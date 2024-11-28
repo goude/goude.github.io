@@ -8,7 +8,7 @@ import rehypeExternalLinks from "rehype-external-links";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://goude.github.io/astroblog2",
+  site: "https://goude.github.io/astroblog2/",
   integrations: [mdx(), svelte()],
   markdown: {
     shikiConfig: {
