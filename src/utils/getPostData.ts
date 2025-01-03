@@ -1,4 +1,4 @@
-import readingTime from 'reading-time'
+import readingTime from "reading-time"
 
 type Post = {
   title: string
@@ -8,7 +8,7 @@ type Post = {
 
 export default function getPostData(post: Post) {
   return {
-    slug: post.file.split('/').pop().split('.').shift(),
-    readingTime: readingTime(post.rawContent()).text,
+    slug: post.file.split("/").pop()!.split(".").shift(), // FIXME: using ! for now
+    readingTime: readingTime(post.rawContent()).text
   }
 }
