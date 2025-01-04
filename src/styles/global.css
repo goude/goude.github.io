@@ -4,7 +4,7 @@
   --text-secondary: #6b6f72;
   --primary-color: #548e9b;
   --font-family-serif: Merriweather, serif;
-  --font-family-sans: 'Fira Sans', sans-serif;
+  --font-family-sans: "Fira Sans", sans-serif;
 }
 
 :root.theme-dark {
@@ -115,8 +115,12 @@ a:hover {
 p a {
   text-decoration: none;
   box-shadow: inset 0 -0.12em 0 var(--primary-color);
-  -webkit-transition: box-shadow 0.2s ease-in-out, color 0.2s ease-in-out;
-  transition: box-shadow 0.2s ease-in-out, color 0.2s ease-in-out;
+  -webkit-transition:
+    box-shadow 0.2s ease-in-out,
+    color 0.2s ease-in-out;
+  transition:
+    box-shadow 0.2s ease-in-out,
+    color 0.2s ease-in-out;
 }
 
 p a:hover {
@@ -138,7 +142,7 @@ hr {
 }
 
 code {
-  font-family: 'SF Mono', menlo, inconsolata, monospace;
+  font-family: "SF Mono", menlo, inconsolata, monospace;
   font-size: calc(1em - 2px);
   color: #555;
   padding: 0.2em 0.4em;
@@ -229,7 +233,9 @@ td {
 
 .theme-toggle > label:focus-within {
   outline: 2px solid transparent;
-  box-shadow: 0 0 0 0.08em var(--theme-accent), 0 0 0 0.12em white;
+  box-shadow:
+    0 0 0 0.08em var(--theme-accent),
+    0 0 0 0.12em white;
 }
 
 .theme-toggle > label {
@@ -247,7 +253,7 @@ td {
   opacity: 1;
 }
 
-input[name='theme-toggle'] {
+input[name="theme-toggle"] {
   position: absolute;
   opacity: 0;
   top: 0;
@@ -278,4 +284,25 @@ input[name='theme-toggle'] {
     font-size: 1.2rem;
     margin: 1em 0;
   }
+}
+
+/* Added by me to fix image button links */
+.no-style-link {
+  color: inherit; /* Ensures the link text (if any) uses the parent element's color */
+  text-decoration: none; /* Removes underline */
+  box-shadow: none; /* Removes box-shadow effects */
+  transition: none; /* Disables any hover transitions */
+}
+
+.no-style-link:hover,
+.no-style-link:focus,
+.no-style-link:active {
+  color: inherit; /* Prevents color changes on hover/focus/active */
+  text-decoration: none; /* Prevents underline from reappearing */
+  box-shadow: none; /* Prevents box-shadow from reappearing */
+}
+
+.no-style-link img {
+  display: inline-block; /* Ensures the image displays correctly */
+  pointer-events: auto; /* Allows clicking on the image link */
 }
