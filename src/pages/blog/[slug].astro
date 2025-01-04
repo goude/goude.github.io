@@ -3,8 +3,6 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Bio from "../../components/Bio.astro";
 import getPostData from "../../utils/getPostData";
 
-import type { GetStaticPaths } from "astro";
-
 type MarkdownPost = {
   frontmatter: { title: string; publishDate: string; [key: string]: any };
   Content: any; // Or a more specific type if you know it
@@ -18,7 +16,7 @@ export const getStaticPaths = async () => {
     params: { slug: p.file.split("/").pop()!.split(".").shift()! },
     props: { post: p },
   }));
-}; //satisfies GetStaticPaths;
+};
 
 const { Content, frontmatter } = Astro.props.post;
 const { title, description, publishDate } = frontmatter;
