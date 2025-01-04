@@ -1,6 +1,6 @@
 ---
-title: Markdown Test Page
-publishDate: 01 Dec 2021
+title: Markdown Test Page 2025
+publishDate: 04 Dec 2025
 description: A sample page with the most common elements of an article, including headings, paragraphs, lists, and images. Use it as a starting point for applying your own styles.
 ---
 
@@ -171,10 +171,10 @@ Ex amet id ex aliquip id do laborum excepteur exercitation elit sint commodo occ
 
 ```html
 <script>
-  let count = 0
+  let count = 0;
 
   function handleClick() {
-    count += 1
+    count += 1;
   }
 </script>
 
