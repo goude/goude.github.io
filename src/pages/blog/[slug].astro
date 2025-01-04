@@ -3,17 +3,22 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Bio from "../../components/Bio.astro";
 import getPostData from "../../utils/getPostData";
 
-export async function getStaticPaths(): Promise<
-  { params: { slug: string }; props: { post: any } }[]
-> {
-  const posts: { file: string }[] = await Astro.glob(
-    "../../data/blog-posts/*.md",
-  );
-  return posts.map((p: { file: string }) => ({
+import type { GetStaticPaths } from "astro";
+
+type MarkdownPost = {
+  frontmatter: { title: string; publishDate: string; [key: string]: any };
+  Content: any; // Or a more specific type if you know it
+  file: string;
+  rawContent: () => string;
+};
+
+export const getStaticPaths = async () => {
+  const posts: MarkdownPost[] = await Astro.glob("../../data/blog-posts/*.md");
+  return posts.map((p) => ({
     params: { slug: p.file.split("/").pop()!.split(".").shift()! },
     props: { post: p },
   }));
-}
+}; //satisfies GetStaticPaths;
 
 const { Content, frontmatter } = Astro.props.post;
 const { title, description, publishDate } = frontmatter;
