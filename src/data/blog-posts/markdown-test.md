@@ -1,6 +1,6 @@
 ---
 title: Markdown Test Page 2025
-publishDate: 04 Dec 2025
+publishDate: 04 Jan 2025
 description: A sample page with the most common elements of an article, including headings, paragraphs, lists, and images. Use it as a starting point for applying your own styles.
 ---
 
