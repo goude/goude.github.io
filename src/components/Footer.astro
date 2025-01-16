@@ -1,6 +1,13 @@
 <footer>
   <span>
-    &copy; {new Date().getFullYear()} goude.se.
+    &copy; {new Date().getFullYear()} goude.se. Week {
+      Math.ceil(
+        ((new Date() - new Date(new Date().getFullYear(), 0, 1)) / 86400000 +
+          new Date().getDay() +
+          1) /
+          7,
+      )
+    }.
     <a href="/about#colophon">Colophon</a>.
   </span>
 </footer>
