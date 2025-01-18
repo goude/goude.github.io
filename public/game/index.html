@@ -10,6 +10,9 @@
         margin: 0;
         overflow: hidden;
       }
+      canvas {
+        display: block;
+      }
     </style>
   </head>
   <body>
@@ -17,8 +20,13 @@
       // Phaser game configuration
       const config = {
         type: Phaser.AUTO,
-        width: 800,
-        height: 600,
+        width: 800, // Original width
+        height: 600, // Original height
+        scale: {
+          mode: Phaser.Scale.FIT, // Ensures scaling to fit screen
+          autoCenter: Phaser.Scale.CENTER_BOTH, // Center the game
+        },
+        pixelArt: true,
         backgroundColor: "#87CEEB",
         physics: {
           default: "arcade",
@@ -35,7 +43,7 @@
 
       const game = new Phaser.Game(config);
 
-      let player, cursors, target;
+      let player, cursors, target, background;
 
       function preload() {
         // Load assets
@@ -47,11 +55,13 @@
       }
 
       function create() {
-        // Add a repeating background
-        this.add.tileSprite(400, 300, 800, 600, "grass");
+        // Add a repeating background scaled up
+        background = this.add.tileSprite(400, 300, 800, 600, "grass");
+        background.setScale(2); // Double the background size
 
-        // Add player sprite
+        // Add player sprite and scale it
         player = this.physics.add.sprite(400, 300, "character");
+        player.setScale(2); // Double the player size
         player.setCollideWorldBounds(true);
 
         // Create animations
