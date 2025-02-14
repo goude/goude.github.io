@@ -11,7 +11,9 @@ type MarkdownPost = {
 };
 
 export const getStaticPaths = async () => {
-  const posts: MarkdownPost[] = await Astro.glob("../../data/blog-posts/*.md");
+  const posts: MarkdownPost[] = await Astro.glob(
+    "../../data/blog-posts/**/*.md",
+  );
   return posts.map((p) => ({
     params: { slug: p.file.split("/").pop()!.split(".").shift()! },
     props: { post: p },
@@ -39,8 +41,6 @@ const permalink = `${Astro.site!.href}blog/${slug}`;
     <article class="content">
       <Content />
     </article>
-    <hr />
-    <Bio />
   </div>
 </BaseLayout>
 
