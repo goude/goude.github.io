@@ -33,7 +33,9 @@ const permalink = `${Astro.site!.href}blog/${slug}`;
   current="blog"
 >
   <header>
-    <p>{publishDate} ~ {readingTime}</p>
+    <p>
+      {new Date(publishDate).toISOString().split("T")[0]} ~ {readingTime}
+    </p>
     <h1>{title}</h1>
     <hr />
   </header>

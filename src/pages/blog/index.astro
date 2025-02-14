@@ -34,7 +34,12 @@ allPosts = allPosts.sort(
               <p>{post.frontmatter.description}</p>
               <div class="post-item-footer">
                 <span class="post-item-date">
-                  — {post.frontmatter.publishDate}
+                  —{" "}
+                  {
+                    new Date(post.frontmatter.publishDate)
+                      .toISOString()
+                      .split("T")[0]
+                  }
                 </span>
               </div>
             </div>
