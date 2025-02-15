@@ -5,7 +5,7 @@ import mdx from "@astrojs/mdx";
 import remarkGfm from "remark-gfm";
 import remarkSmartypants from "remark-smartypants";
 import rehypeExternalLinks from "rehype-external-links";
-import remarkLinkTransformer from "./src/plugins/remark-link-transformer.js";
+import remarkLinkTransformer from "./src/plugins/remark-link-transformer.ts";
 
 // https://astro.build/config
 export default defineConfig({
