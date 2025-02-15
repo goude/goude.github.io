@@ -1,6 +1,6 @@
 import { visit } from "unist-util-visit";
 
-export default function remarkLinkTransformer() {
+export default function remarkImageLinkTransformer() {
   return (tree) => {
     // First, handle image references of the form ![[filename|alt text]]
     visit(tree, "text", (node, index, parent) => {

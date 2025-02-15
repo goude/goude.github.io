@@ -4,7 +4,7 @@ description: "How to make people get out of bed."
 layout: ../../layouts/BaseLayout.astro
 ---
 
-This is a linking test: [[yet-another-test-page]].
+This is a linking test: [[yet-another-test-page]] (broken link) [[cool-awakenings]] (self link) [[finding-humanity-what-we-do-in-the-shadows]] (other page link)
 
 tl;dr pour ice cold water in their face
 

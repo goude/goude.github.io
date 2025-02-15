@@ -5,7 +5,8 @@ import mdx from "@astrojs/mdx";
 import remarkGfm from "remark-gfm";
 import remarkSmartypants from "remark-smartypants";
 import rehypeExternalLinks from "rehype-external-links";
-import remarkLinkTransformer from "./src/plugins/remark-link-transformer.ts";
+import remarkImageLinkTransformer from "./src/plugins/remark-image-link-transformer.ts";
+import remarkPageLinkTransformer from "./src/plugins/remark-page-link-transformer.ts";
 
 // https://astro.build/config
 export default defineConfig({
@@ -20,7 +21,12 @@ export default defineConfig({
     shikiConfig: {
       theme: "nord",
     },
-    remarkPlugins: [remarkGfm, remarkSmartypants, remarkLinkTransformer],
+    remarkPlugins: [
+      remarkGfm,
+      remarkSmartypants,
+      remarkImageLinkTransformer,
+      remarkPageLinkTransformer,
+    ],
     rehypePlugins: [
       [
         rehypeExternalLinks,
