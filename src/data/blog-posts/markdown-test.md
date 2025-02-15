@@ -8,8 +8,6 @@ description: A sample page with the most common elements of an article, includin
 
 This page is an adapted version of [markdown-test-page](https://github.com/fullpipe/markdown-test-page). It should give you an idea of how different elements are styled on this template.
 
-We also have a link to [another-test-page](another-test-page).
-
 ## <a name="top"></a> Table of Contents
 
 - [Headings](#Headings)
