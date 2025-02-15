@@ -11,6 +11,11 @@ import remarkLinkTransformer from "./src/plugins/remark-link-transformer.ts";
 export default defineConfig({
   site: "https://goude.se",
   integrations: [mdx(), svelte()],
+  vite: {
+    define: {
+      __BUILD_TIMESTAMP__: JSON.stringify(new Date().toISOString()),
+    },
+  },
   markdown: {
     shikiConfig: {
       theme: "nord",

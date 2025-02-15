@@ -2,20 +2,28 @@
 const now = new Date();
 
 // Function to get ISO week number
-const getISOWeek = (date) => {
+const getISOWeek = (date: Date) => {
   const tempDate = new Date(date.getTime());
   tempDate.setUTCDate(tempDate.getUTCDate() + 4 - (tempDate.getUTCDay() || 7));
   const yearStart = new Date(Date.UTC(tempDate.getUTCFullYear(), 0, 1));
-  return Math.ceil(((tempDate - yearStart) / 86400000 + 1) / 7);
+  return Math.ceil(
+    ((tempDate.getTime() - yearStart.getTime()) / 86400000 + 1) / 7,
+  );
 };
 
 const weekNumber = getISOWeek(now);
+
+declare const __BUILD_TIMESTAMP__: string; // Perhaps one should not put declarations here. Gets rid of warning.
+const buildTimestamp = __BUILD_TIMESTAMP__;
+const buildDate = new Date(buildTimestamp);
+const pad = (num: number) => num.toString().padStart(2, "0");
+const formattedBuildDate = `${buildDate.getFullYear()}-${pad(buildDate.getMonth() + 1)}-${pad(buildDate.getDate())} ${pad(buildDate.getHours())}:${pad(buildDate.getMinutes())}`;
 ---
 
 <footer>
   <span>
     &copy; {now.getFullYear()} goude.se. Week {weekNumber}.
-    <a href="/about#colophon">Colophon</a>.
+    <a href="/about#colophon">Colophon</a>. Built {formattedBuildDate}.
   </span>
 </footer>
 
