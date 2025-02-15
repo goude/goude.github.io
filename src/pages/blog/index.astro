@@ -15,9 +15,10 @@ const permalink = `${Astro.site!.href}blog`;
 const modules = import.meta.glob("../../data/blog-posts/*.md");
 let allPosts: MarkdownPost[] = await Promise.all(
   Object.entries(modules).map(async ([file, resolver]) => {
-    const post = (await resolver()) as MarkdownPost;
-    post.file = file;
-    return post;
+    const modulePost = (await resolver()) as MarkdownPost;
+    // Instead of mutating modulePost, create a new object with the file property:
+    const postWithFile: MarkdownPost = Object.assign({}, modulePost, { file });
+    return postWithFile;
   }),
 );
 
