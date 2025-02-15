@@ -1,17 +1,22 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Bio from "../../components/Bio.astro";
 import getPostData from "../../utils/getPostData";
 
 type MarkdownPost = {
   frontmatter: { title: string; publishDate: string; [key: string]: any };
-  Content: any; // Or a more specific type if you know it
+  Content: any;
   file: string;
   rawContent: () => string;
 };
 
 export const getStaticPaths = async () => {
-  const posts: MarkdownPost[] = await Astro.glob("../../data/blog-posts/*.md");
+  const modules = import.meta.glob("../../data/blog-posts/*.md");
+  const posts: MarkdownPost[] = await Promise.all(
+    Object.entries(modules).map(async ([file, resolver]) => {
+      const post = await resolver();
+      return { ...post, file } as MarkdownPost;
+    }),
+  );
   return posts.map((p) => ({
     params: { slug: p.file.split("/").pop()!.split(".").shift()! },
     props: { post: p },
@@ -48,18 +53,15 @@ const permalink = `${Astro.site!.href}blog/${slug}`;
   header {
     text-align: center;
   }
-
   header h1 {
     margin-bottom: 0.7em;
   }
-
   header p {
     color: var(--text-secondary);
     text-transform: uppercase;
     font-family: var(--font-family-sans);
     font-weight: 600;
   }
-
   header hr {
     min-width: 100px;
     width: 30%;
