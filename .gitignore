@@ -1,5 +1,8 @@
 repomix-output.txt
 
+# .astro directory
+.astro/
+
 # build output
 dist/
 .output/
