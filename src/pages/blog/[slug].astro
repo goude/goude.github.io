@@ -13,8 +13,9 @@ export const getStaticPaths = async () => {
   const modules = import.meta.glob("../../data/blog-posts/*.md");
   const posts: MarkdownPost[] = await Promise.all(
     Object.entries(modules).map(async ([file, resolver]) => {
-      const post = await resolver();
-      return { ...post, file } as MarkdownPost;
+      const post = (await resolver()) as MarkdownPost;
+      post.file = file;
+      return post;
     }),
   );
   return posts.map((p) => ({

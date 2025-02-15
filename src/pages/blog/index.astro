@@ -1,20 +1,28 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
+type MarkdownPost = {
+  frontmatter: { title: string; publishDate: string; [key: string]: any };
+  Content?: any;
+  file: string;
+  rawContent?: () => string;
+};
+
 const title = "Blog";
 const description = "Latest articles.";
 const permalink = `${Astro.site!.href}blog`;
 
 const modules = import.meta.glob("../../data/blog-posts/*.md");
-let allPosts = await Promise.all(
+let allPosts: MarkdownPost[] = await Promise.all(
   Object.entries(modules).map(async ([file, resolver]) => {
-    const post = await resolver();
-    return { ...post, file };
+    const post = (await resolver()) as MarkdownPost;
+    post.file = file;
+    return post;
   }),
 );
 
 allPosts = allPosts.sort(
-  (a, b) =>
+  (a: MarkdownPost, b: MarkdownPost) =>
     new Date(b.frontmatter.publishDate).valueOf() -
     new Date(a.frontmatter.publishDate).valueOf(),
 );
@@ -29,7 +37,7 @@ allPosts = allPosts.sort(
   <div class="container">
     <h1>Blog</h1>
     {
-      allPosts.map((post, index) => {
+      allPosts.map((post: MarkdownPost, index: number) => {
         const href = `/blog/${post.file.split("/").pop()!.split(".").shift()}`;
         return (
           <div>
