@@ -1,0 +1,31 @@
+name: Run Tests
+
+#on: [push, pull_request]
+on: workflow_dispatch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run file uniqueness test
+        run: node test/fileUniqueness.js
+
+      - name: Start local server
+        run: npm run start & # Ensure your start script serves the site on port 3000
+
+      - name: Wait for server to be ready
+        run: sleep 5
+
+      - name: Run Playwright tests
+        run: npx playwright test

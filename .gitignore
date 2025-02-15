@@ -1,5 +1,8 @@
 repomix-output.txt
 
+# playwright
+test-results/
+
 # .astro directory
 .astro/
 
