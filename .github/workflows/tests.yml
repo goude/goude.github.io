@@ -1,6 +1,6 @@
 name: Run Tests
 
-#on: [push, pull_request]
+# on: [push, pull_request]
 on: workflow_dispatch
 
 jobs:
@@ -20,11 +20,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Build site
+        run: npm run build
+
       - name: Run file uniqueness test
         run: node test/fileUniqueness.js
 
-      - name: Start local server
-        run: npm run start &
+      - name: Start preview server
+        run: npm run preview &
 
       - name: Wait for server to be ready
         run: sleep 10
