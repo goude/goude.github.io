@@ -7,7 +7,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.38.2-focal # This container image includes Playwright browsers preinstalled.
+      image: mcr.microsoft.com/playwright:latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
