@@ -6,6 +6,8 @@ on: workflow_dispatch
 jobs:
   test:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.38.2-focal # This container image includes Playwright browsers preinstalled.
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,7 +24,7 @@ jobs:
         run: node test/fileUniqueness.js
 
       - name: Start local server
-        run: npm run start & # Ensure your start script serves the site on port 3000
+        run: npm run start &
 
       - name: Wait for server to be ready
         run: sleep 5
