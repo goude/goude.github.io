@@ -1,4 +1,6 @@
 ---
+import pkg from "../../package.json";
+
 const now = new Date();
 
 // Function to get ISO week number
@@ -23,7 +25,9 @@ const formattedBuildDate = `${buildDate.getFullYear()}-${pad(buildDate.getMonth(
 <footer>
   <span>
     &copy; {now.getFullYear()} goude.se. Week {weekNumber}.
-    <a href="/about#colophon">Colophon</a>. Built {formattedBuildDate}.
+    <a href="/about#colophon">Colophon</a>. Built {formattedBuildDate} (v{
+      pkg.version
+    }).
   </span>
 </footer>
 
