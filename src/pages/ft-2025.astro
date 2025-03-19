@@ -1,10 +1,15 @@
 <!doctype html>
 <html lang="sv">
   <head>
+    <meta
+      name="generator"
+      content="HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 204), see www.w3.org"
+    />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Nedräkning till FT 2025</title>
-    <style>
+    <style type="text/css">
       @import url("https://fonts.googleapis.com/css2?family=Vollkorn:wght@600&family=EB+Garamond:wght@700&display=swap");
 
       body {
@@ -66,7 +71,7 @@
 
       .divider::before,
       .divider::after {
-        content: "⚜";
+        content: "âaS";
         position: absolute;
         top: -8px;
         font-size: 1.2em;
@@ -91,17 +96,21 @@
       }
     </style>
   </head>
+
   <body>
     <div class="background-svg" id="svg-container"></div>
 
     <h1>Nu är det bara</h1>
-    <div class="divider"></div>
-    <div id="countdown">Laddar...</div>
-    <div class="divider"></div>
-    <p>kvar till Feldttåget 2025!</p>
-    <p id="adage">Loading...</p>
 
-    <script>
+    <div class="divider"></div>
+
+    <div id="countdown">Laddar...</div>
+
+    <div class="divider"></div>
+
+    <p>kvar till Feldttåget 2025!</p>
+
+    <p id="adage">Loading...</p><script type="text/javascript">
       async function injectSVG() {
         try {
           const response = await fetch("assets/blhj_logo.svg");
@@ -148,14 +157,14 @@
           const randomAdage =
             adages[Math.floor(Math.random() * adages.length)].trim();
 
-          const match = randomAdage.match(/^(.*?)(?:\s*–\s*(.*))?$/);
+          const match = randomAdage.match(/^(.*?)(?:\s*â¬\s*(.*))?$/);
           const adage = match ? match[1].trim() : randomAdage;
           const attribution = match && match[2] ? match[2].trim() : null;
 
           const formattedAdage = adage.replace(/\n/g, "<br>");
           const adageElement = document.getElementById("adage");
           adageElement.innerHTML = attribution
-            ? `${formattedAdage}<br><i>— ${attribution}</i>`
+            ? `${formattedAdage}<br><i>â¬ ${attribution}<\/i>`
             : formattedAdage;
           adageElement.classList.add("fade-in");
         } catch (error) {
@@ -172,7 +181,7 @@
         const diff = targetDate - now;
 
         if (diff <= 0) {
-          document.getElementById("countdown").innerHTML = "Det är dags!";
+          document.getElementById("countdown").innerHTML = "Det Ã¤r dags!";
           return;
         }
 
