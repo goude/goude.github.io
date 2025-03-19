@@ -28,10 +28,6 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: url("assets/blhj_logo.svg") no-repeat center center;
-        background-size: contain;
-        opacity: 1;
-        filter: brightness(2) sepia(1) hue-rotate(40deg) saturate(5);
         z-index: -1;
       }
 
@@ -96,7 +92,7 @@
     </style>
   </head>
   <body>
-    <div class="background-svg"></div>
+    <div class="background-svg" id="svg-container"></div>
 
     <h1>Nu är det bara</h1>
     <div class="divider"></div>
@@ -106,6 +102,26 @@
     <p id="adage">Loading...</p>
 
     <script>
+      async function injectSVG() {
+        try {
+          const response = await fetch("assets/blhj_logo.svg");
+          let svgText = await response.text();
+
+          // Modify all paths to gold with 20% opacity
+          svgText = svgText.replace(
+            /fill-opacity:[^;]+;/g,
+            "fill-opacity:0.5;",
+          );
+          svgText = svgText.replace(/fill:[^;]+;/g, "fill:#003;");
+
+          document.getElementById("svg-container").innerHTML = svgText;
+        } catch (error) {
+          console.error("Error loading SVG:", error);
+        }
+      }
+
+      injectSVG();
+
       async function fetchRandomAdage() {
         const githubApiUrl =
           "https://api.github.com/repos/goude/adages/contents/adages";
@@ -151,7 +167,7 @@
       fetchRandomAdage();
 
       function updateCountdown() {
-        const targetDate = new Date("2025-05-23T14:00:00Z");
+        const targetDate = new Date("2025-05-23T14:00:00Z"); // UTC equivalent of Sweden time (16:00 CEST)
         const now = new Date();
         const diff = targetDate - now;
 
@@ -167,10 +183,18 @@
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
+        function pluralize(value, singular, plural) {
+          return value === 1 ? `${value} ${singular}` : `${value} ${plural}`;
+        }
+
         document.getElementById("countdown").innerHTML =
-          `${days} dagar ${hours} timmar ${minutes} minuter & ${seconds} sekunder`;
+          `${pluralize(days, "dag", "dagar")} ` +
+          `${pluralize(hours, "timme", "timmar")} ` +
+          `${pluralize(minutes, "minut", "minuter")} ` +
+          `${pluralize(seconds, "sekund", "sekunder")}`;
       }
 
+      // Call updateCountdown immediately and set an interval
       updateCountdown();
       setInterval(updateCountdown, 1000);
     </script>
