@@ -129,22 +129,35 @@
       fetchRandomAdage();
 
       function updateCountdown() {
-        const targetDate = new Date("2025-05-23T14:00:00Z");
+        const targetDate = new Date("2025-05-23T14:00:00Z"); // UTC equivalent of Sweden time (16:00 CEST)
         const now = new Date();
         const diff = targetDate - now;
+
         if (diff <= 0) {
-          document.getElementById("countdown").textContent = "Det är dags!";
+          document.getElementById("countdown").innerHTML = "Det är dags!";
           return;
         }
+
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor(
           (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
         );
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        document.getElementById("countdown").textContent =
-          `${days} dagar ${hours} timmar ${minutes} minuter ${seconds} sekunder`;
+
+        function pluralize(value, singular, plural) {
+          return value === 1 ? `${value} ${singular}` : `${value} ${plural}`;
+        }
+
+        document.getElementById("countdown").innerHTML =
+          `${pluralize(days, "dag", "dagar")} ` +
+          `${pluralize(hours, "timme", "timmar")} ` +
+          `${pluralize(minutes, "minut", "minuter")} ` +
+          "& " +
+          `${pluralize(seconds, "sekund", "sekunder")}`;
       }
+
+      // Call updateCountdown immediately and set an interval
       updateCountdown();
       setInterval(updateCountdown, 1000);
     </script>
