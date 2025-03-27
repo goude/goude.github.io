@@ -1,0 +1,71 @@
+---
+const name = Astro.url.searchParams.get("name") ?? "Daniel";
+const title = "Hello";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title={title}>
+  <div class="container">
+    <h2>Hi, thanks for reaching out 👋</h2>
+
+    <p>
+      To help me respond faster and more effectively (and protect focus time
+      🧠), I really appreciate if <strong
+        >you can include everything relevant in your first message</strong
+      >. This means:
+    </p>
+
+    <ul>
+      <li>
+        Say hello if you'd like, but <strong
+          >then go straight to your question</strong
+        >
+        <sup><a href="https://nohello.net">[1]</a></sup> ✍️
+      </li>
+      <li>
+        Please do not use @<span data-role="greeting"></span> mentions in 1:1 chats
+        — it will not speed up my response 🚫
+      </li>
+      <li>
+        Include <strong>enough context</strong> for me to understand and act on it
+        🔍
+        <ul>
+          <li>
+            For example: ticket number, what you've tried, what you're blocked
+            on.
+          </li>
+        </ul>
+      </li>
+      <li>
+        If it’s urgent, feel free to say so 🚨. But otherwise, I’ll reply as
+        soon as I’m able 💬
+      </li>
+    </ul>
+
+    <p>
+      This saves time for both of us, and lets me give you a clearer answer
+      without needing a full chat-style back-and-forth.
+    </p>
+
+    <p>Here's an example:</p>
+
+    <blockquote>
+      Hey <span data-role="greeting"></span> — quick question re: INC12345. We’re
+      getting a timeout in step 2 of the pipeline after yesterday’s change. Logs
+      here:
+      <a href="https://youtu.be/dQw4w9WgXcQ">link</a>. Do you know if anything
+      changed on your side?
+    </blockquote>
+
+    <p>Thanks for helping make things smoother! 🙏</p>
+  </div>
+
+  <script is:inline>
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get("name") || "Daniel";
+    const greetingEls = document.querySelectorAll("[data-role='greeting']");
+    greetingEls.forEach((el) => {
+      el.textContent = name;
+    });
+  </script>
+</BaseLayout>
