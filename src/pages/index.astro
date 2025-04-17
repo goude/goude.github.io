@@ -9,10 +9,12 @@ const permalink = Astro.site!.href; // FIXME: using ! for now
 <BaseLayout title={title} description={description} permalink={permalink}>
   <div class="home-container">
     <div class="home-copy">
-      <h1>Hello There</h1>
+      <h1><a href="/hello">Hello</a> There</h1>
       <p>
-        Remember: Lack of planning on your part does not constitute an emergency
-        on mine.
+        <a href="https://www.youtube.com/watch?v=E3kbUA1PNts"
+          >What means "get rid of"?</a
+        > Check out the <a href="/ref/command-palette-cheatsheet">cheat sheet</a
+        >.
       </p>
     </div>
 

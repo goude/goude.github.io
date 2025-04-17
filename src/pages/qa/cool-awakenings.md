@@ -1,6 +1,6 @@
 ---
-title: "Cool Awakenings"
-description: "How to make people get out of bed."
+title: Cool Awakenings
+description: How to make people get out of bed.
 layout: ../../layouts/BaseLayout.astro
 ---
 
