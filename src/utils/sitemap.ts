@@ -1,6 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
-import { getCollection, type CollectionEntry } from "astro:content";
+import getPostData from "./getPostData";
+import type { MarkdownPost } from "./getPostData";
+
 /**
  * Returns a list of all routable URLs in the site,
  * both static and from dynamic content collections.
@@ -12,11 +14,21 @@ export async function getAllRoutes(
     url: new URL(route, site).href,
   }));
 
-  const blogPosts = await getCollection("blog-posts");
-  const blogRoutes = blogPosts.map((post: CollectionEntry<"blog-posts">) => ({
-    url: new URL(`/blog/${post.slug}`, site).href,
-    title: post.data.title,
-  }));
+  const modules = import.meta.glob("../data/blog-posts/*.md");
+  const blogPosts: MarkdownPost[] = await Promise.all(
+    Object.entries(modules).map(async ([file, resolver]) => {
+      const mod = (await resolver()) as Omit<MarkdownPost, "file">;
+      return { ...mod, file } satisfies MarkdownPost;
+    }),
+  );
+
+  const blogRoutes = blogPosts.map((post) => {
+    const { slug } = getPostData(post);
+    return {
+      url: new URL(`/blog/${slug}`, site).href,
+      title: post.frontmatter?.title,
+    };
+  });
 
   return [...staticRoutes, ...blogRoutes];
 }

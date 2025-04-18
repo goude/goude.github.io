@@ -15,7 +15,7 @@ export default function getPostData(post: Post) {
 }
 */
 
-type MarkdownPost = {
+export type MarkdownPost = {
   frontmatter: { title: string; publishDate: string; [key: string]: any };
   Content: any; // Or a more specific type if you know it
   file: string;
