@@ -192,20 +192,24 @@ figure {
 
 table {
   border-collapse: collapse;
-  font-family: var(--font-family-sans);
-  font-size: 1.125em;
+  font-size: 1em;
   margin: 2em 0;
 }
 
 th {
+  font-family: var(--font-family-sans);
   border-bottom: 2px solid #cccccc;
   padding: 0.4em 0.8em;
   word-break: break-word;
+  text-align: left;
+  vertical-align: top;
 }
 
 td {
   padding: 0.4em 0.8em;
   word-break: break-word;
+  text-align: left;
+  vertical-align: top;
 }
 
 .container {

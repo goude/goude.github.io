@@ -8,4 +8,4 @@ check:
 
 test: clean check
 	node test/fileUniqueness.js
-	NODE_ENV=test npx playwright test
+	npx playwright test
