@@ -1,8 +1,11 @@
-.PHONY: clean test
+.PHONY: clean test check
 
 clean:
 	rm -rf dist/ test-results/
 
-test:
+check:
+	npm run astro check
+
+test: clean check
 	node test/fileUniqueness.js
-	npx playwright test
+	NODE_ENV=test npx playwright test

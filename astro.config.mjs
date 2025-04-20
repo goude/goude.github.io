@@ -8,9 +8,13 @@ import rehypeExternalLinks from "rehype-external-links";
 import remarkImageLinkTransformer from "./src/plugins/remark-image-link-transformer.ts";
 import remarkPageLinkTransformer from "./src/plugins/remark-page-link-transformer.ts";
 
+const isTest = process.env.NODE_ENV === "test";
+const isDev = process.env.NODE_ENV === "dev";
+const site = isTest || isDev ? "http://localhost:4321" : "https://goude.se";
+
 // https://astro.build/config
 export default defineConfig({
-  site: "https://goude.se",
+  site,
   integrations: [mdx(), svelte()],
   vite: {
     define: {
