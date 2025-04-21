@@ -4,7 +4,7 @@ description: A clear, written entry point—like a simple README—can replace t
 layout: ../../layouts/BaseContainerLayout.astro
 ---
 
-# The Entry Point
+## The Entry Point
 
 One of the most overlooked aspects of any system—technical, organizational, or social—is the entry point: the place where a newcomer lands, trying to understand what to do, what has been done, and how to proceed. This entry point is where momentum is either built or broken. And yet, in many environments, especially at work, the entry point is treated not as a documented path but as an oral tradition—a conversation you must have with a specific person, at a specific time, often requiring social decoding more than actual knowledge.
 
