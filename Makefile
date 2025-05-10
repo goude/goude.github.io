@@ -1,4 +1,4 @@
-.PHONY: clean test check
+.PHONY: clean test check serve
 
 clean:
 	rm -rf dist/ test-results/
@@ -9,3 +9,6 @@ check:
 test: clean check
 	node test/fileUniqueness.js
 	npx playwright test
+
+serve:
+	npm run start
