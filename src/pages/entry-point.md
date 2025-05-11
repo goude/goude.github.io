@@ -41,3 +41,7 @@ This isn’t just inefficient. It makes onboarding uneven and unnecessarily hard
 And the solution is usually simple: a short README, a diagram, a set of curated links. Instead, we bury it all in Slack, calendars, and scattered meeting notes.
 
 Creating a clear entry point is a small act of foresight. It welcomes new people, cuts down repeated explanations, and helps the team move faster with less friction. We should do it more often.
+
+### Hold It! You Call This Page an Entry Point?
+
+Well... Um... Yeah need to work on that. Meanwhile, [here's a list of links for ya.](/sitemap).
