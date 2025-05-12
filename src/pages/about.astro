@@ -12,13 +12,15 @@ const permalink = `${Astro.site!.href}about`; // FIXME: using ! for now, also, m
   permalink={permalink}
   current="about"
 >
-  <div class="container">
+  <section>
     <h1 id="colophon">About</h1>
     <p>
       What’s this? I live in a place where knowing the current week number is
       strangely important. So I made a page to help me remember it (it's in the
       footer). Then I added some fluff around that.
     </p>
+  </section>
+  <section>
     <h2>Colophon</h2>
     <ul>
       <li>
@@ -34,6 +36,8 @@ const permalink = `${Astro.site!.href}about`; // FIXME: using ! for now, also, m
         >.
       </li>
     </ul>
+  </section>
+  <section>
     <h2>Adage Experiment</h2>
 
     <p id="adage">Loading...</p>
@@ -88,7 +92,8 @@ const permalink = `${Astro.site!.href}about`; // FIXME: using ! for now, also, m
 
       fetchRandomAdage();
     </script>
-
+  </section>
+  <section>
     <h2>Certain Links</h2>
     <ul>
       <li><a href="/sitemap">Sitemap</a></li>
@@ -109,49 +114,5 @@ const permalink = `${Astro.site!.href}about`; // FIXME: using ! for now, also, m
         /></a
       >
     </p>
-
-    <!-- Here's how to include an image, for later
-    <figure class="about-image">
-      <img
-        src="/assets/about-illustration.webp"
-        alt="Illustration of a notebook"
-        width="330"
-      />
-      <figcaption>
-        Illustration by
-        <a
-          href="https://icons8.com/illustrations/author/5c07e68d82bcbc0092519bb6"
-          target="_blank"
-          rel="noopener">Icons 8</a
-        >
-        from
-        <a
-          href="https://icons8.com/illustrations"
-          target="_blank"
-          rel="noopener">Ouch!</a
-        >
-      </figcaption>
-    </figure>
-    -->
-  </div>
-
-  <style>
-    .about-image {
-      float: right;
-      margin: -3em -7em 2em 2em;
-      max-width: 300px;
-    }
-
-    .about-image img {
-      border-radius: 8px;
-      margin-bottom: 1.5em;
-    }
-
-    @media (max-width: 1020px) {
-      .about-image {
-        float: none;
-        margin: 0 auto 2em;
-      }
-    }
-  </style>
+  </section>
 </BaseLayout>

@@ -12,124 +12,22 @@ const permalink = Astro.site!.href; // FIXME: using ! for now
   permalink={permalink}
   current="home"
 >
-  <div class="home-container">
-    <div class="home-copy">
-      <h1><a href="/hello">Hello</a> There</h1>
-      <p>
-        Some things are here to be useful. Others are here to be recognized. If
-        you're the kind of person who feels relief when structure replaces
-        ritual, or who builds to understand—then this may be for you.
-      </p>
+  <section>
+    <h1><a href="/hello">Hello</a> There</h1>
+    <p>
+      Some things are here to be useful. Others are here to be recognized. If
+      you're the kind of person who feels relief when structure replaces ritual,
+      or who builds to understand—then this may be for you.
+    </p>
 
-      <p>
-        Start with the <a href="/entry-point">entry point</a>.
-      </p>
-      <!-- But Daddy Gemerno... -->
-      <p>
-        <a href="https://www.youtube.com/watch?v=E3kbUA1PNts"
-          >"What means get rid of?"</a
-        >
-      </p>
-    </div>
-
-    <div class="hero-image-container">
-      <picture>
-        <source
-          srcset="/assets/home-illustration.webp"
-          media="(min-width: 600px)"
-        />
-        <img
-          class="hero-image"
-          alt="Illustration of person reading a book"
-          src="/assets/home-illustration-small.webp"
-          width="550"
-          height="466"
-        />
-      </picture>
-      <p class="caption">
-        Illustration by
-        <a
-          href="https://icons8.com/illustrations/author/5c07e68d82bcbc0092519bb6"
-          target="_blank"
-          rel="noopener">Icons 8</a
-        >
-        from
-        <a
-          href="https://icons8.com/illustrations"
-          target="_blank"
-          rel="noopener">Ouch!</a
-        >
-      </p>
-    </div>
-  </div>
+    <p>
+      Start with the <a href="/entry-point">entry point</a>.
+    </p>
+    <!-- But Daddy Guimerno... -->
+    <p>
+      <a href="https://www.youtube.com/watch?v=E3kbUA1PNts"
+        >"What means get rid of?"</a
+      >
+    </p>
+  </section>
 </BaseLayout>
-
-<style>
-  .home-container {
-    align-items: center;
-    display: flex;
-    flex: 1;
-    justify-content: center;
-    margin: 2em 0;
-    min-height: 400px;
-  }
-
-  .home-copy {
-    flex: 1;
-    padding: 0 1em;
-  }
-
-  .home-copy h1 {
-    font-weight: 700;
-    margin-bottom: 0.5em;
-    line-height: 1.3;
-  }
-
-  .home-copy p {
-    font-size: 1.4em;
-  }
-
-  .hero-image-container {
-    margin: 0 1em;
-    text-align: center;
-  }
-
-  .hero-image-container picture {
-    display: block;
-    min-height: 250px;
-  }
-
-  .caption {
-    font-size: 0.8em;
-    font-style: italic;
-    text-align: left;
-  }
-
-  .hero-image {
-    width: 100%;
-    max-width: 550px;
-    margin-bottom: 1em;
-  }
-
-  @media (max-width: 1200px) {
-    p {
-      font-size: 1.2em;
-    }
-
-    .hero-image {
-      max-width: 400px;
-    }
-  }
-
-  @media (max-width: 800px) {
-    .home-container {
-      flex-direction: column;
-    }
-
-    .home-copy {
-      flex: 0;
-      padding-bottom: 2em;
-      text-align: center;
-    }
-  }
-</style>

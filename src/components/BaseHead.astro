@@ -1,7 +1,8 @@
 ---
-//import { ViewTransitions } from "astro:transitions";
-import "../styles/fonts.css";
-import "../styles/global.css";
+import "../styles/tufte.css";
+import "../styles/tufte-extra.css";
+import "../styles/pandoc.css";
+import "../styles/pandoc-solarized.css";
 
 export interface Props {
   title: string;
@@ -37,19 +38,3 @@ const socialUrl = Astro.site!.href + "assets/social.png";
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={socialUrl} />
-
-<!-- <ViewTransitions /> -->
-
-<!-- This is intentionally inlined to avoid FOUC -->
-<script is:inline>
-  const root = document.documentElement;
-  const theme = localStorage.getItem("theme");
-  if (
-    theme === "dark" ||
-    (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches)
-  ) {
-    root.classList.add("theme-dark");
-  } else {
-    root.classList.remove("theme-dark");
-  }
-</script>

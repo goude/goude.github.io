@@ -24,23 +24,9 @@ const formattedBuildDate = `${buildDate.getFullYear()}-${pad(buildDate.getMonth(
 ---
 
 <footer>
-  <span>
-    &copy; {now.getFullYear()}
-    <a href="https://goude.se">goude.se</a>. Week {weekNumber}.
-    <a href="/about#colophon">Colophon</a>. Built {formattedBuildDate} (v{
-      pkg.version
-    }).
-  </span>
+  &copy; {now.getFullYear()}
+  <a href="https://goude.se">goude.se</a>. Week {weekNumber}.
+  <a href="/about#colophon">Colophon</a>. Built {formattedBuildDate} (v{
+    pkg.version
+  }).
 </footer>
-
-<style>
-  footer {
-    color: var(--text-secondary);
-    font-size: 0.8em;
-    margin: 1em auto;
-    max-width: 1400px;
-    padding: 1em 2em;
-    text-align: center;
-    width: 100%;
-  }
-</style>

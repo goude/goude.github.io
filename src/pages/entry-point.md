@@ -1,7 +1,7 @@
 ---
 title: Entry Point
 description: A clear, written entry point—like a simple README—can replace the inefficiency and exclusivity of relying on oral tradition to onboard newcomers.
-layout: ../layouts/BaseContainerLayout.astro
+layout: ../layouts/BaseLayout.astro
 ---
 
 ## The Entry Point
