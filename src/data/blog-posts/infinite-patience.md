@@ -5,4 +5,3 @@ description: A musing of sorts.
 ---
 
 ![[infinite-patience.webp]]
-
