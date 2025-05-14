@@ -1,10 +1,9 @@
-import { visit } from "unist-util-visit";
-import type { Root, Content, Heading } from "mdast";
+import type { Root, BlockContent } from "mdast";
 
 export default function remarkSectionWrapper() {
   return (tree: Root) => {
-    const newChildren: Content[] = [];
-    let buffer: Content[] = [];
+    const newChildren: BlockContent[] = [];
+    let buffer: BlockContent[] = [];
 
     const flush = () => {
       if (buffer.length > 0) {
@@ -25,10 +24,10 @@ export default function remarkSectionWrapper() {
       if (node.type === "heading") {
         flush();
       }
-      buffer.push(node);
+      buffer.push(node as BlockContent); // Safe because Root children are all Content
     }
 
-    flush(); // flush any remaining content
+    flush();
     tree.children = newChildren;
   };
 }
