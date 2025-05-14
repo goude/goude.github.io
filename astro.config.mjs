@@ -7,6 +7,7 @@ import remarkSmartypants from "remark-smartypants";
 import rehypeExternalLinks from "rehype-external-links";
 import remarkImageLinkTransformer from "./src/plugins/remark-image-link-transformer.ts";
 import remarkPageLinkTransformer from "./src/plugins/remark-page-link-transformer.ts";
+import remarkSectionWrapper from "./src/plugins/remark-section-wrapper.ts";
 
 const isTest = process.env.NODE_ENV === "test";
 const isDev = process.env.NODE_ENV === "dev";
@@ -30,6 +31,7 @@ export default defineConfig({
       remarkSmartypants,
       remarkImageLinkTransformer,
       remarkPageLinkTransformer,
+      remarkSectionWrapper,
     ],
     rehypePlugins: [
       [

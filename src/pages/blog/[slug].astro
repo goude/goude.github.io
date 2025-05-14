@@ -40,35 +40,11 @@ const permalink = `${Astro.site!.href}blog/${slug}`;
   permalink={permalink}
   current="blog"
 >
-  <header>
+  <section>
+    <h1>{title}</h1>
     <p>
       {new Date(publishDate).toISOString().split("T")[0]} ~ {readingTime}
     </p>
-    <h1>{title}</h1>
-    <hr />
-  </header>
-  <div class="container">
-    <article class="content">
-      <Content />
-    </article>
-  </div>
+  </section>
+  <Content />
 </BaseLayout>
-
-<style>
-  header {
-    text-align: center;
-  }
-  header h1 {
-    margin-bottom: 0.7em;
-  }
-  header p {
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    font-family: var(--font-family-sans);
-    font-weight: 600;
-  }
-  header hr {
-    min-width: 100px;
-    width: 30%;
-  }
-</style>

@@ -35,35 +35,32 @@ allPosts = allPosts.sort(
   permalink={permalink}
   current="blog"
 >
-  <div class="container">
+  <section>
     <h1>Blog</h1>
-    {
-      allPosts.map((post: MarkdownPost, index: number) => {
-        const href = `/blog/${post.file.split("/").pop()!.split(".").shift()}`;
-        return (
-          <div>
-            {index !== 0 && <hr />}
-            <div class="post-item">
-              <h2>
-                <a href={href}>{post.frontmatter.title}</a>
-              </h2>
-              <p>{post.frontmatter.description}</p>
-              <div class="post-item-footer">
-                <span class="post-item-date">
-                  —{" "}
-                  {
-                    new Date(post.frontmatter.publishDate)
-                      .toISOString()
-                      .split("T")[0]
-                  }
-                </span>
-              </div>
-            </div>
+  </section>
+  {
+    allPosts.map((post: MarkdownPost, index: number) => {
+      const href = `/blog/${post.file.split("/").pop()!.split(".").shift()}`;
+      return (
+        <section>
+          <h2>
+            <a href={href}>{post.frontmatter.title}</a>
+          </h2>
+          <p>{post.frontmatter.description}</p>
+          <div class="post-item-footer">
+            <span class="post-item-date">
+              —{" "}
+              {
+                new Date(post.frontmatter.publishDate)
+                  .toISOString()
+                  .split("T")[0]
+              }
+            </span>
           </div>
-        );
-      })
-    }
-  </div>
+        </section>
+      );
+    })
+  }
 </BaseLayout>
 
 <style>
