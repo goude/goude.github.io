@@ -1,4 +1,10 @@
-# [Astro](https://astro.build) Blog Template
+# goude.se
+
+Are you paying attention?
+
+Original template README follows below.
+
+## [Astro](https://astro.build) Blog Template
 
 [![Screenshot](screenshot.png)](https://astro-blog-template.netlify.app/)
 
