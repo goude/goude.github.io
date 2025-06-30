@@ -6,7 +6,7 @@ Original template README follows below.
 
 ## [Astro](https://astro.build) Blog Template
 
-[![Screenshot](screenshot.png)](https://astro-blog-template.netlify.app/)
+[![Screenshot](/assets/screenshot.png)](https://astro-blog-template.netlify.app/)
 
 ## 👉 Check out the ✨ [Live Demo](https://astro-blog-template.netlify.app/) ✨
 
@@ -22,7 +22,7 @@ npm init astro -- --template Charca/astro-blog-template
 
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/charca/astro-blog-template)
 
-## ✨ Features:
+## ✨ Features
 
 - ✅ Astro 4.0
 - ✅ Dark Mode
