@@ -15,9 +15,16 @@ const permalink = `${Astro.site!.href}about`; // FIXME: using ! for now, also, m
   <section>
     <h1 id="colophon">About</h1>
     <p>
-      What’s this? I live in a place where knowing the current week number is
-      strangely important. So I made a page to help me remember it (it's in the
-      footer). Then I added some fluff around that.
+      <a
+        href="https://www.buymeacoffee.com/goude"
+        target="_blank"
+        class="no-style-link"
+        ><img
+          src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png"
+          alt="Buy Me A Coffee"
+          style="height: 60px !important;width: 217px !important;"
+        /></a
+      >
     </p>
   </section>
   <section>
@@ -29,7 +36,7 @@ const permalink = `${Astro.site!.href}about`; // FIXME: using ! for now, also, m
         >.
       </li>
       <li>
-        Template by <a
+        Original template by <a
           href="https://www.twitter.com/Charca"
           target="_blank"
           rel="noopener">Maxi Ferreira</a
@@ -104,22 +111,6 @@ const permalink = `${Astro.site!.href}about`; // FIXME: using ! for now, also, m
     <h2>Certain Links</h2>
     <ul>
       <li><a href="/sitemap">Sitemap</a></li>
-      <li><a href="/qa/cool-awakenings">Cool awakenings</a></li>
     </ul>
-
-    <h2>Synthesizer Funding</h2>
-
-    <p>
-      <a
-        href="https://www.buymeacoffee.com/goude"
-        target="_blank"
-        class="no-style-link"
-        ><img
-          src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png"
-          alt="Buy Me A Coffee"
-          style="height: 60px !important;width: 217px !important;"
-        /></a
-      >
-    </p>
   </section>
 </BaseLayout>
