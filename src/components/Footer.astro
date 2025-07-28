@@ -37,13 +37,17 @@ const tz = `${sign}${tzH}:${tzM}`;
   .faded {
     opacity: 0.2;
   }
+  .clickable {
+    cursor: pointer;
+    text-decoration: underline dotted;
+  }
 </style>
 
 <footer>
   © {now.getFullYear()}
   <a href="https://goude.se">goude.se</a> · Week {week} · v{pkg.version} ·
   {buildParts.date}<span class="faded">T</span>{buildParts.time} ·
-  {nowParts.date}<span class="faded">T</span>{nowParts.time}<span class="faded"
-    >{tz}</span
-  >
+  <a href={`/id/${nowParts.date}T${nowParts.time}`}>
+    {nowParts.date}<span class="faded">T</span>{nowParts.time}</a
+  >{tz}
 </footer>
