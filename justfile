@@ -8,8 +8,8 @@ test: clean check
 	node test/fileUniqueness.js
 	npx playwright test
 
-start-dev:
-	npm run start
+dev:
+	NODE_ENV=dev npm run start
 
 build:
   npm run build
