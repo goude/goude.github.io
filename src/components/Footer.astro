@@ -13,20 +13,25 @@ const getISOWeek = (date: Date) => {
   );
 };
 
-// Get weeknumber and dispatch it
 const weekNumber = getISOWeek(now);
 
-declare const __BUILD_TIMESTAMP__: string; // Perhaps one should not put declarations here. Gets rid of warning.
-const buildTimestamp = __BUILD_TIMESTAMP__;
-const buildDate = new Date(buildTimestamp);
-const pad = (num: number) => num.toString().padStart(2, "0");
-const formattedBuildDate = `${buildDate.getFullYear()}-${pad(buildDate.getMonth() + 1)}-${pad(buildDate.getDate())} ${pad(buildDate.getHours())}:${pad(buildDate.getMinutes())}`;
+declare const __BUILD_TIMESTAMP__: string;
+const buildDate = new Date(__BUILD_TIMESTAMP__);
+const pad = (n: number) => String(n).padStart(2, "0");
+
+const formattedBuildDate = `${buildDate.getFullYear()}-${pad(buildDate.getMonth() + 1)}-${pad(buildDate.getDate())}T${pad(buildDate.getHours())}:${pad(buildDate.getMinutes())}`;
+
+// Short ISO-like timestamp in local timezone (e.g., 2025-07-28T21:06+02:00)
+const tzOffset = -now.getTimezoneOffset();
+const sign = tzOffset >= 0 ? "+" : "-";
+const tzHours = pad(Math.floor(Math.abs(tzOffset) / 60));
+const tzMins = pad(Math.abs(tzOffset) % 60);
+const shortISOTimestamp = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}${sign}${tzHours}:${tzMins}`;
 ---
 
 <footer>
   &copy; {now.getFullYear()}
-  <a href="https://goude.se">goude.se</a>. Week {weekNumber}.
-  <a href="/about#colophon">Colophon</a>. Built {formattedBuildDate} (v{
-    pkg.version
-  }).
+  <a href="https://goude.se">goude.se</a>. Week {weekNumber}. v{pkg.version}
+  {formattedBuildDate}
+  {shortISOTimestamp}
 </footer>
