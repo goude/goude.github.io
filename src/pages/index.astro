@@ -2,7 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const title = "goude.se";
-const description = "On Entry Points and other things.";
+const description = "It's all about connecting.";
 const permalink = Astro.site!.href; // FIXME: using ! for now
 ---
 
@@ -14,19 +14,62 @@ const permalink = Astro.site!.href; // FIXME: using ! for now
 >
   <!-- It clicked, i think -->
   <h1 id="tufte-css">Transmission Begins</h1>
-  <p class="subtitle">We're not in Kansas anymore.</p>
-  <p></p>Culture Mind name: <strong
-    >Build First, Understand Elegantly Later</strong
-  > .
+
+  <style>
+    .subtitle {
+      font-family: "Georgia", serif;
+      font-size: 1.2em;
+      margin: 1em 0;
+    }
+    .aphorism {
+      display: none;
+    }
+    .aphorism.visible {
+      display: inline;
+    }
+  </style>
+
+  <p class="subtitle">
+    <span class="aphorism"
+      >Focus on those who solve problems, not on those who create them.</span
+    >
+    <span class="aphorism"
+      >Stand with the solution-seekers, not the troublemakers.</span
+    >
+    <span class="aphorism"
+      >Give your energy to people who mend things, not those who break them.</span
+    >
+    <span class="aphorism"
+      >Heed the helpers; pay no mind to the instigators.</span
+    >
+    <span class="aphorism">Honor those who heal; ignore those who harm.</span>
+    <span class="aphorism"
+      >Stand by those who build up, not those who tear down.</span
+    >
+    <span class="aphorism"
+      >Don’t waste your attention on those who cause trouble; invest it in those
+      who solve it.</span
+    >
+    <span class="aphorism"
+      >Be part of the solution, not part of the problem.</span
+    >
+    <span class="aphorism"
+      >Look for the helpers. You will always find people who are helping.</span
+    >
+    <span class="aphorism"
+      >You will only be remembered for two things: the problems you solve or the
+      ones you create.</span
+    >
+  </p>
+
+  <script>
+    const aphorisms = document.querySelectorAll(".aphorism");
+    const index = Math.floor(Math.random() * aphorisms.length);
+    if (aphorisms[index]) aphorisms[index].classList.add("visible");
+  </script>
 
   <section>
     <section>
-      <h2>Pill Tests</h2>
-      <p>
-        <img src="/pill?left=HUMAN%2BAI&right=Generated" alt="A pill box" />
-        <img src="/pill" alt="A secondpill box" />
-      </p>
-
       <h2 id="sidenotes">Sidenotes: Footnotes and Marginal Notes</h2>
       <p>
         One of the most distinctive features of Tufte’s style is his extensive
