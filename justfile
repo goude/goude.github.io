@@ -1,5 +1,3 @@
-.PHONY: clean test check serve
-
 clean:
 	rm -rf dist/ test-results/
 
