@@ -151,7 +151,8 @@ p.subtitle {
 }
 
 article {
-  padding: 5rem 0rem;
+  padding: 0;
+  /* padding: 5rem 0rem; */
 }
 
 section {
