@@ -332,12 +332,13 @@ div.table-wrapper {
   letter-spacing: 0.03em;
 }
 
+/*
 code,
 pre > code {
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   font-size: 1rem;
   line-height: 1.42;
-  -webkit-text-size-adjust: 100%; /* Prevent adjustments of font size after orientation changes in iOS. See https://github.com/edwardtufte/tufte-css/issues/81#issuecomment-261953409 */
+  -webkit-text-size-adjust: 100%;
 }
 
 .sans > code {
@@ -366,6 +367,7 @@ pre > code {
 pre.fullwidth > code {
   width: 90%;
 }
+*/
 
 .fullwidth {
   max-width: 90%;
@@ -419,9 +421,11 @@ label.margin-toggle:not(.sidenote-number) {
     width: 100%;
   }
 
+  /*
   pre > code {
     width: 97%;
   }
+  */
 
   section > dl,
   section > ol,

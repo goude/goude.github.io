@@ -1,8 +1,10 @@
 ---
 import "../styles/tufte.css";
+/*
 import "../styles/tufte-extra.css";
 import "../styles/pandoc.css";
 import "../styles/pandoc-solarized.css";
+*/
 
 export interface Props {
   title: string;
@@ -38,3 +40,39 @@ const socialUrl = Astro.site!.href + "assets/social.png";
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={socialUrl} />
+
+<!-- Syntax Highlighting -->
+<link
+  href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css"
+  rel="stylesheet"
+/>
+
+<script
+  is:inline
+  defer
+  src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"
+></script>
+
+<script
+  is:inline
+  defer
+  src="https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"
+></script>
+
+<script is:inline>
+  window.Prism = window.Prism || {};
+  Prism.plugins = Prism.plugins || {};
+  Prism.plugins.autoloader = {
+    languages_path: "https://cdn.jsdelivr.net/npm/prismjs@1/components/",
+  };
+</script>
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    console.log("YOYO");
+    document.querySelectorAll("pre > code:not([class])").forEach((el) => {
+      el.classList.add("language-js"); // or 'language-text' for neutral
+    });
+    Prism.highlightAll(); // re-run after adding classes
+  });
+</script>
