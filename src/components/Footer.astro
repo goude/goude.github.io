@@ -14,12 +14,14 @@ const getISOWeek = (date: Date) => {
 const pad = (n: number) => String(n).padStart(2, "0");
 
 const week = getISOWeek(now);
+/*
 const build = new Date(__BUILD_TIMESTAMP__);
 
 const buildParts = {
   date: `${build.getFullYear()}-${pad(build.getMonth() + 1)}-${pad(build.getDate())}`,
   time: `${pad(build.getHours())}:${pad(build.getMinutes())}`,
 };
+*/
 
 const nowParts = {
   date: `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`,
@@ -46,8 +48,8 @@ const tz = `${sign}${tzH}:${tzM}`;
 <footer>
   © {now.getFullYear()}
   <a href="https://goude.se">goude.se</a> · Week {week} · v{pkg.version} ·
-  {buildParts.date}<span class="faded">T</span>{buildParts.time} ·
-  <a href={`/id/${nowParts.date}T${nowParts.time}`}>
+  <!-- {buildParts.date}<span class="faded">T</span>{buildParts.time} · -->
+  <a href={`/id?id=${nowParts.date}T${nowParts.time}`}>
     {nowParts.date}<span class="faded">T</span>{nowParts.time}</a
   >{tz}
 </footer>

@@ -1,0 +1,72 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Rubik's Cube Beginner Solution Algorithms";
+const description = "Flip, flop, flubbedubbedop!";
+const permalink = Astro.site!.href; // FIXME: using ! for now
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  permalink={permalink}
+  current="home"
+>
+  <section>
+    <h2>Step 1: White Cross</h2>
+    <p>
+      Manually position the white edge pieces to form a cross on the white face.
+      Match the side colors to the adjacent centers.
+    </p>
+    <code>R' U' R U R'</code>
+    <p>(Optional helper for fixing edge positions)</p>
+
+    <h2>Step 2: White Corners</h2>
+    <p>
+      Insert the white corners one by one by aligning the cubie below its target
+      position and using:
+    </p>
+    <code>F D F'</code>
+    <code>R' D' R</code>
+    <code>R' D R F D2 F'</code>
+    <p>To fix orientation or bump a corner down first:</p>
+    <code>R' D R F D F'</code>
+
+    <h2>Step 3: Second Layer Edges</h2>
+    <p>
+      Find edge pieces in the top layer without yellow. Match their front color
+      with a center and move left or right:
+    </p>
+    <code>U R U' R' U' F' U F</code>
+    <p>(For moving to the right)</p>
+    <code>U' L' U L U F U' F'</code>
+    <p>(For moving to the left)</p>
+
+    <h2>Step 4: Yellow Cross</h2>
+    <p>Depending on the yellow shape, use:</p>
+    <code>F U R U' R' F'</code>
+    <p>(For “L” shape in top-left)</p>
+    <code>F R U R' U' F'</code>
+    <p>(For horizontal line)</p>
+
+    <h2>Step 5: Yellow Edges</h2>
+    <p>Align yellow edge pieces with their side center colors using:</p>
+    <code>U R U R' U R U2 R'</code>
+    <p>(Do twice if wrong edges are opposite)</p>
+
+    <h2>Step 6: Corner Positioning</h2>
+    <p>Put at least one correct corner in the FRU position, then:</p>
+    <code>U R U' L' U R' U' L</code>
+    <p>Repeat until all yellow corners are in the correct positions.</p>
+
+    <h2>Step 7: Corner Orientation</h2>
+    <p>With an incorrect corner in FRU, use:</p>
+    <code>(R' D' R D) (R' D' R D)</code>
+    <p>If yellow is on the right</p>
+    <code>(R' D' R D) × 4</code>
+    <p>If yellow is on the front</p>
+    <p>
+      Use U or U' to rotate next incorrect corner into FRU, repeat until solved.
+    </p>
+  </section>
+</BaseLayout>
