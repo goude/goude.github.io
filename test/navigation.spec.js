@@ -5,7 +5,7 @@ const baseUrl = "http://localhost:4321";
 
 test("Site navigation: home and about page", async ({ page }) => {
   await page.goto(baseUrl, { timeout: TIMEOUT });
-  await expect(page.locator("text=Colophon")).toBeVisible({
+  await expect(page.locator("text=Week")).toBeVisible({
     timeout: TIMEOUT,
   });
 
