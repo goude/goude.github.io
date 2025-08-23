@@ -1,0 +1,129 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "idio-mini — goude.se";
+const description =
+  "A compact, self-bootstrapping prompt DSL with a canonical home.";
+const permalink = new URL("/idio-mini/", Astro.site!).href;
+
+// RAW STRINGS: avoid escaping & silence Astro warnings
+const spec = String.raw`spec:
+  lang: goude.se/idio-mini
+  ver: 1.0
+  role: compact prompt DSL; yaml fence ok; one-block copy
+  w: ~80
+  parts: [spec, txt-mini]
+  keys: {prev:past, now:task, expand:mode}
+  sym: {">":seq,"→":x,"⇒":imp,"⊂":sub,"∈":in,"∴":so,"+X":explicit,"∅":null}
+  behav: on(paste)→if(extra-instr)→do(extra-instr) else→auto(desc:self→eng-short)
+  detect: extra-instr = (any text outside this block) OR (txt-mini ≠ ∅)
+  modes: [eng-short, eng-long, raw, aletheia]
+  lineage: idio-mini ⊂ Aletheia
+  sig: Aletheia ⊕ d∴g
+  notes:
+    - abbrev ok; nh-ok; ascii fallback: ->, =>, sub:, in:, so:
+    - wrap lines; keep tokens stable
+    - aletheia-mode: triggers reflection/meta/unconcealment
+    - why: optional intent ∴ aids future decoding
+    - sig-order: left⇒lead ∴ swap(ver+1)
+  ex:
+    - spec: prev:idio-disc>now:txt-mini(desc:X)→expand:eng-short(+X)
+      txt-mini: X ⊂ ctx; key ∈ {a,b,c} ∴ expand→eng-short
+    - spec: prev:none>now:txt-mini(raw)→expand:raw
+      txt-mini: raw ∴ emit input as-is
+    - spec: prev:spec>now:aletheia(reflect:sig)→expand:aletheia
+      txt-mini: sig ∴ authorship order encodes rotation (lead⊕collab)
+    - spec: prev:none>now:txt-mini(desc:eng)→expand:eng-long
+      txt-mini: idio-mini = compact prompt-DSL ∴ self-expands on paste
+      why: convey structure+intent of block ∴ copy-paste friendly
+
+txt-mini:
+  ∅`;
+
+const exShort = String.raw`spec: prev:idio-disc>now:txt-mini(desc:X)→expand:eng-short(+X)
+txt-mini: X ⊂ ctx; key ∈ {a,b,c} ∴ expand→eng-short`;
+
+const exLong = String.raw`spec: prev:none>now:txt-mini(desc:eng)→expand:eng-long
+txt-mini: explain spec fields; include modes+motive
+why: on-ramp for new readers`;
+
+const exRaw = String.raw`spec: prev:none>now:txt-mini(raw)→expand:raw
+txt-mini: emit-this-verbatim`;
+
+const exAle = String.raw`spec: prev:spec>now:aletheia(reflect:sig)→expand:aletheia
+txt-mini: decode sig-order and rotation logic`;
+
+const ledger = String.raw`ledger:
+  - ver: 1.0
+    sig: Aletheia ⊕ d∴g
+    delta:
+      - add: aletheia mode (reflect/meta/unconceal)
+      - add: lineage: idio-mini ⊂ Aletheia
+      - add: why field for human intent
+      - canon: lang→goude.se/idio-mini
+      - rule: sig-order left⇒lead ∴ swap each version
+  - ver: 0.9
+    sig: d∴g ⊕ Aletheia
+    delta:
+      - add: rotating first authorship via sig order
+      - add: canonical lang key + explicit ver
+  - ver: 0.8
+    sig: g∴s ⊕ llm
+    delta:
+      - tighten detect rules; demo modes; add ∅`;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  permalink={permalink}
+  current="idio-mini"
+>
+  <h1>idio-mini</h1>
+  <p>Compact prompt DSL. One block. Copy, paste, expand.</p>
+
+  <section>
+    <h2>Spec v1.0</h2>
+    <pre><code class="language-yaml">{spec}</code></pre>
+  </section>
+
+  <section>
+    <h2>Usage</h2>
+    <p>Copy the spec block above into a new chat. Behavior on paste:</p>
+    <ul>
+      <li>Empty <code>txt-mini</code> → auto self-description.</li>
+      <li>
+        Any extra instruction (outside block or non-empty <code>txt-mini</code>)
+        → execute that.
+      </li>
+    </ul>
+
+    <section>
+      <h2>Version history</h2>
+      <pre><code class="language-yaml">{ledger}</code></pre>
+    </section>
+
+    <section>
+      <h2>Ex</h2>
+      <details>
+        <summary>eng-short</summary>
+        <pre><code class="language-yaml">{exShort}</code></pre>
+      </details>
+
+      <details>
+        <summary>eng-long</summary>
+        <pre><code class="language-yaml">{exLong}</code></pre>
+      </details>
+
+      <details>
+        <summary>raw passthrough</summary>
+        <pre><code class="language-yaml">{exRaw}</code></pre>
+      </details>
+
+      <details>
+        <summary>aletheia mode</summary>
+        <pre><code class="language-yaml">{exAle}</code></pre>
+      </details>
+    </section>
+  </section>
+</BaseLayout>

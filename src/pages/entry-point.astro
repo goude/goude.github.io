@@ -1,0 +1,102 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Entry Point";
+const description =
+  "Send one link: the project’s entry point page that maps to everything else.";
+const permalink = new URL("/entry-point", Astro.site!).href;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  permalink={permalink}
+  current="entry-point"
+>
+  <h1>Entry Point</h1>
+
+  <style>
+    .tldr {
+      border: 1px solid var(--color-border, #ddd);
+      background: var(--color-bg-soft, #f9f9f9);
+      padding: 0.9rem 1rem;
+      border-radius: 0.5rem;
+      margin: 1rem 0 1.5rem;
+      font-weight: 600;
+    }
+    .subtle {
+      color: var(--color-text-dim, #666);
+      font-size: 0.95rem;
+      margin-top: 0.25rem;
+      font-weight: 400;
+    }
+    .section {
+      margin: 1.25rem 0;
+    }
+    .examples code {
+      font-weight: 600;
+    }
+  </style>
+
+  <div class="tldr" role="note" aria-label="TL;DR">
+    👉 TL;DR: Send exactly <strong>one link</strong> — the page that maps to everything
+    else.
+    <div class="subtle">
+      Not a bundle of URLs. One page that already collects them.
+    </div>
+  </div>
+
+  <p>
+    Hello! If I shared this link with you, I’m asking:
+    <strong>Where is the project’s entry point?</strong>
+  </p>
+
+  <p>
+    The entry point is a single page that acts as the project map. It links to
+    the essentials and is the first thing a newcomer should read.
+  </p>
+
+  <div class="section">
+    <h2>What belongs on an entry point page</h2>
+    <ul>
+      <li>Repository or code (<strong>README</strong> or equivalent)</li>
+      <li>Task board (Jira, Trello, Linear)</li>
+      <li>Documentation (Confluence, Notion, wiki)</li>
+      <li>Meeting notes and decisions</li>
+      <li>Key contacts and responsibilities</li>
+    </ul>
+    <p class="subtle">Think of it as the table of contents for the project.</p>
+  </div>
+
+  <div class="section">
+    <h2>Why one link matters</h2>
+    <ul>
+      <li>Onboarding is faster. Open one page, not five tabs.</li>
+      <li>Fewer pings. No scavenger hunts for scattered links.</li>
+      <li>Shared reality. Update once, align everyone.</li>
+    </ul>
+  </div>
+
+  <div class="section examples">
+    <h2>Examples</h2>
+    <ul>
+      <li>Repo-driven project: the <code>README</code> is the entry point.</li>
+      <li>
+        Non-technical project: a single Confluence, Notion, or Google Doc.
+      </li>
+      <li>
+        Cross-team effort: an index page that links Jira, docs, dashboards, and
+        notes.
+      </li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>What I need from you</h2>
+    <p>
+      If the project already has an entry point, please send me that one link.
+      If it does not exist yet, create a short page with the links above and
+      share it. It does not need to be fancy. It does need to exist.
+    </p>
+  </div>
+</BaseLayout>

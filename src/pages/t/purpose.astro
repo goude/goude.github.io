@@ -1,0 +1,19 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const title = "Purpose and Meaning";
+const description = "Why are we here? What's it all about?";
+const permalink = Astro.site!.href; // FIXME: using ! for now
+---
+
+<BaseLayout title={title} description={description} permalink={permalink}>
+  <section>
+    <h2>The Purpose of Life</h2>
+    <p>
+      The purpose of life is to change, like how a seed becomes a tree, or a
+      caterpillar becomes a butterfly. We’re always changing too, learning new
+      things, growing taller, and sometimes even learning how to let go. Life’s
+      about becoming different over time.
+    </p>
+  </section>
+</BaseLayout>
