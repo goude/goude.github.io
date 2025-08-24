@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 const title = "Rubik's Cube Beginner Solution Algorithms";
 const description = "Flip, flop, flubbedubbedop!";
-const permalink = Astro.site!.href; // FIXME: using ! for now
+const permalink = Astro.site?.href ?? "https://goude.se/";
 ---
 
 <BaseLayout

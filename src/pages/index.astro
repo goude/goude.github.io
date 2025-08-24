@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 const title = "goude.se";
 const description = "It's all about connecting.";
-const permalink = Astro.site!.href; // FIXME: using ! for now
+const permalink = Astro.site?.href ?? "https://goude.se/";
 ---
 
 <BaseLayout
