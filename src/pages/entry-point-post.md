@@ -1,10 +1,12 @@
 ---
--title: Entry Point
--description: A clear, written entry point—like a simple README—can replace the inefficiency and exclusivity of relying on oral tradition to onboard newcomers.
--layout: ../layouts/BaseLayout.astro
+title: A Simple and Single ENTRY POINT
+description: A clear, written entry point—like a simple README—can replace the inefficiency and exclusivity of relying on oral tradition to onboard newcomers.
+layout: ../layouts/BaseLayout.astro
 ---
 
 # 🧭 A Simple and Single ENTRY POINT
+
+This is the original. A [copy was posted on LinkedIn](https://www.linkedin.com/pulse/simple-single-entry-point-daniel-goude-fdmff/).
 
 Imagine walking into a restaurant. The first thing you look for is the menu:
 one obvious place to see what's available and decide what to do next.

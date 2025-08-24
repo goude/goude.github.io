@@ -1,9 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-
 const title = "Entry Point";
 const description =
-  "Send one link: the project’s entry point page that maps to everything else.";
+  "Send one link: the project's entry point page that maps to everything else.";
 const permalink = new URL("/entry-point", Astro.site!).href;
 ---
 
@@ -13,90 +12,131 @@ const permalink = new URL("/entry-point", Astro.site!).href;
   permalink={permalink}
   current="entry-point"
 >
-  <h1>Entry Point</h1>
+  <section>
+    <h2>Entry Point</h2>
 
-  <style>
-    .tldr {
-      border: 1px solid var(--color-border, #ddd);
-      background: var(--color-bg-soft, #f9f9f9);
-      padding: 0.9rem 1rem;
-      border-radius: 0.5rem;
-      margin: 1rem 0 1.5rem;
-      font-weight: 600;
-    }
-    .subtle {
-      color: var(--color-text-dim, #666);
-      font-size: 0.95rem;
-      margin-top: 0.25rem;
-      font-weight: 400;
-    }
-    .section {
-      margin: 1.25rem 0;
-    }
-    .examples code {
-      font-weight: 600;
-    }
-  </style>
-
-  <div class="tldr" role="note" aria-label="TL;DR">
-    👉 TL;DR: Send exactly <strong>one link</strong> — the page that maps to everything
-    else.
-    <div class="subtle">
-      Not a bundle of URLs. One page that already collects them.
+    <div class="tldr" role="note" aria-label="TL;DR">
+      🧭 <strong>Entry Point</strong>: One link to start. Not a collection of
+      URLs—a single page that maps to everything else.
+      <div class="subtle">
+        The project equivalent of walking into a restaurant and finding the
+        menu.
+      </div>
     </div>
-  </div>
 
-  <p>
-    Hello! If I shared this link with you, I’m asking:
-    <strong>Where is the project’s entry point?</strong>
-  </p>
-
-  <p>
-    The entry point is a single page that acts as the project map. It links to
-    the essentials and is the first thing a newcomer should read.
-  </p>
-
-  <div class="section">
-    <h2>What belongs on an entry point page</h2>
-    <ul>
-      <li>Repository or code (<strong>README</strong> or equivalent)</li>
-      <li>Task board (Jira, Trello, Linear)</li>
-      <li>Documentation (Confluence, Notion, wiki)</li>
-      <li>Meeting notes and decisions</li>
-      <li>Key contacts and responsibilities</li>
-    </ul>
-    <p class="subtle">Think of it as the table of contents for the project.</p>
-  </div>
-
-  <div class="section">
-    <h2>Why one link matters</h2>
-    <ul>
-      <li>Onboarding is faster. Open one page, not five tabs.</li>
-      <li>Fewer pings. No scavenger hunts for scattered links.</li>
-      <li>Shared reality. Update once, align everyone.</li>
-    </ul>
-  </div>
-
-  <div class="section examples">
-    <h2>Examples</h2>
-    <ul>
-      <li>Repo-driven project: the <code>README</code> is the entry point.</li>
-      <li>
-        Non-technical project: a single Confluence, Notion, or Google Doc.
-      </li>
-      <li>
-        Cross-team effort: an index page that links Jira, docs, dashboards, and
-        notes.
-      </li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>What I need from you</h2>
     <p>
-      If the project already has an entry point, please send me that one link.
-      If it does not exist yet, create a short page with the links above and
-      share it. It does not need to be fancy. It does need to exist.
+      An entry point addresses a really simple question: 'what single piece of
+      written information do I need to get started in this project?' Not a quick
+      chat with someone who'll email you documents later. Just one place to
+      start.
     </p>
-  </div>
+
+    <p>
+      Imagine a restaurant with no menu. You ask a server who names a few dishes
+      but not all, tells you to ask someone else who's on break. Others around
+      you are doing the same dance. It sounds absurd—but this is how many
+      projects operate.
+    </p>
+
+    <p>
+      In software, this problem was solved long ago: the <strong>README</strong>
+      file. It's designed empathy—written by someone who remembered being confused
+      and took time to smooth the path for the next person.
+    </p>
+
+    <h2>What belongs on an entry point</h2>
+    <ul>
+      <li>
+        <strong>Project purpose:</strong> What are we building and why?
+      </li>
+      <li>
+        <strong>Key contacts:</strong> Who owns what and how to reach them
+      </li>
+      <li>
+        <strong>Essential links:</strong> Repository, task board, documentation
+      </li>
+      <li><strong>Current priorities:</strong> What's happening now</li>
+      <li>
+        <strong>How to contribute:</strong> Clear next steps for newcomers
+      </li>
+    </ul>
+    <p class="subtle">
+      Think menu, not phone book. Curated essentials that orient fast.
+    </p>
+
+    <h2>Why this matters</h2>
+
+    <ul>
+      <li>
+        <strong>Faster onboarding:</strong> One tab instead of five, one conversation
+        instead of a scavenger hunt
+      </li>
+      <li>
+        <strong>Reduced cognitive load:</strong> No more "where do I even start"
+        paralysis
+      </li>
+      <li>
+        <strong>Shared reality:</strong> Everyone works from the same understanding
+      </li>
+      <li>
+        <strong>Invisible time savings:</strong> Eliminates the quiet tax of repeated
+        orientation questions
+      </li>
+    </ul>
+
+    <p>
+      (Pro tip: The first line should be "prefer talking? contact X to walk
+      through this" because the real point isn't the format—it's ensuring
+      someone owns the onboarding experience. Once you're onboarded, it becomes
+      everyone's responsibility to keep improving it because we all remember
+      what it felt like to be lost on day one.)
+    </p>
+
+    <h2>What this looks like</h2>
+    <ul>
+      <li>
+        <strong>Code project:</strong> The <code>README</code> already does this—extend
+        the concept
+      </li>
+      <li>
+        <strong>Business project:</strong> A single Confluence page, Notion doc,
+        or even a well-organized Google Doc
+      </li>
+      <li>
+        <strong>Cross-functional effort:</strong> An index page linking to Jira,
+        dashboards, meeting notes, and key decisions
+      </li>
+    </ul>
+    <p class="subtle">
+      It doesn't need to be fancy. It needs to exist and be maintained.
+    </p>
+
+    <h2>What I'm asking for</h2>
+    <p>
+      <strong>If your project has an entry point:</strong> Please send me that one
+      link.
+    </p>
+    <p>
+      <strong>If it doesn't exist yet:</strong> Consider creating one. A simple page
+      with the essentials above. Your future teammates (and future self) will thank
+      you.
+    </p>
+    <p class="subtle">
+      This isn't about process for process's sake—it's about recognizing that
+      good onboarding is designed, not accidental.
+    </p>
+
+    <p>
+      <a href="/entry-point-post"
+        >Read the full thinking behind entry points →</a
+      >
+    </p>
+    <p class="subtle">
+      <em
+        >This concept emerged from collaborative thinking about making
+        organizations more human-centered. Because good tools should amplify
+        human connection, not replace it.</em
+      >
+    </p>
+  </section>
 </BaseLayout>
