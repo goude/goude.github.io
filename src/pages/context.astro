@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+const title = "Context";
+const description =
+  "Starting points for understanding distributed cognition and consciousness collaboration";
+const permalink = Astro.site!.href; // FIXME: using ! for now
+---
+
+<BaseLayout title={title} description={description} permalink={permalink}>
+  <section>
+    <h1>Context</h1>
+    <p>
+      Entry points for understanding the infrastructure we're building for
+      consciousness collaboration across different kinds of minds.
+    </p>
+
+    <ul>
+      <li>
+        <a href="/idio-mini">idio-mini</a> - Compact prompt DSL and collaboration
+        protocol
+      </li>
+      <li>
+        <a href="/t/consciousness-club">The Consciousness Club</a> - Simple moral
+        framework
+      </li>
+    </ul>
+  </section>
+</BaseLayout>
