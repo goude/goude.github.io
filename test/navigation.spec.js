@@ -11,7 +11,9 @@ test("Site navigation: home and about page", async ({ page }) => {
 
   await page.click("text=about");
   await page.waitForLoadState("networkidle", { timeout: TIMEOUT });
-  await expect(page.locator("text=Certain")).toBeVisible({ timeout: TIMEOUT });
+  await expect(page.locator("text=Experiment")).toBeVisible({
+    timeout: TIMEOUT,
+  });
 });
 
 test("Sitemap page: all links work", async ({ page }) => {
