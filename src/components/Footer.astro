@@ -47,9 +47,8 @@ const tz = `${sign}${tzH}:${tzM}`;
 
 <footer>
   © {now.getFullYear()}
-  <a href="https://goude.se">goude.se</a> · Week {week} · <a href="/sitemap"
-    >v{pkg.version}</a
-  > · <!--{buildParts.date}<span class="faded">T</span>{buildParts.time} · -->
+  <a href="https://goude.se">goude.se</a> · <a href="/context">Week {week}</a> ·
+  <a href="/sitemap">v{pkg.version}</a> · <!--{buildParts.date}<span class="faded">T</span>{buildParts.time} · -->
   <a href={`/id?id=${nowParts.date}T${nowParts.time}`}>
     {nowParts.date}<span class="faded">T</span>{nowParts.time}</a
   >{tz} ⊛
