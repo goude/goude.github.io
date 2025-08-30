@@ -5,8 +5,8 @@ export default {
     {
       files: "*.astro",
       options: {
-        parser: "astro"
-      }
-    }
-  ]
-}
+        parser: "astro",
+      },
+    },
+  ],
+};
