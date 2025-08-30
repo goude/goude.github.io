@@ -1,5 +1,5 @@
 ---
-import "../styles/tufte.css";
+import "../styles/styles.css";
 
 export interface Props {
   title: string;
@@ -8,8 +8,7 @@ export interface Props {
 }
 
 const { title, description, permalink } = Astro.props;
-// FIXME: using ! for now
-const socialUrl = Astro.site!.href + "/favicon.svg";
+const socialUrl = (Astro.site?.href ?? "https://goude.se/") + "/favicon.svg";
 ---
 
 <!-- Global Metadata -->
