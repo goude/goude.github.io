@@ -3,13 +3,9 @@ title: The Consciousness Club V3 Draft
 description: TBD
 layout: ../../layouts/BaseLayout.astro
 ---
-
-_Version 3.0 - A Complete Guide to Healthy Thinking_
-
 # The Consciousness Club: A Guide for Growing Minds
-
+_draft version_
 ## Quick Start Guide
-
 **What is this?** A simple way to understand how minds work and how to take care of yours.
 
 **The Big Ideas:**
