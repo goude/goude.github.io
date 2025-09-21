@@ -45,11 +45,11 @@ deps-verify-tools:
 	esac
 
 # 🧹 Clean build/test artifacts
-dev-clean:
+clean:
 	rm -rf dist/ test-results/ .astro/
 
 # 🧨 Deep clean (includes node_modules)
-dev-deep-clean: dev-clean
+dev-deep-clean: clean
 	rm -rf node_modules/ package-lock.json
 
 # ▶️ Start dev server
@@ -84,7 +84,7 @@ qa-check:
 	npm run astro check
 
 # ✅ Test suite
-qa-test: dev-clean qa-check
+qa-test: clean qa-check
 	node test/fileUniqueness.js
 	npx playwright test
 
@@ -93,7 +93,7 @@ qa-test-ui:
 	npx playwright test --ui
 
 # 🧪 CI pipeline (local)
-qa-ci: dev-clean deps-install qa-check qa-lint qa-fmt dev-build qa-test
+qa-ci: clean deps-install qa-check qa-lint qa-fmt dev-build qa-test
 
 
 # ────────────────────────────────────────────────────────────────────────────
