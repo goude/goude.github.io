@@ -1,117 +1,73 @@
-# Load .env automatically
+# Load .env and use a safe shell
 set dotenv-load := true
-# Safer shell defaults
 set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
 
-# Configuration defaults (override via exported env or .env)
+# Config (override via env/.env)
 NODE_ENV := env("NODE_ENV", "development")
 PORT := env("PORT", "4321")
 NODE_REQUIRED := env("NODE_REQUIRED", "v20")
 
-# 🚀 Quickstart + task index (run `just` with no args)
-core-help:
-	@printf "🚀 Quickstart\n"
-	@printf "  1) just core-quickstart   # verify tools, install deps, check, then start dev\n"
-	@printf "  2) just dev-start         # start dev server (subsequent runs)\n"
-	@printf "  3) just dev-build && dev-preview  # build and preview production\n\n"
-	@printf "Env  NODE_ENV={{NODE_ENV}}  PORT={{PORT}}  NODE_REQUIRED={{NODE_REQUIRED}}\n\n"
-	@printf "📜 Available tasks\n\n"
+# 🚀 Show banner + task list
+_default:
+	@echo "🚀 Run 'just quickstart' to get going\n"
 	@just --list
 
-# 🧭 Bootstrap project and start dev server
-core-quickstart: deps-verify-tools deps-install qa-check
-	NODE_ENV={{NODE_ENV}} npm run start
-
-# 📋 Show available tasks (plain list)
-core-show:
-	@just --list
-
-# 📦 Install project dependencies
-deps-install: deps-verify-tools
-	npm ci
-
-# 🎭 Install Playwright browsers
-deps-playwright-install:
-	npx playwright install --with-deps
-
-# 🔧 Verify toolchain (node/npm)
-deps-verify-tools:
-	@command -v node >/dev/null || { echo "❌ node not found" >&2; exit 127; }
-	@command -v npm  >/dev/null || { echo "❌ npm not found" >&2; exit 127; }
-	@NODE_VER="$$(node -v)"; \
-	case "$$NODE_VER" in \
-	  {{NODE_REQUIRED}}*) ;; \
-	  *) echo "❌ Expected Node {{NODE_REQUIRED}} (got $$NODE_VER)" >&2; exit 1 ;; \
-	esac
-
-# 🧹 Clean build/test artifacts
-clean:
-	rm -rf dist/ test-results/ .astro/
-
-# 🧨 Deep clean (includes node_modules)
-dev-deep-clean: clean
-	rm -rf node_modules/ package-lock.json
+# 🚀 Install → check → dev
+quickstart: verify install check dev
 
 # ▶️ Start dev server
-dev-start: qa-check
+dev:
 	NODE_ENV={{NODE_ENV}} npm run start
 
-# 🏗️ Build production site
-dev-build: deps-verify-tools
+# 🏗️ Production build
+build: verify
 	npm run build
 
 # 🔎 Preview production build
-dev-preview:
+preview:
 	NODE_ENV=production npm run preview -- --port {{PORT}}
 
-# ♻️ Reset: deep clean → install → playwright → check
-dev-reset: dev-deep-clean deps-install deps-playwright-install qa-check
-	@printf "✅ Reset complete. Next: run 'just dev-start' or 'just core-quickstart'.\n"
-
 # ✨ Format code
-qa-fmt:
-	if npm run | grep -qE '^[[:space:]]*fmt([[:space:]]|:)'; then npm run fmt; \
-	elif npm run | grep -qE '^[[:space:]]*format([[:space:]]|:)'; then npm run format; \
-	else npx prettier -w .; fi
+fmt:
+	npm run format
 
 # 🧼 Lint code
-qa-lint:
-	if npm run | grep -qE '^[[:space:]]*lint([[:space:]]|:)'; then npm run lint; \
-	else printf "ℹ️ No lint script found; skipping.\n"; fi
+lint:
+	npm run lint
 
 # 🩺 Static checks (astro check)
-qa-check:
+check:
 	npm run astro check
 
-# ✅ Test suite
-qa-test: clean qa-check
+# ✅ Run test suite
+test: clean check
 	node test/fileUniqueness.js
 	npx playwright test
 
-# 🖥️ Test UI (Playwright)
-qa-test-ui:
+# 🖥️ Playwright UI
+test-ui:
 	npx playwright test --ui
 
-# 🧪 CI pipeline (local)
-qa-ci: clean deps-install qa-check qa-lint qa-fmt dev-build qa-test
+# 🧹 Clean build artifacts
+clean:
+	rm -rf dist/ test-results/ .astro/
 
+# ♻️ Deep clean + reinstall + check
+reset: clean
+	rm -rf node_modules/ package-lock.json
+	npm ci
+	npx playwright install --with-deps
+	just check
 
-# ────────────────────────────────────────────────────────────────────────────
-# Notes for future maintainers (and helpful LLMs)
-# ────────────────────────────────────────────────────────────────────────────
-# Grouping & naming:
-#   - Word prefixes so alphabetical `just --list` clusters tasks:
-#       core-* (meta/entry), deps-* (tooling), dev-* (build/run/clean), qa-* (checks/tests).
-# UX:
-#   - First recipe `core-help` runs on bare `just`, prints a minimal guide,
-#     current env, and then calls `just --list` (no fancy quoting; portable).
-# Docstrings:
-#   - The single-line comment immediately above each recipe shows in `just --list`.
-# Env:
-#   - Defaults via env("KEY","default") so exported vars and `.env` override cleanly.
-# Shell:
-#   - Bash with -eu and pipefail for predictable failure behavior.
-# Portability:
-#   - Avoids `$'...'` strings and nested command substitution in help to keep it tmux/fish-friendly.
-# Extend:
-#   - Add `release-*`, `docs-*`, or argumented recipes as needed; document usage in the doc-comment.
+# 🔧 Verify Node toolchain
+verify:
+	@command -v node >/dev/null || { echo "❌ node not found" >&2; exit 127; }
+	@command -v npm  >/dev/null || { echo "❌ npm not found" >&2; exit 127; }
+	@case "$$(node -v)" in {{NODE_REQUIRED}}*) ;; *) echo "❌ Need Node {{NODE_REQUIRED}}" >&2; exit 1 ;; esac
+
+# 📦 Install deps
+install: verify
+	npm ci
+
+# 🤖 Local CI pipeline
+ci: clean install check lint fmt build test
