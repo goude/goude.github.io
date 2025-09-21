@@ -3,9 +3,13 @@ title: The Group Harmony Guide - How Your Actions Affect Everyone
 description: A simple way to understand how your choices affect other people and how groups work together smoothly.
 layout: ../../layouts/BaseLayout.astro
 ---
+
 # The Group Harmony Guide: How Your Actions Affect Everyone
+
 _draft version_
+
 ## Quick Start Guide
+
 **What is this?** A simple way to understand how your choices affect other people and how groups work together smoothly.
 
 **The Big Ideas:**

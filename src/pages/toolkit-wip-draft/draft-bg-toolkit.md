@@ -12,7 +12,7 @@
 
 **Alternative names:** Mental Spotlight, Attention Remote Control, Mind Steering Wheel
 
------
+---
 
 ## The Core Three: Foundation for Mental Health
 
@@ -36,7 +36,7 @@
 
 **Alternative names:** Cognitive Fuel Tank, Mental Power Level, Brain Battery
 
------
+---
 
 ## The Essential Five: Core Mental Skills
 
@@ -56,7 +56,7 @@
 
 **Alternative names:** Mind Diversity Principle, Different Brains Rule, Neurodiversity Lens
 
------
+---
 
 ## The Expanded Eight: Advanced Self-Management
 
@@ -84,7 +84,7 @@
 
 **Alternative names:** Doing Bridge, Action Translator, Knowledge-to-Action Converter
 
------
+---
 
 ## The Complete Thirteen: Comprehensive Mental Health Toolkit
 
@@ -128,7 +128,7 @@
 
 **Alternative names:** Crisis Detector, Emergency Mode Activator, Help Signal System
 
------
+---
 
 ## Identified Gaps and Missing Tools
 
@@ -169,7 +169,7 @@
 - Recognizing when your system is about to overload and taking preventive action
 - How to step back before reaching crisis mode
 
------
+---
 
 ## Alternative Naming Schemes
 

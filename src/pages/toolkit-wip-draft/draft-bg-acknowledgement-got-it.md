@@ -33,6 +33,7 @@ Meanwhile, the receiver might think their silence is perfectly clear communicati
 Just like nodding when someone speaks to you in person, digital communication benefits from simple acknowledgment signals:
 
 **Quick Examples:**
+
 - "Got your message, will respond this evening"
 - "Saw this, thinking it over"
 - "Received - need to check some things first"
@@ -42,18 +43,21 @@ Just like nodding when someone speaks to you in person, digital communication be
 ## Why This Matters More Than We Realize
 
 **For the sender:**
+
 - Eliminates the "did they get it?" anxiety
 - Prevents unnecessary follow-up messages
 - Creates clear expectations for response timing
 - Shows basic respect for their effort to communicate
 
 **For the receiver:**
+
 - Buys thinking time without appearing rude
 - Prevents repeated messages asking if you saw the first one
 - Lets you control response timing while maintaining goodwill
 - Creates space for thoughtful rather than reactive responses
 
 **For the relationship:**
+
 - Reduces communication friction and misunderstandings
 - Builds trust through reliable acknowledgment patterns
 - Creates calmer, more predictable interaction rhythms
@@ -70,6 +74,7 @@ Just like nodding when someone speaks to you in person, digital communication be
 ## The Meta-Effect
 
 Once you start consistently acknowledging messages, something interesting happens:
+
 - Others begin to trust your communication patterns
 - You reduce the overall communication anxiety in your relationships
 - People feel heard and valued, even during delayed responses
