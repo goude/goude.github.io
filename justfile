@@ -28,7 +28,7 @@ preview:
 	NODE_ENV=production npm run preview -- --port {{PORT}}
 
 # ✨ Format code
-fmt:
+format:
 	npm run format
 
 # 🧼 Lint code
@@ -70,4 +70,4 @@ install: verify
 	npm ci
 
 # 🤖 Local CI pipeline
-ci: clean install check lint fmt build test
+ci: clean install check lint format build test
