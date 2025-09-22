@@ -1,6 +1,6 @@
 {
   "name": "goude-github-io",
-  "version": "1.10.1",
+  "version": "1.10.2",
   "type": "module",
   "scripts": {
     "prepare-readme": "node scripts/prepare-readme.js",
@@ -19,9 +19,9 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
-    "@astrojs/mdx": "^4.2.4",
-    "@astrojs/svelte": "^7.0.10",
-    "astro": "^5.6.2",
+    "@astrojs/mdx": "^4.3.6",
+    "@astrojs/svelte": "^7.1.1",
+    "astro": "^5.13.10",
     "reading-time": "^1.5.0",
     "rehype-external-links": "^3.0.0",
     "remark-gfm": "^4.0.0",
