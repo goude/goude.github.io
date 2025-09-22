@@ -13,10 +13,10 @@ _default:
 	@just --list
 
 # 🚀 Install → check → dev
-quickstart: verify install check dev
+quickstart: verify install check dev-serve
 
 # ▶️ Start dev server
-dev:
+dev-serve:
 	NODE_ENV={{NODE_ENV}} npm run start
 
 # 🏗️ Production build
