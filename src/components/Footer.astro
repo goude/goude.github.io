@@ -43,51 +43,21 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 const week = getISOWeek(now);
 
-// Keep BUILD_TIMESTAMP in local time for consistency with the week computation.
 // __BUILD_TIMESTAMP__ should be injected by your bundler as a numeric epoch millis or ISO string.
 const build = new Date(__BUILD_TIMESTAMP__ as unknown as number | string);
 const buildParts = {
-  date: `${build.getFullYear()}-${pad(build.getMonth() + 1)}-${pad(build.getDate())}`,
-  time: `${pad(build.getHours())}:${pad(build.getMinutes())}`,
+  date: `${build.getUTCFullYear()}-${pad(build.getUTCMonth() + 1)}-${pad(build.getUTCDate())}`,
+  time: `${pad(build.getUTCHours())}:${pad(build.getUTCMinutes())}`,
 };
-
-const nowParts = {
-  date: `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`,
-  time: `${pad(now.getHours())}:${pad(now.getMinutes())}`,
-};
-
-// Timezone offset display (+HH:MM / -HH:MM) in LOCAL time
-const tzOffset = -now.getTimezoneOffset();
-const sign = tzOffset >= 0 ? "+" : "-";
-const tzH = pad(Math.floor(Math.abs(tzOffset) / 60));
-const tzM = pad(Math.abs(tzOffset) % 60);
-const tz = `${sign}${tzH}:${tzM}`;
 ---
 
 <style>
   .faded {
-    opacity: 0.2;
+    opacity: 0.3;
   }
   .clickable {
     cursor: pointer;
     text-decoration: underline dotted;
-  }
-
-  footer {
-    font:
-      14px/1.4 system-ui,
-      -apple-system,
-      Segoe UI,
-      Roboto,
-      "Helvetica Neue",
-      Arial,
-      "Noto Sans",
-      "Apple Color Emoji",
-      "Segoe UI Emoji";
-    color: inherit;
-  }
-  footer a {
-    color: inherit;
   }
 </style>
 
@@ -97,5 +67,5 @@ const tz = `${sign}${tzH}:${tzM}`;
   <a href="/rubiks" title="ISO week (Sweden: SS-ISO 8601-1)">Week {week}</a> ·
   <a href="/sitemap">v{pkg.version}</a> · Built {buildParts.date}<span
     class="faded">T</span
-  >{buildParts.time} · ⊛
+  >{buildParts.time}Z · ⊛
 </footer>
