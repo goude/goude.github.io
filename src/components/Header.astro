@@ -1,6 +1,7 @@
 ---
 import Logo from "./Logo.astro";
 import Nav from "./Nav.astro";
+import ThemeToggle from "./ThemeToggle.astro";
 
 const { current = "" } = Astro.props;
 ---
@@ -15,4 +16,5 @@ const { current = "" } = Astro.props;
 <header>
   <Logo />
   <Nav current={current} />
+  <ThemeToggle />
 </header>
