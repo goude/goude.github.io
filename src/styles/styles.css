@@ -26,6 +26,13 @@
   }
 }
 
+/* Override for manual dark mode toggle */
+[data-theme-dark] {
+  --bg: #151515;
+  --fg: #ddd;
+  --rule: #444;
+}
+
 html {
   font-size: 15px;
   height: 100%;

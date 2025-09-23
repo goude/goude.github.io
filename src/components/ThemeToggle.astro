@@ -20,35 +20,31 @@
 </style>
 
 <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-  <span id="theme-icon">☀️</span>
+  <span id="theme-icon">○</span>
 </button>
 
 <script is:inline>
-  // Initialize theme based on system preference
   const themeToggle = document.getElementById("theme-toggle");
   const themeIcon = document.getElementById("theme-icon");
 
   function updateIcon() {
-    const isDark =
-      document.documentElement.style.colorScheme === "dark" ||
-      (document.documentElement.style.colorScheme !== "light" &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches);
-
-    themeIcon.textContent = isDark ? "🌙" : "☀️";
+    const isDark = document.documentElement.hasAttribute("data-theme-dark");
+    themeIcon.textContent = isDark ? "●" : "○";
   }
 
   function toggleTheme() {
-    const currentScheme = document.documentElement.style.colorScheme;
-    const isDark =
-      currentScheme === "dark" ||
-      (currentScheme !== "light" &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches);
+    const isDark = document.documentElement.hasAttribute("data-theme-dark");
 
-    document.documentElement.style.colorScheme = isDark ? "light" : "dark";
+    if (isDark) {
+      document.documentElement.removeAttribute("data-theme-dark");
+    } else {
+      document.documentElement.setAttribute("data-theme-dark", "");
+    }
+
     updateIcon();
   }
 
-  // Set initial state
+  // Set initial state (defaults to system preference)
   updateIcon();
 
   // Add click listener
