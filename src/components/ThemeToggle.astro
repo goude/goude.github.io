@@ -13,7 +13,7 @@
     display: flex;
     align-items: center;
   }
-  
+
   .theme-toggle:hover {
     opacity: 0.7;
   }
@@ -25,29 +25,32 @@
 
 <script is:inline>
   // Initialize theme based on system preference
-  const themeToggle = document.getElementById('theme-toggle');
-  const themeIcon = document.getElementById('theme-icon');
-  
+  const themeToggle = document.getElementById("theme-toggle");
+  const themeIcon = document.getElementById("theme-icon");
+
   function updateIcon() {
-    const isDark = document.documentElement.style.colorScheme === 'dark' || 
-      (document.documentElement.style.colorScheme !== 'light' && 
-       window.matchMedia('(prefers-color-scheme: dark)').matches);
-    
-    themeIcon.textContent = isDark ? '🌙' : '☀️';
+    const isDark =
+      document.documentElement.style.colorScheme === "dark" ||
+      (document.documentElement.style.colorScheme !== "light" &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+    themeIcon.textContent = isDark ? "🌙" : "☀️";
   }
-  
+
   function toggleTheme() {
     const currentScheme = document.documentElement.style.colorScheme;
-    const isDark = currentScheme === 'dark' || 
-      (currentScheme !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    
-    document.documentElement.style.colorScheme = isDark ? 'light' : 'dark';
+    const isDark =
+      currentScheme === "dark" ||
+      (currentScheme !== "light" &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+    document.documentElement.style.colorScheme = isDark ? "light" : "dark";
     updateIcon();
   }
-  
+
   // Set initial state
   updateIcon();
-  
+
   // Add click listener
-  themeToggle.addEventListener('click', toggleTheme);
+  themeToggle.addEventListener("click", toggleTheme);
 </script>
