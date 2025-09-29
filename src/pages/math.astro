@@ -13,20 +13,28 @@ const permalink = Astro.site?.href ?? "https://goude.se/multiplication";
   current="multiplication"
 >
   <h1>Multiplication Practice</h1>
-  
+
   <p class="subtitle">Practice your times tables up to 12 × 12</p>
 
   <div id="quiz-container">
+    <div id="progress"></div>
     <div id="problem"></div>
-    <input 
-      type="text" 
-      inputmode="numeric" 
+
+    <!-- type="tel" for iOS keypad; inputmode keeps good keyboards elsewhere -->
+    <input
+      id="answer-input"
+      type="tel"
+      inputmode="numeric"
       pattern="[0-9]*"
-      id="answer-input" 
       autocomplete="off"
+      autocapitalize="off"
+      autocorrect="off"
+      enterkeyhint="done"
       aria-label="Answer"
     />
-    <div id="feedback"></div>
+
+    <div id="feedback" role="status" aria-live="polite"></div>
+    <div id="completion"></div>
   </div>
 
   <style>
@@ -35,123 +43,227 @@ const permalink = Astro.site?.href ?? "https://goude.se/multiplication";
       font-size: 1.2em;
       margin: 1em 0;
     }
-
     #quiz-container {
       margin: 2em 0;
       max-width: 400px;
     }
-
+    #progress {
+      font-size: 0.9em;
+      color: #666;
+      margin-bottom: 1em;
+    }
     #problem {
       font-size: 2em;
       margin: 1em 0;
       min-height: 1.5em;
     }
-
     #answer-input {
-      font-size: 1.5em;
+      font-size: 1.5em; /* >=16px prevents iOS zoom */
       padding: 0.5em;
       width: 100%;
       max-width: 200px;
       text-align: center;
     }
-
     #feedback {
       margin-top: 1em;
       min-height: 1.5em;
       font-size: 1.2em;
     }
-
     .correct {
       color: #2d5016;
     }
-
     .incorrect {
       color: #8b0000;
     }
+    #completion {
+      margin-top: 2em;
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+    .hidden {
+      display: none;
+    } /* avoid inline style toggles */
   </style>
 
   <script>
-    type Problem = {
-      a: number;
-      b: number;
-      answer: number;
-    };
+    /** @typedef {{a:number,b:number,answer:number,key:string}} Problem */
 
-    class MultiplicationQuiz {
-      private problemQueue: Problem[] = [];
-      private retryQueue: Problem[] = [];
-      private currentProblem: Problem | null = null;
-      private problemsSinceRetry = 0;
+    (function () {
+      class MultiplicationQuiz {
+        /** @type {Problem[]} */ problems = [];
+        /** @type {Problem[]} */ retries = [];
+        solved = new Set();
+        /** @type {Problem|null} */ current = null;
+        sinceRetry = 0;
+        total = 0;
+        busy = false;
+        userGestureUnlocked = false;
 
-      constructor() {
-        this.generateNewProblem();
-        this.setupEventListeners();
-      }
+        constructor() {
+          this.$progress = document.getElementById("progress");
+          this.$problem = document.getElementById("problem");
+          this.$input = document.getElementById("answer-input");
+          this.$feedback = document.getElementById("feedback");
+          this.$done = document.getElementById("completion");
+          this.$container = document.getElementById("quiz-container");
 
-      private setupEventListeners() {
-        const input = document.getElementById('answer-input') as HTMLInputElement;
-        input.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') {
-            this.checkAnswer();
+          this.initProblems();
+          this.wireUX();
+          this.nextProblem();
+          this.updateProgress();
+        }
+
+        initProblems() {
+          for (let a = 2; a <= 12; a++) {
+            for (let b = a; b <= 12; b++) {
+              this.problems.push({ a, b, answer: a * b, key: this.key(a, b) });
+            }
           }
-        });
-        input.focus();
-      }
-
-      private generateNewProblem() {
-        const input = document.getElementById('answer-input') as HTMLInputElement;
-        const problemDiv = document.getElementById('problem') as HTMLDivElement;
-        const feedbackDiv = document.getElementById('feedback') as HTMLDivElement;
-
-        input.value = '';
-        feedbackDiv.textContent = '';
-        feedbackDiv.className = '';
-
-        // Check if we should pull from retry queue
-        if (this.retryQueue.length > 0 && this.problemsSinceRetry >= this.getRandomDelay()) {
-          this.currentProblem = this.retryQueue.shift()!;
-          this.problemsSinceRetry = 0;
-        } else {
-          const a = Math.floor(Math.random() * 12) + 1;
-          const b = Math.floor(Math.random() * 12) + 1;
-          this.currentProblem = { a, b, answer: a * b };
+          this.total = this.problems.length;
+          for (let i = this.problems.length - 1; i > 0; i--) {
+            const j = (Math.random() * (i + 1)) | 0;
+            [this.problems[i], this.problems[j]] = [
+              this.problems[j],
+              this.problems[i],
+            ];
+          }
         }
 
-        problemDiv.textContent = `${this.currentProblem.a} × ${this.currentProblem.b}`;
-        input.focus();
-      }
-
-      private getRandomDelay(): number {
-        return Math.floor(Math.random() * 6) + 5; // 5-10 problems
-      }
-
-      private checkAnswer() {
-        const input = document.getElementById('answer-input') as HTMLInputElement;
-        const feedbackDiv = document.getElementById('feedback') as HTMLDivElement;
-        const userAnswer = parseInt(input.value, 10);
-
-        if (isNaN(userAnswer)) return;
-
-        input.disabled = true;
-
-        if (userAnswer === this.currentProblem!.answer) {
-          feedbackDiv.textContent = '✓';
-          feedbackDiv.className = 'correct';
-          this.problemsSinceRetry++;
-          setTimeout(() => this.generateNewProblem(), 800);
-        } else {
-          feedbackDiv.textContent = `✗ ${this.currentProblem!.answer}`;
-          feedbackDiv.className = 'incorrect';
-          this.retryQueue.push(this.currentProblem!);
-          setTimeout(() => this.generateNewProblem(), 2000);
+        key(a, b) {
+          return a <= b ? `${a}×${b}` : `${b}×${a}`;
         }
 
-        setTimeout(() => {
-          input.disabled = false;
-        }, 100);
-      }
-    }
+        wireUX() {
+          const unlock = () => {
+            this.userGestureUnlocked = true;
+            this.safeFocus();
+            window.removeEventListener("pointerdown", unlock);
+            window.removeEventListener("touchstart", unlock);
+          };
+          window.addEventListener("pointerdown", unlock, { once: true });
+          window.addEventListener("touchstart", unlock, { once: true });
 
-    new MultiplicationQuiz();
+          // Keep focus when tapping anywhere in the container
+          this.$container.addEventListener("pointerdown", () =>
+            this.safeFocus(),
+          );
+
+          // Digit-only guard (kids-friendly)
+          this.$input.addEventListener("input", () => {
+            const v = this.$input.value.replace(/\D+/g, "");
+            if (v !== this.$input.value) this.$input.value = v;
+          });
+
+          // Enter submits; blur submits if something typed
+          this.$input.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              this.check();
+            }
+          });
+          this.$input.addEventListener("blur", () => {
+            if (!this.busy && this.$input.value.trim() !== "") this.check();
+          });
+
+          document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === "visible") this.safeFocus();
+          });
+
+          // Try to autofocus after paint for non-iOS
+          requestAnimationFrame(() => this.safeFocus());
+        }
+
+        isIOS() {
+          const ua = navigator.userAgent;
+          const iOSUA = /iPad|iPhone|iPod/.test(ua);
+          const iPadOSTouchMac =
+            navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
+          return iOSUA || iPadOSTouchMac;
+        }
+
+        safeFocus() {
+          if (this.$input.disabled) return;
+          if (this.isIOS() && !this.userGestureUnlocked) return;
+          requestAnimationFrame(() => {
+            this.$input.focus({ preventScroll: true });
+            const len = this.$input.value.length;
+            try {
+              this.$input.setSelectionRange(len, len);
+            } catch {}
+          });
+        }
+
+        updateProgress() {
+          this.$progress.textContent = `${this.solved.size} / ${this.total}`;
+        }
+
+        nextProblem() {
+          this.busy = false;
+          this.$input.value = "";
+          this.$input.disabled = false;
+          this.$feedback.textContent = "";
+          this.$feedback.className = "";
+
+          if (this.retries.length > 0 && this.sinceRetry >= this.randDelay()) {
+            this.current = this.retries.shift();
+            this.sinceRetry = 0;
+          } else if (this.problems.length > 0) {
+            this.current = this.problems.shift();
+          } else if (this.retries.length > 0) {
+            this.current = this.retries.shift();
+          } else {
+            this.finish();
+            return;
+          }
+
+          if (Math.random() > 0.5 && this.current.a !== this.current.b) {
+            const t = this.current.a;
+            this.current.a = this.current.b;
+            this.current.b = t;
+          }
+
+          this.$problem.textContent = `${this.current.a} × ${this.current.b}`;
+          this.safeFocus();
+        }
+
+        randDelay() {
+          return (Math.random() * 3 + 2) | 0;
+        } // 2–4
+
+        check() {
+          if (this.busy || !this.current) return;
+          const val = this.$input.value.trim();
+          if (!val) return;
+          const num = Number(val);
+          if (Number.isNaN(num)) return;
+
+          this.busy = true;
+          this.$input.disabled = true;
+
+          if (num === this.current.answer) {
+            this.$feedback.textContent = "✓";
+            this.$feedback.className = "correct";
+            this.solved.add(this.current.key);
+            this.sinceRetry++;
+            this.updateProgress();
+            setTimeout(() => this.nextProblem(), 600);
+          } else {
+            this.$feedback.textContent = `✗ ${this.current.answer}`;
+            this.$feedback.className = "incorrect";
+            this.retries.push(this.current);
+            setTimeout(() => this.nextProblem(), 1200);
+          }
+        }
+
+        finish() {
+          this.$problem.textContent = "";
+          this.$input.classList.add("hidden");
+          this.$done.textContent = "✓ All problems completed!";
+          this.$done.className = "correct";
+        }
+      }
+
+      new MultiplicationQuiz();
+    })();
   </script>
 </BaseLayout>

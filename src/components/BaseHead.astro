@@ -63,7 +63,6 @@ const socialUrl = (Astro.site?.href ?? "https://goude.se/") + "/favicon.svg";
 
 <script is:inline>
   document.addEventListener("DOMContentLoaded", () => {
-    console.log("YOYO");
     document.querySelectorAll("pre > code:not([class])").forEach((el) => {
       el.classList.add("language-js"); // or 'language-text' for neutral
     });
