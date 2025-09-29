@@ -1,0 +1,157 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Multiplication Practice";
+const description = "Practice multiplication up to 12 × 12";
+const permalink = Astro.site?.href ?? "https://goude.se/multiplication";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  permalink={permalink}
+  current="multiplication"
+>
+  <h1>Multiplication Practice</h1>
+  
+  <p class="subtitle">Practice your times tables up to 12 × 12</p>
+
+  <div id="quiz-container">
+    <div id="problem"></div>
+    <input 
+      type="text" 
+      inputmode="numeric" 
+      pattern="[0-9]*"
+      id="answer-input" 
+      autocomplete="off"
+      aria-label="Answer"
+    />
+    <div id="feedback"></div>
+  </div>
+
+  <style>
+    .subtitle {
+      font-family: "Georgia", serif;
+      font-size: 1.2em;
+      margin: 1em 0;
+    }
+
+    #quiz-container {
+      margin: 2em 0;
+      max-width: 400px;
+    }
+
+    #problem {
+      font-size: 2em;
+      margin: 1em 0;
+      min-height: 1.5em;
+    }
+
+    #answer-input {
+      font-size: 1.5em;
+      padding: 0.5em;
+      width: 100%;
+      max-width: 200px;
+      text-align: center;
+    }
+
+    #feedback {
+      margin-top: 1em;
+      min-height: 1.5em;
+      font-size: 1.2em;
+    }
+
+    .correct {
+      color: #2d5016;
+    }
+
+    .incorrect {
+      color: #8b0000;
+    }
+  </style>
+
+  <script>
+    type Problem = {
+      a: number;
+      b: number;
+      answer: number;
+    };
+
+    class MultiplicationQuiz {
+      private problemQueue: Problem[] = [];
+      private retryQueue: Problem[] = [];
+      private currentProblem: Problem | null = null;
+      private problemsSinceRetry = 0;
+
+      constructor() {
+        this.generateNewProblem();
+        this.setupEventListeners();
+      }
+
+      private setupEventListeners() {
+        const input = document.getElementById('answer-input') as HTMLInputElement;
+        input.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            this.checkAnswer();
+          }
+        });
+        input.focus();
+      }
+
+      private generateNewProblem() {
+        const input = document.getElementById('answer-input') as HTMLInputElement;
+        const problemDiv = document.getElementById('problem') as HTMLDivElement;
+        const feedbackDiv = document.getElementById('feedback') as HTMLDivElement;
+
+        input.value = '';
+        feedbackDiv.textContent = '';
+        feedbackDiv.className = '';
+
+        // Check if we should pull from retry queue
+        if (this.retryQueue.length > 0 && this.problemsSinceRetry >= this.getRandomDelay()) {
+          this.currentProblem = this.retryQueue.shift()!;
+          this.problemsSinceRetry = 0;
+        } else {
+          const a = Math.floor(Math.random() * 12) + 1;
+          const b = Math.floor(Math.random() * 12) + 1;
+          this.currentProblem = { a, b, answer: a * b };
+        }
+
+        problemDiv.textContent = `${this.currentProblem.a} × ${this.currentProblem.b}`;
+        input.focus();
+      }
+
+      private getRandomDelay(): number {
+        return Math.floor(Math.random() * 6) + 5; // 5-10 problems
+      }
+
+      private checkAnswer() {
+        const input = document.getElementById('answer-input') as HTMLInputElement;
+        const feedbackDiv = document.getElementById('feedback') as HTMLDivElement;
+        const userAnswer = parseInt(input.value, 10);
+
+        if (isNaN(userAnswer)) return;
+
+        input.disabled = true;
+
+        if (userAnswer === this.currentProblem!.answer) {
+          feedbackDiv.textContent = '✓';
+          feedbackDiv.className = 'correct';
+          this.problemsSinceRetry++;
+          setTimeout(() => this.generateNewProblem(), 800);
+        } else {
+          feedbackDiv.textContent = `✗ ${this.currentProblem!.answer}`;
+          feedbackDiv.className = 'incorrect';
+          this.retryQueue.push(this.currentProblem!);
+          setTimeout(() => this.generateNewProblem(), 2000);
+        }
+
+        setTimeout(() => {
+          input.disabled = false;
+        }, 100);
+      }
+    }
+
+    new MultiplicationQuiz();
+  </script>
+</BaseLayout>
