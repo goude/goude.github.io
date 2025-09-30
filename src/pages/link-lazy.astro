@@ -3,8 +3,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 const title = "Stop Link Laziness";
 const description = "The one rule for useful reminders - always relink.";
-const permalink =
-  Astro.site?.href + "link-laziness" ?? "https://goude.se/link-laziness";
+const permalink = Astro.site
+  ? `${Astro.site.href}link-laziness`
+  : "https://goude.se/link-laziness";
 ---
 
 <BaseLayout
