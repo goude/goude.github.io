@@ -2,20 +2,16 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import MathQuiz from "../components/MathQuiz.astro";
 
-const title = "Multiplication Practice";
-const description = "Practice multiplication up to 12 × 12";
-const permalink = Astro.site?.href ?? "https://goude.se/multiplication";
+const title = "Math Practice";
+const description = "Practice math with an interactive retro calculator";
+const permalink = Astro.site?.href ?? "https://goude.se/math";
 ---
 
 <BaseLayout
   title={title}
   description={description}
   permalink={permalink}
-  current="multiplication"
+  current="math"
 >
-  <h1>Multiplication Practice</h1>
-
-  <p class="subtitle">Practice your times tables up to 12 × 12</p>
-
   <MathQuiz />
 </BaseLayout>

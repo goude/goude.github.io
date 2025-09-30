@@ -4,16 +4,11 @@ import "../styles/math-quiz.css";
 ---
 
 <div id="quiz-container">
-  <div id="mode-selector">
-    <button type="button" data-mode="multiplication" class="mode-btn active"
-      >×</button
-    >
-    <button type="button" data-mode="division" class="mode-btn">÷</button>
-    <button type="button" data-mode="addition" class="mode-btn">+</button>
-    <button type="button" data-mode="subtraction" class="mode-btn">−</button>
-    <button type="button" data-mode="squares" class="mode-btn">x²</button>
-    <button type="button" data-mode="square-roots" class="mode-btn">√</button>
-    <button type="button" data-mode="lcd" class="mode-btn">LCD</button>
+  <div id="problem-type-selector">
+    <select id="problem-type-select">
+      <option value="">Select problem type...</option>
+    </select>
+    <button type="button" id="sound-toggle" title="Toggle sound">♪̸</button>
   </div>
 
   <div id="calculator">
@@ -40,9 +35,12 @@ import "../styles/math-quiz.css";
       <button type="button" data-num="0" class="zero">0</button>
       <button type="button" id="backspace">⌫</button>
       <button type="button" id="enter" class="enter">↵</button>
+      <button type="button" id="decimal-btn" style="display: none;">.</button>
+      <button type="button" id="fraction-btn" style="display: none;">/</button>
     </div>
   </div>
 
+  <div id="problem-description">&nbsp;</div>
   <div id="completion">&nbsp;</div>
 </div>
 
