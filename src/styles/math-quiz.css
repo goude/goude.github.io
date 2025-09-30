@@ -1,21 +1,21 @@
 /* math-quiz.css - Retro pastel calculator design */
 
-/* DSEG7 - Classic 7-segment LCD display font */
+/* DSEG14 - Classic 7-segment LCD display font */
 @font-face {
-  font-family: "DSEG7";
+  font-family: "DSEG14";
   src:
-    url("/fonts/dseg/DSEG7Classic-Regular.woff2") format("woff2"),
-    url("/fonts/dseg/DSEG7Classic-Regular.woff") format("woff");
+    url("/fonts/dseg/DSEG14Classic-Regular.woff2") format("woff2"),
+    url("/fonts/dseg/DSEG14Classic-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "DSEG7";
+  font-family: "DSEG14";
   src:
-    url("/fonts/dseg/DSEG7Classic-Bold.woff2") format("woff2"),
-    url("/fonts/dseg/DSEG7Classic-Bold.woff") format("woff");
+    url("/fonts/dseg/DSEG14Classic-Bold.woff2") format("woff2"),
+    url("/fonts/dseg/DSEG14Classic-Bold.woff") format("woff");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -27,6 +27,7 @@
   display: flex;
   flex-direction: column;
   gap: 1em;
+  touch-action: manipulation; /* prevent double-clicks from zooming in on mobile */
 }
 
 /* Mode selector styling */
@@ -193,7 +194,7 @@
   color: #3a4a3a;
   text-align: left;
   font-weight: 700;
-  font-family: "DSEG7", "Courier New", monospace;
+  font-family: "DSEG14", "Courier New", monospace;
   letter-spacing: 0.05em;
 }
 
@@ -206,7 +207,7 @@
   color: #3a4a3a;
   text-align: right;
   font-weight: 700;
-  font-family: "DSEG7", "Courier New", monospace;
+  font-family: "DSEG14", "Courier New", monospace;
   letter-spacing: 0.05em;
 }
 
@@ -238,7 +239,7 @@
   align-items: center;
   justify-content: center;
   border-bottom: 2px solid rgba(58, 74, 58, 0.3);
-  font-family: "DSEG7", "Courier New", monospace;
+  font-family: "DSEG14", "Courier New", monospace;
   letter-spacing: 0.1em;
 }
 
@@ -255,7 +256,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "DSEG7", "Courier New", monospace;
+  font-family: "DSEG14", "Courier New", monospace;
 }
 
 .correct {
