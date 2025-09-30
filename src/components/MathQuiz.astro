@@ -4,40 +4,171 @@ import "../styles/math-quiz.css";
 ---
 
 <div id="quiz-container">
-  <div id="display">
-    <div id="progress"></div>
-    <div id="problem"></div>
-    <div id="answer-input"></div>
-    <div id="feedback"></div>
+  <div id="mode-selector">
+    <button type="button" data-mode="multiplication" class="mode-btn active"
+      >×</button
+    >
+    <button type="button" data-mode="division" class="mode-btn">÷</button>
+    <button type="button" data-mode="addition" class="mode-btn">+</button>
+    <button type="button" data-mode="subtraction" class="mode-btn">−</button>
+    <button type="button" data-mode="squares" class="mode-btn">x²</button>
+    <button type="button" data-mode="square-roots" class="mode-btn">√</button>
   </div>
 
-  <div id="numpad">
-    <button type="button" data-num="7">7</button>
-    <button type="button" data-num="8">8</button>
-    <button type="button" data-num="9">9</button>
-    <button type="button" data-num="4">4</button>
-    <button type="button" data-num="5">5</button>
-    <button type="button" data-num="6">6</button>
-    <button type="button" data-num="1">1</button>
-    <button type="button" data-num="2">2</button>
-    <button type="button" data-num="3">3</button>
-    <button type="button" data-num="0" class="zero">0</button>
-    <button type="button" id="backspace">⌫</button>
-    <button type="button" id="enter" class="enter">↵</button>
+  <div id="calculator">
+    <div id="display">
+      <div id="progress">&nbsp;</div>
+      <div id="problem">&nbsp;</div>
+      <div id="answer-input">&nbsp;</div>
+      <div id="feedback">&nbsp;</div>
+    </div>
+
+    <div id="numpad">
+      <button type="button" data-num="7">7</button>
+      <button type="button" data-num="8">8</button>
+      <button type="button" data-num="9">9</button>
+      <button type="button" data-num="4">4</button>
+      <button type="button" data-num="5">5</button>
+      <button type="button" data-num="6">6</button>
+      <button type="button" data-num="1">1</button>
+      <button type="button" data-num="2">2</button>
+      <button type="button" data-num="3">3</button>
+      <button type="button" data-num="0" class="zero">0</button>
+      <button type="button" id="backspace">⌫</button>
+      <button type="button" id="enter" class="enter">↵</button>
+    </div>
   </div>
 
-  <div id="completion"></div>
+  <div id="completion">&nbsp;</div>
 </div>
 
 <script>
-  type Problem = {
-    a: number;
-    b: number;
+  type OperationMode =
+    | "multiplication"
+    | "division"
+    | "addition"
+    | "subtraction"
+    | "squares"
+    | "square-roots";
+
+  interface Problem {
+    display: string;
     answer: number;
     key: string;
-  };
+  }
+
+  interface ProblemGenerator {
+    generate(): Problem[];
+  }
+
+  class MultiplicationGenerator implements ProblemGenerator {
+    generate(): Problem[] {
+      const problems: Problem[] = [];
+      for (let a = 2; a <= 12; a++) {
+        for (let b = a; b <= 12; b++) {
+          const key = `${Math.min(a, b)}×${Math.max(a, b)}`;
+          problems.push({
+            display: `${a} \\times ${b}`,
+            answer: a * b,
+            key,
+          });
+        }
+      }
+      return problems;
+    }
+  }
+
+  class DivisionGenerator implements ProblemGenerator {
+    generate(): Problem[] {
+      const problems: Problem[] = [];
+      for (let divisor = 2; divisor <= 12; divisor++) {
+        for (let quotient = 2; quotient <= 12; quotient++) {
+          const dividend = divisor * quotient;
+          if (dividend <= 144) {
+            const key = `${dividend}÷${divisor}`;
+            problems.push({
+              display: `\\frac{${dividend}}{${divisor}}`,
+              answer: quotient,
+              key,
+            });
+          }
+        }
+      }
+      return problems;
+    }
+  }
+
+  class AdditionGenerator implements ProblemGenerator {
+    generate(): Problem[] {
+      const problems: Problem[] = [];
+      for (let a = 2; a <= 50; a++) {
+        for (let b = a; b <= 50; b++) {
+          if (a + b <= 100) {
+            const key = `${Math.min(a, b)}+${Math.max(a, b)}`;
+            problems.push({
+              display: `${a} + ${b}`,
+              answer: a + b,
+              key,
+            });
+          }
+        }
+      }
+      return problems;
+    }
+  }
+
+  class SubtractionGenerator implements ProblemGenerator {
+    generate(): Problem[] {
+      const problems: Problem[] = [];
+      for (let minuend = 10; minuend <= 100; minuend++) {
+        for (
+          let subtrahend = 2;
+          subtrahend < minuend && subtrahend <= 50;
+          subtrahend++
+        ) {
+          const key = `${minuend}−${subtrahend}`;
+          problems.push({
+            display: `${minuend} - ${subtrahend}`,
+            answer: minuend - subtrahend,
+            key,
+          });
+        }
+      }
+      return problems;
+    }
+  }
+
+  class SquaresGenerator implements ProblemGenerator {
+    generate(): Problem[] {
+      const problems: Problem[] = [];
+      for (let n = 2; n <= 25; n++) {
+        problems.push({
+          display: `${n}^2`,
+          answer: n * n,
+          key: `${n}²`,
+        });
+      }
+      return problems;
+    }
+  }
+
+  class SquareRootsGenerator implements ProblemGenerator {
+    generate(): Problem[] {
+      const problems: Problem[] = [];
+      for (let n = 2; n <= 25; n++) {
+        problems.push({
+          display: `\\sqrt{${n * n}}`,
+          answer: n,
+          key: `√${n * n}`,
+        });
+      }
+      return problems;
+    }
+  }
 
   class MathQuiz {
+    private generators: Map<OperationMode, ProblemGenerator>;
+    private currentMode: OperationMode = "multiplication";
     private allProblems: Problem[] = [];
     private solvedKeys: Set<string> = new Set();
     private retryQueue: Problem[] = [];
@@ -47,52 +178,113 @@ import "../styles/math-quiz.css";
     private isProcessing = false;
 
     constructor() {
-      this.initializeProblems();
+      this.generators = new Map([
+        ["multiplication", new MultiplicationGenerator()],
+        ["division", new DivisionGenerator()],
+        ["addition", new AdditionGenerator()],
+        ["subtraction", new SubtractionGenerator()],
+        ["squares", new SquaresGenerator()],
+        ["square-roots", new SquareRootsGenerator()],
+      ]);
+
+      this.initialize();
+    }
+
+    private async initialize() {
+      await this.loadMathJax();
+      this.setupModeSelector();
       this.setupEventListeners();
+      this.initializeMode("multiplication");
+    }
+
+    private async loadMathJax(): Promise<void> {
+      return new Promise((resolve) => {
+        if (window.MathJax && window.MathJax.typesetPromise) {
+          resolve();
+          return;
+        }
+
+        window.MathJax = {
+          tex: {
+            inlineMath: [
+              ["$", "$"],
+              ["\\(", "\\)"],
+            ],
+          },
+          startup: {
+            ready: () => {
+              window.MathJax.startup.defaultReady();
+              resolve();
+            },
+          },
+        };
+
+        const script = document.createElement("script");
+        script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js";
+        script.async = true;
+        document.head.appendChild(script);
+      });
+    }
+
+    private setupModeSelector() {
+      document.querySelectorAll(".mode-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const mode = (btn as HTMLElement).dataset.mode as OperationMode;
+          this.switchMode(mode);
+        });
+      });
+    }
+
+    private switchMode(mode: OperationMode) {
+      document.querySelectorAll(".mode-btn").forEach((btn) => {
+        btn.classList.toggle(
+          "active",
+          (btn as HTMLElement).dataset.mode === mode,
+        );
+      });
+      this.currentMode = mode;
+      this.initializeMode(mode);
+    }
+
+    private initializeMode(mode: OperationMode) {
+      const generator = this.generators.get(mode)!;
+      this.allProblems = this.shuffleArray(generator.generate());
+      this.solvedKeys.clear();
+      this.retryQueue = [];
+      this.totalProblems = this.allProblems.length;
+      this.problemsSinceRetry = 0;
       this.generateNewProblem();
       this.updateProgress();
     }
 
-    private initializeProblems() {
-      for (let a = 2; a <= 12; a++) {
-        for (let b = a; b <= 12; b++) {
-          const key = this.getProblemKey(a, b);
-          this.allProblems.push({ a, b, answer: a * b, key });
-        }
-      }
-      this.totalProblems = this.allProblems.length;
-      this.shuffleArray(this.allProblems);
-    }
-
-    private shuffleArray<T>(array: T[]) {
-      for (let i = array.length - 1; i > 0; i--) {
+    private shuffleArray<T>(array: T[]): T[] {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
       }
-    }
-
-    private getProblemKey(a: number, b: number): string {
-      return a <= b ? `${a}×${b}` : `${b}×${a}`;
+      return shuffled;
     }
 
     private setupEventListeners() {
-      // Physical keyboard support
       window.addEventListener("keydown", (e) => {
         if (this.isProcessing) return;
 
         if (e.key >= "0" && e.key <= "9") {
           e.preventDefault();
           this.addDigit(e.key);
+          this.animateButton(`[data-num="${e.key}"]`);
         } else if (e.key === "Backspace") {
           e.preventDefault();
           this.backspace();
+          this.animateButton("#backspace");
         } else if (e.key === "Enter") {
           e.preventDefault();
           this.checkAnswer();
+          this.animateButton("#enter");
         }
       });
 
-      // Number buttons
       document.querySelectorAll("[data-num]").forEach((btn) => {
         btn.addEventListener("click", () => {
           const num = (btn as HTMLElement).dataset.num!;
@@ -100,27 +292,36 @@ import "../styles/math-quiz.css";
         });
       });
 
-      // Backspace button
       document.getElementById("backspace")!.addEventListener("click", () => {
         this.backspace();
       });
 
-      // Enter button
       document.getElementById("enter")!.addEventListener("click", () => {
         this.checkAnswer();
       });
     }
 
+    private animateButton(selector: string) {
+      const btn = document.querySelector(selector) as HTMLElement;
+      if (btn) {
+        btn.classList.add("pressed");
+        setTimeout(() => btn.classList.remove("pressed"), 100);
+      }
+    }
+
     private addDigit(digit: string) {
       const input = document.getElementById("answer-input") as HTMLDivElement;
-      if (input.textContent!.length < 4) {
-        input.textContent += digit;
+      const current = input.textContent?.trim() || "";
+      if (current.length < 4 && current !== "\u00A0") {
+        input.textContent = (current === "" ? "" : current) + digit;
       }
     }
 
     private backspace() {
       const input = document.getElementById("answer-input") as HTMLDivElement;
-      input.textContent = input.textContent!.slice(0, -1);
+      const current = input.textContent || "";
+      const newValue = current.slice(0, -1);
+      input.textContent = newValue || "\u00A0";
     }
 
     private updateProgress() {
@@ -128,14 +329,14 @@ import "../styles/math-quiz.css";
       progressDiv.textContent = `${this.solvedKeys.size} / ${this.totalProblems}`;
     }
 
-    private generateNewProblem() {
+    private async generateNewProblem() {
       const input = document.getElementById("answer-input") as HTMLDivElement;
       const problemDiv = document.getElementById("problem") as HTMLDivElement;
       const feedbackDiv = document.getElementById("feedback") as HTMLDivElement;
 
       this.isProcessing = false;
-      input.textContent = "";
-      feedbackDiv.textContent = "";
+      input.textContent = "\u00A0";
+      feedbackDiv.textContent = "\u00A0";
       feedbackDiv.className = "";
 
       if (
@@ -153,17 +354,17 @@ import "../styles/math-quiz.css";
         return;
       }
 
-      if (
-        Math.random() > 0.5 &&
-        this.currentProblem.a !== this.currentProblem.b
-      ) {
-        [this.currentProblem.a, this.currentProblem.b] = [
-          this.currentProblem.b,
-          this.currentProblem.a,
-        ];
-      }
+      // Set the LaTeX markup
+      problemDiv.innerHTML = `\\[${this.currentProblem.display}\\]`;
 
-      problemDiv.textContent = `${this.currentProblem.a} × ${this.currentProblem.b}`;
+      // Wait for MathJax to render
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        try {
+          await window.MathJax.typesetPromise([problemDiv]);
+        } catch (err) {
+          console.error("MathJax typesetting error:", err);
+        }
+      }
     }
 
     private getRandomDelay(): number {
@@ -175,10 +376,10 @@ import "../styles/math-quiz.css";
 
       const input = document.getElementById("answer-input") as HTMLDivElement;
       const feedbackDiv = document.getElementById("feedback") as HTMLDivElement;
-      const answerText = input.textContent || "";
+      const answerText = (input.textContent || "").trim();
       const userAnswer = parseInt(answerText, 10);
 
-      if (!answerText || isNaN(userAnswer)) return;
+      if (!answerText || answerText === "\u00A0" || isNaN(userAnswer)) return;
 
       this.isProcessing = true;
 
@@ -198,14 +399,18 @@ import "../styles/math-quiz.css";
     }
 
     private showCompletion() {
-      const display = document.getElementById("display") as HTMLDivElement;
-      const numpad = document.getElementById("numpad") as HTMLDivElement;
+      const calculator = document.getElementById(
+        "calculator",
+      ) as HTMLDivElement;
       const completionDiv = document.getElementById(
         "completion",
       ) as HTMLDivElement;
+      const modeSelector = document.getElementById(
+        "mode-selector",
+      ) as HTMLDivElement;
 
-      display.classList.add("hidden");
-      numpad.classList.add("hidden");
+      calculator.classList.add("hidden");
+      modeSelector.classList.add("hidden");
       completionDiv.textContent = "✓ All problems completed!";
       completionDiv.className = "correct";
     }

@@ -1,71 +1,212 @@
-/* math-quiz.css */
+/* math-quiz.css - Retro pastel calculator design */
 
 #quiz-container {
   margin: 2em 0;
   max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 }
 
-#display {
-  background: #f5f5f5;
-  border: 2px solid #ccc;
-  border-radius: 8px;
+/* Mode selector styling */
+#mode-selector {
+  display: flex;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}
+
+.mode-btn {
+  padding: 0.5em 1em;
+  font-size: 1em;
+  font-weight: 600;
+  border: 2px solid #b8a898;
+  background: linear-gradient(180deg, #e8dcc8 0%, #d8cbb8 100%);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #5a4a3a;
+  font-family: "Arial", sans-serif;
+  box-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.mode-btn:hover {
+  background: linear-gradient(180deg, #f0e4d0 0%, #e0d3c0 100%);
+}
+
+.mode-btn.active {
+  background: linear-gradient(180deg, #c8b898 0%, #b8a888 100%);
+  border-color: #a89878;
+  box-shadow:
+    inset 0 2px 3px rgba(0, 0, 0, 0.2),
+    0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(1px);
+}
+
+[data-theme-dark] .mode-btn {
+  background: linear-gradient(180deg, #4a4540 0%, #3a3530 100%);
+  border-color: #5a5550;
+  color: #d0c8b8;
+}
+
+[data-theme-dark] .mode-btn:hover {
+  background: linear-gradient(180deg, #5a5550 0%, #4a4540 100%);
+}
+
+[data-theme-dark] .mode-btn.active {
+  background: linear-gradient(180deg, #3a3530 0%, #2a2520 100%);
+  border-color: #4a4540;
+}
+
+/* Calculator body - aged plastic aesthetic */
+#calculator {
+  width: 100%;
+  max-width: 360px;
+  /* Light mode: aged beige plastic with subtle yellowing */
+  background: linear-gradient(135deg, #e8dcc8 0%, #d8c8b0 100%);
+  border: 3px solid #b8a898;
+  border-radius: 12px;
   padding: 1.5em;
-  margin-bottom: 1em;
-  height: 240px;
+  box-shadow:
+    0 6px 12px rgba(0, 0, 0, 0.15),
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 2px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Subtle texture overlay for plastic feel */
+#calculator::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.03) 2px,
+    rgba(255, 255, 255, 0.03) 4px
+  );
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+[data-theme-dark] #calculator {
+  /* Dark mode: dark gray/charcoal plastic */
+  background: linear-gradient(135deg, #3a3530 0%, #2a2520 100%);
+  border-color: #4a4540;
+  box-shadow:
+    0 6px 12px rgba(0, 0, 0, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.05),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* LCD Display - retro calculator screen */
+#display {
+  /* Pale greenish LCD */
+  background: linear-gradient(180deg, #c8d8c0 0%, #b0c8a8 100%);
+  border: 3px solid #8a9a82;
+  border-radius: 6px;
+  padding: 1em;
+  margin-bottom: 1.5em;
+  min-height: 200px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  box-shadow:
+    inset 0 3px 6px rgba(0, 0, 0, 0.25),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+  font-family: "Courier New", "Consolas", monospace;
+  color: #2a3a2a;
+  position: relative;
+}
+
+/* Subtle LCD grid pattern */
+#display::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0, 0, 0, 0.02) 3px,
+      rgba(0, 0, 0, 0.02) 6px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 3px,
+      rgba(0, 0, 0, 0.02) 3px,
+      rgba(0, 0, 0, 0.02) 6px
+    );
+  border-radius: 3px;
+  pointer-events: none;
 }
 
 [data-theme-dark] #display {
-  background: #2a2a2a;
-  border-color: #555;
+  background: linear-gradient(180deg, #3a4a3a 0%, #2a3a2a 100%);
+  border-color: #4a5a4a;
+  color: #a8c8a0;
 }
 
 #progress {
-  font-size: 0.9em;
-  color: #666;
+  font-size: 0.8em;
+  color: #3a4a3a;
   text-align: right;
-  height: 1.2em;
+  min-height: 1.2em;
   line-height: 1.2em;
+  font-weight: 700;
 }
 
 [data-theme-dark] #progress {
-  color: #999;
+  color: #88a880;
 }
 
 #problem {
-  font-size: 2.5em;
+  font-size: 2em;
+  font-weight: 700;
   text-align: center;
   margin: 0.5em 0;
-  height: 1.2em;
-  line-height: 1.2em;
+  min-height: 1.5em;
+  line-height: 1.5em;
   display: flex;
   align-items: center;
   justify-content: center;
+  letter-spacing: 0.05em;
 }
 
 #answer-input {
-  font-size: 1.8em;
+  font-size: 1.4em;
+  font-weight: 700;
   text-align: center;
-  height: 1.5em;
+  min-height: 1.5em;
   line-height: 1.5em;
   padding: 0.3em;
-  color: #000;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-bottom: 2px solid rgba(58, 74, 58, 0.3);
 }
 
 [data-theme-dark] #answer-input {
-  color: #fff;
+  border-bottom-color: rgba(168, 200, 160, 0.3);
 }
 
 #feedback {
   text-align: center;
-  height: 1.8em;
+  min-height: 1.8em;
   line-height: 1.8em;
   font-size: 1.2em;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -76,48 +217,90 @@
 }
 
 [data-theme-dark] .correct {
-  color: #4ade80;
+  color: #6ade80;
 }
 
 .incorrect {
-  color: #8b0000;
+  color: #9b2020;
 }
 
 [data-theme-dark] .incorrect {
-  color: #ef4444;
+  color: #ef5555;
 }
 
+/* Numpad buttons - retro calculator keys */
 #numpad {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  max-width: 300px;
+  gap: 10px;
+  width: 100%;
 }
 
 #numpad button {
-  font-size: 1.5em;
-  padding: 0.8em;
-  border: 1px solid #ccc;
-  background: #fff;
-  border-radius: 4px;
+  font-size: 1.4em;
+  font-weight: 700;
+  padding: 0.7em;
+  /* Light mode: warm cream/beige keys */
+  border: 2px solid #a89888;
+  background: linear-gradient(180deg, #f8f0e0 0%, #e8d8c0 100%);
+  border-radius: 6px;
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
+  transition: all 0.08s ease;
+  box-shadow:
+    0 3px 0 #b8a898,
+    0 4px 2px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  color: #4a3a2a;
+  font-family: "Arial", sans-serif;
+  position: relative;
+}
+
+#numpad button::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    transparent 100%
+  );
+  border-radius: 4px;
+  pointer-events: none;
 }
 
 [data-theme-dark] #numpad button {
-  background: #333;
-  border-color: #555;
-  color: #fff;
+  background: linear-gradient(180deg, #5a5550 0%, #4a4540 100%);
+  border-color: #6a6560;
+  color: #e8e0d0;
+  box-shadow:
+    0 3px 0 #3a3530,
+    0 4px 2px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-#numpad button:active {
-  background: #e0e0e0;
+#numpad button:active,
+#numpad button.pressed {
+  transform: translateY(3px);
+  box-shadow:
+    0 0 0 #b8a898,
+    0 1px 1px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  background: linear-gradient(180deg, #e8d8c0 0%, #d8c8b0 100%);
 }
 
-[data-theme-dark] #numpad button:active {
-  background: #444;
+[data-theme-dark] #numpad button:active,
+[data-theme-dark] #numpad button.pressed {
+  background: linear-gradient(180deg, #4a4540 0%, #3a3530 100%);
+  box-shadow:
+    0 0 0 #3a3530,
+    0 1px 1px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 #numpad .zero {
@@ -126,25 +309,78 @@
 
 #numpad #backspace,
 #numpad #enter {
-  font-size: 1.3em;
+  font-size: 1.2em;
 }
 
+/* Enter button - retro blue accent */
 #numpad #enter {
-  background: #4a90e2;
-  color: white;
-  border-color: #4a90e2;
+  background: linear-gradient(180deg, #8ab8d8 0%, #6a9fc8 100%);
+  border-color: #5a8fb8;
+  color: #ffffff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 
-#numpad #enter:active {
-  background: #357abd;
+[data-theme-dark] #numpad #enter {
+  background: linear-gradient(180deg, #5a7f9f 0%, #4a6f8f 100%);
+  border-color: #3a5f7f;
+}
+
+#numpad #enter:active,
+#numpad #enter.pressed {
+  background: linear-gradient(180deg, #6a9fc8 0%, #5a8fb8 100%);
+}
+
+[data-theme-dark] #numpad #enter:active,
+[data-theme-dark] #numpad #enter.pressed {
+  background: linear-gradient(180deg, #4a6f8f 0%, #3a5f7f 100%);
 }
 
 #completion {
   margin-top: 2em;
-  font-size: 1.3em;
+  font-size: 1.5em;
   font-weight: bold;
+  text-align: left;
+  min-height: 1.5em;
 }
 
 .hidden {
   display: none;
+}
+
+/* Mobile optimizations */
+@media (max-width: 480px) {
+  #calculator {
+    max-width: 100%;
+    padding: 1em;
+  }
+
+  #display {
+    min-height: 180px;
+    padding: 0.8em;
+  }
+
+  #problem {
+    font-size: 1.6em;
+  }
+
+  #answer-input {
+    font-size: 1.2em;
+  }
+
+  #numpad button {
+    font-size: 1.2em;
+    padding: 0.6em;
+  }
+
+  .mode-btn {
+    padding: 0.4em 0.8em;
+    font-size: 0.9em;
+  }
+}
+
+/* Prevent zoom on input focus on iOS */
+@media screen and (max-width: 768px) {
+  #answer-input {
+    font-size: max(16px, 1.4em);
+  }
 }
