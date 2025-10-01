@@ -1,6 +1,5 @@
-/* math-quiz.css - Version 2 with shorter LCD (180px) */
+/* math-quiz.css - Enhanced retro calculator with aged aesthetics */
 
-/* DSEG14 - Classic 7-segment LCD display font */
 @font-face {
   font-family: "DSEG14";
   src:
@@ -30,7 +29,6 @@
   touch-action: manipulation;
 }
 
-/* Problem type selector - styled dropdown */
 #problem-type-selector {
   display: flex;
   gap: 0.5em;
@@ -96,31 +94,23 @@
   background: linear-gradient(180deg, #5a5550 0%, #4a4540 100%);
 }
 
-/* Calculator body - aged beige plastic with subtle texture */
+/* Calculator body - aged 1980s plastic with wear */
 #calculator {
   width: 100%;
   max-width: 400px;
-  background: linear-gradient(
-    135deg,
-    #e8dcc8 0%,
-    #e4d8c4 15%,
-    #dccfbb 30%,
-    #dccfbb 70%,
-    #d4c7b3 85%,
-    #d0c3af 100%
-  );
-  border: 3px solid #b8a898;
+  background: linear-gradient(135deg, #dcd0bc 0%, #d4c4b0 50%, #c8b8a4 100%);
+  border: 3px solid #a89888;
   border-radius: 12px;
   padding: 1.5em;
   box-shadow:
-    0 8px 16px rgba(0, 0, 0, 0.2),
-    0 4px 6px rgba(0, 0, 0, 0.15),
-    inset 0 2px 0 rgba(255, 255, 255, 0.25),
-    inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+    0 8px 16px rgba(0, 0, 0, 0.25),
+    0 4px 6px rgba(0, 0, 0, 0.2),
+    inset 0 2px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.15);
   position: relative;
 }
 
-/* Subtle plastic texture overlay */
+/* Heavy plastic texture with aging */
 #calculator::before {
   content: "";
   position: absolute;
@@ -131,49 +121,60 @@
   background-image: repeating-linear-gradient(
       0deg,
       transparent,
-      transparent 2px,
-      rgba(255, 255, 255, 0.03) 2px,
-      rgba(255, 255, 255, 0.03) 4px
+      transparent 1px,
+      rgba(0, 0, 0, 0.04) 1px,
+      rgba(0, 0, 0, 0.04) 2px
     ),
     repeating-linear-gradient(
       90deg,
       transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.02) 2px,
-      rgba(0, 0, 0, 0.02) 4px
-    );
+      transparent 1px,
+      rgba(0, 0, 0, 0.03) 1px,
+      rgba(0, 0, 0, 0.03) 2px
+    ),
+    radial-gradient(
+      ellipse at 30% 40%,
+      rgba(0, 0, 0, 0.05) 0%,
+      transparent 60%
+    ),
+    radial-gradient(ellipse at 70% 60%, rgba(0, 0, 0, 0.04) 0%, transparent 50%);
   border-radius: 10px;
   pointer-events: none;
-  opacity: 0.6;
+  opacity: 0.8;
 }
 
-/* Small wear marks for aged look */
+/* Multiple wear marks and scratches */
 #calculator::after {
   content: "";
   position: absolute;
-  top: 20%;
-  right: 15%;
-  width: 40px;
-  height: 30px;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0, 0, 0, 0.03) 0%,
-    transparent 70%
-  );
-  border-radius: 50%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(
+      85deg,
+      transparent 45%,
+      rgba(255, 255, 255, 0.08) 46%,
+      transparent 47%
+    ),
+    linear-gradient(
+      120deg,
+      transparent 60%,
+      rgba(0, 0, 0, 0.06) 61%,
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse at 25% 30%,
+      rgba(0, 0, 0, 0.08) 0%,
+      transparent 40%
+    ),
+    radial-gradient(ellipse at 75% 70%, rgba(0, 0, 0, 0.06) 0%, transparent 45%);
+  border-radius: 10px;
   pointer-events: none;
 }
 
 [data-theme-dark] #calculator {
-  background: linear-gradient(
-    135deg,
-    #3a3530 0%,
-    #363026 15%,
-    #32291d 30%,
-    #32291d 70%,
-    #2e251a 85%,
-    #2a2116 100%
-  );
+  background: linear-gradient(135deg, #3a3530 0%, #322e24 50%, #2a2116 100%);
   border-color: #4a4540;
   box-shadow:
     0 8px 16px rgba(0, 0, 0, 0.5),
@@ -182,22 +183,20 @@
     inset 0 -2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* LCD Display - REDUCED HEIGHT to 180px */
+/* LCD Display - compact height with floating text */
 #display {
   background: linear-gradient(
     180deg,
     #c4d4bc 0%,
-    #bcd0b4 20%,
     #b4ccac 40%,
-    #b0c8a8 60%,
     #acc4a4 80%,
     #a8c0a0 100%
   );
   border: 3px solid #8a9a82;
   border-radius: 6px;
-  padding: 1.2em;
+  padding: 1em;
   margin-bottom: 1.5em;
-  min-height: 180px;
+  min-height: 140px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -241,9 +240,7 @@
   background: linear-gradient(
     180deg,
     #344a34 0%,
-    #2e442e 20%,
     #283e28 40%,
-    #243a24 60%,
     #203620 80%,
     #1c321c 100%
   );
@@ -277,19 +274,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: 1.4em;
-  line-height: 1.4em;
-  margin-bottom: 0.5em;
+  min-height: 1.2em;
+  line-height: 1.2em;
+  margin-bottom: 0.4em;
 }
 
 #streak,
 #progress {
-  font-size: 0.9em;
+  font-size: 0.85em;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-shadow:
-    0 1px 0 rgba(0, 0, 0, 0.15),
-    0 -1px 0 rgba(255, 255, 255, 0.1);
+    1px 1px 1px rgba(0, 0, 0, 0.25),
+    0 0 2px rgba(255, 255, 255, 0.15);
 }
 
 #streak {
@@ -306,61 +303,61 @@
 [data-theme-dark] #progress {
   color: #88b880;
   text-shadow:
-    0 0 2px rgba(136, 184, 128, 0.4),
-    0 1px 0 rgba(0, 0, 0, 0.3);
+    0 0 3px rgba(136, 184, 128, 0.5),
+    1px 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 #problem {
-  font-size: 2.2em;
+  font-size: 2em;
   font-weight: 700;
   text-align: center;
-  margin: 0.6em 0;
-  min-height: 1.6em;
-  line-height: 1.6em;
+  margin: 0.5em 0;
+  min-height: 1.4em;
+  line-height: 1.4em;
   display: flex;
   align-items: center;
   justify-content: center;
   letter-spacing: 0.05em;
   text-shadow:
-    0 1px 1px rgba(0, 0, 0, 0.2),
-    0 -1px 0 rgba(255, 255, 255, 0.15);
+    1px 1px 2px rgba(0, 0, 0, 0.3),
+    0 0 3px rgba(255, 255, 255, 0.2);
 }
 
 [data-theme-dark] #problem {
   text-shadow:
-    0 0 4px rgba(168, 216, 160, 0.4),
-    0 1px 0 rgba(0, 0, 0, 0.5);
+    0 0 5px rgba(168, 216, 160, 0.5),
+    1px 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 #answer-input {
-  font-size: 1.8em;
+  font-size: 1.6em;
   font-weight: 700;
   text-align: center;
-  min-height: 1.6em;
-  line-height: 1.6em;
-  padding: 0.4em;
+  min-height: 1.4em;
+  line-height: 1.4em;
+  padding: 0.3em;
   display: flex;
   align-items: center;
   justify-content: center;
   border-bottom: 2px solid rgba(58, 74, 58, 0.3);
   letter-spacing: 0.1em;
   text-shadow:
-    0 1px 1px rgba(0, 0, 0, 0.2),
-    0 -1px 0 rgba(255, 255, 255, 0.1);
+    1px 1px 2px rgba(0, 0, 0, 0.3),
+    0 0 2px rgba(255, 255, 255, 0.15);
 }
 
 [data-theme-dark] #answer-input {
   border-bottom-color: rgba(168, 200, 160, 0.3);
   text-shadow:
-    0 0 3px rgba(168, 216, 160, 0.4),
-    0 1px 0 rgba(0, 0, 0, 0.4);
+    0 0 4px rgba(168, 216, 160, 0.5),
+    1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 #feedback {
   text-align: center;
-  min-height: 1.8em;
-  line-height: 1.8em;
-  font-size: 1.4em;
+  min-height: 1.6em;
+  line-height: 1.6em;
+  font-size: 1.3em;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -371,32 +368,32 @@
 .correct {
   color: #2d5016;
   text-shadow:
-    0 1px 1px rgba(0, 0, 0, 0.2),
-    0 -1px 0 rgba(255, 255, 255, 0.2);
+    1px 1px 2px rgba(0, 0, 0, 0.3),
+    0 0 3px rgba(255, 255, 255, 0.25);
 }
 
 [data-theme-dark] .correct {
   color: #6ade80;
   text-shadow:
-    0 0 4px rgba(106, 222, 128, 0.5),
-    0 1px 0 rgba(0, 0, 0, 0.5);
+    0 0 5px rgba(106, 222, 128, 0.6),
+    1px 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .incorrect {
   color: #9b2020;
   text-shadow:
-    0 1px 1px rgba(0, 0, 0, 0.2),
-    0 -1px 0 rgba(255, 255, 255, 0.15);
+    1px 1px 2px rgba(0, 0, 0, 0.3),
+    0 0 2px rgba(255, 255, 255, 0.2);
 }
 
 [data-theme-dark] .incorrect {
   color: #ef5555;
   text-shadow:
-    0 0 4px rgba(239, 85, 85, 0.4),
-    0 1px 0 rgba(0, 0, 0, 0.5);
+    0 0 5px rgba(239, 85, 85, 0.5),
+    1px 1px 2px rgba(0, 0, 0, 0.6);
 }
 
-/* Numpad buttons - enhanced retro keys with gradients */
+/* Numpad buttons - enhanced retro keys */
 #numpad {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -412,11 +409,8 @@
   background: linear-gradient(
     180deg,
     #f8f0e0 0%,
-    #f4ece0 15%,
     #f0e8dc 30%,
-    #ece4d8 50%,
     #e8e0d4 70%,
-    #e4dcd0 85%,
     #e0d8cc 100%
   );
   border-radius: 6px;
@@ -435,7 +429,12 @@
   position: relative;
 }
 
-/* Top highlight on button */
+#numpad button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+}
+
 #numpad button::before {
   content: "";
   position: absolute;
@@ -457,11 +456,8 @@
   background: linear-gradient(
     180deg,
     #5a5550 0%,
-    #565048 15%,
     #524c40 30%,
-    #4e4838 50%,
     #4a4430 70%,
-    #464028 85%,
     #423c20 100%
   );
   border-color: #6a6560;
@@ -473,7 +469,7 @@
     inset 0 0 6px rgba(255, 255, 255, 0.05);
 }
 
-#numpad button:active,
+#numpad button:active:not(:disabled),
 #numpad button.pressed {
   transform: translateY(3px);
   box-shadow:
@@ -484,7 +480,7 @@
   background: linear-gradient(180deg, #e8d8c0 0%, #dccfbb 50%, #d0c3af 100%);
 }
 
-[data-theme-dark] #numpad button:active,
+[data-theme-dark] #numpad button:active:not(:disabled),
 [data-theme-dark] #numpad button.pressed {
   background: linear-gradient(180deg, #4a4540 0%, #3e3a30 50%, #322e24 100%);
   box-shadow:
@@ -499,18 +495,17 @@
 }
 
 #numpad #backspace,
-#numpad #enter {
+#numpad #enter,
+#numpad #clear {
   font-size: 1.2em;
 }
 
-/* Enter button - retro blue accent with gradient */
+/* Enter button - retro blue accent */
 #numpad #enter {
   background: linear-gradient(
     180deg,
     #8ab8d8 0%,
-    #7eb2d4 20%,
     #72acd0 40%,
-    #66a6cc 60%,
     #5aa0c8 80%,
     #4e9ac4 100%
   );
@@ -525,41 +520,23 @@
   background: linear-gradient(
     180deg,
     #5a7f9f 0%,
-    #537991 20%,
     #4c7383 40%,
-    #456d75 60%,
     #3e6767 80%,
     #376159 100%
   );
   border-color: #3a5f7f;
 }
 
-#numpad #enter:active,
+#numpad #enter:active:not(:disabled),
 #numpad #enter.pressed {
   background: linear-gradient(180deg, #6a9fc8 0%, #5e93bc 50%, #5287b0 100%);
 }
 
-[data-theme-dark] #numpad #enter:active,
+[data-theme-dark] #numpad #enter:active:not(:disabled),
 [data-theme-dark] #numpad #enter.pressed {
   background: linear-gradient(180deg, #4a6f8f 0%, #3e6379 50%, #325763 100%);
 }
 
-/* Special buttons for fractions, decimals, and prime factorization */
-#decimal-btn,
-#fraction-btn,
-#space-btn,
-#exponent-btn {
-  background: linear-gradient(180deg, #f0e8d8 0%, #e8e0d0 50%, #e0d8c8 100%);
-}
-
-[data-theme-dark] #decimal-btn,
-[data-theme-dark] #fraction-btn,
-[data-theme-dark] #space-btn,
-[data-theme-dark] #exponent-btn {
-  background: linear-gradient(180deg, #524c48 0%, #464038 50%, #3a3428 100%);
-}
-
-/* Problem description */
 #problem-description {
   margin-top: 1em;
   font-size: 0.95em;
@@ -586,7 +563,6 @@
   display: none;
 }
 
-/* Mobile optimizations */
 @media (max-width: 480px) {
   #calculator {
     max-width: 100%;
@@ -594,16 +570,16 @@
   }
 
   #display {
-    min-height: 160px;
-    padding: 1em;
+    min-height: 130px;
+    padding: 0.9em;
   }
 
   #problem {
-    font-size: 1.8em;
+    font-size: 1.7em;
   }
 
   #answer-input {
-    font-size: 1.4em;
+    font-size: 1.3em;
   }
 
   #numpad button {
@@ -618,9 +594,8 @@
   }
 }
 
-/* Prevent zoom on input focus on iOS */
 @media screen and (max-width: 768px) {
   #answer-input {
-    font-size: max(16px, 1.6em);
+    font-size: max(16px, 1.5em);
   }
 }
