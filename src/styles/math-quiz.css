@@ -1,4 +1,4 @@
-/* math-quiz.css - Enhanced retro calculator with authentic LCD display */
+/* math-quiz.css - Version 2 with shorter LCD (180px) */
 
 /* DSEG14 - Classic 7-segment LCD display font */
 @font-face {
@@ -100,14 +100,15 @@
 #calculator {
   width: 100%;
   max-width: 400px;
-  background: 
-    linear-gradient(135deg, 
-      #e8dcc8 0%, 
-      #e4d8c4 15%,
-      #dccfbb 30%, 
-      #dccfbb 70%,
-      #d4c7b3 85%,
-      #d0c3af 100%);
+  background: linear-gradient(
+    135deg,
+    #e8dcc8 0%,
+    #e4d8c4 15%,
+    #dccfbb 30%,
+    #dccfbb 70%,
+    #d4c7b3 85%,
+    #d0c3af 100%
+  );
   border: 3px solid #b8a898;
   border-radius: 12px;
   padding: 1.5em;
@@ -127,8 +128,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image:
-    repeating-linear-gradient(
+  background-image: repeating-linear-gradient(
       0deg,
       transparent,
       transparent 2px,
@@ -165,14 +165,15 @@
 }
 
 [data-theme-dark] #calculator {
-  background: 
-    linear-gradient(135deg,
-      #3a3530 0%,
-      #363026 15%,
-      #32291d 30%,
-      #32291d 70%,
-      #2e251a 85%,
-      #2a2116 100%);
+  background: linear-gradient(
+    135deg,
+    #3a3530 0%,
+    #363026 15%,
+    #32291d 30%,
+    #32291d 70%,
+    #2e251a 85%,
+    #2a2116 100%
+  );
   border-color: #4a4540;
   box-shadow:
     0 8px 16px rgba(0, 0, 0, 0.5),
@@ -181,21 +182,22 @@
     inset 0 -2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* LCD Display - authentic greenish tint with proper shadows */
+/* LCD Display - REDUCED HEIGHT to 180px */
 #display {
-  background: 
-    linear-gradient(180deg,
-      #c4d4bc 0%,
-      #bcd0b4 20%,
-      #b4ccac 40%,
-      #b0c8a8 60%,
-      #acc4a4 80%,
-      #a8c0a0 100%);
+  background: linear-gradient(
+    180deg,
+    #c4d4bc 0%,
+    #bcd0b4 20%,
+    #b4ccac 40%,
+    #b0c8a8 60%,
+    #acc4a4 80%,
+    #a8c0a0 100%
+  );
   border: 3px solid #8a9a82;
   border-radius: 6px;
   padding: 1.2em;
   margin-bottom: 1.5em;
-  min-height: 220px;
+  min-height: 180px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -216,8 +218,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image:
-    repeating-linear-gradient(
+  background-image: repeating-linear-gradient(
       0deg,
       transparent,
       transparent 2px,
@@ -237,14 +238,15 @@
 }
 
 [data-theme-dark] #display {
-  background: 
-    linear-gradient(180deg,
-      #344a34 0%,
-      #2e442e 20%,
-      #283e28 40%,
-      #243a24 60%,
-      #203620 80%,
-      #1c321c 100%);
+  background: linear-gradient(
+    180deg,
+    #344a34 0%,
+    #2e442e 20%,
+    #283e28 40%,
+    #243a24 60%,
+    #203620 80%,
+    #1c321c 100%
+  );
   border-color: #4a5a4a;
   color: #a8d8a0;
   box-shadow:
@@ -285,7 +287,7 @@
   font-size: 0.9em;
   font-weight: 700;
   letter-spacing: 0.05em;
-  text-shadow: 
+  text-shadow:
     0 1px 0 rgba(0, 0, 0, 0.15),
     0 -1px 0 rgba(255, 255, 255, 0.1);
 }
@@ -303,7 +305,7 @@
 [data-theme-dark] #streak,
 [data-theme-dark] #progress {
   color: #88b880;
-  text-shadow: 
+  text-shadow:
     0 0 2px rgba(136, 184, 128, 0.4),
     0 1px 0 rgba(0, 0, 0, 0.3);
 }
@@ -319,13 +321,13 @@
   align-items: center;
   justify-content: center;
   letter-spacing: 0.05em;
-  text-shadow: 
+  text-shadow:
     0 1px 1px rgba(0, 0, 0, 0.2),
     0 -1px 0 rgba(255, 255, 255, 0.15);
 }
 
 [data-theme-dark] #problem {
-  text-shadow: 
+  text-shadow:
     0 0 4px rgba(168, 216, 160, 0.4),
     0 1px 0 rgba(0, 0, 0, 0.5);
 }
@@ -342,14 +344,14 @@
   justify-content: center;
   border-bottom: 2px solid rgba(58, 74, 58, 0.3);
   letter-spacing: 0.1em;
-  text-shadow: 
+  text-shadow:
     0 1px 1px rgba(0, 0, 0, 0.2),
     0 -1px 0 rgba(255, 255, 255, 0.1);
 }
 
 [data-theme-dark] #answer-input {
   border-bottom-color: rgba(168, 200, 160, 0.3);
-  text-shadow: 
+  text-shadow:
     0 0 3px rgba(168, 216, 160, 0.4),
     0 1px 0 rgba(0, 0, 0, 0.4);
 }
@@ -368,28 +370,28 @@
 
 .correct {
   color: #2d5016;
-  text-shadow: 
+  text-shadow:
     0 1px 1px rgba(0, 0, 0, 0.2),
     0 -1px 0 rgba(255, 255, 255, 0.2);
 }
 
 [data-theme-dark] .correct {
   color: #6ade80;
-  text-shadow: 
+  text-shadow:
     0 0 4px rgba(106, 222, 128, 0.5),
     0 1px 0 rgba(0, 0, 0, 0.5);
 }
 
 .incorrect {
   color: #9b2020;
-  text-shadow: 
+  text-shadow:
     0 1px 1px rgba(0, 0, 0, 0.2),
     0 -1px 0 rgba(255, 255, 255, 0.15);
 }
 
 [data-theme-dark] .incorrect {
   color: #ef5555;
-  text-shadow: 
+  text-shadow:
     0 0 4px rgba(239, 85, 85, 0.4),
     0 1px 0 rgba(0, 0, 0, 0.5);
 }
@@ -407,15 +409,16 @@
   font-weight: 700;
   padding: 0.7em;
   border: 2px solid #a89888;
-  background: 
-    linear-gradient(180deg,
-      #f8f0e0 0%,
-      #f4ece0 15%,
-      #f0e8dc 30%,
-      #ece4d8 50%,
-      #e8e0d4 70%,
-      #e4dcd0 85%,
-      #e0d8cc 100%);
+  background: linear-gradient(
+    180deg,
+    #f8f0e0 0%,
+    #f4ece0 15%,
+    #f0e8dc 30%,
+    #ece4d8 50%,
+    #e8e0d4 70%,
+    #e4dcd0 85%,
+    #e0d8cc 100%
+  );
   border-radius: 6px;
   cursor: pointer;
   user-select: none;
@@ -451,15 +454,16 @@
 }
 
 [data-theme-dark] #numpad button {
-  background: 
-    linear-gradient(180deg,
-      #5a5550 0%,
-      #565048 15%,
-      #524c40 30%,
-      #4e4838 50%,
-      #4a4430 70%,
-      #464028 85%,
-      #423c20 100%);
+  background: linear-gradient(
+    180deg,
+    #5a5550 0%,
+    #565048 15%,
+    #524c40 30%,
+    #4e4838 50%,
+    #4a4430 70%,
+    #464028 85%,
+    #423c20 100%
+  );
   border-color: #6a6560;
   color: #e8e0d0;
   box-shadow:
@@ -477,20 +481,12 @@
     0 2px 2px rgba(0, 0, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
     inset 0 2px 4px rgba(0, 0, 0, 0.15);
-  background: 
-    linear-gradient(180deg,
-      #e8d8c0 0%,
-      #dccfbb 50%,
-      #d0c3af 100%);
+  background: linear-gradient(180deg, #e8d8c0 0%, #dccfbb 50%, #d0c3af 100%);
 }
 
 [data-theme-dark] #numpad button:active,
 [data-theme-dark] #numpad button.pressed {
-  background: 
-    linear-gradient(180deg,
-      #4a4540 0%,
-      #3e3a30 50%,
-      #322e24 100%);
+  background: linear-gradient(180deg, #4a4540 0%, #3e3a30 50%, #322e24 100%);
   box-shadow:
     0 0 0 #3a3530,
     0 2px 2px rgba(0, 0, 0, 0.5),
@@ -509,68 +505,58 @@
 
 /* Enter button - retro blue accent with gradient */
 #numpad #enter {
-  background: 
-    linear-gradient(180deg,
-      #8ab8d8 0%,
-      #7eb2d4 20%,
-      #72acd0 40%,
-      #66a6cc 60%,
-      #5aa0c8 80%,
-      #4e9ac4 100%);
+  background: linear-gradient(
+    180deg,
+    #8ab8d8 0%,
+    #7eb2d4 20%,
+    #72acd0 40%,
+    #66a6cc 60%,
+    #5aa0c8 80%,
+    #4e9ac4 100%
+  );
   border-color: #5a8fb8;
   color: #ffffff;
-  text-shadow: 
+  text-shadow:
     0 1px 2px rgba(0, 0, 0, 0.3),
     0 -1px 0 rgba(255, 255, 255, 0.2);
 }
 
 [data-theme-dark] #numpad #enter {
-  background: 
-    linear-gradient(180deg,
-      #5a7f9f 0%,
-      #537991 20%,
-      #4c7383 40%,
-      #456d75 60%,
-      #3e6767 80%,
-      #376159 100%);
+  background: linear-gradient(
+    180deg,
+    #5a7f9f 0%,
+    #537991 20%,
+    #4c7383 40%,
+    #456d75 60%,
+    #3e6767 80%,
+    #376159 100%
+  );
   border-color: #3a5f7f;
 }
 
 #numpad #enter:active,
 #numpad #enter.pressed {
-  background: 
-    linear-gradient(180deg,
-      #6a9fc8 0%,
-      #5e93bc 50%,
-      #5287b0 100%);
+  background: linear-gradient(180deg, #6a9fc8 0%, #5e93bc 50%, #5287b0 100%);
 }
 
 [data-theme-dark] #numpad #enter:active,
 [data-theme-dark] #numpad #enter.pressed {
-  background: 
-    linear-gradient(180deg,
-      #4a6f8f 0%,
-      #3e6379 50%,
-      #325763 100%);
+  background: linear-gradient(180deg, #4a6f8f 0%, #3e6379 50%, #325763 100%);
 }
 
-/* Special buttons for fractions and decimals */
+/* Special buttons for fractions, decimals, and prime factorization */
 #decimal-btn,
-#fraction-btn {
-  background: 
-    linear-gradient(180deg,
-      #f0e8d8 0%,
-      #e8e0d0 50%,
-      #e0d8c8 100%);
+#fraction-btn,
+#space-btn,
+#exponent-btn {
+  background: linear-gradient(180deg, #f0e8d8 0%, #e8e0d0 50%, #e0d8c8 100%);
 }
 
 [data-theme-dark] #decimal-btn,
-[data-theme-dark] #fraction-btn {
-  background: 
-    linear-gradient(180deg,
-      #524c48 0%,
-      #464038 50%,
-      #3a3428 100%);
+[data-theme-dark] #fraction-btn,
+[data-theme-dark] #space-btn,
+[data-theme-dark] #exponent-btn {
+  background: linear-gradient(180deg, #524c48 0%, #464038 50%, #3a3428 100%);
 }
 
 /* Problem description */
@@ -608,7 +594,7 @@
   }
 
   #display {
-    min-height: 200px;
+    min-height: 160px;
     padding: 1em;
   }
 

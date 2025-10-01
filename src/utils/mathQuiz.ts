@@ -1,8 +1,4 @@
-// src/utils/mathQuiz.ts
-
-// ============================================================================
-// TYPE DECLARATIONS
-// ============================================================================
+// src/utils/mathQuiz.ts - Version 2 with fixes
 
 declare global {
   interface Window {
@@ -32,16 +28,18 @@ export interface ProblemType {
   name: string;
   description: string;
   generator: ProblemGenerator;
-  answerMode: "integer" | "decimal" | "fraction";
+  answerMode: "integer" | "decimal" | "fraction" | "prime-factorization";
 }
 
 export interface ProblemGenerator {
   generate(difficulty: Difficulty): Problem[];
 }
 
-// ============================================================================
-// PROBLEM GENERATORS
-// ============================================================================
+// Helper function to check if fraction is in reduced form
+function isReducedFraction(num: number, denom: number): boolean {
+  const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
+  return gcd(num, denom) === 1;
+}
 
 class MultiplicationGenerator implements ProblemGenerator {
   generate(difficulty: Difficulty): Problem[] {
@@ -52,7 +50,7 @@ class MultiplicationGenerator implements ProblemGenerator {
       hard: { min: 2, max: 15 },
     };
     const range = ranges[difficulty];
-    
+
     for (let a = range.min; a <= range.max; a++) {
       for (let b = a; b <= range.max; b++) {
         problems.push({
@@ -75,7 +73,7 @@ class DivisionGenerator implements ProblemGenerator {
       hard: { min: 2, max: 15 },
     };
     const range = ranges[difficulty];
-    
+
     for (let divisor = range.min; divisor <= range.max; divisor++) {
       for (let quotient = range.min; quotient <= range.max; quotient++) {
         const dividend = divisor * quotient;
@@ -99,8 +97,12 @@ class AdditionGenerator implements ProblemGenerator {
       hard: { min: 20, max: 100 },
     };
     const range = ranges[difficulty];
-    
-    for (let a = range.min; a <= range.max; a += difficulty === "easy" ? 1 : 2) {
+
+    for (
+      let a = range.min;
+      a <= range.max;
+      a += difficulty === "easy" ? 1 : 2
+    ) {
       for (let b = a; b <= range.max; b += difficulty === "easy" ? 1 : 2) {
         if (a + b <= range.max * 2) {
           problems.push({
@@ -124,9 +126,17 @@ class SubtractionGenerator implements ProblemGenerator {
       hard: { min: 20, max: 100 },
     };
     const range = ranges[difficulty];
-    
-    for (let minuend = range.min; minuend <= range.max; minuend += difficulty === "easy" ? 1 : 2) {
-      for (let subtrahend = range.min; subtrahend < minuend; subtrahend += difficulty === "easy" ? 1 : 2) {
+
+    for (
+      let minuend = range.min;
+      minuend <= range.max;
+      minuend += difficulty === "easy" ? 1 : 2
+    ) {
+      for (
+        let subtrahend = range.min;
+        subtrahend < minuend;
+        subtrahend += difficulty === "easy" ? 1 : 2
+      ) {
         problems.push({
           display: `${minuend} - ${subtrahend}`,
           answer: String(minuend - subtrahend),
@@ -151,7 +161,7 @@ class FractionAdditionGenerator implements ProblemGenerator {
       hard: { maxDenom: 20, maxNum: 15 },
     };
     const range = ranges[difficulty];
-    
+
     for (let d1 = 2; d1 <= range.maxDenom; d1++) {
       for (let n1 = 1; n1 < d1 && n1 <= range.maxNum; n1++) {
         for (let d2 = 2; d2 <= range.maxDenom; d2++) {
@@ -161,7 +171,7 @@ class FractionAdditionGenerator implements ProblemGenerator {
             const g = this.gcd(num, lcd);
             const ansNum = num / g;
             const ansDenom = lcd / g;
-            
+
             problems.push({
               display: `\\frac{${n1}}{${d1}} + \\frac{${n2}}{${d2}}`,
               answer: `${ansNum}/${ansDenom}`,
@@ -171,7 +181,10 @@ class FractionAdditionGenerator implements ProblemGenerator {
         }
       }
     }
-    return problems.slice(0, difficulty === "easy" ? 30 : difficulty === "medium" ? 60 : 100);
+    return problems.slice(
+      0,
+      difficulty === "easy" ? 30 : difficulty === "medium" ? 60 : 100,
+    );
   }
 }
 
@@ -188,7 +201,7 @@ class FractionSubtractionGenerator implements ProblemGenerator {
       hard: { maxDenom: 20, maxNum: 15 },
     };
     const range = ranges[difficulty];
-    
+
     for (let d1 = 2; d1 <= range.maxDenom; d1++) {
       for (let n1 = 2; n1 < d1 && n1 <= range.maxNum; n1++) {
         for (let d2 = 2; d2 <= range.maxDenom; d2++) {
@@ -199,7 +212,7 @@ class FractionSubtractionGenerator implements ProblemGenerator {
               const g = this.gcd(num, lcd);
               const ansNum = num / g;
               const ansDenom = lcd / g;
-              
+
               problems.push({
                 display: `\\frac{${n1}}{${d1}} - \\frac{${n2}}{${d2}}`,
                 answer: `${ansNum}/${ansDenom}`,
@@ -210,7 +223,10 @@ class FractionSubtractionGenerator implements ProblemGenerator {
         }
       }
     }
-    return problems.slice(0, difficulty === "easy" ? 30 : difficulty === "medium" ? 60 : 100);
+    return problems.slice(
+      0,
+      difficulty === "easy" ? 30 : difficulty === "medium" ? 60 : 100,
+    );
   }
 }
 
@@ -227,7 +243,7 @@ class FractionMultiplicationGenerator implements ProblemGenerator {
       hard: { maxDenom: 15, maxNum: 12 },
     };
     const range = ranges[difficulty];
-    
+
     for (let d1 = 2; d1 <= range.maxDenom; d1++) {
       for (let n1 = 1; n1 < d1 && n1 <= range.maxNum; n1++) {
         for (let d2 = 2; d2 <= range.maxDenom; d2++) {
@@ -237,7 +253,7 @@ class FractionMultiplicationGenerator implements ProblemGenerator {
             const g = this.gcd(num, denom);
             const ansNum = num / g;
             const ansDenom = denom / g;
-            
+
             problems.push({
               display: `\\frac{${n1}}{${d1}} \\times \\frac{${n2}}{${d2}}`,
               answer: `${ansNum}/${ansDenom}`,
@@ -247,7 +263,10 @@ class FractionMultiplicationGenerator implements ProblemGenerator {
         }
       }
     }
-    return problems.slice(0, difficulty === "easy" ? 30 : difficulty === "medium" ? 60 : 100);
+    return problems.slice(
+      0,
+      difficulty === "easy" ? 30 : difficulty === "medium" ? 60 : 100,
+    );
   }
 }
 
@@ -264,7 +283,7 @@ class FractionDivisionGenerator implements ProblemGenerator {
       hard: { maxDenom: 12, maxNum: 10 },
     };
     const range = ranges[difficulty];
-    
+
     for (let d1 = 2; d1 <= range.maxDenom; d1++) {
       for (let n1 = 1; n1 < d1 && n1 <= range.maxNum; n1++) {
         for (let d2 = 2; d2 <= range.maxDenom; d2++) {
@@ -274,7 +293,7 @@ class FractionDivisionGenerator implements ProblemGenerator {
             const g = this.gcd(num, denom);
             const ansNum = num / g;
             const ansDenom = denom / g;
-            
+
             problems.push({
               display: `\\frac{${n1}}{${d1}} \\div \\frac{${n2}}{${d2}}`,
               answer: `${ansNum}/${ansDenom}`,
@@ -284,7 +303,10 @@ class FractionDivisionGenerator implements ProblemGenerator {
         }
       }
     }
-    return problems.slice(0, difficulty === "easy" ? 30 : difficulty === "medium" ? 60 : 100);
+    return problems.slice(
+      0,
+      difficulty === "easy" ? 30 : difficulty === "medium" ? 60 : 100,
+    );
   }
 }
 
@@ -301,7 +323,7 @@ class FractionSimplificationGenerator implements ProblemGenerator {
       hard: { max: 30, multipliers: [2, 3, 4, 5, 6, 7] },
     };
     const range = ranges[difficulty];
-    
+
     for (let denom = 2; denom <= range.max; denom++) {
       for (let num = 1; num < denom; num++) {
         for (const mult of range.multipliers) {
@@ -316,7 +338,68 @@ class FractionSimplificationGenerator implements ProblemGenerator {
         }
       }
     }
-    return problems.slice(0, difficulty === "easy" ? 30 : difficulty === "medium" ? 50 : 80);
+    return problems.slice(
+      0,
+      difficulty === "easy" ? 30 : difficulty === "medium" ? 50 : 80,
+    );
+  }
+}
+
+class PrimeFactorizationGenerator implements ProblemGenerator {
+  private getPrimeFactors(n: number): number[] {
+    const factors: number[] = [];
+    let divisor = 2;
+
+    while (n > 1) {
+      while (n % divisor === 0) {
+        factors.push(divisor);
+        n = n / divisor;
+      }
+      divisor++;
+      if (divisor * divisor > n && n > 1) {
+        factors.push(n);
+        break;
+      }
+    }
+    return factors;
+  }
+
+  private formatFactors(factors: number[]): string {
+    const counts = new Map<number, number>();
+    for (const f of factors) {
+      counts.set(f, (counts.get(f) || 0) + 1);
+    }
+
+    return Array.from(counts.entries())
+      .sort((a, b) => a[0] - b[0])
+      .map(([base, exp]) => (exp === 1 ? String(base) : `${base}^${exp}`))
+      .join(" ");
+  }
+
+  generate(difficulty: Difficulty): Problem[] {
+    const problems: Problem[] = [];
+    const ranges = {
+      easy: { min: 4, max: 30 },
+      medium: { min: 20, max: 100 },
+      hard: { min: 50, max: 200 },
+    };
+    const range = ranges[difficulty];
+
+    for (let n = range.min; n <= range.max; n++) {
+      const factors = this.getPrimeFactors(n);
+      if (factors.length > 1) {
+        problems.push({
+          display: String(n),
+          answer: this.formatFactors(factors),
+          key: `factor-${n}`,
+        });
+      }
+    }
+
+    return problems.slice(
+      0,
+      difficulty === "easy" ? 40 : difficulty === "medium" ? 60 : 80,
+    );
   }
 }
 
@@ -334,19 +417,16 @@ class ConstantsGenerator implements ProblemGenerator {
   ];
 
   generate(difficulty: Difficulty): Problem[] {
-    const decimalsRequired = difficulty === "easy" ? 2 : difficulty === "medium" ? 3 : 4;
-    
-    return this.constants.map(c => ({
+    const decimalsRequired =
+      difficulty === "easy" ? 2 : difficulty === "medium" ? 3 : 4;
+
+    return this.constants.map((c) => ({
       display: c.name,
       answer: c.value.toFixed(decimalsRequired),
       key: c.name,
     }));
   }
 }
-
-// ============================================================================
-// SOUND MANAGER
-// ============================================================================
 
 class SoundManager {
   private enabled = false;
@@ -370,7 +450,11 @@ class SoundManager {
     return this.enabled;
   }
 
-  private playTone(frequency: number, duration: number, type: OscillatorType = "sine") {
+  private playTone(
+    frequency: number,
+    duration: number,
+    type: OscillatorType = "sine",
+  ) {
     if (!this.enabled) return;
     if (!this.audioContext) {
       this.audioContext = new AudioContext();
@@ -386,7 +470,10 @@ class SoundManager {
     oscillator.type = type;
 
     gainNode.gain.setValueAtTime(0.1, this.audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+    gainNode.gain.exponentialRampToValueAtTime(
+      0.01,
+      this.audioContext.currentTime + duration,
+    );
 
     oscillator.start(this.audioContext.currentTime);
     oscillator.stop(this.audioContext.currentTime + duration);
@@ -405,10 +492,6 @@ class SoundManager {
     this.playTone(300, 0.2);
   }
 }
-
-// ============================================================================
-// STREAK MANAGER
-// ============================================================================
 
 class StreakManager {
   private storageKey = "mathQuizStreaks";
@@ -443,86 +526,96 @@ class StreakManager {
   }
 }
 
-// ============================================================================
-// PROBLEM TYPE REGISTRY
-// ============================================================================
-
 export const PROBLEM_TYPES: ProblemType[] = [
   {
     id: "multiplication",
     name: "Multiplication",
-    description: "Practice multiplying whole numbers. Build fluency with times tables and develop mental math skills.",
+    description:
+      "Practice multiplying whole numbers. Build fluency with times tables and develop mental math skills.",
     generator: new MultiplicationGenerator(),
     answerMode: "integer",
   },
   {
     id: "division",
     name: "Division",
-    description: "Practice dividing whole numbers. Master division facts and strengthen your understanding of the relationship between multiplication and division.",
+    description:
+      "Practice dividing whole numbers. Master division facts and strengthen your understanding of the relationship between multiplication and division.",
     generator: new DivisionGenerator(),
     answerMode: "integer",
   },
   {
     id: "addition",
     name: "Addition",
-    description: "Practice adding whole numbers. Develop quick mental addition skills and number sense.",
+    description:
+      "Practice adding whole numbers. Develop quick mental addition skills and number sense.",
     generator: new AdditionGenerator(),
     answerMode: "integer",
   },
   {
     id: "subtraction",
     name: "Subtraction",
-    description: "Practice subtracting whole numbers. Build confidence with mental subtraction and strengthen number relationships.",
+    description:
+      "Practice subtracting whole numbers. Build confidence with mental subtraction and strengthen number relationships.",
     generator: new SubtractionGenerator(),
     answerMode: "integer",
   },
   {
     id: "fraction-addition",
     name: "Fraction Addition",
-    description: "Add fractions with different denominators. Practice finding common denominators and simplifying results.",
+    description:
+      "Add fractions with different denominators. Practice finding common denominators and simplifying results to reduced form.",
     generator: new FractionAdditionGenerator(),
     answerMode: "fraction",
   },
   {
     id: "fraction-subtraction",
     name: "Fraction Subtraction",
-    description: "Subtract fractions with different denominators. Master working with common denominators and reducing answers.",
+    description:
+      "Subtract fractions with different denominators. Master working with common denominators and reducing answers to simplest form.",
     generator: new FractionSubtractionGenerator(),
     answerMode: "fraction",
   },
   {
     id: "fraction-multiplication",
     name: "Fraction Multiplication",
-    description: "Multiply fractions and simplify the results. Learn to multiply numerators and denominators efficiently.",
+    description:
+      "Multiply fractions and simplify the results to lowest terms. Learn to multiply numerators and denominators efficiently.",
     generator: new FractionMultiplicationGenerator(),
     answerMode: "fraction",
   },
   {
     id: "fraction-division",
     name: "Fraction Division",
-    description: "Divide fractions using the multiply-by-reciprocal method. Build understanding of fraction operations.",
+    description:
+      "Divide fractions using the multiply-by-reciprocal method. Build understanding of fraction operations and simplify to reduced form.",
     generator: new FractionDivisionGenerator(),
     answerMode: "fraction",
   },
   {
     id: "fraction-simplification",
     name: "Fraction Simplification",
-    description: "Simplify fractions to lowest terms. Practice identifying greatest common factors and reducing fractions.",
+    description:
+      "Simplify fractions to lowest terms. Practice identifying greatest common factors and reducing fractions completely.",
     generator: new FractionSimplificationGenerator(),
     answerMode: "fraction",
   },
   {
+    id: "prime-factorization",
+    name: "Prime Factorization",
+    description:
+      "Factor numbers into their prime factors. Express answers as space-separated primes with exponents (e.g., 2^3 5 for 40).",
+    generator: new PrimeFactorizationGenerator(),
+    answerMode: "prime-factorization",
+  },
+  {
     id: "constants",
     name: "Mathematical Constants",
-    description: "Memorize important mathematical constants to multiple decimal places. Essential values include π, e, φ, and common square roots.",
+    description:
+      "Memorize important mathematical constants to multiple decimal places. Essential values include π, e, φ, and common square roots.",
     generator: new ConstantsGenerator(),
     answerMode: "decimal",
   },
 ];
-
-// ============================================================================
-// MAIN QUIZ CLASS
-// ============================================================================
 
 export class MathQuiz {
   private allProblems: Problem[] = [];
@@ -559,7 +652,10 @@ export class MathQuiz {
 
       window.MathJax = {
         tex: {
-          inlineMath: [["$", "$"], ["\\(", "\\)"]],
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
         },
         startup: {
           defaultReady: () => {},
@@ -586,10 +682,12 @@ export class MathQuiz {
   }
 
   private setupProblemSelector() {
-    const select = document.getElementById("problem-type-select") as HTMLSelectElement;
-    
-    PROBLEM_TYPES.forEach(type => {
-      (["easy", "medium", "hard"] as Difficulty[]).forEach(diff => {
+    const select = document.getElementById(
+      "problem-type-select",
+    ) as HTMLSelectElement;
+
+    PROBLEM_TYPES.forEach((type) => {
+      (["easy", "medium", "hard"] as Difficulty[]).forEach((diff) => {
         const option = document.createElement("option");
         option.value = `${type.id}:${diff}`;
         option.textContent = `${type.name} - ${diff.charAt(0).toUpperCase() + diff.slice(1)}`;
@@ -616,18 +714,20 @@ export class MathQuiz {
   }
 
   private switchMode(typeId: string, difficulty: Difficulty) {
-    const problemType = PROBLEM_TYPES.find(t => t.id === typeId);
+    const problemType = PROBLEM_TYPES.find((t) => t.id === typeId);
     if (!problemType) return;
 
     this.currentProblemType = problemType;
     this.currentDifficulty = difficulty;
-    
+
     const desc = document.getElementById("problem-description");
     if (desc) desc.textContent = problemType.description;
 
     this.updateNumpad(problemType.answerMode);
 
-    this.allProblems = this.shuffleArray(problemType.generator.generate(difficulty));
+    this.allProblems = this.shuffleArray(
+      problemType.generator.generate(difficulty),
+    );
     this.solvedKeys.clear();
     this.retryQueue = [];
     this.totalProblems = this.allProblems.length;
@@ -637,12 +737,24 @@ export class MathQuiz {
     this.updateProgress();
   }
 
-  private updateNumpad(mode: "integer" | "decimal" | "fraction") {
+  private updateNumpad(
+    mode: "integer" | "decimal" | "fraction" | "prime-factorization",
+  ) {
     const decimalBtn = document.getElementById("decimal-btn");
     const fractionBtn = document.getElementById("fraction-btn");
-    
-    if (decimalBtn) decimalBtn.style.display = mode === "decimal" ? "block" : "none";
-    if (fractionBtn) fractionBtn.style.display = mode === "fraction" ? "block" : "none";
+    const spaceBtn = document.getElementById("space-btn");
+    const exponentBtn = document.getElementById("exponent-btn");
+
+    if (decimalBtn)
+      decimalBtn.style.display = mode === "decimal" ? "block" : "none";
+    if (fractionBtn)
+      fractionBtn.style.display = mode === "fraction" ? "block" : "none";
+    if (spaceBtn)
+      spaceBtn.style.display =
+        mode === "prime-factorization" ? "block" : "none";
+    if (exponentBtn)
+      exponentBtn.style.display =
+        mode === "prime-factorization" ? "block" : "none";
   }
 
   private shuffleArray<T>(array: T[]): T[] {
@@ -672,13 +784,33 @@ export class MathQuiz {
         e.preventDefault();
         this.checkAnswer();
         this.animateButton("#enter");
-      } else if (e.key === "." && this.currentProblemType?.answerMode === "decimal") {
+      } else if (
+        e.key === "." &&
+        this.currentProblemType?.answerMode === "decimal"
+      ) {
         e.preventDefault();
         this.addCharacter(".");
         this.soundManager.playClick();
-      } else if (e.key === "/" && this.currentProblemType?.answerMode === "fraction") {
+      } else if (
+        e.key === "/" &&
+        this.currentProblemType?.answerMode === "fraction"
+      ) {
         e.preventDefault();
         this.addCharacter("/");
+        this.soundManager.playClick();
+      } else if (
+        e.key === " " &&
+        this.currentProblemType?.answerMode === "prime-factorization"
+      ) {
+        e.preventDefault();
+        this.addCharacter(" ");
+        this.soundManager.playClick();
+      } else if (
+        e.key === "^" &&
+        this.currentProblemType?.answerMode === "prime-factorization"
+      ) {
+        e.preventDefault();
+        this.addCharacter("^");
         this.soundManager.playClick();
       }
     });
@@ -707,6 +839,22 @@ export class MathQuiz {
       });
     }
 
+    const spaceBtn = document.getElementById("space-btn");
+    if (spaceBtn) {
+      spaceBtn.addEventListener("click", () => {
+        this.addCharacter(" ");
+        this.soundManager.playClick();
+      });
+    }
+
+    const exponentBtn = document.getElementById("exponent-btn");
+    if (exponentBtn) {
+      exponentBtn.addEventListener("click", () => {
+        this.addCharacter("^");
+        this.soundManager.playClick();
+      });
+    }
+
     document.getElementById("backspace")!.addEventListener("click", () => {
       this.backspace();
       this.soundManager.playClick();
@@ -728,7 +876,7 @@ export class MathQuiz {
   private addCharacter(char: string) {
     const input = document.getElementById("answer-input") as HTMLDivElement;
     const current = input.textContent?.trim() || "";
-    if (current.length < 10 && current !== "\u00A0") {
+    if (current.length < 20 && current !== "\u00A0") {
       input.textContent = (current === "" ? "" : current) + char;
     }
   }
@@ -746,7 +894,10 @@ export class MathQuiz {
 
     const streakDiv = document.getElementById("streak") as HTMLDivElement;
     if (this.currentProblemType) {
-      const bestStreak = this.streakManager.getStreak(this.currentProblemType.id, this.currentDifficulty);
+      const bestStreak = this.streakManager.getStreak(
+        this.currentProblemType.id,
+        this.currentDifficulty,
+      );
       streakDiv.textContent = `${this.currentStreak} | ${bestStreak}`;
     }
   }
@@ -755,7 +906,11 @@ export class MathQuiz {
     if (correct) {
       this.currentStreak++;
       if (this.currentProblemType) {
-        this.streakManager.updateStreak(this.currentProblemType.id, this.currentDifficulty, this.currentStreak);
+        this.streakManager.updateStreak(
+          this.currentProblemType.id,
+          this.currentDifficulty,
+          this.currentStreak,
+        );
       }
     } else {
       this.currentStreak = 0;
@@ -773,7 +928,10 @@ export class MathQuiz {
     feedbackDiv.textContent = "\u00A0";
     feedbackDiv.className = "";
 
-    if (this.retryQueue.length > 0 && this.problemsSinceRetry >= this.getRandomDelay()) {
+    if (
+      this.retryQueue.length > 0 &&
+      this.problemsSinceRetry >= this.getRandomDelay()
+    ) {
       this.currentProblem = this.retryQueue.shift()!;
       this.problemsSinceRetry = 0;
     } else if (this.allProblems.length > 0) {
@@ -812,7 +970,10 @@ export class MathQuiz {
 
     this.isProcessing = true;
 
-    const isCorrect = this.compareAnswers(answerText, this.currentProblem!.answer);
+    const isCorrect = this.compareAnswers(
+      answerText,
+      this.currentProblem!.answer,
+    );
 
     if (isCorrect) {
       feedbackDiv.textContent = "√";
@@ -835,17 +996,29 @@ export class MathQuiz {
   private compareAnswers(userAnswer: string, correctAnswer: string): boolean {
     const user = userAnswer.trim().toLowerCase();
     const correct = correctAnswer.trim().toLowerCase();
-    
+
     if (user === correct) return true;
 
+    // For fractions, check if both are in reduced form and equivalent
     if (user.includes("/") && correct.includes("/")) {
       const [un, ud] = user.split("/").map(Number);
       const [cn, cd] = correct.split("/").map(Number);
+
       if (!isNaN(un) && !isNaN(ud) && !isNaN(cn) && !isNaN(cd)) {
-        return un * cd === cn * ud;
+        // Must be in reduced form
+        const gcd = (a: number, b: number): number =>
+          b === 0 ? a : gcd(b, a % b);
+        const userGcd = gcd(Math.abs(un), Math.abs(ud));
+        const correctGcd = gcd(Math.abs(cn), Math.abs(cd));
+
+        // Check if user's answer is reduced and equivalent to correct answer
+        if (userGcd === 1 && correctGcd === 1 && un * cd === cn * ud) {
+          return true;
+        }
       }
     }
 
+    // For decimals, compare with tolerance
     const userNum = parseFloat(user);
     const correctNum = parseFloat(correct);
     if (!isNaN(userNum) && !isNaN(correctNum)) {
@@ -857,8 +1030,12 @@ export class MathQuiz {
 
   private showCompletion() {
     const calculator = document.getElementById("calculator") as HTMLDivElement;
-    const completionDiv = document.getElementById("completion") as HTMLDivElement;
-    const selector = document.getElementById("problem-type-selector") as HTMLDivElement;
+    const completionDiv = document.getElementById(
+      "completion",
+    ) as HTMLDivElement;
+    const selector = document.getElementById(
+      "problem-type-selector",
+    ) as HTMLDivElement;
 
     calculator.classList.add("hidden");
     selector.classList.add("hidden");
