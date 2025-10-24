@@ -5,7 +5,7 @@ set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
 # Config (override via env/.env)
 NODE_ENV := env("NODE_ENV", "development")
 PORT := env("PORT", "4321")
-NODE_REQUIRED := env("NODE_REQUIRED", "v20")
+NODE_REQUIRED := env("NODE_REQUIRED", "v22")
 
 # 🚀 Show banner + task list
 _default:
@@ -13,7 +13,7 @@ _default:
 	@just --list
 
 # 🚀 Install → check → dev
-quickstart: verify install check dev-serve
+quickstart: install check dev-serve
 
 # ▶️ Start dev server
 dev-serve:
@@ -56,18 +56,20 @@ clean:
 reset: clean
 	rm -rf node_modules/ package-lock.json
 	npm ci
-	npx playwright install --with-deps
 	just check
 
 # 🔧 Verify Node toolchain
 verify:
 	@command -v node >/dev/null || { echo "❌ node not found" >&2; exit 127; }
 	@command -v npm  >/dev/null || { echo "❌ npm not found" >&2; exit 127; }
-	@case "$$(node -v)" in {{NODE_REQUIRED}}*) ;; *) echo "❌ Need Node {{NODE_REQUIRED}}" >&2; exit 1 ;; esac
 
 # 📦 Install deps
 install: verify
 	npm ci
+
+# Install playwright
+install-playwright:
+	npx playwright install --with-deps
 
 # 🤖 Local CI pipeline
 ci: clean install check lint format build test
