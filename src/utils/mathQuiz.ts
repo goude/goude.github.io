@@ -1,5 +1,3 @@
-// src/utils/mathQuiz.ts - Lean and comprehensive
-
 declare global {
   interface Window {
     MathJax?: {
@@ -33,9 +31,9 @@ export interface ProblemGenerator {
 class MultiplicationGenerator implements ProblemGenerator {
   generate(difficulty: Difficulty): Problem[] {
     const ranges = {
-      easy: { min: 2, max: 5 },
-      medium: { min: 2, max: 10 },
-      hard: { min: 2, max: 15 },
+      easy: { min: 2, max: 10 },
+      medium: { min: 2, max: 12 },
+      hard: { min: 2, max: 20 },
     };
     const range = ranges[difficulty];
     const problems: Problem[] = [];
