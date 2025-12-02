@@ -1,0 +1,267 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "cop — cloud clipboard portal";
+const description = "View whatever cop -n last pushed.";
+const permalink = (Astro.site?.href ?? "https://goude.se/") + "cop";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  permalink={permalink}
+  current="home"
+>
+  <section>
+    <script
+      is:inline
+      src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"
+      defer></script>
+
+    <style>
+      .cop-container {
+        margin-top: 2rem;
+        max-width: 48rem;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .cop-header {
+        margin-bottom: 1rem;
+      }
+
+      .cop-status {
+        font-family: monospace;
+        font-size: 0.9rem;
+        margin: 0.5rem 0 1rem;
+        color: #555;
+      }
+
+      .cop-qr-wrapper {
+        margin-bottom: 1.5rem;
+      }
+
+      .cop-qr-wrapper canvas {
+        display: block;
+        margin-top: 0.5rem;
+        /* double-ish size */
+        width: 400px;
+        height: 400px;
+        max-width: 100%;
+        max-height: 100%;
+      }
+
+      .cop-box {
+        border-radius: 4px;
+        background: #f6f6f6;
+        border: 1px solid #ddd;
+        overflow: auto;
+      }
+
+      .cop-box pre {
+        margin: 0;
+        padding: 0.75rem 1rem;
+        font-size: 0.85rem;
+      }
+
+      .cop-empty {
+        font-style: italic;
+        color: #888;
+      }
+
+      .cop-actions {
+        margin-top: 0.5rem;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .cop-button {
+        border: 1px solid #ccc;
+        background: #f7f7f7;
+        padding: 0.25rem 0.6rem;
+        font-size: 0.75rem;
+        cursor: pointer;
+        border-radius: 999px;
+      }
+
+      .cop-button:hover {
+        background: #eee;
+      }
+    </style>
+
+    <div class="cop-container">
+      <header class="cop-header">
+        <h1>cop</h1>
+      </header>
+
+      <div class="cop-status" id="cop-status">
+        Fetching from cloud clipboard…
+      </div>
+
+      <div class="cop-qr-wrapper">
+        <canvas id="cop-qr-canvas"></canvas>
+      </div>
+
+      <div class="cop-box">
+        <pre><code id="cop-code" class="language-text cop-empty">(no data yet)</code></pre>
+      </div>
+
+      <div class="cop-actions">
+        <button type="button" class="cop-button" id="cop-copy-btn">
+          copy
+        </button>
+      </div>
+    </div>
+
+    <script is:inline>
+      (function () {
+        const APP_KEY = "pk1vk7oj";
+        const KEY = "cop";
+
+        function trimQuotes(s) {
+          s = s.trim();
+          if (s.length >= 2 && s[0] === '"' && s[s.length - 1] === '"') {
+            return s.slice(1, -1);
+          }
+          return s;
+        }
+
+        function safeBase64Decode(s) {
+          try {
+            return atob(s.replace(/\s+/g, ""));
+          } catch (_) {
+            return s;
+          }
+        }
+
+        function guessLanguage(text) {
+          const src = text.trim();
+          if (!src) return "";
+
+          if (
+            /^#!\/(usr\/bin\/env|bin)\/bash/.test(src) ||
+            /\bset -euo pipefail\b/.test(src)
+          )
+            return "bash";
+          if (/\bdef\s+\w+\s*\(/.test(src) || /^import\s+\w+/m.test(src))
+            return "python";
+          if (
+            /^SELECT\b/i.test(src) ||
+            (/\bFROM\b/i.test(src) && /\bSELECT\b/i.test(src))
+          )
+            return "sql";
+          if (/^[{\[]\s*["']\w+["']\s*:/.test(src)) return "json";
+          if (/^<\w+[\s>]/.test(src)) return "markup";
+          if (/function\s+\w+\s*\(/.test(src) || /\bconst\b.+=>/.test(src))
+            return "javascript";
+
+          return "";
+        }
+
+        async function fetchCopValue() {
+          const url =
+            "https://keyvalue.immanuel.co/api/KeyVal/GetValue/" +
+            APP_KEY +
+            "/" +
+            encodeURIComponent(KEY);
+
+          const res = await fetch(url);
+          if (!res.ok) throw new Error("HTTP " + res.status);
+
+          let raw = await res.text();
+          raw = trimQuotes(raw);
+          return safeBase64Decode(raw);
+        }
+
+        function renderQR(text) {
+          const canvas = document.getElementById("cop-qr-canvas");
+          if (!canvas || !window.QRCode) return;
+
+          window.QRCode.toCanvas(
+            canvas,
+            text || "",
+            { margin: 2, width: 400 },
+            function () {},
+          );
+        }
+
+        async function loadCop() {
+          const statusEl = document.getElementById("cop-status");
+          const codeEl = document.getElementById("cop-code");
+
+          if (!statusEl || !codeEl) return;
+
+          statusEl.textContent = 'Fetching from cloud clipboard key "cop"…';
+          codeEl.textContent = "(loading…)";
+          codeEl.classList.remove("cop-empty");
+          codeEl.className = "language-text";
+
+          try {
+            const value = await fetchCopValue();
+
+            if (!value) {
+              statusEl.textContent = 'Key "cop" is empty.';
+              codeEl.textContent = "(empty)";
+              codeEl.classList.add("cop-empty");
+              renderQR("");
+              if (window.Prism) Prism.highlightElement(codeEl);
+              return;
+            }
+
+            codeEl.textContent = value;
+
+            const lang = guessLanguage(value);
+            codeEl.className = lang ? "language-" + lang : "language-text";
+
+            statusEl.textContent = `Loaded ${value.length} characters from key "cop".`;
+            renderQR(value);
+
+            if (window.Prism && typeof Prism.highlightElement === "function") {
+              Prism.highlightElement(codeEl);
+            }
+          } catch (err) {
+            statusEl.textContent = 'Failed to fetch key "cop".';
+            codeEl.textContent = "(error fetching value)";
+            codeEl.className = "language-text cop-empty";
+            renderQR("");
+          }
+        }
+
+        function setupCopy() {
+          const btn = document.getElementById("cop-copy-btn");
+          const codeEl = document.getElementById("cop-code");
+          const statusEl = document.getElementById("cop-status");
+          if (!btn || !codeEl || !statusEl) return;
+
+          btn.addEventListener("click", async () => {
+            const text = codeEl.textContent || "";
+            try {
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(text);
+                statusEl.textContent = "Copied to local clipboard.";
+              } else {
+                const tmp = document.createElement("textarea");
+                tmp.value = text;
+                tmp.style.position = "fixed";
+                tmp.style.opacity = "0";
+                document.body.appendChild(tmp);
+                tmp.focus();
+                tmp.select();
+                document.execCommand("copy");
+                document.body.removeChild(tmp);
+                statusEl.textContent = "Copied to local clipboard (fallback).";
+              }
+            } catch (_) {
+              statusEl.textContent = "Failed to copy to clipboard.";
+            }
+          });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+          setupCopy();
+          loadCop();
+        });
+      })();
+    </script>
+  </section>
+</BaseLayout>
