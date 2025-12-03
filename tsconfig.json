@@ -8,5 +8,5 @@
     "noEmit": true
   },
   "extends": "astro/tsconfigs/strict",
-  "exclude": ["src/pages/hello.astro", "src/pages/ft-2025.astro"]
+  "exclude": ["quarantine/", "src/pages/hello.astro", "src/pages/ft-2027.astro"]
 }

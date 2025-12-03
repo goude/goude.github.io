@@ -2,16 +2,24 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const title = "cop — cloud clipboard portal";
-const description = "View whatever cop -n last pushed.";
-const permalink = (Astro.site?.href ?? "https://goude.se/") + "cop";
+const description = "View and update whatever cop -n last pushed.";
+const permalink = `${Astro.site!.href}cop`;
 ---
 
 <BaseLayout
   title={title}
   description={description}
   permalink={permalink}
-  current="home"
+  current="cop"
 >
+  <section>
+    <h1>cop</h1>
+    <p class="lede">
+      Simple cloud clipboard backed by a tiny Worker. Intended only for
+      non-sensitive, public data.
+    </p>
+  </section>
+
   <section>
     <script
       is:inline
@@ -20,14 +28,15 @@ const permalink = (Astro.site?.href ?? "https://goude.se/") + "cop";
 
     <style>
       .cop-container {
-        margin-top: 2rem;
+        margin-top: 1rem;
         max-width: 48rem;
         margin-left: auto;
         margin-right: auto;
-      }
-
-      .cop-header {
-        margin-bottom: 1rem;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
       }
 
       .cop-status {
@@ -38,207 +47,236 @@ const permalink = (Astro.site?.href ?? "https://goude.se/") + "cop";
       }
 
       .cop-qr-wrapper {
-        margin-bottom: 1.5rem;
+        margin-bottom: 0.75rem;
       }
 
       .cop-qr-wrapper canvas {
         display: block;
         margin-top: 0.5rem;
-        /* double-ish size */
         width: 400px;
         height: 400px;
         max-width: 100%;
         max-height: 100%;
       }
 
-      .cop-box {
+      .cop-url-link {
+        font-size: 0.9rem;
+        word-break: break-all;
+        margin-top: 0.5rem;
+        display: inline-block;
+      }
+
+      .cop-input {
+        width: 100%;
+        box-sizing: border-box;
         border-radius: 4px;
-        background: #f6f6f6;
         border: 1px solid #ddd;
-        overflow: auto;
-      }
-
-      .cop-box pre {
-        margin: 0;
-        padding: 0.75rem 1rem;
-        font-size: 0.85rem;
-      }
-
-      .cop-empty {
-        font-style: italic;
-        color: #888;
+        padding: 0.5rem 0.75rem;
+        font-family: monospace;
+        font-size: 0.9rem;
+        min-height: 6rem;
+        resize: vertical;
+        margin-top: 1.5rem;
       }
 
       .cop-actions {
         margin-top: 0.5rem;
         display: flex;
+        gap: 0.5rem;
         justify-content: flex-end;
       }
 
       .cop-button {
         border: 1px solid #ccc;
         background: #f7f7f7;
-        padding: 0.25rem 0.6rem;
-        font-size: 0.75rem;
+        padding: 0.25rem 0.8rem;
+        font-size: 0.8rem;
         cursor: pointer;
         border-radius: 999px;
       }
 
-      .cop-button:hover {
+      .cop-button:hover:enabled {
         background: #eee;
+      }
+
+      .cop-button:disabled {
+        opacity: 0.6;
+        cursor: default;
+      }
+
+      .cop-charcount {
+        margin-top: 0.25rem;
+        font-size: 0.75rem;
+        color: #888;
+        text-align: right;
+      }
+
+      .lede {
+        margin: 0.5rem 0 0;
+        color: #555;
+        font-size: 0.95rem;
       }
     </style>
 
     <div class="cop-container">
-      <header class="cop-header">
-        <h1>cop</h1>
-      </header>
-
       <div class="cop-status" id="cop-status">
         Fetching from cloud clipboard…
       </div>
 
       <div class="cop-qr-wrapper">
         <canvas id="cop-qr-canvas"></canvas>
+        <a
+          id="cop-url-link"
+          class="cop-url-link"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"></a>
       </div>
 
-      <div class="cop-box">
-        <pre><code id="cop-code" class="language-text cop-empty">(no data yet)</code></pre>
-      </div>
+      <textarea
+        id="cop-input"
+        class="cop-input"
+        maxlength="2048"
+        placeholder="(no data yet)"></textarea>
+      <div class="cop-charcount" id="cop-charcount">0 / 2048</div>
 
       <div class="cop-actions">
         <button type="button" class="cop-button" id="cop-copy-btn">
           copy
+        </button>
+        <button type="button" class="cop-button" id="cop-update-btn">
+          update
         </button>
       </div>
     </div>
 
     <script is:inline>
       (function () {
-        const APP_KEY = "pk1vk7oj";
-        const KEY = "cop";
+        const SERVICE_URL = "https://cop.daniel-goude.workers.dev/cop";
+        const MAX_CHARS_UI = 2048;
 
-        function trimQuotes(s) {
-          s = s.trim();
-          if (s.length >= 2 && s[0] === '"' && s[s.length - 1] === '"') {
-            return s.slice(1, -1);
+        const statusEl = document.getElementById("cop-status");
+        const inputEl = document.getElementById("cop-input");
+        const charCountEl = document.getElementById("cop-charcount");
+        const copyBtn = document.getElementById("cop-copy-btn");
+        const updateBtn = document.getElementById("cop-update-btn");
+        const qrCanvas = document.getElementById("cop-qr-canvas");
+        const urlLink = document.getElementById("cop-url-link");
+
+        function utf8ToBase64(text) {
+          const encoder = new TextEncoder();
+          const bytes = encoder.encode(text);
+          let binary = "";
+          for (let i = 0; i < bytes.length; i++) {
+            binary += String.fromCharCode(bytes[i]);
           }
-          return s;
+          return btoa(binary);
         }
 
-        function safeBase64Decode(s) {
+        function base64ToUtf8_safe(b64) {
           try {
-            return atob(s.replace(/\s+/g, ""));
-          } catch (_) {
-            return s;
+            const binary = atob(b64);
+            const len = binary.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+              bytes[i] = binary.charCodeAt(i);
+            }
+            return new TextDecoder().decode(bytes);
+          } catch {
+            // If it's not valid base64, just treat as plain text
+            return b64;
           }
         }
 
-        function guessLanguage(text) {
-          const src = text.trim();
-          if (!src) return "";
-
-          if (
-            /^#!\/(usr\/bin\/env|bin)\/bash/.test(src) ||
-            /\bset -euo pipefail\b/.test(src)
-          )
-            return "bash";
-          if (/\bdef\s+\w+\s*\(/.test(src) || /^import\s+\w+/m.test(src))
-            return "python";
-          if (
-            /^SELECT\b/i.test(src) ||
-            (/\bFROM\b/i.test(src) && /\bSELECT\b/i.test(src))
-          )
-            return "sql";
-          if (/^[{\[]\s*["']\w+["']\s*:/.test(src)) return "json";
-          if (/^<\w+[\s>]/.test(src)) return "markup";
-          if (/function\s+\w+\s*\(/.test(src) || /\bconst\b.+=>/.test(src))
-            return "javascript";
-
-          return "";
+        function updateCharCount() {
+          if (!inputEl || !charCountEl) return;
+          const len = inputEl.value.length;
+          charCountEl.textContent = len + " / " + MAX_CHARS_UI;
         }
 
-        async function fetchCopValue() {
-          const url =
-            "https://keyvalue.immanuel.co/api/KeyVal/GetValue/" +
-            APP_KEY +
-            "/" +
-            encodeURIComponent(KEY);
-
-          const res = await fetch(url);
-          if (!res.ok) throw new Error("HTTP " + res.status);
-
-          let raw = await res.text();
-          raw = trimQuotes(raw);
-          return safeBase64Decode(raw);
+        function clearQR() {
+          if (!qrCanvas) return;
+          const ctx = qrCanvas.getContext("2d");
+          if (ctx) {
+            ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
+          }
         }
 
-        function renderQR(text) {
-          const canvas = document.getElementById("cop-qr-canvas");
-          if (!canvas || !window.QRCode) return;
-
-          window.QRCode.toCanvas(
-            canvas,
-            text || "",
-            { margin: 2, width: 400 },
-            function () {},
-          );
+        function renderQR(value) {
+          if (!qrCanvas || !window.QRCode) return;
+          if (!value) {
+            clearQR();
+            return;
+          }
+          window.QRCode.toCanvas(qrCanvas, value, {
+            margin: 2,
+            width: 400,
+          });
         }
 
-        async function loadCop() {
-          const statusEl = document.getElementById("cop-status");
-          const codeEl = document.getElementById("cop-code");
+        function setUrl(url) {
+          if (!urlLink) return;
+          if (!url) {
+            urlLink.textContent = "";
+            urlLink.removeAttribute("href");
+            return;
+          }
+          urlLink.href = url;
+          urlLink.textContent = url;
+        }
 
-          if (!statusEl || !codeEl) return;
+        async function refreshFromServer() {
+          if (!statusEl || !inputEl) return;
 
-          statusEl.textContent = 'Fetching from cloud clipboard key "cop"…';
-          codeEl.textContent = "(loading…)";
-          codeEl.classList.remove("cop-empty");
-          codeEl.className = "language-text";
+          statusEl.textContent = "Fetching from cloud clipboard…";
+          inputEl.value = "";
+          updateCharCount();
+          clearQR();
+          setUrl("");
 
           try {
-            const value = await fetchCopValue();
-
-            if (!value) {
-              statusEl.textContent = 'Key "cop" is empty.';
-              codeEl.textContent = "(empty)";
-              codeEl.classList.add("cop-empty");
-              renderQR("");
-              if (window.Prism) Prism.highlightElement(codeEl);
-              return;
+            const res = await fetch(SERVICE_URL, {
+              method: "GET",
+              mode: "cors",
+            });
+            if (!res.ok) {
+              throw new Error("HTTP " + res.status);
             }
 
-            codeEl.textContent = value;
+            const encoded = await res.text();
+            const txt = base64ToUtf8_safe(encoded.trim());
+            const url = txt || "";
 
-            const lang = guessLanguage(value);
-            codeEl.className = lang ? "language-" + lang : "language-text";
+            inputEl.value = txt.slice(0, MAX_CHARS_UI);
+            updateCharCount();
 
-            statusEl.textContent = `Loaded ${value.length} characters from key "cop".`;
-            renderQR(value);
-
-            if (window.Prism && typeof Prism.highlightElement === "function") {
-              Prism.highlightElement(codeEl);
+            if (url) {
+              renderQR(url);
+              setUrl(url);
+            } else {
+              clearQR();
+              setUrl("");
             }
-          } catch (err) {
-            statusEl.textContent = 'Failed to fetch key "cop".';
-            codeEl.textContent = "(error fetching value)";
-            codeEl.className = "language-text cop-empty";
-            renderQR("");
+
+            statusEl.textContent =
+              "Loaded " +
+              inputEl.value.length +
+              " characters from cloud clipboard.";
+          } catch (e) {
+            console.error(e);
+            statusEl.textContent = "Failed to fetch from cloud clipboard.";
+            inputEl.placeholder = "(error fetching value)";
           }
         }
 
         function setupCopy() {
-          const btn = document.getElementById("cop-copy-btn");
-          const codeEl = document.getElementById("cop-code");
-          const statusEl = document.getElementById("cop-status");
-          if (!btn || !codeEl || !statusEl) return;
+          if (!copyBtn || !inputEl || !statusEl) return;
 
-          btn.addEventListener("click", async () => {
-            const text = codeEl.textContent || "";
+          copyBtn.addEventListener("click", async () => {
+            const text = inputEl.value;
             try {
               if (navigator.clipboard && navigator.clipboard.writeText) {
                 await navigator.clipboard.writeText(text);
-                statusEl.textContent = "Copied to local clipboard.";
               } else {
                 const tmp = document.createElement("textarea");
                 tmp.value = text;
@@ -249,17 +287,58 @@ const permalink = (Astro.site?.href ?? "https://goude.se/") + "cop";
                 tmp.select();
                 document.execCommand("copy");
                 document.body.removeChild(tmp);
-                statusEl.textContent = "Copied to local clipboard (fallback).";
               }
-            } catch (_) {
+              statusEl.textContent = "Copied to local clipboard.";
+            } catch {
               statusEl.textContent = "Failed to copy to clipboard.";
+            }
+          });
+        }
+
+        function setupUpdate() {
+          if (!updateBtn || !inputEl || !statusEl) return;
+
+          inputEl.addEventListener("input", () => {
+            if (inputEl.value.length > MAX_CHARS_UI) {
+              inputEl.value = inputEl.value.slice(0, MAX_CHARS_UI);
+            }
+            updateCharCount();
+          });
+
+          updateBtn.addEventListener("click", async () => {
+            const txt = inputEl.value.slice(0, MAX_CHARS_UI);
+            const encoded = utf8ToBase64(txt);
+
+            statusEl.textContent = "Updating cloud clipboard…";
+            updateBtn.disabled = true;
+
+            try {
+              const res = await fetch(SERVICE_URL, {
+                method: "POST",
+                mode: "cors",
+                body: encoded,
+              });
+              if (!res.ok) {
+                throw new Error("HTTP " + res.status);
+              }
+
+              statusEl.textContent =
+                "Updated cloud clipboard with " + txt.length + " characters.";
+
+              await refreshFromServer();
+            } catch (e) {
+              console.error(e);
+              statusEl.textContent = "Failed to update cloud clipboard.";
+            } finally {
+              updateBtn.disabled = false;
             }
           });
         }
 
         document.addEventListener("DOMContentLoaded", () => {
           setupCopy();
-          loadCop();
+          setupUpdate();
+          refreshFromServer();
         });
       })();
     </script>

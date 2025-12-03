@@ -1,12 +1,12 @@
 {
   "name": "goude-github-io",
-  "version": "1.11.2",
+  "version": "1.11.4",
   "type": "module",
   "scripts": {
     "prepare-readme": "node scripts/prepare-readme.js",
-    "dev": "npm run prepare-readme && astro dev",
-    "start": "npm run prepare-readme && astro dev --host 0.0.0.0",
-    "build": "npm run prepare-readme && astro check && astro build && node scripts/beautify-html.js",
+    "dev": "astro dev",
+    "start": "astro dev --host 0.0.0.0",
+    "build": "astro check && astro build && node scripts/beautify-html.js",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint .",

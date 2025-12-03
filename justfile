@@ -19,6 +19,10 @@ quickstart: install check dev-serve
 dev-serve:
 	NODE_ENV={{NODE_ENV}} npm run start
 
+# 🩺 Static checks (astro check)
+check: clean format lint
+	npm run astro check
+
 # 🏗️ Production build
 build: verify
 	npm run build
@@ -35,10 +39,6 @@ format:
 lint:
 	npm run lint
 
-# 🩺 Static checks (astro check)
-check:
-	npm run astro check
-
 # ✅ Run test suite
 test: clean check
 	node test/fileUniqueness.js
@@ -51,12 +51,6 @@ test-ui:
 # 🧹 Clean build artifacts
 clean:
 	rm -rf dist/ test-results/ .astro/
-
-# ♻️ Deep clean + reinstall + check
-reset: clean
-	rm -rf node_modules/ package-lock.json
-	npm ci
-	just check
 
 # 🔧 Verify Node toolchain
 verify:
@@ -71,5 +65,7 @@ install: verify
 install-playwright:
 	npx playwright install --with-deps
 
-# 🤖 Local CI pipeline
-ci: clean install check lint format build test
+# ♻️ Deep clean + reinstall + check
+reset: clean install check
+	rm -rf node_modules/ package-lock.json
+

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nedräkning till FT 2025</title>
+    <title>Nedräkning till FT 2027</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -95,13 +95,13 @@
   </head>
   <body>
     <div class="background-svg" id="svg-container"></div>
-    <a href="https://goude.se/ft-2025" class="top-link">goude.se/ft-2025</a>
+    <a href="https://goude.se/ft-2027" class="top-link">goude.se/ft-2027</a>
     <div class="content">
       <h1>Nu är det bara</h1>
       <div class="divider"></div>
       <div id="countdown">Laddar...</div>
       <div class="divider"></div>
-      <p>kvar till Feldttåget 2025!</p>
+      <p>kvar till Feldttåget 2027!</p>
       <p id="adage">Loading...</p>
     </div>
     <script>
@@ -148,7 +148,7 @@
       fetchRandomAdage();
 
       function updateCountdown() {
-        const targetDate = new Date("2025-05-23T12:30:00Z"); // UTC equivalent of Sweden time (16:00 CEST)
+        const targetDate = new Date("2027-05-23T12:30:00Z"); // UTC equivalent of Sweden time (16:00 CEST)
         const now = new Date();
         const diff = targetDate - now;
 

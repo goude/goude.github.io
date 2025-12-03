@@ -2,29 +2,73 @@
 const { current = "" } = Astro.props;
 ---
 
+<nav class="main-nav">
+  <a href="/about" class={`nav-link ${current === "about" ? "selected" : ""}`}>
+    <span>About</span>
+  </a>
+
+  <a
+    href="https://github.com/goude"
+    class="nav-link external"
+    target="_self"
+    rel="noopener noreferrer"
+  >
+    <i class="fa-brands fa-github nav-icon" aria-hidden="true"></i>
+    <span>GitHub</span>
+    <i
+      class="fa-solid fa-arrow-up-right-from-square ext-icon"
+      aria-hidden="true"></i>
+  </a>
+
+  <a
+    href="https://buymeacoffee.com/goude"
+    class="nav-link external"
+    target="_self"
+    rel="noopener noreferrer"
+  >
+    <i class="fa-solid fa-mug-saucer nav-icon" aria-hidden="true"></i>
+    <span>Coffee</span>
+    <i
+      class="fa-solid fa-arrow-up-right-from-square ext-icon"
+      aria-hidden="true"></i>
+  </a>
+</nav>
+
 <style>
-  nav {
-    align-items: center;
+  .main-nav {
     display: flex;
-    flex: 1;
-    font-family: var(--font-family-sans);
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-sans);
     font-weight: 700;
-    text-transform: uppercase;
-    margin-left: 1em;
   }
 
-  a {
-    color: inherit;
+  .nav-link {
+    display: inline-flex;
+    align-items: center; /* keeps icons + text on same vertical line */
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
     text-decoration: none;
-    padding: 5px 5px;
-    display: block;
-    position: relative;
-    margin-left: 5px;
-    min-width: 70px;
-    text-align: center;
+    color: inherit;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+  }
+
+  .nav-link.external {
+    cursor: alias; /* subtle external-link pointer style */
+  }
+
+  .nav-icon {
+    font-size: 1.1em;
+    line-height: 1;
+  }
+
+  .ext-icon {
+    font-size: 0.85em;
+    opacity: 0.75;
+    margin-left: 0.1rem;
+    line-height: 1;
   }
 </style>
-<nav>
-  <a class={current === "about" ? "selected" : ""} href="/about">about</a>
-  <a class={current === "readme" ? "selected" : ""} href="/README">README</a>
-</nav>
