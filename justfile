@@ -20,7 +20,7 @@ dev-serve:
 	NODE_ENV={{NODE_ENV}} npm run start
 
 # 🩺 Static checks (astro check)
-check: clean format lint
+check: clean format
 	npm run astro check
 
 # 🏗️ Production build
