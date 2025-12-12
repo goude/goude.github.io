@@ -1,6 +1,5 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-
 const title = "egghunt";
 const description = "egghunt";
 const permalink = `${Astro.site!.href}egghunt`;
@@ -13,10 +12,359 @@ const permalink = `${Astro.site!.href}egghunt`;
   current="egghunt"
 >
   <section>
-    <h1>egghunt</h1>
-    <p>
-      lbh ner gur svefg gb svaq guvf cvat rttuhag ng tbhqr qbg fr jvgu lbhe
-      pubfra yrnqreobneq nyvnf gb npgvingr gur arkg fgntr bs gur gernfher uhag
-    </p>
+    <h1>🥚 egghunt</h1>
+
+    <div class="puzzle-input">
+      <input
+        type="text"
+        id="answer"
+        placeholder="Enter answer..."
+        autocomplete="off"
+      />
+      <button id="submit">Submit</button>
+    </div>
+
+    <div id="result" class="result hidden"></div>
+
+    <h2>🏆 Leaderboard</h2>
+    <ol class="leaderboard">
+      <li>
+        <span class="hunter">???</span>
+        <span class="time">--:--:--</span>
+      </li>
+      <li>
+        <span class="hunter">???</span>
+        <span class="time">--:--:--</span>
+      </li>
+      <li>
+        <span class="hunter">???</span>
+        <span class="time">--:--:--</span>
+      </li>
+      <li>
+        <span class="hunter">???</span>
+        <span class="time">--:--:--</span>
+      </li>
+      <li>
+        <span class="hunter">???</span>
+        <span class="time">--:--:--</span>
+      </li>
+    </ol>
   </section>
+
+  <style>
+    .puzzle-input {
+      margin: var(--space-md) 0;
+      display: flex;
+      gap: var(--space-sm);
+      max-width: 400px;
+    }
+
+    .puzzle-input input {
+      flex: 1;
+      padding: 0.75rem;
+      font-size: 1rem;
+      font-family: var(--font-code);
+      background: var(--bg);
+      color: var(--fg);
+      border: 2px solid var(--rule);
+      border-radius: 4px;
+    }
+
+    .puzzle-input input:focus {
+      outline: none;
+      border-color: var(--fg);
+    }
+
+    .puzzle-input button {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-family: var(--font-sans);
+      cursor: pointer;
+      background: var(--fg);
+      color: var(--bg);
+      border: 2px solid var(--fg);
+      border-radius: 4px;
+      transition: opacity 0.15s;
+    }
+
+    .puzzle-input button:hover {
+      opacity: 0.8;
+    }
+    .puzzle-input button:disabled {
+      opacity: 0.7;
+      cursor: wait;
+    }
+
+    .puzzle-input button .spinner {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      border: 2px solid transparent;
+      border-top-color: var(--bg);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      vertical-align: middle;
+      margin-right: 0.4em;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .puzzle-input input:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .result {
+      margin: var(--space-md) 0;
+      padding: var(--space-md);
+      border: 2px solid var(--rule);
+      border-radius: 4px;
+      max-width: 500px;
+    }
+
+    .result.success {
+      border-color: #22c55e;
+    }
+    .result.error {
+      border-color: var(--rule);
+    }
+    .hidden {
+      display: none;
+    }
+
+    .leaderboard {
+      list-style: none;
+      padding: 0;
+      max-width: 400px;
+      counter-reset: lb;
+    }
+
+    .leaderboard li {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: 0.5rem var(--space-md);
+      margin: 0.25rem 0;
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      font-family: var(--font-code);
+    }
+
+    .leaderboard li::before {
+      content: counter(lb) ".";
+      counter-increment: lb;
+      opacity: 0.5;
+      min-width: 1.5em;
+    }
+
+    .hunter {
+      flex: 1;
+    }
+    .time {
+      opacity: 0.7;
+    }
+  </style>
+
+  <script>
+    /*
+     * SECURITY MODEL & HOW TO CRACK THIS
+     * ===================================
+     * Each answer is normalized (lowercase, only a-z0-9), then used as input to PBKDF2
+     * with 150,000 iterations to derive an AES-256-GCM key. The reward message is
+     * encrypted with this key.
+     *
+     * To crack: You must brute-force guess the answer. Each guess takes ~100-200ms
+     * due to the PBKDF2 iterations.
+     *
+     * Time estimates (single machine, ~10 guesses/sec):
+     *   - 4-letter word (a-z):     ~13 hours      (456,976 combinations)
+     *   - 5-letter word (a-z):     ~14 days       (11.8M combinations)
+     *   - 6-letter word (a-z):     ~1 year        (308M combinations)
+     *   - Common word dictionary:  ~3 hours       (~100k words)
+     *   - 8-char alphanumeric:     ~87,000 years  (2.8 trillion combinations)
+     *
+     * The salt/IV are public but useless without the answer. AES-GCM authentication
+     * means wrong guesses fail immediately (no partial decryption leaks).
+     *
+     * TL;DR: Use phrases or uncommon words. "quackmire" is safe. "duck" is not.
+     */
+    const PUZZLES: Record<
+      string,
+      { name: string; salt: string; iv: string; ciphertext: string }
+    > = {
+      "1": {
+        name: "Puzzle #1",
+        salt: "sH6L2smGhGQmfCkIC2pB5Q==",
+        iv: "u44h3Msx24xmbDxZ",
+        ciphertext:
+          "WQRtgYAcvtvHseK5hMwUC1C+Gi+7ICwLfXzdJ5vDNBJt/KYLn4/JB8PRcR5teESNMnH9JcFvpUdP/Amu0boHqB5jbGft6qc2sW40/qpDOfY4ZZpsYMSi6q3DvxASg5F99APosg==",
+      },
+      "2": {
+        name: "Puzzle #2",
+        salt: "JJcY9Fj+TA4yGt3fM3Cixw==",
+        iv: "ndVlxZUmmdUTeWHY",
+        ciphertext:
+          "ltm5U1svK7BEuVg6CtBRJqjdTZiC2VgqaoQjHnaxG/1YzW0/ypFrd5BnkG9S+/z0Z3guZ+eARgD/LU+hAwb8GfJSWv0HDFlCvTxvRSuNr0iUYJAiYe+mJLpBdY3rhR1kTBC58bOV/LT9zUDNVd/Yh0Ru/R69cPkiqpLreiY6gli1+NpbbSd598rZQLI=",
+      },
+    };
+
+    const ITERATIONS = 150000;
+
+    const $ = <T extends HTMLElement>(id: string) =>
+      document.getElementById(id) as T;
+    const input = $<HTMLInputElement>("answer");
+    const button = $<HTMLButtonElement>("submit");
+    const result = $<HTMLDivElement>("result");
+
+    const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const b64ToBytes = (b64: string) =>
+      Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+    const toB64 = (b: Uint8Array) => btoa(String.fromCharCode(...b));
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+    async function deriveKey(
+      answer: string,
+      salt: Uint8Array,
+      usage: KeyUsage[],
+    ): Promise<CryptoKey> {
+      const keyMaterial = await crypto.subtle.importKey(
+        "raw",
+        new TextEncoder().encode(normalize(answer)),
+        "PBKDF2",
+        false,
+        ["deriveKey"],
+      );
+      return crypto.subtle.deriveKey(
+        { name: "PBKDF2", salt, iterations: ITERATIONS, hash: "SHA-256" },
+        keyMaterial,
+        { name: "AES-GCM", length: 256 },
+        false,
+        usage,
+      );
+    }
+
+    const WRONG_RESPONSES = [
+      `<div style="text-align:center;font-size:2em;opacity:0.6">🥀</div>
+       <p style="text-align:center;font-style:italic;opacity:0.7">
+         Alas, that's not it. Perhaps ponder a while longer?
+       </p>`,
+      `<div style="text-align:center;font-size:2em;opacity:0.6">🍂</div>
+       <p style="text-align:center;font-style:italic;opacity:0.7">
+         Not quite... the answer drifts away like autumn leaves.
+       </p>`,
+      `<div style="text-align:center;font-size:2em;opacity:0.6">🌫️</div>
+       <p style="text-align:center;font-style:italic;opacity:0.7">
+         Hmm, still shrouded in mystery. Take your time.
+       </p>`,
+      `<div style="text-align:center;font-size:2em;opacity:0.6">🦉</div>
+       <p style="text-align:center;font-style:italic;opacity:0.7">
+         The owl blinks slowly. That wasn't the secret word.
+       </p>`,
+      `<div style="text-align:center;font-size:2em;opacity:0.6">🕯️</div>
+       <p style="text-align:center;font-style:italic;opacity:0.7">
+         The candle flickers but doesn't reveal. Try again?
+       </p>`,
+    ];
+
+    async function tryDecryptAll(
+      answer: string,
+    ): Promise<{ ok: boolean; html: string }> {
+      for (const puzzle of Object.values(PUZZLES)) {
+        try {
+          const key = await deriveKey(answer, b64ToBytes(puzzle.salt), [
+            "decrypt",
+          ]);
+          const dec = await crypto.subtle.decrypt(
+            { name: "AES-GCM", iv: b64ToBytes(puzzle.iv) },
+            key,
+            b64ToBytes(puzzle.ciphertext),
+          );
+          return { ok: true, html: new TextDecoder().decode(dec) };
+        } catch {
+          /* wrong key, try next */
+        }
+      }
+      return {
+        ok: false,
+        html: WRONG_RESPONSES[
+          Math.floor(Math.random() * WRONG_RESPONSES.length)
+        ],
+      };
+    }
+
+    async function submit() {
+      if (!input.value) return;
+
+      input.disabled = true;
+      button.disabled = true;
+      button.innerHTML = '<span class="spinner"></span>Decrypting...';
+      result.classList.add("hidden");
+
+      const minDelay = sleep(1500 + Math.random() * 1000);
+      const decryption = tryDecryptAll(input.value);
+
+      const [_, { ok, html }] = await Promise.all([minDelay, decryption]);
+
+      result.innerHTML = html;
+      result.className = `result ${ok ? "success" : "error"}`;
+      input.disabled = false;
+      button.disabled = false;
+      button.textContent = "Decrypt";
+    }
+
+    button.addEventListener("click", submit);
+    input.addEventListener("keydown", (e) => e.key === "Enter" && submit());
+
+    /*
+     * PUZZLE GENERATOR
+     * ================
+     * Usage (in browser console):
+     *
+     *   await generatePuzzles([
+     *     { answer: "quackmire", message: "<h3>🎉 Correct!</h3><p>The next clue is...</p>" },
+     *     { answer: "frobnicator", message: "<h3>🏆 You did it!</h3>" }
+     *   ])
+     *
+     * This outputs a ready-to-paste PUZZULAR object. Copy it into the PUZZLES const above.
+     */
+    (window as any).generatePuzzles = async (
+      puzzles: { answer: string; message: string }[],
+    ) => {
+      const results: Record<
+        string,
+        { name: string; salt: string; iv: string; ciphertext: string }
+      > = {};
+
+      for (let i = 0; i < puzzles.length; i++) {
+        const { answer, message } = puzzles[i];
+        const salt = crypto.getRandomValues(new Uint8Array(16));
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+        const key = await deriveKey(answer, salt, ["encrypt"]);
+        const ct = await crypto.subtle.encrypt(
+          { name: "AES-GCM", iv },
+          key,
+          new TextEncoder().encode(message),
+        );
+
+        results[String(i + 1)] = {
+          name: `Puzzle #${i + 1}`,
+          salt: toB64(salt),
+          iv: toB64(iv),
+          ciphertext: toB64(new Uint8Array(ct)),
+        };
+
+        console.log(
+          `Puzzle #${i + 1}: answer="${answer}" → normalized="${normalize(answer)}"`,
+        );
+      }
+
+      const output = `const PUZZLES: Record<string, { name: string; salt: string; iv: string; ciphertext: string }> = ${JSON.stringify(results, null, 2)};`;
+      console.log("\n// Paste this into the page:\n" + output);
+      return results;
+    };
+  </script>
 </BaseLayout>
