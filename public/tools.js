@@ -80,7 +80,7 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
       if (!parent) break;
 
       const siblingsSameTag = Array.from(parent.children).filter(
-        (c) => c.tagName === cur.tagName
+        (c) => c.tagName === cur.tagName,
       );
       let nth = "";
       if (siblingsSameTag.length > 1) {
@@ -392,4 +392,594 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
     }
 
     html.${MODE.HILITE_CLICKS} a, html.${MODE.HILITE_CLICKS} button, html.${MODE.HILITE_CLICKS} [role="button"],
-    html.${MODE.HILITE_CLICKS} input, html.${MODE.HILITE_CLICKS} select, html.${
+    html.${MODE.HILITE_CLICKS} input, html.${MODE.HILITE_CLICKS} select, html.${MODE.HILITE_CLICKS} textarea {
+      box-shadow: 0 0 0 2px rgba(40,255,140,0.22) inset !important;
+      border-radius: 6px !important;
+    }
+
+    html.${MODE.UNHIDE_ALL} [hidden] { display: initial !important; }
+    html.${MODE.UNHIDE_ALL} *[style*="display: none"] { display: initial !important; }
+    html.${MODE.UNHIDE_ALL} *[style*="visibility: hidden"] { visibility: visible !important; }
+
+    /* Dim screen overlay (persistent) */
+    html.${MODE.DIM_OVERLAY}::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      pointer-events: none;
+      z-index: 2147483645;
+    }
+
+    /* UI */
+    #${ROOT_ID} {
+      position: fixed;
+      z-index: 2147483647;
+      top: 18px;
+      right: 18px;
+      width: 360px;
+      color: var(--dbg-text);
+      font-family: var(--dbg-mono);
+      user-select: none;
+    }
+
+    .dbgtools-panel {
+      background: var(--dbg-panel);
+      box-shadow: var(--dbg-shadow);
+      border: 1px solid var(--dbg-line);
+      border-radius: var(--dbg-radius);
+      overflow: hidden;
+      clip-path: polygon(
+        14px 0%,
+        calc(100% - 16px) 0%,
+        100% 16px,
+        100% calc(100% - 14px),
+        calc(100% - 14px) 100%,
+        16px 100%,
+        0% calc(100% - 16px),
+        0% 14px
+      );
+      position: relative;
+    }
+
+    .dbgtools-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(255,255,255,0.04), transparent 12%),
+        repeating-linear-gradient(
+          to bottom,
+          rgba(0, 255, 120, 0.06),
+          rgba(0, 255, 120, 0.06) 1px,
+          transparent 1px,
+          transparent 6px
+        );
+      pointer-events: none;
+      mix-blend-mode: screen;
+      opacity: 0.65;
+    }
+
+    .dbgtools-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--dbg-line);
+      background: rgba(0,0,0,0.25);
+      cursor: grab;
+    }
+
+    .dbgtools-title {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      letter-spacing: 0.4px;
+    }
+
+    .dbgtools-title strong { color: var(--dbg-accent); font-weight: 700; }
+    .dbgtools-title span { color: var(--dbg-dim); font-size: 12px; }
+
+    .dbgtools-btns { display: flex; gap: 8px; align-items: center; }
+
+    .dbgtools-iconbtn {
+      border: 1px solid var(--dbg-line);
+      background: rgba(0,0,0,0.35);
+      color: var(--dbg-text);
+      border-radius: 10px;
+      padding: 4px 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .dbgtools-iconbtn:hover { border-color: var(--dbg-accent); }
+
+    .dbgtools-body { padding: 10px 12px 12px 12px; }
+
+    .dbgtools-section {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(40,255,140,0.16);
+    }
+
+    .dbgtools-section:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .dbgtools-section h4 {
+      margin: 0 0 8px 0;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      color: rgba(40,255,140,0.85);
+    }
+
+    .dbgtools-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 0;
+      border-bottom: 1px dashed rgba(40,255,140,0.14);
+    }
+    .dbgtools-row:last-child { border-bottom: 0; }
+
+    .dbgtools-label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .dbgtools-label .name { font-size: 13px; }
+    .dbgtools-label .hint {
+      font-size: 11px;
+      color: rgba(200,255,225,0.62);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 240px;
+    }
+
+    .dbgtools-toggle {
+      width: 48px;
+      height: 24px;
+      border-radius: 14px;
+      border: 1px solid var(--dbg-line);
+      background: rgba(0,0,0,0.35);
+      position: relative;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+    .dbgtools-toggle::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(200,255,225,0.72);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.35);
+      transition: transform 120ms ease;
+    }
+    .dbgtools-toggle.on {
+      border-color: rgba(40,255,140,0.6);
+      box-shadow: 0 0 0 1px rgba(40,255,140,0.22) inset;
+    }
+    .dbgtools-toggle.on::after {
+      transform: translateX(24px);
+      background: var(--dbg-accent);
+    }
+
+    .dbgtools-footer {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(40,255,140,0.22);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      user-select: text;
+    }
+
+    .dbgtools-kbd {
+      font-size: 11px;
+      color: rgba(200,255,225,0.65);
+      line-height: 1.2;
+    }
+
+    .dbgtools-toast {
+      position: fixed;
+      z-index: 2147483647;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.78);
+      border: 1px solid rgba(40,255,140,0.35);
+      color: rgba(235,255,245,0.92);
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-family: var(--dbg-mono);
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 120ms ease;
+      pointer-events: none;
+    }
+    .dbgtools-toast.show { opacity: 1; }
+
+    .__dbgtools_hoverchip__ {
+      position: fixed;
+      z-index: 2147483647;
+      pointer-events: none;
+      font-family: var(--dbg-mono);
+      font-size: 12px;
+      padding: 6px 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(40,255,140,0.35);
+      background: rgba(0,0,0,0.78);
+      color: rgba(235,255,245,0.92);
+      box-shadow: var(--dbg-shadow);
+      max-width: 60vw;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .__dbgtools_measure_layer__ {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2147483646;
+    }
+    .__dbgtools_measure_dot__ {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-left: -5px;
+      margin-top: -5px;
+      background: rgba(40,255,140,0.95);
+      box-shadow: 0 0 0 2px rgba(0,0,0,0.55);
+    }
+    .__dbgtools_measure_line__ {
+      position: fixed;
+      height: 2px;
+      transform-origin: 0 0;
+      background: rgba(40,255,140,0.85);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.45);
+    }
+    .__dbgtools_measure_label__ {
+      position: fixed;
+      font-family: var(--dbg-mono);
+      font-size: 12px;
+      padding: 6px 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(40,255,140,0.35);
+      background: rgba(0,0,0,0.78);
+      color: rgba(235,255,245,0.92);
+      box-shadow: var(--dbg-shadow);
+      white-space: nowrap;
+    }
+  `;
+  document.documentElement.appendChild(style);
+
+  // ---------- Remove existing UI (do NOT undo modes) ----------
+  const prevRoot = document.getElementById(ROOT_ID);
+  if (prevRoot) prevRoot.remove();
+
+  // ---------- UI ----------
+  const root = document.createElement("div");
+  root.id = ROOT_ID;
+
+  root.innerHTML = `
+    <div class="dbgtools-panel">
+      <div class="dbgtools-header" id="__dbgtools_drag__">
+        <div class="dbgtools-title">
+          <strong>DBG</strong>
+          <span>overlay</span>
+        </div>
+        <div class="dbgtools-btns">
+          <button class="dbgtools-iconbtn" id="__dbgtools_min__" title="Minimize">_</button>
+          <button class="dbgtools-iconbtn" id="__dbgtools_close__" title="Close overlay">×</button>
+        </div>
+      </div>
+
+      <div class="dbgtools-body" id="__dbgtools_body__">
+        <div class="dbgtools-section">
+          <h4>Modes</h4>
+
+          <div class="dbgtools-row">
+            <div class="dbgtools-label">
+              <div class="name">Editable</div>
+              <div class="hint">document.designMode (sticks after closing)</div>
+            </div>
+            <div class="dbgtools-toggle" data-toggle="editable"></div>
+          </div>
+
+          <div class="dbgtools-row">
+            <div class="dbgtools-label">
+              <div class="name">Picker</div>
+              <div class="hint">Click element → copy selector (Esc to exit)</div>
+            </div>
+            <div class="dbgtools-toggle" data-toggle="picker"></div>
+          </div>
+
+          <div class="dbgtools-row">
+            <div class="dbgtools-label">
+              <div class="name">Measure</div>
+              <div class="hint">Shift+click points (sticks after closing)</div>
+            </div>
+            <div class="dbgtools-toggle" data-toggle="measure"></div>
+          </div>
+
+          <div class="dbgtools-row">
+            <div class="dbgtools-label">
+              <div class="name">No animations</div>
+              <div class="hint">Kills transitions/animations</div>
+            </div>
+            <div class="dbgtools-toggle" data-toggle="noanim"></div>
+          </div>
+
+          <div class="dbgtools-row">
+            <div class="dbgtools-label">
+              <div class="name">Outlines</div>
+              <div class="hint">Outline every element</div>
+            </div>
+            <div class="dbgtools-toggle" data-toggle="outline"></div>
+          </div>
+
+          <div class="dbgtools-row">
+            <div class="dbgtools-label">
+              <div class="name">Hide images</div>
+              <div class="hint">Layout stress test</div>
+            </div>
+            <div class="dbgtools-toggle" data-toggle="hideimgs"></div>
+          </div>
+
+          <div class="dbgtools-row">
+            <div class="dbgtools-label">
+              <div class="name">Focus rings</div>
+              <div class="hint">Force visible focus outlines</div>
+            </div>
+            <div class="dbgtools-toggle" data-toggle="showfocus"></div>
+          </div>
+
+          <div class="dbgtools-row">
+            <div class="dbgtools-label">
+              <div class="name">Highlight interactives</div>
+              <div class="hint">Buttons/links/inputs visual scan</div>
+            </div>
+            <div class="dbgtools-toggle" data-toggle="hiliteclicks"></div>
+          </div>
+
+          <div class="dbgtools-row">
+            <div class="dbgtools-label">
+              <div class="name">Unhide everything</div>
+              <div class="hint">Reveal [hidden], display:none, visibility:hidden</div>
+            </div>
+            <div class="dbgtools-toggle" data-toggle="unhideall"></div>
+          </div>
+
+          <div class="dbgtools-row">
+            <div class="dbgtools-label">
+              <div class="name">Dim screen</div>
+              <div class="hint">Useful for presentations/screenshot focus</div>
+            </div>
+            <div class="dbgtools-toggle" data-toggle="dim"></div>
+          </div>
+        </div>
+
+        <div class="dbgtools-section">
+          <h4>Actions</h4>
+
+          <div class="dbgtools-row">
+            <div class="dbgtools-label">
+              <div class="name">Copy page info</div>
+              <div class="hint">title/url/UA + first 50 scripts/styles</div>
+            </div>
+            <button class="dbgtools-iconbtn" id="__dbgtools_copyinfo__">Copy</button>
+          </div>
+
+          <div class="dbgtools-row">
+            <div class="dbgtools-label">
+              <div class="name">Copy visible text</div>
+              <div class="hint">Quick “what’s on this screen” scrape</div>
+            </div>
+            <button class="dbgtools-iconbtn" id="__dbgtools_copytext__">Copy</button>
+          </div>
+
+          <div class="dbgtools-row">
+            <div class="dbgtools-label">
+              <div class="name">Reset modes</div>
+              <div class="hint">Turns off all toggles (keeps overlay)</div>
+            </div>
+            <button class="dbgtools-iconbtn" id="__dbgtools_reset__">Reset</button>
+          </div>
+        </div>
+
+        <div class="dbgtools-footer">
+          <div class="dbgtools-kbd">
+            Esc: exits picker<br>
+            Shift+click: measure points
+          </div>
+          <button class="dbgtools-iconbtn" id="__dbgtools_help__" title="Show quick help">Help</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(root);
+
+  // ---------- UI wiring ----------
+  const setToggleUI = (key, on) => {
+    const el = $(`.dbgtools-toggle[data-toggle="${key}"]`, root);
+    if (!el) return;
+    el.classList.toggle("on", !!on);
+  };
+
+  const syncUI = () => {
+    setToggleUI("editable", state.editable);
+    setToggleUI("picker", state.picker);
+    setToggleUI("measure", state.measure);
+    setToggleUI("noanim", state.noanim);
+    setToggleUI("outline", state.outline);
+    setToggleUI("hideimgs", state.hideimgs);
+    setToggleUI("showfocus", state.showfocus);
+    setToggleUI("hiliteclicks", state.hiliteclicks);
+    setToggleUI("unhideall", state.unhideall);
+    setToggleUI("dim", state.dim);
+
+    const body = $("#__dbgtools_body__", root);
+    if (body) body.style.display = state.minimized ? "none" : "block";
+  };
+
+  // Dragging
+  const dragHandle = $("#__dbgtools_drag__", root);
+  let dragging = false;
+  let startX = 0,
+    startY = 0;
+  let startTop = 0,
+    startRight = 0;
+
+  dragHandle.addEventListener("mousedown", (e) => {
+    if (e.target && e.target.closest("button")) return;
+    dragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+
+    const rect = root.getBoundingClientRect();
+    startTop = rect.top;
+    startRight = window.innerWidth - rect.right;
+
+    root.style.left = "auto";
+    root.style.bottom = "auto";
+    dragHandle.style.cursor = "grabbing";
+    e.preventDefault();
+  });
+
+  window.addEventListener("mousemove", (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+
+    const top = Math.max(6, Math.min(window.innerHeight - 60, startTop + dy));
+    const right = Math.max(
+      6,
+      Math.min(window.innerWidth - 60, startRight - dx),
+    );
+
+    root.style.top = `${top}px`;
+    root.style.right = `${right}px`;
+  });
+
+  window.addEventListener("mouseup", () => {
+    dragging = false;
+    dragHandle.style.cursor = "grab";
+  });
+
+  // Hotkeys
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && state.picker) setState({ picker: false });
+  });
+
+  // Toggle clicks
+  root.addEventListener("click", (e) => {
+    const t = e.target;
+    const toggle = t && t.closest && t.closest(".dbgtools-toggle");
+    if (!toggle) return;
+
+    const key = toggle.getAttribute("data-toggle");
+    if (!key) return;
+
+    setState({ [key]: !state[key] });
+
+    const msg = {
+      editable: state.editable ? "Editable ON" : "Editable OFF",
+      picker: state.picker ? "Picker ON" : "Picker OFF",
+      measure: state.measure ? "Measure ON" : "Measure OFF",
+      noanim: state.noanim ? "Animations OFF" : "Animations ON",
+      outline: state.outline ? "Outlines ON" : "Outlines OFF",
+      hideimgs: state.hideimgs ? "Images HIDDEN" : "Images VISIBLE",
+      showfocus: state.showfocus ? "Focus rings ON" : "Focus rings OFF",
+      hiliteclicks: state.hiliteclicks
+        ? "Interactives highlighted"
+        : "Interactives normal",
+      unhideall: state.unhideall
+        ? "Hidden elements revealed"
+        : "Hidden elements normal",
+      dim: state.dim ? "Dim ON" : "Dim OFF",
+    }[key];
+
+    if (msg) toast(msg);
+  });
+
+  // Buttons
+  $("#__dbgtools_close__", root).addEventListener("click", () => {
+    // Important: do NOT undo modes; only remove the overlay.
+    root.remove();
+    toast("Overlay closed (modes kept)");
+  });
+
+  $("#__dbgtools_min__", root).addEventListener("click", () => {
+    setState({ minimized: !state.minimized });
+  });
+
+  $("#__dbgtools_help__", root).addEventListener("click", () => {
+    toast(
+      "Modes persist. Reset turns them off. Esc exits Picker. Shift+click measures.",
+    );
+  });
+
+  $("#__dbgtools_reset__", root).addEventListener("click", () => {
+    setState({
+      editable: false,
+      picker: false,
+      measure: false,
+      noanim: false,
+      outline: false,
+      hideimgs: false,
+      showfocus: false,
+      hiliteclicks: false,
+      unhideall: false,
+      dim: false,
+    });
+    toast("Reset done");
+  });
+
+  $("#__dbgtools_copyinfo__", root).addEventListener("click", async () => {
+    const info = {
+      title: document.title,
+      url: location.href,
+      userAgent: navigator.userAgent,
+      scripts: $$("script[src]")
+        .map((s) => s.src)
+        .slice(0, 50),
+      styles: $$("link[rel=stylesheet]")
+        .map((l) => l.href)
+        .slice(0, 50),
+    };
+    await copyText(JSON.stringify(info, null, 2));
+  });
+
+  $("#__dbgtools_copytext__", root).addEventListener("click", async () => {
+    // visible-ish text: not perfect, but practical
+    const text = (document.body?.innerText || "").trim();
+    await copyText(text.slice(0, 200000)); // avoid clipboard abuse on massive pages
+  });
+
+  // ---------- Expose API ----------
+  window.__DBGTOOLS__ = {
+    version: "0.2",
+    get: () => ({ ...state }),
+    set: (patch) => setState(patch),
+    reset: () => $("#__dbgtools_reset__")?.click(),
+    cssPath,
+    closeOverlay: () => $("#__dbgtools_close__")?.click(),
+  };
+
+  // ---------- Start ----------
+  applyState();
+  syncUI();
+  toast("DBG loaded");
+})();
