@@ -81,7 +81,7 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
       if (!parent) break;
 
       const siblingsSameTag = Array.from(parent.children).filter(
-        (c) => c.tagName === cur.tagName
+        (c) => c.tagName === cur.tagName,
       );
       let nth = "";
       if (siblingsSameTag.length > 1) {
@@ -369,7 +369,7 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
         '[role="alertdialog"]',
         '[class*="modal" i]',
         '[class*="overlay" i]',
-      ].join(",")
+      ].join(","),
     );
 
     let removed = 0;
@@ -378,7 +378,9 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
       if (el.closest(`#${ROOT_ID}`)) continue;
 
       const r = el.getBoundingClientRect();
-      const big = r.width > Math.min(300, innerWidth * 0.6) && r.height > Math.min(120, innerHeight * 0.25);
+      const big =
+        r.width > Math.min(300, innerWidth * 0.6) &&
+        r.height > Math.min(120, innerHeight * 0.25);
       const fixedish = getComputedStyle(el).position === "fixed";
       if (big || fixedish) {
         el.remove();
@@ -1006,7 +1008,10 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
     const dy = e.clientY - startY;
 
     const top = Math.max(6, Math.min(window.innerHeight - 60, startTop + dy));
-    const right = Math.max(6, Math.min(window.innerWidth - 60, startRight - dx));
+    const right = Math.max(
+      6,
+      Math.min(window.innerWidth - 60, startRight - dx),
+    );
 
     root.style.top = `${top}px`;
     root.style.right = `${right}px`;
@@ -1042,11 +1047,17 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
       outline: state.outline ? "Outlines ON" : "Outlines OFF",
       hideimgs: state.hideimgs ? "Images HIDDEN" : "Images VISIBLE",
       showfocus: state.showfocus ? "Focus rings ON" : "Focus rings OFF",
-      hiliteclicks: state.hiliteclicks ? "Interactives highlighted" : "Interactives normal",
-      unhideall: state.unhideall ? "Hidden elements revealed" : "Hidden elements normal",
+      hiliteclicks: state.hiliteclicks
+        ? "Interactives highlighted"
+        : "Interactives normal",
+      unhideall: state.unhideall
+        ? "Hidden elements revealed"
+        : "Hidden elements normal",
       dim: state.dim ? "Dim ON" : "Dim OFF",
       grayscale: state.grayscale ? "Grayscale ON" : "Grayscale OFF",
-      highcontrast: state.highcontrast ? "High contrast ON" : "High contrast OFF",
+      highcontrast: state.highcontrast
+        ? "High contrast ON"
+        : "High contrast OFF",
     }[key];
 
     if (msg) toast(msg);
@@ -1063,7 +1074,9 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
   });
 
   $("#__dbgtools_help__", root).addEventListener("click", () => {
-    toast("Modes persist. Reset turns them off. Esc exits Picker. Shift+click measures.");
+    toast(
+      "Modes persist. Reset turns them off. Esc exits Picker. Shift+click measures.",
+    );
   });
 
   $("#__dbgtools_reset__", root).addEventListener("click", () => {
@@ -1091,8 +1104,12 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
       title: document.title,
       url: location.href,
       userAgent: navigator.userAgent,
-      scripts: $$("script[src]").map((s) => s.src).slice(0, 50),
-      styles: $$("link[rel=stylesheet]").map((l) => l.href).slice(0, 50),
+      scripts: $$("script[src]")
+        .map((s) => s.src)
+        .slice(0, 50),
+      styles: $$("link[rel=stylesheet]")
+        .map((l) => l.href)
+        .slice(0, 50),
     };
     await copyText(JSON.stringify(info, null, 2));
   });
