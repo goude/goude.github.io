@@ -5,7 +5,8 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
 (() => {
   "use strict";
 
-  // ---------- Identity / persistence ----------
+  // ---------- Identity / version ----------
+  const VERSION = "0.3";
   const ROOT_ID = "__dbgtools_root__";
   const STYLE_ID = "__dbgtools_style__";
   const LS_KEY = "__dbgtools_state__";
@@ -80,7 +81,7 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
       if (!parent) break;
 
       const siblingsSameTag = Array.from(parent.children).filter(
-        (c) => c.tagName === cur.tagName,
+        (c) => c.tagName === cur.tagName
       );
       let nth = "";
       if (siblingsSameTag.length > 1) {
@@ -89,13 +90,20 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
       }
 
       parts.unshift(`${tag}${classPart}${nth}`);
-
-      // short-ish but stable-ish
       if (parts.length >= 4) break;
       cur = parent;
     }
 
     return parts.join(" > ");
+  };
+
+  const once = (fn) => {
+    let done = false;
+    return (...args) => {
+      if (done) return;
+      done = true;
+      return fn(...args);
+    };
   };
 
   // ---------- Modes (persist after UI close) ----------
@@ -108,6 +116,8 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
     HILITE_CLICKS: "__dbgtools_hilite_clicks__",
     UNHIDE_ALL: "__dbgtools_unhide_all__",
     DIM_OVERLAY: "__dbgtools_dim_overlay__",
+    GRAYSCALE: "__dbgtools_grayscale__",
+    HIGH_CONTRAST: "__dbgtools_high_contrast__",
   };
 
   const defaultState = {
@@ -122,10 +132,13 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
     hiliteclicks: false,
     unhideall: false,
     dim: false,
+    grayscale: false,
+    highcontrast: false,
 
     // tools
     picker: false,
     measure: false,
+    rulers: false,
   };
 
   const state = { ...defaultState, ...loadState() };
@@ -135,8 +148,6 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
   };
 
   const applyEditable = (on) => {
-    // Prefer designMode: applies broadly and keeps working after UI closes.
-    // Some sites fight it; we also set body.contentEditable as a nudge.
     try {
       document.designMode = on ? "on" : "off";
     } catch {}
@@ -305,7 +316,6 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
     if (measureEnabled) return;
     measureEnabled = true;
     document.addEventListener("click", onClickMeasure, true);
-    toast("Measure ON (shift+click)");
   };
 
   const disableMeasure = () => {
@@ -313,12 +323,73 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
     measureEnabled = false;
     document.removeEventListener("click", onClickMeasure, true);
     clearMeasure();
-    toast("Measure OFF");
+  };
+
+  // ---------- Rulers (simple fixed overlay) ----------
+  let rulersEl = null;
+
+  const enableRulers = () => {
+    if (rulersEl) return;
+    rulersEl = document.createElement("div");
+    rulersEl.className = "__dbgtools_rulers__";
+    document.body.appendChild(rulersEl);
+  };
+
+  const disableRulers = () => {
+    if (!rulersEl) return;
+    rulersEl.remove();
+    rulersEl = null;
+  };
+
+  // ---------- Scroll lock toggle (action, not persisted toggle in UI) ----------
+  const unlockScroll = () => {
+    const html = document.documentElement;
+    const body = document.body;
+    [html, body].forEach((el) => {
+      if (!el) return;
+      el.style.overflow = "auto";
+      el.style.position = "";
+      el.style.height = "";
+      el.style.width = "";
+    });
+    toast("Scroll unlocked (best effort)");
+  };
+
+  // ---------- Remove cookie banners / overlays (best effort, local DOM only) ----------
+  const zapOverlays = () => {
+    const candidates = $$(
+      [
+        '[id*="cookie" i]',
+        '[class*="cookie" i]',
+        '[id*="consent" i]',
+        '[class*="consent" i]',
+        '[aria-label*="cookie" i]',
+        '[aria-label*="consent" i]',
+        '[role="dialog"]',
+        '[role="alertdialog"]',
+        '[class*="modal" i]',
+        '[class*="overlay" i]',
+      ].join(",")
+    );
+
+    let removed = 0;
+    for (const el of candidates) {
+      if (!(el instanceof Element)) continue;
+      if (el.closest(`#${ROOT_ID}`)) continue;
+
+      const r = el.getBoundingClientRect();
+      const big = r.width > Math.min(300, innerWidth * 0.6) && r.height > Math.min(120, innerHeight * 0.25);
+      const fixedish = getComputedStyle(el).position === "fixed";
+      if (big || fixedish) {
+        el.remove();
+        removed += 1;
+      }
+    }
+    toast(`Removed ${removed} overlay-ish nodes`);
   };
 
   // ---------- Apply state ----------
   const applyState = () => {
-    // Persisted modes
     setModeClass(MODE.OUTLINE, state.outline);
     setModeClass(MODE.NO_ANIM, state.noanim);
     setModeClass(MODE.HIDE_IMGS, state.hideimgs);
@@ -326,17 +397,20 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
     setModeClass(MODE.HILITE_CLICKS, state.hiliteclicks);
     setModeClass(MODE.UNHIDE_ALL, state.unhideall);
     setModeClass(MODE.DIM_OVERLAY, state.dim);
+    setModeClass(MODE.GRAYSCALE, state.grayscale);
+    setModeClass(MODE.HIGH_CONTRAST, state.highcontrast);
 
     applyEditable(state.editable);
 
-    // Tools (need listeners)
     if (state.picker) enablePicker();
     else disablePicker();
 
     if (state.measure) enableMeasure();
     else disableMeasure();
 
-    // UI minimized state (if UI exists)
+    if (state.rulers) enableRulers();
+    else disableRulers();
+
     const body = document.getElementById("__dbgtools_body__");
     if (body) body.style.display = state.minimized ? "none" : "block";
   };
@@ -401,6 +475,14 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
     html.${MODE.UNHIDE_ALL} *[style*="display: none"] { display: initial !important; }
     html.${MODE.UNHIDE_ALL} *[style*="visibility: hidden"] { visibility: visible !important; }
 
+    html.${MODE.GRAYSCALE} {
+      filter: grayscale(1) !important;
+    }
+
+    html.${MODE.HIGH_CONTRAST} {
+      filter: contrast(1.25) saturate(1.2) !important;
+    }
+
     /* Dim screen overlay (persistent) */
     html.${MODE.DIM_OVERLAY}::before {
       content: "";
@@ -411,13 +493,28 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
       z-index: 2147483645;
     }
 
+    /* Rulers */
+    .__dbgtools_rulers__ {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2147483644;
+      background:
+        linear-gradient(to right, rgba(40,255,140,0.12) 1px, transparent 1px) 0 0 / 50px 50px,
+        linear-gradient(to bottom, rgba(40,255,140,0.12) 1px, transparent 1px) 0 0 / 50px 50px,
+        linear-gradient(to right, rgba(40,255,140,0.22) 1px, transparent 1px) 0 0 / 10px 10px,
+        linear-gradient(to bottom, rgba(40,255,140,0.22) 1px, transparent 1px) 0 0 / 10px 10px;
+      mix-blend-mode: screen;
+      opacity: 0.25;
+    }
+
     /* UI */
     #${ROOT_ID} {
       position: fixed;
       z-index: 2147483647;
       top: 18px;
       right: 18px;
-      width: 360px;
+      width: 380px;
       color: var(--dbg-text);
       font-family: var(--dbg-mono);
       user-select: none;
@@ -475,10 +572,11 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
       gap: 10px;
       align-items: baseline;
       letter-spacing: 0.4px;
+      min-width: 0;
     }
 
     .dbgtools-title strong { color: var(--dbg-accent); font-weight: 700; }
-    .dbgtools-title span { color: var(--dbg-dim); font-size: 12px; }
+    .dbgtools-title span { color: var(--dbg-dim); font-size: 12px; white-space: nowrap; }
 
     .dbgtools-btns { display: flex; gap: 8px; align-items: center; }
 
@@ -490,6 +588,7 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
       padding: 4px 8px;
       font-size: 12px;
       cursor: pointer;
+      white-space: nowrap;
     }
     .dbgtools-iconbtn:hover { border-color: var(--dbg-accent); }
 
@@ -538,7 +637,7 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 240px;
+      max-width: 250px;
     }
 
     .dbgtools-toggle {
@@ -677,7 +776,7 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
       <div class="dbgtools-header" id="__dbgtools_drag__">
         <div class="dbgtools-title">
           <strong>DBG</strong>
-          <span>overlay</span>
+          <span>v${VERSION}</span>
         </div>
         <div class="dbgtools-btns">
           <button class="dbgtools-iconbtn" id="__dbgtools_min__" title="Minimize">_</button>
@@ -700,7 +799,7 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
           <div class="dbgtools-row">
             <div class="dbgtools-label">
               <div class="name">Picker</div>
-              <div class="hint">Click element → copy selector (Esc to exit)</div>
+              <div class="hint">Click element → copy selector (Esc exits)</div>
             </div>
             <div class="dbgtools-toggle" data-toggle="picker"></div>
           </div>
@@ -708,9 +807,17 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
           <div class="dbgtools-row">
             <div class="dbgtools-label">
               <div class="name">Measure</div>
-              <div class="hint">Shift+click points (sticks after closing)</div>
+              <div class="hint">Shift+click points</div>
             </div>
             <div class="dbgtools-toggle" data-toggle="measure"></div>
+          </div>
+
+          <div class="dbgtools-row">
+            <div class="dbgtools-label">
+              <div class="name">Rulers grid</div>
+              <div class="hint">10px/50px grid overlay</div>
+            </div>
+            <div class="dbgtools-toggle" data-toggle="rulers"></div>
           </div>
 
           <div class="dbgtools-row">
@@ -748,7 +855,7 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
           <div class="dbgtools-row">
             <div class="dbgtools-label">
               <div class="name">Highlight interactives</div>
-              <div class="hint">Buttons/links/inputs visual scan</div>
+              <div class="hint">Buttons/links/inputs scan</div>
             </div>
             <div class="dbgtools-toggle" data-toggle="hiliteclicks"></div>
           </div>
@@ -756,7 +863,7 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
           <div class="dbgtools-row">
             <div class="dbgtools-label">
               <div class="name">Unhide everything</div>
-              <div class="hint">Reveal [hidden], display:none, visibility:hidden</div>
+              <div class="hint">Reveal hidden/display:none/visibility:hidden</div>
             </div>
             <div class="dbgtools-toggle" data-toggle="unhideall"></div>
           </div>
@@ -764,9 +871,25 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
           <div class="dbgtools-row">
             <div class="dbgtools-label">
               <div class="name">Dim screen</div>
-              <div class="hint">Useful for presentations/screenshot focus</div>
+              <div class="hint">Screenshot/presentation focus</div>
             </div>
             <div class="dbgtools-toggle" data-toggle="dim"></div>
+          </div>
+
+          <div class="dbgtools-row">
+            <div class="dbgtools-label">
+              <div class="name">Grayscale</div>
+              <div class="hint">Quick visual regression / contrast sense</div>
+            </div>
+            <div class="dbgtools-toggle" data-toggle="grayscale"></div>
+          </div>
+
+          <div class="dbgtools-row">
+            <div class="dbgtools-label">
+              <div class="name">High contrast</div>
+              <div class="hint">Boost contrast + saturation</div>
+            </div>
+            <div class="dbgtools-toggle" data-toggle="highcontrast"></div>
           </div>
         </div>
 
@@ -776,7 +899,7 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
           <div class="dbgtools-row">
             <div class="dbgtools-label">
               <div class="name">Copy page info</div>
-              <div class="hint">title/url/UA + first 50 scripts/styles</div>
+              <div class="hint">title/url/UA + scripts/styles</div>
             </div>
             <button class="dbgtools-iconbtn" id="__dbgtools_copyinfo__">Copy</button>
           </div>
@@ -784,15 +907,31 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
           <div class="dbgtools-row">
             <div class="dbgtools-label">
               <div class="name">Copy visible text</div>
-              <div class="hint">Quick “what’s on this screen” scrape</div>
+              <div class="hint">Quick “what’s on screen” scrape</div>
             </div>
             <button class="dbgtools-iconbtn" id="__dbgtools_copytext__">Copy</button>
           </div>
 
           <div class="dbgtools-row">
             <div class="dbgtools-label">
+              <div class="name">Unlock scroll</div>
+              <div class="hint">Fix “stuck modal disables scroll”</div>
+            </div>
+            <button class="dbgtools-iconbtn" id="__dbgtools_unlockscroll__">Go</button>
+          </div>
+
+          <div class="dbgtools-row">
+            <div class="dbgtools-label">
+              <div class="name">Zap overlays</div>
+              <div class="hint">Best-effort remove cookie/modals</div>
+            </div>
+            <button class="dbgtools-iconbtn" id="__dbgtools_zap__">Zap</button>
+          </div>
+
+          <div class="dbgtools-row">
+            <div class="dbgtools-label">
               <div class="name">Reset modes</div>
-              <div class="hint">Turns off all toggles (keeps overlay)</div>
+              <div class="hint">Turns off all toggles</div>
             </div>
             <button class="dbgtools-iconbtn" id="__dbgtools_reset__">Reset</button>
           </div>
@@ -822,6 +961,7 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
     setToggleUI("editable", state.editable);
     setToggleUI("picker", state.picker);
     setToggleUI("measure", state.measure);
+    setToggleUI("rulers", state.rulers);
     setToggleUI("noanim", state.noanim);
     setToggleUI("outline", state.outline);
     setToggleUI("hideimgs", state.hideimgs);
@@ -829,6 +969,8 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
     setToggleUI("hiliteclicks", state.hiliteclicks);
     setToggleUI("unhideall", state.unhideall);
     setToggleUI("dim", state.dim);
+    setToggleUI("grayscale", state.grayscale);
+    setToggleUI("highcontrast", state.highcontrast);
 
     const body = $("#__dbgtools_body__", root);
     if (body) body.style.display = state.minimized ? "none" : "block";
@@ -864,10 +1006,7 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
     const dy = e.clientY - startY;
 
     const top = Math.max(6, Math.min(window.innerHeight - 60, startTop + dy));
-    const right = Math.max(
-      6,
-      Math.min(window.innerWidth - 60, startRight - dx),
-    );
+    const right = Math.max(6, Math.min(window.innerWidth - 60, startRight - dx));
 
     root.style.top = `${top}px`;
     root.style.right = `${right}px`;
@@ -898,17 +1037,16 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
       editable: state.editable ? "Editable ON" : "Editable OFF",
       picker: state.picker ? "Picker ON" : "Picker OFF",
       measure: state.measure ? "Measure ON" : "Measure OFF",
+      rulers: state.rulers ? "Rulers ON" : "Rulers OFF",
       noanim: state.noanim ? "Animations OFF" : "Animations ON",
       outline: state.outline ? "Outlines ON" : "Outlines OFF",
       hideimgs: state.hideimgs ? "Images HIDDEN" : "Images VISIBLE",
       showfocus: state.showfocus ? "Focus rings ON" : "Focus rings OFF",
-      hiliteclicks: state.hiliteclicks
-        ? "Interactives highlighted"
-        : "Interactives normal",
-      unhideall: state.unhideall
-        ? "Hidden elements revealed"
-        : "Hidden elements normal",
+      hiliteclicks: state.hiliteclicks ? "Interactives highlighted" : "Interactives normal",
+      unhideall: state.unhideall ? "Hidden elements revealed" : "Hidden elements normal",
       dim: state.dim ? "Dim ON" : "Dim OFF",
+      grayscale: state.grayscale ? "Grayscale ON" : "Grayscale OFF",
+      highcontrast: state.highcontrast ? "High contrast ON" : "High contrast OFF",
     }[key];
 
     if (msg) toast(msg);
@@ -916,7 +1054,6 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
 
   // Buttons
   $("#__dbgtools_close__", root).addEventListener("click", () => {
-    // Important: do NOT undo modes; only remove the overlay.
     root.remove();
     toast("Overlay closed (modes kept)");
   });
@@ -926,9 +1063,7 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
   });
 
   $("#__dbgtools_help__", root).addEventListener("click", () => {
-    toast(
-      "Modes persist. Reset turns them off. Esc exits Picker. Shift+click measures.",
-    );
+    toast("Modes persist. Reset turns them off. Esc exits Picker. Shift+click measures.");
   });
 
   $("#__dbgtools_reset__", root).addEventListener("click", () => {
@@ -936,6 +1071,7 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
       editable: false,
       picker: false,
       measure: false,
+      rulers: false,
       noanim: false,
       outline: false,
       hideimgs: false,
@@ -943,43 +1079,51 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
       hiliteclicks: false,
       unhideall: false,
       dim: false,
+      grayscale: false,
+      highcontrast: false,
     });
     toast("Reset done");
   });
 
   $("#__dbgtools_copyinfo__", root).addEventListener("click", async () => {
     const info = {
+      version: VERSION,
       title: document.title,
       url: location.href,
       userAgent: navigator.userAgent,
-      scripts: $$("script[src]")
-        .map((s) => s.src)
-        .slice(0, 50),
-      styles: $$("link[rel=stylesheet]")
-        .map((l) => l.href)
-        .slice(0, 50),
+      scripts: $$("script[src]").map((s) => s.src).slice(0, 50),
+      styles: $$("link[rel=stylesheet]").map((l) => l.href).slice(0, 50),
     };
     await copyText(JSON.stringify(info, null, 2));
   });
 
   $("#__dbgtools_copytext__", root).addEventListener("click", async () => {
-    // visible-ish text: not perfect, but practical
     const text = (document.body?.innerText || "").trim();
-    await copyText(text.slice(0, 200000)); // avoid clipboard abuse on massive pages
+    await copyText(text.slice(0, 200000));
+  });
+
+  $("#__dbgtools_unlockscroll__", root).addEventListener("click", () => {
+    unlockScroll();
+  });
+
+  $("#__dbgtools_zap__", root).addEventListener("click", () => {
+    zapOverlays();
   });
 
   // ---------- Expose API ----------
   window.__DBGTOOLS__ = {
-    version: "0.2",
+    version: VERSION,
     get: () => ({ ...state }),
     set: (patch) => setState(patch),
     reset: () => $("#__dbgtools_reset__")?.click(),
     cssPath,
     closeOverlay: () => $("#__dbgtools_close__")?.click(),
+    unlockScroll,
+    zapOverlays,
   };
 
   // ---------- Start ----------
   applyState();
   syncUI();
-  toast("DBG loaded");
+  toast(`DBG v${VERSION} loaded`);
 })();
