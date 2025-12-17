@@ -1,6 +1,6 @@
 {
   "name": "goude-github-io",
-  "version": "1.12.5",
+  "version": "1.12.6",
   "type": "module",
   "scripts": {
     "prepare-readme": "node scripts/prepare-readme.js",
