@@ -1,9 +1,11 @@
 import { test, expect } from "@playwright/test";
 
 const TIMEOUT = 10_000;
-const baseUrl = "http://localhost:4321";
+const defaultBaseUrl = "http://localhost:4321";
 
-test("Site navigation: home and about page", async ({ page }) => {
+test("Site navigation: home and about page", async ({ page, baseURL }) => {
+  const baseUrl = baseURL ?? defaultBaseUrl;
+
   await page.goto(baseUrl, { timeout: TIMEOUT });
   await expect(page.locator("text=Week")).toBeVisible({
     timeout: TIMEOUT,
@@ -16,7 +18,9 @@ test("Site navigation: home and about page", async ({ page }) => {
   });
 });
 
-test("Sitemap page: all links work", async ({ page }) => {
+test("Sitemap page: all links work", async ({ page, baseURL }) => {
+  const baseUrl = baseURL ?? defaultBaseUrl;
+
   await page.goto(`${baseUrl}/sitemap`, { timeout: TIMEOUT });
 
   // Extract hrefs and labels from links before navigating
