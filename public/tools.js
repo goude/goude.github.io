@@ -97,15 +97,6 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
     return parts.join(" > ");
   };
 
-  const once = (fn) => {
-    let done = false;
-    return (...args) => {
-      if (done) return;
-      done = true;
-      return fn(...args);
-    };
-  };
-
   // ---------- Modes (persist after UI close) ----------
   const MODE = {
     EDITABLE: "__dbgtools_editable__",
