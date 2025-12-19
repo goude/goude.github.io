@@ -1,4 +1,0 @@
-- [ ] linting/formating configuration
-- [ ] look into vitetest
-- [ ] precommit
-- [ ] handle ideas.md
