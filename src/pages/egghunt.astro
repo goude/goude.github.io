@@ -582,6 +582,10 @@ const permalink = `${Astro.site!.href}egghunt`;
     const toB64 = (b: Uint8Array) => btoa(String.fromCharCode(...b));
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+    function u8ToArrayBuffer(u8: Uint8Array): ArrayBuffer {
+      return u8.slice().buffer;
+    }
+
     async function deriveKey(
       answer: string,
       salt: Uint8Array,
@@ -595,7 +599,12 @@ const permalink = `${Astro.site!.href}egghunt`;
         ["deriveKey"],
       );
       return crypto.subtle.deriveKey(
-        { name: "PBKDF2", salt, iterations: ITERATIONS, hash: "SHA-256" },
+        {
+          name: "PBKDF2",
+          salt: u8ToArrayBuffer(salt),
+          iterations: ITERATIONS,
+          hash: "SHA-256",
+        },
         keyMaterial,
         { name: "AES-GCM", length: 256 },
         false,
