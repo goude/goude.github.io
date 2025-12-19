@@ -48,7 +48,7 @@ function getStaticRoutes(baseDir: string): string[] {
         walk(fullPath);
       } else if (entry.name.endsWith(".astro") || entry.name.endsWith(".md")) {
         if (entry.name.includes("[")) continue; // skip dynamic routes
-        let rel = path.relative("src/pages", fullPath);
+        const rel = path.relative("src/pages", fullPath);
         let route =
           "/" +
           rel
@@ -56,7 +56,6 @@ function getStaticRoutes(baseDir: string): string[] {
             .replace(/index\.astro$/, "") // /index.astro → /
             .replace(/\.astro$/, "")
             .replace(/\.md$/, "");
-        if (!route.endsWith("/")) route = route;
         result.push(route || "/");
       }
     }
