@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-
+import dollSvgUrl from "./do-olls-that-will-talk/dolls-that-will-talk.svg?url";
 const title = "goude.se";
 const description = "It's all about connecting.";
 const permalink = Astro.site?.href ?? "https://goude.se/";
@@ -12,65 +12,117 @@ const permalink = Astro.site?.href ?? "https://goude.se/";
   permalink={permalink}
   current="home"
 >
-  <!-- It clicked, i think -->
   <h1 id="tufte-css">Entry Point</h1>
-
-  <style>
-    .subtitle {
-      font-family: "Georgia", serif;
-      font-size: 1.2em;
-      margin: 1em 0;
-    }
-    .aphorism {
-      display: none;
-    }
-    .aphorism.visible {
-      display: inline;
-    }
-  </style>
-
   <p class="subtitle">
     Leave the campground a little cleaner than you found it.
   </p>
   <section>
-    <section>
-      <h2 id="sidenotes">Sidenotes: Footnotes and Marginal Notes</h2>
-      <p>
-        One of the most distinctive features of Tufte’s style is his extensive
-        use of sidenotes.<label
-          for="sn-extensive-use-of-sidenotes"
-          class="margin-toggle sidenote-number"></label><input
-          type="checkbox"
-          id="sn-extensive-use-of-sidenotes"
-          class="margin-toggle"
-        /><span class="sidenote">This is a sidenote.</span> Sidenotes are like footnotes,
-        except they don’t force the reader to jump their eye to the bottom of the
-        page, but instead display off to the side in the margin. Perhaps you have
-        noticed their use in this document already. You are very astute.
-      </p>
-      <p>
-        If you want a sidenote without footnote-style numberings, then you want
-        a margin note.
-        <label for="mn-demo" class="margin-toggle">&#8853;</label>
-        <input type="checkbox" id="mn-demo" class="margin-toggle" />
-        <span class="marginnote">
-          This is a margin note. Notice there isn’t a number preceding the note.
-        </span> On large screens, a margin note is just a sidenote that omits the
-        reference number. This lessens the distracting effect taking away from the
-        flow of the main text, but can increase the cognitive load of matching a margin
-        note to its referent text. However, on small screens, a margin note is like
-        a sidenote except its viewability-toggle is a symbol rather than a reference
-        number. This document currently uses the symbol &#8853; (<code
-          >&amp;#8853;</code
-        >), but it’s up to you.
-      </p>
-      <p>
-        Margin notes are created just like sidenotes, but with the <code
-          >marginnote</code
-        > class for the content and the <code>margin-toggle</code> class for the label
-        and dummy checkbox. For instance, here is the code for the margin note used
-        in the previous paragraph:
-      </p>
-    </section>
+    <h2>It's Beginning to Look a Lot Like Christmas</h2>
+    <a href="/do-olls-that-will-talk/" class="notation-link">
+      <figure class="notation-preview">
+        <div class="notation-frame">
+          <img
+            src={dollSvgUrl}
+            alt="Musical notation comparing timing of 'Dolls' in two versions"
+          />
+        </div>
+        <figcaption>A timing difference I can't unhear (WIP)</figcaption>
+      </figure>
+    </a>
+  </section>
+  <section>
+    <h2 id="sidenotes">Sidenotes: Footnotes and Marginal Notes</h2>
+    <p>
+      One of the most distinctive features of Tufte's style is his extensive use
+      of sidenotes.<label
+        for="sn-extensive-use-of-sidenotes"
+        class="margin-toggle sidenote-number"></label><input
+        type="checkbox"
+        id="sn-extensive-use-of-sidenotes"
+        class="margin-toggle"
+      /><span class="sidenote">This is a sidenote.</span> Sidenotes are like footnotes,
+      except they don't force the reader to jump their eye to the bottom of the page,
+      but instead display off to the side in the margin. Perhaps you have noticed
+      <label for="mn-demo" class="margin-toggle">&#8853;</label>
+      <input type="checkbox" id="mn-demo" class="margin-toggle" />
+      <span class="marginnote">
+        This is a margin note. Notice there isn't a number preceding the note.
+      </span>
+      On large screens, a margin note is just a sidenote that omits the reference
+    </p>
   </section>
 </BaseLayout>
+
+<style>
+  .notation-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    margin: var(--space-xl) 0;
+    width: var(--content-w);
+  }
+
+  .notation-preview {
+    margin: 0;
+    max-width: 100%;
+  }
+
+  .notation-frame {
+    width: 100%;
+    height: 140px;
+    overflow: hidden;
+    perspective: 600px;
+    position: relative;
+  }
+
+  .notation-frame::before,
+  .notation-frame::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 40%;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .notation-frame::before {
+    top: 0;
+    background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
+  }
+
+  .notation-frame::after {
+    bottom: 0;
+    background: linear-gradient(to top, var(--bg) 0%, transparent 100%);
+  }
+
+  .notation-frame img {
+    width: 100%;
+    transform: rotateX(45deg) translateY(-65%) scale(150%);
+    transform-origin: center center;
+    filter: contrast(0.95);
+  }
+
+  .notation-preview figcaption {
+    margin-top: var(--space-sm);
+    font-size: var(--text-sm);
+    opacity: 0.7;
+    text-align: center;
+    float: none;
+    max-width: none;
+  }
+
+  .notation-link:hover .notation-frame img {
+    filter: contrast(1);
+  }
+
+  .notation-link:hover figcaption {
+    opacity: 1;
+  }
+
+  @media (max-width: 768px) {
+    .notation-link {
+      width: 100%;
+    }
+  }
+</style>
