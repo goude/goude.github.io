@@ -42,7 +42,9 @@
     }
 
     function apply(dark) {
-      document.documentElement.toggleAttribute("data-theme-dark", dark);
+      const root = document.documentElement;
+      root.toggleAttribute("data-theme-dark", dark);
+      root.toggleAttribute("data-theme-light", !dark);
     }
 
     apply(isDark());
