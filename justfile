@@ -1,71 +1,55 @@
-# Load .env and use a safe shell
-set dotenv-load := true
 set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
+set dotenv-load := true
 
-# Config (override via env/.env)
-NODE_ENV := env("NODE_ENV", "development")
-PORT := env("PORT", "4321")
-NODE_REQUIRED := env("NODE_REQUIRED", "v22")
-
-# 🚀 Show banner + task list
 _default:
-	@echo "🚀 Run 'just quickstart' to get going\n"
-	@just --list
+    @just --list
 
-# 🚀 Install → check → dev
-quickstart: install check dev-serve
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Core workflow
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 📦 Install dependencies
+install:
+    npm install
+
+# ✅ Full check: format → lint → build → test
+check: format lint build test
 
 # ▶️ Start dev server
 dev-serve:
-	NODE_ENV={{NODE_ENV}} npm run start
+    npm run dev
 
-# 🩺 Static checks (astro check)
-check: clean format
-	npm run astro check
+# 🧹 Clean build artifacts and caches
+clean:
+    rm -rf dist node_modules/.cache .astro
 
-# 🏗️ Production build
-build: verify
-	npm run build
-
-# 🔎 Preview production build
-preview:
-	NODE_ENV=production npm run preview -- --port {{PORT}}
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Individual steps
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # ✨ Format code
 format:
-	npm run format
+    npm run format
 
-# 🧼 Lint code
+# 🔍 Lint code
 lint:
-	npm run lint
+    npm run lint
 
-# ✅ Run test suite
-test: clean check
-	node test/fileUniqueness.js
-	npx playwright test
+# 🔨 Build for production
+build:
+    npm run build
 
-# 🖥️ Playwright UI
-test-ui:
-	npx playwright test --ui
+# 🧪 Run tests
+test:
+    npx playwright test
 
-# 🧹 Clean build artifacts
-clean:
-	rm -rf dist/ test-results/ .astro/
+# 👁️ Preview production build
+preview:
+    npm run preview
 
-# 🔧 Verify Node toolchain
-verify:
-	@command -v node >/dev/null || { echo "❌ node not found" >&2; exit 127; }
-	@command -v npm  >/dev/null || { echo "❌ npm not found" >&2; exit 127; }
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Quickstart
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# 📦 Install deps
-install: verify
-	npm ci
-
-# Install playwright
-install-playwright:
-	npx playwright install --with-deps
-
-# ♻️ Deep clean + reinstall + check
-reset: clean install check
-	rm -rf node_modules/ package-lock.json
-
+# 🚀 Bootstrap: install → build → dev server
+core-quickstart: install build dev-serve
