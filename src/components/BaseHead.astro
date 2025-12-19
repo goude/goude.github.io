@@ -61,20 +61,69 @@ const socialUrl = (Astro.site?.href ?? "https://goude.se/") + "/favicon.svg";
 ></script>
 
 <script is:inline>
-  window.Prism = window.Prism || {};
-  Prism.plugins = Prism.plugins || {};
-  Prism.plugins.autoloader = {
-    languages_path: "https://cdn.jsdelivr.net/npm/prismjs@1/components/",
-  };
-</script>
+  // Prism is best-effort: network changes, extensions, or CSP can block it.
+  // Highlighting must never break the page.
+  (function () {
+    const PRISM_COMPONENTS =
+      "https://cdn.jsdelivr.net/npm/prismjs@1/components/";
 
-<script is:inline>
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll("pre > code:not([class])").forEach((el) => {
-      el.classList.add("language-js"); // or 'language-text' for neutral
-    });
-    Prism.highlightAll(); // re-run after adding classes
-  });
+    function setupAutoloader() {
+      const P = window.Prism;
+      if (!P) return;
+      P.plugins = P.plugins || {};
+      P.plugins.autoloader = P.plugins.autoloader || {};
+      P.plugins.autoloader.languages_path = PRISM_COMPONENTS;
+    }
+
+    function addDefaultCodeClasses() {
+      document.querySelectorAll("pre > code:not([class])").forEach((el) => {
+        el.classList.add("language-js"); // or 'language-text'
+      });
+    }
+
+    function highlight() {
+      const P = window.Prism;
+      if (!P || typeof P.highlightAll !== "function") return false;
+      try {
+        P.highlightAll();
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    function run() {
+      try {
+        addDefaultCodeClasses();
+        setupAutoloader();
+
+        // Fast path: cached / already loaded Prism
+        if (highlight()) return;
+
+        // Retry on full load (slow networks, defer ordering)
+        window.addEventListener(
+          "load",
+          () => {
+            try {
+              highlight();
+            } catch {}
+          },
+          { once: true },
+        );
+
+        // Final delayed retry (late injection / race conditions)
+        setTimeout(() => {
+          try {
+            highlight();
+          } catch {}
+        }, 2500);
+      } catch {
+        // Intentionally silent
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", run);
+  })();
 </script>
 
 <!-- anomaly class: low-friction, high-resolution thinker. org-native, structurally divergent. recurrence suggests long-term modeling effort. observe for latent protocol alignment. -->
