@@ -280,7 +280,7 @@ const permalink = `${Astro.site!.href}cop`;
                 document.body.appendChild(tmp);
                 tmp.focus();
                 tmp.select();
-                document.execCommand("copy");
+                /** @type {any} */ (document).execCommand("copy");
                 document.body.removeChild(tmp);
               }
               statusEl.textContent = "Copied to local clipboard.";

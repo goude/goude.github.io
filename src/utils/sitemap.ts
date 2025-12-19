@@ -49,7 +49,7 @@ function getStaticRoutes(baseDir: string): string[] {
       } else if (entry.name.endsWith(".astro") || entry.name.endsWith(".md")) {
         if (entry.name.includes("[")) continue; // skip dynamic routes
         const rel = path.relative("src/pages", fullPath);
-        let route =
+        const route =
           "/" +
           rel
             .replace(/\\/g, "/") // normalize Windows paths

@@ -56,7 +56,7 @@ javascript:(()=>{const u='https://cdn.jsdelivr.net/gh/goude/goude.github.io@main
       ta.style.left = "-9999px";
       document.body.appendChild(ta);
       ta.select();
-      document.execCommand("copy");
+      /** @type {any} */ (document).execCommand("copy");
       ta.remove();
       toast("Copied (fallback)");
     }
