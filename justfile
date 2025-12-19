@@ -21,7 +21,7 @@ dev-serve:
 
 # 🧹 Clean build artifacts and caches
 clean:
-    rm -rf dist node_modules/.cache .astro
+    rm -rf dist node_modules/.cache .astro test-results/
 
 # 🧹 Clean everything
 reset: clean
