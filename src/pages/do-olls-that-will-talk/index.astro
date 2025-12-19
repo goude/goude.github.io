@@ -1,0 +1,142 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import dollSvgUrl from "./dolls-that-will-talk.svg?url";
+
+const title = "The Do-olls That Will Talk";
+const description = "A timing difference I can't unhear.";
+const permalink = `${Astro.site!.href}/do-olls-that-will-talk`;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  permalink={permalink}
+  current="cop"
+>
+  <article>
+    <h1>The Do-olls That Will Talk</h1>
+    <p class="subtitle">It's Beginning to Look a Lot Like Christmas</p>
+
+    <!--
+    This is writing practice.
+
+    ════════════════════════════════════════════════════════════════════
+    OPENING: THE HOOK
+    ════════════════════════════════════════════════════════════════════
+    You need ONE sentence that makes someone want to keep reading.
+
+    Options to try:
+    - Start with the moment you noticed it (concrete, sensory)
+    - Start with the question itself
+    - Start with the feeling of "can't unhear"
+
+    Draft fragments to work from:
+    - "This year I heard something I can't stop hearing."
+    - "One word. One syllable. Two different placements."
+    - "Michael Bublé says 'Dolls' on the beat. Perry Como says it before."
+    - "Every December, the same itch."
+
+    What made YOU notice? That's your opening.
+    -->
+    <p>[Your opening hook here]</p>
+
+    <!--
+    ════════════════════════════════════════════════════════════════════
+    THE OBSERVATION
+    ════════════════════════════════════════════════════════════════════
+    State what you hear. Plain. No hedging.
+
+    Structure:
+    1. Bublé version: what happens rhythmically (on the beat / downbeat)
+    2. Como version: what happens rhythmically (before the bar / anticipates)
+    3. Why it matters to you (the feel, the push, the "cue")
+
+    Musical terms you might use (or avoid):
+    - downbeat vs upbeat/pickup
+    - triplet feel
+    - "anticipation" (the note that arrives early)
+    - "lands" vs "pushes into"
+
+    Keep it concrete. If you can hum it, describe it.
+    -->
+
+    <h2>Bublé: on the beat</h2>
+    <p>[1-2 sentences: what you hear, where it lands]</p>
+
+    <figure>
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/0bhsXykXxfg?start=76"
+        title="Michael Bublé version"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen></iframe>
+    </figure>
+
+    <h2>Como: before the bar</h2>
+    <p>[1-2 sentences: what you hear, how it differs]</p>
+
+    <figure>
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/SnunPV-XTbA?start=45"
+        title="Perry Como version"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen></iframe>
+    </figure>
+
+    <h2>The notation</h2>
+    <!--
+    ════════════════════════════════════════════════════════════════════
+    THE SVG
+    ════════════════════════════════════════════════════════════════════
+    You made this in MuseScore → exported SVG → tweaked in Inkscape.
+    That's interesting! The tech chain matters:
+
+    - MuseScore for the notation itself
+    - SVG export keeps it crisp at any size
+    - Inkscape for any adjustments
+    - Astro imports it with ?url for proper path handling
+
+    You could mention this process, or not. Your call.
+    -->
+    <figure>
+      <img
+        src={dollSvgUrl}
+        alt="Two-line timing comparison: Bublé on top, Como below"
+      />
+      <figcaption>Top line: Bublé. Bottom: Como.</figcaption>
+    </figure>
+
+    <p>[Optional: one sentence about what the notation shows]</p>
+
+    <!--
+    ════════════════════════════════════════════════════════════════════
+    THE PERSONAL ANGLE (the "why I'm writing this")
+    ════════════════════════════════════════════════════════════════════
+    This is the emotional core. Some options:
+
+    A) Be direct:
+       "I notice this every time. Writing it down might let me stop."
+
+    B) Frame it as a question:
+       "Does anyone else hear this? I've never found anyone talking about it."
+
+    C) Frame it as appreciation:
+       "These tiny choices are what make arrangements feel different."
+
+    D) Just end with the observation:
+       Don't explain why you care. The fact that you made the page says enough.
+
+    Which feels right?
+    -->
+
+    <!--
+    ════════════════════════════════════════════════════════════════════
+    CLOSING
+    ════════════════════════════════════════════════════════════════════
+    Options:
+    - End on the observation (no summary needed)
+    - End on the feeling
+    - End with an invitation (what do you hear?)
+    - Just stop. The page made its point.
+    -->
+  </article>
+</BaseLayout>
