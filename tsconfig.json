@@ -2,11 +2,11 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true
   },
   "extends": "astro/tsconfigs/strict",
-  "exclude": ["quarantine/", "src/pages/hello.astro", "src/pages/ft-2027.astro"]
+  "exclude": ["src/pages/hello.astro", "src/pages/ft-2027.astro"]
 }
