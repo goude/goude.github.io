@@ -3,28 +3,20 @@ const { current = "" } = Astro.props;
 ---
 
 <nav class="main-nav">
-  <a href="/about" class={`nav-link ${current === "about" ? "selected" : ""}`}>
-    <span>About</span>
+  <a href="/about" class:list={["nav-link", { selected: current === "about" }]}>
+    About
   </a>
-
-  <a
-    href="https://github.com/goude"
-    class="nav-link external"
-    target="_self"
-    rel="noopener noreferrer"
-  >
-    <i class="fa-brands fa-github nav-icon" aria-hidden="true"></i>
-    <span>GitHub</span>
+  <a href="https://github.com/goude" class="nav-link" rel="noopener noreferrer">
+    <i class="fa-brands fa-github" aria-hidden="true"></i>
+    GitHub
   </a>
-
   <a
     href="https://buymeacoffee.com/goude"
-    class="nav-link external"
-    target="_self"
+    class="nav-link"
     rel="noopener noreferrer"
   >
-    <i class="fa-solid fa-mug-saucer nav-icon" aria-hidden="true"></i>
-    <span>Coffee</span>
+    <i class="fa-solid fa-mug-saucer" aria-hidden="true"></i>
+    Coffee
   </a>
 </nav>
 
@@ -39,8 +31,7 @@ const { current = "" } = Astro.props;
 
   .nav-link {
     display: inline-flex;
-    align-items: center; /* keeps icons + text on same vertical line */
-    justify-content: center;
+    align-items: center;
     gap: 0.35rem;
     padding: 0.25rem 0.6rem;
     border-radius: 999px;
@@ -49,19 +40,12 @@ const { current = "" } = Astro.props;
     letter-spacing: 0.08em;
   }
 
-  .nav-link.external {
-    cursor: alias; /* subtle external-link pointer style */
-  }
-
-  .nav-icon {
+  .nav-link i {
     font-size: 1.1em;
-    line-height: 1;
   }
 
-  .ext-icon {
-    font-size: 0.85em;
-    opacity: 0.75;
-    margin-left: 0.1rem;
-    line-height: 1;
+  .selected {
+    background: var(--fg);
+    color: var(--bg);
   }
 </style>

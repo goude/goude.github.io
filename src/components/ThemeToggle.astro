@@ -2,93 +2,61 @@
 // src/components/ThemeToggle.astro
 ---
 
+<button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+  <i class="fa-regular fa-sun" id="icon-light" aria-hidden="true"></i>
+  <i class="fa-solid fa-moon" id="icon-dark" aria-hidden="true"></i>
+</button>
+
 <style>
   .theme-toggle {
     background: none;
     border: none;
-    font-size: 1.5rem;
+    font-size: 1.1em;
     cursor: pointer;
-    padding: 0.25rem;
+    padding: 0.25rem 0.6rem;
     color: inherit;
-    display: flex;
-    align-items: center;
   }
 
   .theme-toggle:hover {
     opacity: 0.7;
   }
-</style>
 
-<button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-  <span id="theme-icon">○</span>
-</button>
+  #icon-dark {
+    display: none;
+  }
+
+  :global([data-theme-dark]) #icon-light {
+    display: none;
+  }
+  :global([data-theme-dark]) #icon-dark {
+    display: inline;
+  }
+</style>
 
 <script is:inline>
   (function () {
-    const themeToggle = document.getElementById("theme-toggle");
-    const themeIcon = document.getElementById("theme-icon");
-
-    // Get stored preference or system preference
-    function getInitialTheme() {
+    function isDark() {
       const stored = localStorage.getItem("theme");
-      if (stored) {
-        return stored;
-      }
-      // Check system preference
-      if (
-        window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-      ) {
-        return "dark";
-      }
-      return "light";
+      if (stored) return stored === "dark";
+      return window.matchMedia?.("(prefers-color-scheme: dark)").matches;
     }
 
-    // Apply theme to document
-    function applyTheme(theme) {
-      if (theme === "dark") {
-        document.documentElement.setAttribute("data-theme-dark", "");
-      } else {
-        document.documentElement.removeAttribute("data-theme-dark");
-      }
-      updateIcon(theme);
+    function apply(dark) {
+      document.documentElement.toggleAttribute("data-theme-dark", dark);
     }
 
-    // Update icon based on theme
-    function updateIcon(theme) {
-      themeIcon.textContent = theme === "dark" ? "●" : "○";
-    }
+    apply(isDark());
 
-    // Toggle between themes
-    function toggleTheme() {
-      const currentTheme = document.documentElement.hasAttribute(
-        "data-theme-dark",
-      )
-        ? "dark"
-        : "light";
-      const newTheme = currentTheme === "dark" ? "light" : "dark";
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+      const dark = !document.documentElement.hasAttribute("data-theme-dark");
+      localStorage.setItem("theme", dark ? "dark" : "light");
+      apply(dark);
+    });
 
-      localStorage.setItem("theme", newTheme);
-      applyTheme(newTheme);
-    }
-
-    // Set initial theme immediately (before page renders)
-    const initialTheme = getInitialTheme();
-    applyTheme(initialTheme);
-
-    // Add click listener
-    themeToggle.addEventListener("click", toggleTheme);
-
-    // Listen for system theme changes (optional enhancement)
-    if (window.matchMedia) {
-      window
-        .matchMedia("(prefers-color-scheme: dark)")
-        .addEventListener("change", (e) => {
-          // Only auto-update if user hasn't set a manual preference
-          if (!localStorage.getItem("theme")) {
-            applyTheme(e.matches ? "dark" : "light");
-          }
-        });
-    }
+    window
+      .matchMedia?.("(prefers-color-scheme: dark)")
+      .addEventListener("change", (e) => {
+        if (!localStorage.getItem("theme")) apply(e.matches);
+      });
   })();
 </script>
