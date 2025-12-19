@@ -1,0 +1,15 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import dollSvgUrl from "./dolls-that-will-walk.svg?url";
+
+const title = "The Do-olls That Will Talk";
+const description = "An observation of sorts.";
+const permalink = `${Astro.site!.href}/dolls-that-will-walk`;
+---
+
+<BaseLayout title={title} description={description} permalink={permalink} current="cop">
+  <section>
+    <h1>It's Beginning to Look a Lot Like Christmas</h1>
+    <img src={dollSvgUrl} alt="Dolls that will walk" />
+  </section>
+</BaseLayout>
