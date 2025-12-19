@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import pkg from "../../package.json";
 const title = "egghunt";
 const description = "egghunt";
 const permalink = `${Astro.site!.href}egghunt`;
@@ -12,7 +13,11 @@ const permalink = `${Astro.site!.href}egghunt`;
   current="egghunt"
 >
   <section>
-    <h1>🥚 egghunt</h1>
+    <h1>🥚 egghunt</h1><p>
+      This is <span class="version">v{pkg.version}</span> of the egghunt. Some users
+      have reported issues when using certain Windows + Chrome configurations. We
+      have heard you.
+    </p>
 
     <div class="puzzle-input">
       <input
