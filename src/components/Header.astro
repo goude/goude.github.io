@@ -2,7 +2,12 @@
 import Logo from "./Logo.astro";
 import Nav from "./Nav.astro";
 import ThemeToggle from "./ThemeToggle.astro";
-const { current = "" } = Astro.props;
+
+interface Props {
+  current?: string;
+}
+
+const { current } = Astro.props;
 ---
 
 <header>

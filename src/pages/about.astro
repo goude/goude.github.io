@@ -1,32 +1,27 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-
-const title = "About";
-const description = "About your blog.";
-const permalink = `${Astro.site!.href}about`; // FIXME: using ! for now, also, missing / ?
+import Layout from "@/layouts/Layout.astro";
 ---
 
-<BaseLayout
-  title={title}
-  description={description}
-  permalink={permalink}
-  current="about"
->
+<Layout title="About - goude.se" description="About goude.se" current="about">
   <section>
     <h1 id="colophon">About</h1>
     <p>
       <a
         href="https://www.buymeacoffee.com/goude"
         target="_blank"
+        rel="noopener noreferrer"
         class="no-style-link"
-        ><img
+      >
+        <img
           src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png"
           alt="Buy Me A Coffee"
-          style="height: 60px !important;width: 217px !important;"
-        /></a
-      >
+          style="height: 60px; width: 217px;"
+          loading="lazy"
+        />
+      </a>
     </p>
   </section>
+
   <section>
     <h2>Adage Experiment</h2>
     <div class="epigraph">
@@ -39,8 +34,13 @@ const permalink = `${Astro.site!.href}about`; // FIXME: using ! for now, also, m
         <footer><span id="attribution"></span></footer>
       </blockquote>
     </div>
+
     <script>
-      async function fetchRandomAdage() {
+      interface AdageFile {
+        name: string;
+      }
+
+      async function fetchRandomAdage(): Promise<void> {
         const githubApiUrl =
           "https://api.github.com/repos/goude/adages/contents/adages";
         const rawContentBaseUrl =
@@ -49,14 +49,10 @@ const permalink = `${Astro.site!.href}about`; // FIXME: using ! for now, also, m
         try {
           const allowedFileNames = ["boot-messages", "wwdits"];
 
-          interface File {
-            name: string;
-          }
-
           const listResponse = await fetch(githubApiUrl);
-          const fileList: File[] = await listResponse.json();
-          const filteredFileList = fileList.filter((file: File) =>
-            allowedFileNames.includes(file.name),
+          const fileList: AdageFile[] = await listResponse.json();
+          const filteredFileList = fileList.filter((file) =>
+            allowedFileNames.includes(file.name)
           );
           const randomFileName =
             filteredFileList[
@@ -76,24 +72,26 @@ const permalink = `${Astro.site!.href}about`; // FIXME: using ! for now, also, m
           const attribution = match && match[2] ? match[2].trim() : "";
 
           const formattedAdage = adage.replace(/\n/g, "<br>");
-          const adageElement = document.getElementById("adage")!;
-          adageElement.innerHTML = formattedAdage;
-          const attributionElement = document.getElementById("attribution")!;
-          attributionElement.innerHTML = attribution;
+          const adageElement = document.getElementById("adage");
+          const attributionElement = document.getElementById("attribution");
+
+          if (adageElement) adageElement.innerHTML = formattedAdage;
+          if (attributionElement) attributionElement.innerHTML = attribution;
         } catch (error) {
           console.error("Error fetching adage:", error);
-          document.getElementById("adage")!.textContent =
-            "Failed to load adage.";
+          const adageElement = document.getElementById("adage");
+          if (adageElement) adageElement.textContent = "Failed to load adage.";
         }
       }
 
       fetchRandomAdage();
     </script>
   </section>
+
   <section>
     <h2>Everyday Carry</h2>
     <ul>
       <li>A Permanent Marker</li>
     </ul>
   </section>
-</BaseLayout>
+</Layout>

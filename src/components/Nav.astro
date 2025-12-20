@@ -1,24 +1,32 @@
 ---
+import { NAV_ITEMS, type NavItem } from "@/types/site";
+
+interface Props {
+  current?: string;
+}
+
 const { current = "" } = Astro.props;
+
+function isSelected(item: NavItem): boolean {
+  return item.href === `/${current}`;
+}
 ---
 
-<nav class="main-nav">
-  <a href="/about" class:list={["nav-link", { selected: current === "about" }]}>
-    <i class="fa fa-life-ring" aria-hidden="true"></i>
-    About
-  </a>
-  <a href="https://github.com/goude" class="nav-link" rel="noopener noreferrer">
-    <i class="fa-brands fa-github" aria-hidden="true"></i>
-    GitHub
-  </a>
-  <a
-    href="https://buymeacoffee.com/goude"
-    class="nav-link"
-    rel="noopener noreferrer"
-  >
-    <i class="fa-solid fa-mug-saucer" aria-hidden="true"></i>
-    Coffee
-  </a>
+<nav class="main-nav" aria-label="Main navigation">
+  {
+    NAV_ITEMS.map((item) => (
+      <a
+        href={item.href}
+        class:list={["nav-link", { selected: isSelected(item) }]}
+        {...(item.external
+          ? { rel: "noopener noreferrer", target: "_blank" }
+          : {})}
+      >
+        <i class={item.icon} aria-hidden="true" />
+        <span>{item.label}</span>
+      </a>
+    ))
+  }
 </nav>
 
 <style>
@@ -40,6 +48,9 @@ const { current = "" } = Astro.props;
     color: inherit;
     letter-spacing: 0.08em;
     white-space: nowrap;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
   }
 
   .nav-link i {
@@ -51,7 +62,6 @@ const { current = "" } = Astro.props;
     color: var(--bg);
   }
 
-  /* ---- Mobile tightening ---- */
   @media (max-width: 480px) {
     .main-nav {
       flex-wrap: wrap;

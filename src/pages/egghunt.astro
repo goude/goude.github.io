@@ -1,23 +1,10 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import pkg from "../../package.json";
-const title = "egghunt";
-const description = "egghunt";
-const permalink = `${Astro.site!.href}egghunt`;
+import Layout from "@/layouts/Layout.astro";
 ---
 
-<BaseLayout
-  title={title}
-  description={description}
-  permalink={permalink}
-  current="egghunt"
->
+<Layout>
   <section>
-    <h1>🥚 egghunt</h1><p>
-      This is <span class="version">v{pkg.version}</span> of the egghunt. Some users
-      have reported issues when using certain Windows + Chrome configurations. We
-      have heard you.
-    </p>
+    <h1>🥚 egghunt</h1>
 
     <div class="puzzle-input">
       <input
@@ -589,14 +576,14 @@ const permalink = `${Astro.site!.href}egghunt`;
     async function deriveKey(
       answer: string,
       salt: Uint8Array,
-      usage: KeyUsage[],
+      usage: KeyUsage[]
     ): Promise<CryptoKey> {
       const keyMaterial = await crypto.subtle.importKey(
         "raw",
         new TextEncoder().encode(normalize(answer)),
         "PBKDF2",
         false,
-        ["deriveKey"],
+        ["deriveKey"]
       );
       return crypto.subtle.deriveKey(
         {
@@ -608,7 +595,7 @@ const permalink = `${Astro.site!.href}egghunt`;
         keyMaterial,
         { name: "AES-GCM", length: 256 },
         false,
-        usage,
+        usage
       );
     }
 
@@ -636,7 +623,7 @@ const permalink = `${Astro.site!.href}egghunt`;
     ];
 
     async function tryDecryptAll(
-      answer: string,
+      answer: string
     ): Promise<{ ok: boolean; html: string }> {
       for (const puzzle of Object.values(PUZZLES)) {
         try {
@@ -646,7 +633,7 @@ const permalink = `${Astro.site!.href}egghunt`;
           const dec = await crypto.subtle.decrypt(
             { name: "AES-GCM", iv: b64ToBytes(puzzle.iv) },
             key,
-            b64ToBytes(puzzle.ciphertext),
+            b64ToBytes(puzzle.ciphertext)
           );
           return { ok: true, html: new TextDecoder().decode(dec) };
         } catch {
@@ -697,7 +684,7 @@ const permalink = `${Astro.site!.href}egghunt`;
      * This outputs a ready-to-paste PUZZULAR object. Copy it into the PUZZLES const above.
      */
     (window as any).generatePuzzles = async (
-      puzzles: { answer: string; message: string }[],
+      puzzles: { answer: string; message: string }[]
     ) => {
       const results: Record<
         string,
@@ -712,7 +699,7 @@ const permalink = `${Astro.site!.href}egghunt`;
         const ct = await crypto.subtle.encrypt(
           { name: "AES-GCM", iv },
           key,
-          new TextEncoder().encode(message),
+          new TextEncoder().encode(message)
         );
 
         results[String(i + 1)] = {
@@ -723,7 +710,7 @@ const permalink = `${Astro.site!.href}egghunt`;
         };
 
         console.log(
-          `Puzzle #${i + 1}: answer="${answer}" → normalized="${normalize(answer)}"`,
+          `Puzzle #${i + 1}: answer="${answer}" → normalized="${normalize(answer)}"`
         );
       }
 
@@ -732,4 +719,4 @@ const permalink = `${Astro.site!.href}egghunt`;
       return results;
     };
   </script>
-</BaseLayout>
+</Layout>

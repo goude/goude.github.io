@@ -1,35 +1,52 @@
 # goude.se
 
-[https://github.com/goude/goude.github.io](https://github.com/goude/goude.github.io)
+Personal site built with Astro 5 and TypeScript.
 
-Transmitting. Listen.
+## Stack
 
-## Getting Started
+- **Framework**: Astro 5
+- **Language**: TypeScript (strict mode)
+- **Styling**: Tufte-inspired CSS, et-book fonts
+- **Deploy**: GitHub Pages
 
-This project uses [just](https://github.com/casey/just) as its task runner.
-All common commands (install, build, dev server, tests, etc.) are defined in the `Justfile`.
+## Development
 
-### 1. Install `just`
+```bash
+# Install dependencies
+npm install
 
-**macOS (Homebrew):**
-`brew install just`
+# Start dev server
+npm run dev
 
-**Linux (Ubuntu/Debian/WSL2):**
-`sudo apt update`
-`sudo apt install just`
+# Type check
+npm run check
 
-If your distro doesn’t have a recent version, see the [official install docs](https://github.com/casey/just#installation) for alternatives (curl, cargo, etc.).
+# Build for production
+npm run build
 
-### 2. Run the bootstrap
+# Preview production build
+npm run preview
+```
 
-From the project root:
-`just`
+## Project Structure
 
-This will print a Quickstart guide and list all available tasks.
-For example:
+```
+src/
+├── components/     # Reusable Astro components
+├── layouts/        # Page layouts
+├── pages/          # File-based routing
+├── styles/         # Global CSS
+├── types/          # TypeScript type definitions
+└── utils/          # Utility functions
+```
 
-- `just core-quickstart` → verify tools, install deps, run checks, start dev server
-- `just dev-start` → start dev server (after first setup)
-- `just dev-build && just dev-preview` → build and preview production
+## Features
 
-That’s it — the only instruction you need is: **run `just`.**
+- Dark/light theme with system preference detection
+- Tufte-style sidenotes and margin notes
+- ISO week display (Swedish standard)
+- Client-side puzzle encryption (egghunt)
+
+## License
+
+Personal use.

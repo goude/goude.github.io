@@ -1,19 +1,15 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-
-const title = "cop — cloud clipboard portal";
-const description = "View and update whatever cop -n last pushed.";
-const permalink = `${Astro.site!.href}cop`;
+import Layout from "@/layouts/Layout.astro";
 ---
 
-<BaseLayout
-  title={title}
-  description={description}
-  permalink={permalink}
+<Layout
+  title="cop — cloud clipboard portal"
+  description="View and update whatever cop -n last pushed."
   current="cop"
 >
   <section>
     <h1>cop</h1>
+    <p class="subtitle">Cloud clipboard portal</p>
   </section>
 
   <section>
@@ -21,97 +17,6 @@ const permalink = `${Astro.site!.href}cop`;
       is:inline
       src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"
       defer></script>
-
-    <style>
-      .cop-container {
-        margin-top: 1rem;
-        max-width: 30rem;
-        font-family:
-          system-ui,
-          -apple-system,
-          BlinkMacSystemFont,
-          sans-serif;
-      }
-
-      .cop-status {
-        font-family: monospace;
-        font-size: 0.9rem;
-        margin: 0.5rem 0 1rem;
-        color: #555;
-      }
-
-      .cop-qr-wrapper {
-        margin-bottom: 0.75rem;
-      }
-
-      .cop-url-link {
-        font-size: 0.9rem;
-        word-break: break-all;
-        margin-top: 0.5rem;
-        display: inline-block;
-      }
-
-      .cop-qr-wrapper canvas {
-        border: 1px solid;
-        display: block;
-        margin-top: 0.5rem;
-        width: 400px;
-        height: 400px;
-        max-width: 100%;
-        max-height: 100%;
-      }
-
-      .cop-input {
-        width: 100%;
-        box-sizing: border-box;
-        border-radius: 4px;
-        border: 1px solid #ddd;
-        padding: 0.5rem 0.75rem;
-        font-family: monospace;
-        font-size: 0.9rem;
-        min-height: 6rem;
-        resize: vertical;
-        margin-top: 1.5rem;
-      }
-
-      .cop-actions {
-        margin-top: 0.5rem;
-        display: flex;
-        gap: 0.5rem;
-        justify-content: flex-end;
-      }
-
-      .cop-button {
-        border: 1px solid #ccc;
-        background: #f7f7f7;
-        padding: 0.25rem 0.8rem;
-        font-size: 0.8rem;
-        cursor: pointer;
-        border-radius: 999px;
-      }
-
-      .cop-button:hover:enabled {
-        background: #eee;
-      }
-
-      .cop-button:disabled {
-        opacity: 0.6;
-        cursor: default;
-      }
-
-      .cop-charcount {
-        margin-top: 0.25rem;
-        font-size: 0.75rem;
-        color: #888;
-        text-align: right;
-      }
-
-      .lede {
-        margin: 0.5rem 0 0;
-        color: #555;
-        font-size: 0.95rem;
-      }
-    </style>
 
     <div class="cop-container">
       <div class="cop-status" id="cop-status">
@@ -178,7 +83,6 @@ const permalink = `${Astro.site!.href}cop`;
             }
             return new TextDecoder().decode(bytes);
           } catch {
-            // If it's not valid base64, just treat as plain text
             return b64;
           }
         }
@@ -268,21 +172,8 @@ const permalink = `${Astro.site!.href}cop`;
           if (!copyBtn || !inputEl || !statusEl) return;
 
           copyBtn.addEventListener("click", async () => {
-            const text = inputEl.value;
             try {
-              if (navigator.clipboard && navigator.clipboard.writeText) {
-                await navigator.clipboard.writeText(text);
-              } else {
-                const tmp = document.createElement("textarea");
-                tmp.value = text;
-                tmp.style.position = "fixed";
-                tmp.style.opacity = "0";
-                document.body.appendChild(tmp);
-                tmp.focus();
-                tmp.select();
-                /** @type {any} */ (document).execCommand("copy");
-                document.body.removeChild(tmp);
-              }
+              await navigator.clipboard.writeText(inputEl.value);
               statusEl.textContent = "Copied to local clipboard.";
             } catch {
               statusEl.textContent = "Failed to copy to clipboard.";
@@ -338,4 +229,89 @@ const permalink = `${Astro.site!.href}cop`;
       })();
     </script>
   </section>
-</BaseLayout>
+</Layout>
+
+<style>
+  .cop-container {
+    margin-top: 1rem;
+    max-width: 30rem;
+    font-family: var(--font-sans);
+  }
+
+  .cop-status {
+    font-family: var(--font-code);
+    font-size: 0.9rem;
+    margin: 0.5rem 0 1rem;
+    opacity: 0.7;
+  }
+
+  .cop-qr-wrapper {
+    margin-bottom: 0.75rem;
+  }
+
+  .cop-url-link {
+    font-size: 0.9rem;
+    word-break: break-all;
+    margin-top: 0.5rem;
+    display: inline-block;
+  }
+
+  .cop-qr-wrapper canvas {
+    border: 1px solid var(--rule);
+    display: block;
+    margin-top: 0.5rem;
+    width: 400px;
+    height: 400px;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .cop-input {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 1px solid var(--rule);
+    padding: 0.5rem 0.75rem;
+    font-family: var(--font-code);
+    font-size: 0.9rem;
+    min-height: 6rem;
+    resize: vertical;
+    margin-top: 1.5rem;
+    background: var(--bg);
+    color: var(--fg);
+  }
+
+  .cop-actions {
+    margin-top: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
+
+  .cop-button {
+    border: 1px solid var(--rule);
+    background: var(--bg);
+    color: var(--fg);
+    padding: 0.25rem 0.8rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    border-radius: 999px;
+    transition: opacity 0.15s ease;
+  }
+
+  .cop-button:hover:enabled {
+    opacity: 0.7;
+  }
+
+  .cop-button:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+
+  .cop-charcount {
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    opacity: 0.6;
+    text-align: right;
+  }
+</style>

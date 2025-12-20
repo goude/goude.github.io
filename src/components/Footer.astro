@@ -1,35 +1,17 @@
 ---
+import { getISOWeek } from "@/utils";
 import pkg from "../../package.json";
 
+const version = pkg.version;
+
 const now = new Date();
-
-function getISOWeek(d) {
-  const dLocal = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-  const isoDow = dLocal.getDay() === 0 ? 7 : dLocal.getDay();
-  const th = new Date(dLocal);
-  th.setDate(th.getDate() + (4 - isoDow));
-  const weekYear = th.getFullYear();
-  const jan4 = new Date(weekYear, 0, 4);
-  const jan4IsoDow = jan4.getDay() === 0 ? 7 : jan4.getDay();
-  const week1Mon = new Date(weekYear, 0, 4 - (jan4IsoDow - 1));
-  const toUTCmid = (x) => Date.UTC(x.getFullYear(), x.getMonth(), x.getDate());
-  const daysSinceWeek1Mon = Math.round(
-    (toUTCmid(th) - toUTCmid(week1Mon)) / 86400000,
-  );
-  return Math.floor(daysSinceWeek1Mon / 7) + 1;
-}
-
-const pad = (n) => String(n).padStart(2, "0");
 const week = getISOWeek(now);
-
-const build = new Date(__BUILD_TIMESTAMP__ as unknown as number | string);
-const builtDate = `${build.getUTCFullYear()}-${pad(build.getUTCMonth() + 1)}-${pad(build.getUTCDate())}`;
-const builtTime = `${pad(build.getUTCHours())}:${pad(build.getUTCMinutes())}`;
+const year = now.getFullYear();
 ---
 
 <footer class="site-footer">
   <span class="chunk">
-    © {now.getFullYear()}
+    © {year}
     <a href="https://goude.se">goude.se</a>
   </span>
 
@@ -42,19 +24,7 @@ const builtTime = `${pad(build.getUTCHours())}:${pad(build.getUTCMinutes())}`;
   <span class="sep" aria-hidden="true">·</span>
 
   <span class="chunk">
-    <a href="/sitemap">v{pkg.version}</a>
-  </span>
-
-  <span class="sep" aria-hidden="true">·</span>
-
-  <span class="chunk nowrap">
-    Built {builtDate}<span class="faded">T</span>{builtTime}Z
-  </span>
-
-  <span class="sep" aria-hidden="true">·</span>
-
-  <span class="chunk">
-    <span title="sigil" aria-label="sigil">⊛</span>
+    <a href="/sitemap">v{version}</a>
   </span>
 </footer>
 
@@ -64,6 +34,8 @@ const builtTime = `${pad(build.getUTCHours())}:${pad(build.getUTCMinutes())}`;
     flex-wrap: wrap;
     align-items: baseline;
     gap: 0.35rem;
+    padding: var(--space-lg) 0;
+    margin-top: auto;
   }
 
   .chunk {
@@ -74,13 +46,5 @@ const builtTime = `${pad(build.getUTCHours())}:${pad(build.getUTCMinutes())}`;
 
   .sep {
     opacity: 0.35;
-  }
-
-  .nowrap {
-    white-space: nowrap;
-  }
-
-  .faded {
-    opacity: 0.3;
   }
 </style>

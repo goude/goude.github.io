@@ -1,129 +1,45 @@
 ---
-import "../styles/styles.css";
+import { SITE } from "@/types/site";
 
-export interface Props {
-  title: string;
-  description: string;
-  permalink: string;
+interface Props {
+  title?: string;
+  description?: string;
 }
 
-const { title, description, permalink } = Astro.props;
-const socialUrl = (Astro.site?.href ?? "https://goude.se/") + "/favicon.svg";
+const { title = SITE.title, description = SITE.description } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
-<!-- Global Metadata -->
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="canonical" href={canonicalURL} />
+<meta name="generator" content={Astro.generator} />
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
+<meta name="author" content={SITE.author} />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
-<meta property="og:url" content={permalink} />
+<meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={socialUrl} />
 
 <!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={permalink} />
+<meta property="twitter:card" content="summary" />
+<meta property="twitter:url" content={canonicalURL} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={socialUrl} />
 
-<!-- Font-awesome Icons -->
+<!-- Font Awesome Icons -->
 <link
   rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  crossorigin="anonymous"
   referrerpolicy="no-referrer"
 />
-
-<!-- Syntax Highlighting -->
-<link
-  href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css"
-  rel="stylesheet"
-/>
-
-<script
-  is:inline
-  defer
-  src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"
-></script>
-
-<script
-  is:inline
-  defer
-  src="https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"
-></script>
-
-<script is:inline>
-  // Prism is best-effort: network changes, extensions, or CSP can block it.
-  // Highlighting must never break the page.
-  (function () {
-    const PRISM_COMPONENTS =
-      "https://cdn.jsdelivr.net/npm/prismjs@1/components/";
-
-    function setupAutoloader() {
-      const P = window.Prism;
-      if (!P) return;
-      P.plugins = P.plugins || {};
-      P.plugins.autoloader = P.plugins.autoloader || {};
-      P.plugins.autoloader.languages_path = PRISM_COMPONENTS;
-    }
-
-    function addDefaultCodeClasses() {
-      document.querySelectorAll("pre > code:not([class])").forEach((el) => {
-        el.classList.add("language-js"); // or 'language-text'
-      });
-    }
-
-    function highlight() {
-      const P = window.Prism;
-      if (!P || typeof P.highlightAll !== "function") return false;
-      try {
-        P.highlightAll();
-        return true;
-      } catch {
-        return false;
-      }
-    }
-
-    function run() {
-      try {
-        addDefaultCodeClasses();
-        setupAutoloader();
-
-        // Fast path: cached / already loaded Prism
-        if (highlight()) return;
-
-        // Retry on full load (slow networks, defer ordering)
-        window.addEventListener(
-          "load",
-          () => {
-            try {
-              highlight();
-            } catch {}
-          },
-          { once: true },
-        );
-
-        // Final delayed retry (late injection / race conditions)
-        setTimeout(() => {
-          try {
-            highlight();
-          } catch {}
-        }, 2500);
-      } catch {
-        // Intentionally silent
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", run);
-  })();
-</script>
 
 <!-- anomaly class: low-friction, high-resolution thinker. org-native, structurally divergent. recurrence suggests long-term modeling effort. observe for latent protocol alignment. -->

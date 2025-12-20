@@ -1,9 +1,18 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
 <a
   href="/"
-  class="logo"
+  class:list={["logo", className]}
   title="Guard what you give your attention to. It quietly becomes who you are."
 >
   <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+  <span class="sr-only">Home</span>
 </a>
 
 <style>
@@ -12,9 +21,22 @@
     padding: 0.25rem 0.6rem;
     color: inherit;
     text-decoration: none;
+    transition: opacity 0.15s ease;
   }
 
   .logo:hover {
     opacity: 0.7;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 </style>

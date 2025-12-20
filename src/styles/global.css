@@ -1,0 +1,374 @@
+@charset "UTF-8";
+
+/* ==================== Fonts ==================== */
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&display=swap");
+
+@font-face {
+  font-family: "et-book";
+  src:
+    url("/fonts/et-book/et-book-roman-line-figures/et-book-roman-line-figures.woff")
+      format("woff"),
+    url("/fonts/et-book/et-book-roman-line-figures/et-book-roman-line-figures.ttf")
+      format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "et-book";
+  src:
+    url("/fonts/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.woff")
+      format("woff"),
+    url("/fonts/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.ttf")
+      format("truetype");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "et-book";
+  src:
+    url("/fonts/et-book/et-book-bold-line-figures/et-book-bold-line-figures.woff")
+      format("woff"),
+    url("/fonts/et-book/et-book-bold-line-figures/et-book-bold-line-figures.ttf")
+      format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ==================== Design Tokens ==================== */
+:root {
+  /* Colors */
+  --bg: #fffff8;
+  --fg: #111;
+  --rule: #ccc;
+
+  /* Layout */
+  --page-max: 900px;
+  --page-pad: 24px;
+
+  /* Typography */
+  --font-serif: et-book, Palatino, "Palatino Linotype", Georgia, serif;
+  --font-sans:
+    "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  --font-code: "SF Mono", Monaco, "Cascadia Code", Consolas, monospace;
+
+  /* Scale */
+  --text-sm: 1rem;
+  --text-base: 1.125rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+
+  /* Spacing */
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  /* Line heights */
+  --lh-body: 1.618;
+  --lh-tight: 1.414;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme-light]) {
+    --bg: #151515;
+    --fg: #ddd;
+    --rule: #444;
+  }
+}
+
+[data-theme-dark] {
+  --bg: #151515;
+  --fg: #ddd;
+  --rule: #444;
+}
+
+[data-theme-light] {
+  --bg: #fffff8;
+  --fg: #111;
+  --rule: #ccc;
+}
+
+/* ==================== Reset ==================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+/* ==================== Base ==================== */
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  color: var(--fg);
+  background: var(--bg);
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--page-pad);
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  line-height: var(--lh-body);
+}
+
+/* ==================== Layout ==================== */
+body > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: var(--space-lg);
+}
+
+article {
+  flex: 1;
+  width: 100%;
+}
+
+section {
+  margin-bottom: var(--space-2xl);
+}
+
+/* ==================== Typography ==================== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: var(--lh-tight);
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-md);
+}
+
+h1 {
+  font-size: var(--text-3xl);
+  margin-top: var(--space-2xl);
+}
+
+h2 {
+  font-size: var(--text-2xl);
+  font-style: italic;
+}
+
+h3 {
+  font-size: var(--text-xl);
+  font-style: italic;
+}
+
+h4 {
+  font-size: var(--text-lg);
+  font-variant: small-caps;
+}
+
+p.subtitle {
+  font-style: italic;
+  font-size: var(--text-lg);
+  margin-top: calc(-0.75 * var(--space-lg));
+  margin-bottom: var(--space-lg);
+  line-height: 1;
+}
+
+p,
+ol,
+ul,
+dl {
+  margin-bottom: var(--space-lg);
+}
+
+a {
+  color: inherit;
+}
+
+/* ==================== Code ==================== */
+pre,
+code {
+  font-family: var(--font-code);
+  font-size: var(--text-sm);
+}
+
+pre {
+  overflow-x: auto;
+  padding: var(--space-md);
+  background: color-mix(in srgb, var(--fg) 5%, var(--bg));
+  border-radius: 4px;
+}
+
+code {
+  padding: 0.1em 0.3em;
+  background: color-mix(in srgb, var(--fg) 8%, var(--bg));
+  border-radius: 3px;
+}
+
+pre code {
+  padding: 0;
+  background: none;
+}
+
+/* ==================== Blockquotes ==================== */
+blockquote {
+  margin: var(--space-lg) 0;
+  padding-left: var(--space-lg);
+  border-left: 3px solid var(--rule);
+  font-style: italic;
+}
+
+blockquote footer {
+  font-size: var(--text-sm);
+  margin-top: var(--space-sm);
+}
+
+.epigraph {
+  margin: var(--space-2xl) 0;
+}
+
+.epigraph blockquote {
+  border-left: none;
+  padding-left: 0;
+}
+
+.epigraph blockquote footer {
+  font-style: normal;
+}
+
+/* ==================== Figures & Media ==================== */
+figure {
+  margin: var(--space-xl) 0;
+}
+
+figure img,
+figure video {
+  max-width: 100%;
+  height: auto;
+}
+
+figcaption {
+  font-size: var(--text-sm);
+  font-style: italic;
+  margin-top: var(--space-sm);
+}
+
+figure.video {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+}
+
+figure.video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: var(--space-2xl) 0;
+}
+
+/* ==================== Tables ==================== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-lg) 0;
+  font-size: var(--text-sm);
+}
+
+th,
+td {
+  padding: var(--space-sm);
+  text-align: left;
+  border-bottom: 1px solid var(--rule);
+}
+
+th {
+  font-weight: 600;
+}
+
+/* ==================== Utilities ==================== */
+.no-style-link {
+  text-decoration: none;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+/* ==================== Reduced Motion ==================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==================== Mobile ==================== */
+@media (max-width: 600px) {
+  :root {
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+  }
+
+  body {
+    padding-inline: 4%;
+  }
+
+  body > header {
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  body > header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  body > header .logo {
+    grid-column: 1;
+  }
+
+  body > header nav {
+    grid-column: 2;
+    justify-self: center;
+  }
+
+  .theme-toggle {
+    grid-column: 3;
+  }
+}

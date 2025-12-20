@@ -12,48 +12,33 @@ _default:
 install:
     npm install
 
-# ✅ Full check: format → lint → build → test
-check: format lint build test
+# ✅ Full check: format → check → build
+check: format typecheck build
 
 # ▶️ Start dev server
-dev-serve:
+dev:
     npm run dev
 
-# 🧹 Clean build artifacts and caches
-clean:
-    rm -rf dist node_modules/.cache .astro test-results/
-
-# 🧹 Clean everything
-reset: clean
-    rm -rf node_modules/
-
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# Individual steps
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-# ✨ Format code
-format:
-    npm run format
-
-# 🔍 Lint code
-lint:
-    npm run lint
+# 🔍 Type check
+typecheck:
+    npm run check
 
 # 🔨 Build for production
 build:
     npm run build
 
-# 🧪 Run tests
-test:
-    npx playwright test
-
 # 👁️ Preview production build
 preview:
     npm run preview
 
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# Quickstart
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ✨ Format code
+format:
+    npm run format
 
-# 🚀 Bootstrap: install → build → dev server
-core-quickstart: install build dev-serve
+# 🧹 Clean build artifacts
+clean:
+    rm -rf dist node_modules/.cache .astro
+
+# 🧹 Full reset
+reset: clean
+    rm -rf node_modules/
