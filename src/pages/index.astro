@@ -28,21 +28,11 @@ import dollSvgUrl from "./do-olls-that-will-talk/_dolls-that-will-talk.svg";
 </Layout>
 
 <style>
-  :root {
-    --notation-h: 280px;
-    --notation-perspective: 600px;
-    --notation-tilt: 0deg;
-    --notation-shift-y: 0%;
-    --notation-scale: 100%;
-    --notation-contrast: 0.95;
-  }
-
   .notation-link {
     display: block;
     text-decoration: none;
     color: inherit;
     margin: var(--space-xl) 0;
-    width: var(--content-w);
   }
 
   .notation-preview {
@@ -52,21 +42,13 @@ import dollSvgUrl from "./do-olls-that-will-talk/_dolls-that-will-talk.svg";
 
   .notation-frame {
     width: 100%;
-    height: var(--notation-h);
+    height: 280px;
     overflow: hidden;
-    perspective: var(--notation-perspective);
-    position: relative;
     border-radius: 4px;
   }
 
   .notation-frame img {
-    position: relative;
-    z-index: 1;
     width: 100%;
-    transform: rotateX(var(--notation-tilt)) translateY(var(--notation-shift-y))
-      scale(var(--notation-scale));
-    transform-origin: center center;
-    filter: contrast(var(--notation-contrast));
-    will-change: transform;
+    filter: contrast(0.95);
   }
 </style>
