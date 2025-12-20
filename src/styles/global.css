@@ -156,6 +156,19 @@ body > header {
 article {
   flex: 1;
   width: 100%;
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 300px);
+  gap: var(--space-xl);
+}
+
+article > * {
+  grid-column: 1;
+}
+
+@media (max-width: 900px) {
+  article {
+    display: block;
+  }
 }
 
 section {
@@ -346,16 +359,11 @@ th {
 /* ==================== Sidenotes & Marginal Notes ==================== */
 .sidenote,
 .marginnote {
-  float: right;
-  clear: right;
-  margin-right: -60%;
-  width: 50%;
-  margin-top: 0.3rem;
-  margin-bottom: 0;
+  grid-column: 2;
+  margin-top: 0;
+  margin-bottom: var(--space-md);
   font-size: var(--text-sm);
-  line-height: 1.3;
-  vertical-align: baseline;
-  position: relative;
+  line-height: 1.4;
 }
 
 .sidenote-number {
@@ -417,6 +425,27 @@ span.newthought {
 }
 
 /* ==================== Mobile ==================== */
+@media (max-width: 900px) {
+  label.margin-toggle:not(.sidenote-number) {
+    display: inline;
+    cursor: pointer;
+    padding: 0 0.25em;
+  }
+
+  .sidenote,
+  .marginnote {
+    display: block;
+    margin: var(--space-md) 0;
+    border-left: 2px solid var(--rule);
+    padding-left: var(--space-md);
+  }
+
+  .margin-toggle:checked + .sidenote,
+  .margin-toggle:checked + .marginnote {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
   :root {
     --text-base: 1rem;
@@ -443,31 +472,6 @@ span.newthought {
     margin-left: var(--space-md);
     margin-right: 0;
     padding-left: var(--space-md);
-  }
-
-  label.margin-toggle:not(.sidenote-number) {
-    display: inline;
-    cursor: pointer;
-    padding: 0 0.25em;
-  }
-
-  .sidenote,
-  .marginnote {
-    display: block;
-    float: none;
-    left: 0;
-    clear: both;
-    width: 100%;
-    margin: var(--space-md) 0;
-    position: relative;
-    border-left: 2px solid var(--rule);
-    padding-left: var(--space-md);
-    margin-right: 0;
-  }
-
-  .margin-toggle:checked + .sidenote,
-  .margin-toggle:checked + .marginnote {
-    display: none;
   }
 
   body > header {
