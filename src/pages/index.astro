@@ -1,10 +1,12 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import dollSvgUrl from "./do-olls-that-will-talk/_dolls-that-will-talk.svg?url";
+import Layout from "@/layouts/Layout.astro";
+// Note: Update this import path when the SVG asset is added
+// import dollSvgUrl from "./do-olls-that-will-talk/_dolls-that-will-talk.svg?url";
+const dollSvgUrl = "/images/dolls-that-will-talk.svg";
 ---
 
-<Layout>
-  <h1 id="tufte-css">Entry Point</h1>
+<Layout title="goude.se" description="Personal site">
+  <h1 id="entry-point">Entry Point</h1>
   <p class="subtitle">
     Leave the campground a little cleaner than you found it.
   </p>
@@ -18,6 +20,7 @@ import dollSvgUrl from "./do-olls-that-will-talk/_dolls-that-will-talk.svg?url";
           <img
             src={dollSvgUrl}
             alt="Musical notation comparing timing of 'Dolls' in two versions"
+            loading="lazy"
           />
         </div>
         <figcaption>A timing difference I can't unhear (WIP)</figcaption>
@@ -32,26 +35,27 @@ import dollSvgUrl from "./do-olls-that-will-talk/_dolls-that-will-talk.svg?url";
       One of the most distinctive features of Tufte's style is his extensive use
       of sidenotes.<label
         for="sn-extensive-use-of-sidenotes"
-        class="margin-toggle sidenote-number"></label><input
+        class="margin-toggle sidenote-number"></label>
+      <input
         type="checkbox"
         id="sn-extensive-use-of-sidenotes"
         class="margin-toggle"
-      /><span class="sidenote">This is a sidenote.</span> Sidenotes are like footnotes,
-      except they don't force the reader to jump their eye to the bottom of the page,
-      but instead display off to the side in the margin. Perhaps you have noticed
+      />
+      <span class="sidenote">This is a sidenote.</span>
+      Sidenotes are like footnotes, except they don't force the reader to jump their
+      eye to the bottom of the page, but instead display off to the side in the margin.
+      Perhaps you have noticed
       <label for="mn-demo" class="margin-toggle">&#8853;</label>
       <input type="checkbox" id="mn-demo" class="margin-toggle" />
       <span class="marginnote">
         This is a margin note. Notice there isn't a number preceding the note.
       </span>
-      On large screens, a margin note is just a sidenote that omits the reference
+      On large screens, a margin note is just a sidenote that omits the reference.
     </p>
   </section>
 </Layout>
 
-
 <style>
-  /* Camera knobs (tweak here) */
   :root {
     --notation-h: 280px;
     --notation-perspective: 600px;

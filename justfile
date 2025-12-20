@@ -12,33 +12,33 @@ _default:
 install:
     npm install
 
-# ✅ Full check: format → lint → build
-check: format lint build test
+# ✅ Full check: format → check → build
+check: format typecheck build
 
 # ▶️ Start dev server
-dev-serve:
+dev:
     npm run dev
 
-# 🧹 Clean build artifacts and caches
-clean:
-    rm -rf dist node_modules/.cache .astro
+# 🔍 Type check
+typecheck:
+    npm run check
 
-# 🧹 Clean everything
-reset: clean
-    rm -rf node_modules/
+# 🔨 Build for production
+build:
+    npm run build
 
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# Individual steps
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 👁️ Preview production build
+preview:
+    npm run preview
 
 # ✨ Format code
 format:
     npm run format
 
-# 🔍 Lint code
-lint:
-    npm run lint
+# 🧹 Clean build artifacts
+clean:
+    rm -rf dist node_modules/.cache .astro
 
-# 🔨 Build for production
-build:
-    npm run build
+# 🧹 Full reset
+reset: clean
+    rm -rf node_modules/

@@ -1,4 +1,13 @@
-<button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+---
+// ThemeToggle - Client-side theme switching with system preference support
+---
+
+<button
+  class="theme-toggle"
+  id="theme-toggle"
+  type="button"
+  aria-label="Toggle theme"
+>
   <i class="fa-regular fa-sun" id="icon-light" aria-hidden="true"></i>
   <i class="fa-solid fa-moon" id="icon-dark" aria-hidden="true"></i>
 </button>
@@ -11,6 +20,7 @@
     cursor: pointer;
     padding: 0.25rem 0.6rem;
     color: inherit;
+    transition: opacity 0.15s ease;
   }
 
   .theme-toggle:hover {
@@ -24,6 +34,7 @@
   :global([data-theme-dark]) #icon-light {
     display: none;
   }
+
   :global([data-theme-dark]) #icon-dark {
     display: inline;
   }
@@ -31,40 +42,47 @@
 
 <script is:inline>
   (function () {
-    function storedTheme() {
-      const t = localStorage.getItem("theme");
-      return t === "dark" || t === "light" ? t : null;
+    const STORAGE_KEY = "theme";
+    const DARK = "dark";
+    const LIGHT = "light";
+
+    function getStoredTheme() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored === DARK || stored === LIGHT ? stored : null;
     }
 
-    function systemTheme() {
+    function getSystemTheme() {
       return window.matchMedia?.("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light";
+        ? DARK
+        : LIGHT;
     }
 
-    function apply(theme) {
+    function getCurrentTheme() {
+      return getStoredTheme() ?? getSystemTheme();
+    }
+
+    function applyTheme(theme) {
       const root = document.documentElement;
-      root.toggleAttribute("data-theme-dark", theme === "dark");
-      root.toggleAttribute("data-theme-light", theme === "light");
+      root.toggleAttribute("data-theme-dark", theme === DARK);
+      root.toggleAttribute("data-theme-light", theme === LIGHT);
     }
 
-    function currentTheme() {
-      return storedTheme() ?? systemTheme();
-    }
+    // Apply immediately to prevent flash
+    applyTheme(getCurrentTheme());
 
-    apply(currentTheme());
-
-    document.getElementById("theme-toggle").addEventListener("click", () => {
+    // Setup toggle button
+    document.getElementById("theme-toggle")?.addEventListener("click", () => {
       const isDark = document.documentElement.hasAttribute("data-theme-dark");
-      const next = isDark ? "light" : "dark";
-      localStorage.setItem("theme", next);
-      apply(next);
+      const next = isDark ? LIGHT : DARK;
+      localStorage.setItem(STORAGE_KEY, next);
+      applyTheme(next);
     });
 
-    window
-      .matchMedia?.("(prefers-color-scheme: dark)")
-      .addEventListener("change", () => {
-        if (!storedTheme()) apply(systemTheme());
-      });
+    // Listen for system preference changes
+    window.matchMedia?.("(prefers-color-scheme: dark)").addEventListener("change", () => {
+      if (!getStoredTheme()) {
+        applyTheme(getSystemTheme());
+      }
+    });
   })();
 </script>

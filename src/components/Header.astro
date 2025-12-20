@@ -2,10 +2,16 @@
 import Logo from "./Logo.astro";
 import Nav from "./Nav.astro";
 import ThemeToggle from "./ThemeToggle.astro";
+
+interface Props {
+  current?: string;
+}
+
+const { current } = Astro.props;
 ---
 
 <header>
   <Logo />
-  <Nav />
+  <Nav current={current} />
   <ThemeToggle />
 </header>

@@ -1,13 +1,17 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import dollSvgUrl from "./_dolls-that-will-talk.svg?url";
+import Layout from "@/layouts/Layout.astro";
+// Note: Update path when SVG is added to assets
+const dollSvgUrl = "/images/dolls-that-will-talk.svg";
 ---
 
-<Layout>
-  <article>
-    <h1>The Do-olls That Will Talk</h1>
-    <p class="subtitle">It's Beginning to Look a Lot Like Christmas</p>
+<Layout
+  title="The Do-olls That Will Talk - goude.se"
+  description="It's Beginning to Look a Lot Like Christmas - timing analysis"
+>
+  <h1>The Do-olls That Will Talk</h1>
+  <p class="subtitle">It's Beginning to Look a Lot Like Christmas</p>
 
+  <section>
     <p>[Your opening hook here]</p>
 
     <h2>Bublé: on the beat</h2>
@@ -18,7 +22,8 @@ import dollSvgUrl from "./_dolls-that-will-talk.svg?url";
         src="https://www.youtube-nocookie.com/embed/0bhsXykXxfg?start=76"
         title="Michael Bublé version"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen></iframe>
+        allowfullscreen
+        loading="lazy"></iframe>
     </figure>
 
     <h2>Como and the Fontane Sisters: before the bar</h2>
@@ -29,7 +34,8 @@ import dollSvgUrl from "./_dolls-that-will-talk.svg?url";
         src="https://www.youtube-nocookie.com/embed/SnunPV-XTbA?start=45"
         title="Perry Como version"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen></iframe>
+        allowfullscreen
+        loading="lazy"></iframe>
     </figure>
 
     <h2>The notation</h2>
@@ -37,8 +43,9 @@ import dollSvgUrl from "./_dolls-that-will-talk.svg?url";
       <img
         src={dollSvgUrl}
         alt="Two-line timing comparison: Bublé on top, Como below"
+        loading="lazy"
       />
       <figcaption>Top: Bublé. Bottom: Como.</figcaption>
     </figure>
-  </article>
+  </section>
 </Layout>
