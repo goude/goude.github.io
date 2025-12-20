@@ -79,10 +79,12 @@
     });
 
     // Listen for system preference changes
-    window.matchMedia?.("(prefers-color-scheme: dark)").addEventListener("change", () => {
-      if (!getStoredTheme()) {
-        applyTheme(getSystemTheme());
-      }
-    });
+    window
+      .matchMedia?.("(prefers-color-scheme: dark)")
+      .addEventListener("change", () => {
+        if (!getStoredTheme()) {
+          applyTheme(getSystemTheme());
+        }
+      });
   })();
 </script>

@@ -576,14 +576,14 @@ import Layout from "@/layouts/Layout.astro";
     async function deriveKey(
       answer: string,
       salt: Uint8Array,
-      usage: KeyUsage[],
+      usage: KeyUsage[]
     ): Promise<CryptoKey> {
       const keyMaterial = await crypto.subtle.importKey(
         "raw",
         new TextEncoder().encode(normalize(answer)),
         "PBKDF2",
         false,
-        ["deriveKey"],
+        ["deriveKey"]
       );
       return crypto.subtle.deriveKey(
         {
@@ -595,7 +595,7 @@ import Layout from "@/layouts/Layout.astro";
         keyMaterial,
         { name: "AES-GCM", length: 256 },
         false,
-        usage,
+        usage
       );
     }
 
@@ -623,7 +623,7 @@ import Layout from "@/layouts/Layout.astro";
     ];
 
     async function tryDecryptAll(
-      answer: string,
+      answer: string
     ): Promise<{ ok: boolean; html: string }> {
       for (const puzzle of Object.values(PUZZLES)) {
         try {
@@ -633,7 +633,7 @@ import Layout from "@/layouts/Layout.astro";
           const dec = await crypto.subtle.decrypt(
             { name: "AES-GCM", iv: b64ToBytes(puzzle.iv) },
             key,
-            b64ToBytes(puzzle.ciphertext),
+            b64ToBytes(puzzle.ciphertext)
           );
           return { ok: true, html: new TextDecoder().decode(dec) };
         } catch {
@@ -684,7 +684,7 @@ import Layout from "@/layouts/Layout.astro";
      * This outputs a ready-to-paste PUZZULAR object. Copy it into the PUZZLES const above.
      */
     (window as any).generatePuzzles = async (
-      puzzles: { answer: string; message: string }[],
+      puzzles: { answer: string; message: string }[]
     ) => {
       const results: Record<
         string,
@@ -699,7 +699,7 @@ import Layout from "@/layouts/Layout.astro";
         const ct = await crypto.subtle.encrypt(
           { name: "AES-GCM", iv },
           key,
-          new TextEncoder().encode(message),
+          new TextEncoder().encode(message)
         );
 
         results[String(i + 1)] = {
@@ -710,7 +710,7 @@ import Layout from "@/layouts/Layout.astro";
         };
 
         console.log(
-          `Puzzle #${i + 1}: answer="${answer}" → normalized="${normalize(answer)}"`,
+          `Puzzle #${i + 1}: answer="${answer}" → normalized="${normalize(answer)}"`
         );
       }
 

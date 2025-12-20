@@ -64,12 +64,15 @@
   --content-w: 55%;
 
   /* Typography */
-  --font-serif: et-book, Palatino, "Palatino Linotype", "Palatino LT STD",
-    "Book Antiqua", Georgia, serif;
-  --font-sans: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-code: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas,
-    "Courier New", monospace;
+  --font-serif:
+    et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua",
+    Georgia, serif;
+  --font-sans:
+    "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-code:
+    "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New",
+    monospace;
 
   /* Font sizes */
   --text-base: 1.125rem;

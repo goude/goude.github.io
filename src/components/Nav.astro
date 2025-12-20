@@ -18,7 +18,9 @@ function isSelected(item: NavItem): boolean {
       <a
         href={item.href}
         class:list={["nav-link", { selected: isSelected(item) }]}
-        {...(item.external ? { rel: "noopener noreferrer", target: "_blank" } : {})}
+        {...(item.external
+          ? { rel: "noopener noreferrer", target: "_blank" }
+          : {})}
       >
         <i class={item.icon} aria-hidden="true" />
         <span>{item.label}</span>
@@ -46,7 +48,9 @@ function isSelected(item: NavItem): boolean {
     color: inherit;
     letter-spacing: 0.08em;
     white-space: nowrap;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
   }
 
   .nav-link i {
