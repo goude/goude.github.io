@@ -58,10 +58,9 @@
   --fg: #111;
   --rule: #ccc;
 
-  /* Layout */
-  --page-max: 1400px;
-  --page-w: 87.5%;
-  --page-pad-left: 12.5%;
+  /* Layout (simplified) */
+  --page-max: 1100px;
+  --page-pad: 24px;
   --content-w: 55%;
 
   /* Typography */
@@ -96,8 +95,9 @@
   --lh-tight: 1.414;
 }
 
+/* System preference only applies when user hasn't chosen explicitly */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme-dark]):not([data-theme-light]) {
     --bg: #151515;
     --fg: #ddd;
     --rule: #444;
@@ -136,11 +136,14 @@ body {
   flex-direction: column;
   color: var(--fg);
   background: var(--bg);
-  width: var(--page-w);
+
+  width: 100%;
   max-width: var(--page-max);
   margin-left: auto;
   margin-right: auto;
-  padding-left: var(--page-pad-left);
+  padding-left: var(--page-pad);
+  padding-right: var(--page-pad);
+
   font-family: var(--font-serif);
   font-size: var(--text-base);
   line-height: var(--lh-body);
@@ -260,7 +263,8 @@ hr {
   border: 0;
   border-top: 1px solid var(--rule);
   margin: var(--space-xl) 0;
-  width: var(--content-w);
+  width: 100%;
+  max-width: var(--content-w);
 }
 
 /* -------------------- Layout -------------------- */
@@ -288,8 +292,15 @@ body > header nav {
 }
 
 body > header .logo {
+  display: inline-flex;
   text-decoration: none;
+  align-items: center;
   line-height: 1;
+}
+
+body > header .logo i {
+  position: relative;
+  top: -0.05em;
 }
 
 body > header nav a {
@@ -301,6 +312,7 @@ body > footer {
   margin-top: auto;
   padding: var(--space-md) 0;
   font-size: var(--text-sm);
+  line-height: 1.35;
 }
 
 article
@@ -500,9 +512,22 @@ span.newthought {
   }
 
   body {
-    width: 94%;
+    max-width: none;
     padding-left: 3%;
     padding-right: 3%;
+  }
+
+  h1 {
+    margin-top: var(--space-lg);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: var(--space-md) 0 var(--space-sm);
   }
 
   hr,
@@ -529,6 +554,7 @@ span.newthought {
       hr
     ) {
     width: 100%;
+    max-width: none;
   }
 
   section > dl,
@@ -565,6 +591,7 @@ span.newthought {
   label.margin-toggle:not(.sidenote-number) {
     display: inline;
     cursor: pointer;
+    padding: 0 0.25em;
   }
 
   .sidenote,
@@ -593,6 +620,7 @@ span.newthought {
 
   body > header {
     flex-wrap: wrap;
+    padding: var(--space-sm) 0;
   }
 }
 
@@ -605,11 +633,27 @@ span.newthought {
   }
 
   body > header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
     gap: var(--space-sm);
+    padding: var(--space-sm) 0;
+  }
+
+  body > header .logo {
+    grid-column: 1;
+    justify-self: start;
   }
 
   body > header nav {
-    width: 100%;
-    justify-content: center;
+    grid-column: 2;
+    justify-self: center;
+    margin: 0;
+  }
+
+  .theme-toggle {
+    grid-column: 3;
+    justify-self: end;
+    align-self: center;
   }
 }

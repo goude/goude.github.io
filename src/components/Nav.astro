@@ -4,6 +4,7 @@ const { current = "" } = Astro.props;
 
 <nav class="main-nav">
   <a href="/about" class:list={["nav-link", { selected: current === "about" }]}>
+    <i class="fa fa-life-ring" aria-hidden="true"></i>
     About
   </a>
   <a href="https://github.com/goude" class="nav-link" rel="noopener noreferrer">
@@ -38,6 +39,7 @@ const { current = "" } = Astro.props;
     text-decoration: none;
     color: inherit;
     letter-spacing: 0.08em;
+    white-space: nowrap;
   }
 
   .nav-link i {
@@ -47,5 +49,24 @@ const { current = "" } = Astro.props;
   .selected {
     background: var(--fg);
     color: var(--bg);
+  }
+
+  /* ---- Mobile tightening ---- */
+  @media (max-width: 480px) {
+    .main-nav {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.35rem 0.6rem;
+    }
+
+    .nav-link {
+      padding: 0.2rem 0.45rem;
+      letter-spacing: 0.04em;
+      font-size: 0.95em;
+    }
+
+    .nav-link i {
+      font-size: 1em;
+    }
   }
 </style>
