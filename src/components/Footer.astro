@@ -22,9 +22,9 @@ function getISOWeek(d) {
 const pad = (n) => String(n).padStart(2, "0");
 const week = getISOWeek(now);
 
-const build = new Date(__BUILD_TIMESTAMP__ as unknown as number | string);
-const builtDate = `${build.getUTCFullYear()}-${pad(build.getUTCMonth() + 1)}-${pad(build.getUTCDate())}`;
-const builtTime = `${pad(build.getUTCHours())}:${pad(build.getUTCMinutes())}`;
+//const build = new Date(__BUILD_TIMESTAMP__ as unknown as number | string);
+//const builtDate = `${build.getUTCFullYear()}-${pad(build.getUTCMonth() + 1)}-${pad(build.getUTCDate())}`;
+//const builtTime = `${pad(build.getUTCHours())}:${pad(build.getUTCMinutes())}`;
 ---
 
 <footer class="site-footer">
@@ -45,6 +45,7 @@ const builtTime = `${pad(build.getUTCHours())}:${pad(build.getUTCMinutes())}`;
     <a href="/sitemap">v{pkg.version}</a>
   </span>
 
+  <!--
   <span class="sep" aria-hidden="true">·</span>
 
   <span class="chunk nowrap">
@@ -56,6 +57,7 @@ const builtTime = `${pad(build.getUTCHours())}:${pad(build.getUTCMinutes())}`;
   <span class="chunk">
     <span title="sigil" aria-label="sigil">⊛</span>
   </span>
+  -->
 </footer>
 
 <style>

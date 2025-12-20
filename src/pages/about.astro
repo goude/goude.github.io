@@ -1,17 +1,8 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-
-const title = "About";
-const description = "About your blog.";
-const permalink = `${Astro.site!.href}about`; // FIXME: using ! for now, also, missing / ?
+import Layout from "../layouts/Layout.astro";
 ---
 
-<BaseLayout
-  title={title}
-  description={description}
-  permalink={permalink}
-  current="about"
->
+<Layout>
   <section>
     <h1 id="colophon">About</h1>
     <p>
@@ -96,4 +87,4 @@ const permalink = `${Astro.site!.href}about`; // FIXME: using ! for now, also, m
       <li>A Permanent Marker</li>
     </ul>
   </section>
-</BaseLayout>
+</Layout>
