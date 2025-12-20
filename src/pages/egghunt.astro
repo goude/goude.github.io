@@ -1,23 +1,10 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import pkg from "../../package.json";
-const title = "egghunt";
-const description = "egghunt";
-const permalink = `${Astro.site!.href}egghunt`;
+import Layout from "../layouts/Layout.astro";
 ---
 
-<BaseLayout
-  title={title}
-  description={description}
-  permalink={permalink}
-  current="egghunt"
->
+<Layout>
   <section>
-    <h1>🥚 egghunt</h1><p>
-      This is <span class="version">v{pkg.version}</span> of the egghunt. Some users
-      have reported issues when using certain Windows + Chrome configurations. We
-      have heard you.
-    </p>
+    <h1>🥚 egghunt</h1>
 
     <div class="puzzle-input">
       <input
@@ -732,4 +719,4 @@ const permalink = `${Astro.site!.href}egghunt`;
       return results;
     };
   </script>
-</BaseLayout>
+</Layout>
