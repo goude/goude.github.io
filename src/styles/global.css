@@ -39,12 +39,26 @@
   font-display: swap;
 }
 
-/* ==================== Design Tokens ==================== */
+/* ==================== Color Palettes ==================== */
+/*
+ * Define base colors once per theme, derive everything else.
+ * Light: warm cream paper with deep ink
+ * Dark: soft charcoal with warm off-white
+ */
+
 :root {
-  /* Colors */
-  --bg: #fffff8;
-  --fg: #111;
-  --rule: #ccc;
+  /* Light palette (default) */
+  --palette-bg: #faf8f5;
+  --palette-fg: #2d2a26;
+  --palette-accent: #6b5c4d;
+
+  /* Derived colors */
+  --bg: var(--palette-bg);
+  --fg: var(--palette-fg);
+  --fg-muted: color-mix(in srgb, var(--palette-fg) 60%, var(--palette-bg));
+  --rule: color-mix(in srgb, var(--palette-fg) 15%, var(--palette-bg));
+  --surface: color-mix(in srgb, var(--palette-fg) 4%, var(--palette-bg));
+  --accent: var(--palette-accent);
 
   /* Layout */
   --page-max: 900px;
@@ -77,25 +91,25 @@
   --lh-tight: 1.414;
 }
 
-/* Dark mode */
+/* Dark palette */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme-light]) {
-    --bg: #151515;
-    --fg: #ddd;
-    --rule: #444;
+    --palette-bg: #1a1917;
+    --palette-fg: #e8e4df;
+    --palette-accent: #c9b99a;
   }
 }
 
 [data-theme-dark] {
-  --bg: #151515;
-  --fg: #ddd;
-  --rule: #444;
+  --palette-bg: #1a1917;
+  --palette-fg: #e8e4df;
+  --palette-accent: #c9b99a;
 }
 
 [data-theme-light] {
-  --bg: #fffff8;
-  --fg: #111;
-  --rule: #ccc;
+  --palette-bg: #faf8f5;
+  --palette-fg: #2d2a26;
+  --palette-accent: #6b5c4d;
 }
 
 /* ==================== Reset ==================== */
@@ -207,13 +221,13 @@ code {
 pre {
   overflow-x: auto;
   padding: var(--space-md);
-  background: color-mix(in srgb, var(--fg) 5%, var(--bg));
+  background: var(--surface);
   border-radius: 4px;
 }
 
 code {
   padding: 0.1em 0.3em;
-  background: color-mix(in srgb, var(--fg) 8%, var(--bg));
+  background: var(--surface);
   border-radius: 3px;
 }
 
@@ -233,6 +247,7 @@ blockquote {
 blockquote footer {
   font-size: var(--text-sm);
   margin-top: var(--space-sm);
+  color: var(--fg-muted);
 }
 
 .epigraph {
@@ -263,6 +278,7 @@ figcaption {
   font-size: var(--text-sm);
   font-style: italic;
   margin-top: var(--space-sm);
+  color: var(--fg-muted);
 }
 
 figure.video {
