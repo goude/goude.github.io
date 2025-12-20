@@ -1,7 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-// Note: Update path when SVG is added to assets
-const dollSvgUrl = "/images/dolls-that-will-talk.svg";
+import dollSvgUrl from "./_dolls-that-will-talk.svg";
 ---
 
 <Layout
@@ -41,7 +40,7 @@ const dollSvgUrl = "/images/dolls-that-will-talk.svg";
     <h2>The notation</h2>
     <figure>
       <img
-        src={dollSvgUrl}
+        src={dollSvgUrl.src}
         alt="Two-line timing comparison: Bublé on top, Como below"
         loading="lazy"
       />

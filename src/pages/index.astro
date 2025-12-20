@@ -1,8 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-// Note: Update this import path when the SVG asset is added
-// import dollSvgUrl from "./do-olls-that-will-talk/_dolls-that-will-talk.svg?url";
-const dollSvgUrl = "/images/dolls-that-will-talk.svg";
+import dollSvgUrl from "./do-olls-that-will-talk/_dolls-that-will-talk.svg";
 ---
 
 <Layout title="goude.se" description="Personal site">
@@ -18,7 +16,7 @@ const dollSvgUrl = "/images/dolls-that-will-talk.svg";
       <figure class="notation-preview">
         <div class="notation-frame">
           <img
-            src={dollSvgUrl}
+            src={dollSvgUrl.src}
             alt="Musical notation comparing timing of 'Dolls' in two versions"
             loading="lazy"
           />
@@ -28,31 +26,6 @@ const dollSvgUrl = "/images/dolls-that-will-talk.svg";
     </a>
   </section>
 
-  <section>
-    <h2 id="sidenotes">Sidenotes: Footnotes and Marginal Notes</h2>
-
-    <p>
-      One of the most distinctive features of Tufte's style is his extensive use
-      of sidenotes.<label
-        for="sn-extensive-use-of-sidenotes"
-        class="margin-toggle sidenote-number"></label>
-      <input
-        type="checkbox"
-        id="sn-extensive-use-of-sidenotes"
-        class="margin-toggle"
-      />
-      <span class="sidenote">This is a sidenote.</span>
-      Sidenotes are like footnotes, except they don't force the reader to jump their
-      eye to the bottom of the page, but instead display off to the side in the margin.
-      Perhaps you have noticed
-      <label for="mn-demo" class="margin-toggle">&#8853;</label>
-      <input type="checkbox" id="mn-demo" class="margin-toggle" />
-      <span class="marginnote">
-        This is a margin note. Notice there isn't a number preceding the note.
-      </span>
-      On large screens, a margin note is just a sidenote that omits the reference.
-    </p>
-  </section>
 </Layout>
 
 <style>
