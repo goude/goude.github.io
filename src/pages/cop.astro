@@ -172,21 +172,8 @@ import Layout from "@/layouts/Layout.astro";
           if (!copyBtn || !inputEl || !statusEl) return;
 
           copyBtn.addEventListener("click", async () => {
-            const text = inputEl.value;
             try {
-              if (navigator.clipboard && navigator.clipboard.writeText) {
-                await navigator.clipboard.writeText(text);
-              } else {
-                const tmp = document.createElement("textarea");
-                tmp.value = text;
-                tmp.style.position = "fixed";
-                tmp.style.opacity = "0";
-                document.body.appendChild(tmp);
-                tmp.focus();
-                tmp.select();
-                document.execCommand("copy");
-                document.body.removeChild(tmp);
-              }
+              await navigator.clipboard.writeText(inputEl.value);
               statusEl.textContent = "Copied to local clipboard.";
             } catch {
               statusEl.textContent = "Failed to copy to clipboard.";
