@@ -43,10 +43,4 @@ src/
 ## Features
 
 - Dark/light theme with system preference detection
-- Tufte-style sidenotes and margin notes
 - ISO week display (Swedish standard)
-- Client-side puzzle encryption (egghunt)
-
-## License
-
-Personal use.
