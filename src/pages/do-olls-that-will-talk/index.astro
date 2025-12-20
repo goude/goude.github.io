@@ -16,29 +16,24 @@ import dollSvgUrl from "./_dolls-that-will-talk.svg";
       particular attention to where the emphasis lands when singing the word
       "dolls".
     </p>
+    <p></p>
 
     <h2>Bublé: on the beat</h2>
-    <p>[1-2 sentences: what you hear, where it lands]</p>
-
+    <p>
+      Let's start with one of the most famous contemporary versions. Bublé,
+      smooth as ever, is straight on the beat.
+    </p>
     <figure class="video">
-      <iframe
-        src="https://www.youtube-nocookie.com/embed/0bhsXykXxfg?start=76"
-        title="Michael Bublé version"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen
-        loading="lazy"></iframe>
+      <div id="player-buble"></div>
     </figure>
 
-    <h2>Como and the Fontane Sisters: before the bar</h2>
-    <p>[1-2 sentences: what you hear, how it differs]</p>
-
+    <h2>Como and the Fontane Sisters: the canonical version</h2>
+    <p>
+      Now for the original. Here, "dolls" comes slightly before the bar.
+      <a href="#" id="skip-to-como">(Skip to Como at 1:54)</a>
+    </p>
     <figure class="video">
-      <iframe
-        src="https://www.youtube-nocookie.com/embed/SnunPV-XTbA?start=45"
-        title="Perry Como version"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen
-        loading="lazy"></iframe>
+      <div id="player-como"></div>
     </figure>
 
     <h2>The notation</h2>
@@ -48,7 +43,115 @@ import dollSvgUrl from "./_dolls-that-will-talk.svg";
         alt="Two-line timing comparison: Bublé on top, Como below"
         loading="lazy"
       />
-      <figcaption>Top: Bublé. Bottom: Como.</figcaption>
+      <figcaption>
+        Top: Bublé. Bottom: Como. [Check the chords, note that Bublé sings "of"
+        but the sisters sing "for"]
+      </figcaption>
     </figure>
+
+    <p class="play-links">
+      Listen:
+      <a href="#" id="play-buble">Bublé (1:16)</a> ·
+      <a href="#" id="play-fontane">Fontane Sisters (0:45)</a> ·
+      <a href="#" id="play-como">Como (1:54)</a>
+    </p>
   </section>
 </Layout>
+
+<script>
+  declare global {
+    interface Window {
+      onYouTubeIframeAPIReady: () => void;
+      YT: typeof YT;
+    }
+  }
+
+  interface YTPlayer {
+    pauseVideo: () => void;
+    seekTo: (seconds: number, allowSeekAhead: boolean) => void;
+    playVideo: () => void;
+  }
+
+  let playerBuble: YTPlayer | null = null;
+  let playerComo: YTPlayer | null = null;
+
+  function onPlayerStateChange(event: { data: number; target: YTPlayer }) {
+    // When one video starts playing, pause the other
+    if (event.data === window.YT.PlayerState.PLAYING) {
+      if (event.target === playerBuble && playerComo) {
+        playerComo.pauseVideo();
+      } else if (event.target === playerComo && playerBuble) {
+        playerBuble.pauseVideo();
+      }
+    }
+  }
+
+  window.onYouTubeIframeAPIReady = function () {
+    playerBuble = new window.YT.Player("player-buble", {
+      videoId: "0bhsXykXxfg",
+      playerVars: {
+        start: 76,
+        rel: 0,
+      },
+      events: {
+        onStateChange: onPlayerStateChange,
+      },
+    }) as unknown as YTPlayer;
+
+    playerComo = new window.YT.Player("player-como", {
+      videoId: "SnunPV-XTbA",
+      playerVars: {
+        start: 45,
+        rel: 0,
+      },
+      events: {
+        onStateChange: onPlayerStateChange,
+      },
+    }) as unknown as YTPlayer;
+  };
+
+  // Load YouTube iframe API
+  const tag = document.createElement("script");
+  tag.src = "https://www.youtube.com/iframe_api";
+  document.head.appendChild(tag);
+
+  // Play links
+  document.addEventListener("DOMContentLoaded", () => {
+    const skipLink = document.getElementById("skip-to-como");
+    const playBuble = document.getElementById("play-buble");
+    const playFontane = document.getElementById("play-fontane");
+    const playComo = document.getElementById("play-como");
+
+    function playVideo(
+      player: YTPlayer | null,
+      other: YTPlayer | null,
+      time: number
+    ) {
+      if (player) {
+        if (other) other.pauseVideo();
+        player.seekTo(time, true);
+        player.playVideo();
+      }
+    }
+
+    skipLink?.addEventListener("click", (e) => {
+      e.preventDefault();
+      playVideo(playerComo, playerBuble, 114);
+    });
+
+    playBuble?.addEventListener("click", (e) => {
+      e.preventDefault();
+      playVideo(playerBuble, playerComo, 76);
+    });
+
+    playFontane?.addEventListener("click", (e) => {
+      e.preventDefault();
+      playVideo(playerComo, playerBuble, 45);
+    });
+
+    playComo?.addEventListener("click", (e) => {
+      e.preventDefault();
+      playVideo(playerComo, playerBuble, 114);
+    });
+  });
+</script>
