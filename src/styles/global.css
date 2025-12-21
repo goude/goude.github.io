@@ -415,6 +415,32 @@ hr {
   margin: var(--space-2xl) 0;
 }
 
+/* ==================== Mode-based Content Visibility ==================== */
+
+/* Hide notes and thoughts in normal mode */
+[data-mode="normal"] .notes,
+[data-mode="normal"] .thoughts {
+  display: none;
+}
+
+/* Hide thoughts in notes mode */
+[data-mode="notes"] .thoughts {
+  display: none;
+}
+
+/* In thoughts mode, show everything (default behavior) */
+
+/* Optional: visual styling for different content types */
+.notes {
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.thoughts {
+  font-style: italic;
+  opacity: 0.85;
+}
+
 /* ==================== Utilities ==================== */
 
 .no-style-link {
