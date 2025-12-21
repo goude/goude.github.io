@@ -2,8 +2,8 @@
 import { SITE } from "@/types/site";
 
 interface Props {
-  title?: string;
-  description?: string;
+  title?: string | undefined;
+  description?: string | undefined;
 }
 
 const { title = SITE.title, description = SITE.description } = Astro.props;

@@ -54,22 +54,35 @@ import Layout from "@/layouts/Layout.astro";
           const filteredFileList = fileList.filter((file) =>
             allowedFileNames.includes(file.name)
           );
-          const randomFileName =
+
+          if (filteredFileList.length === 0) {
+            throw new Error("No matching adage files found");
+          }
+
+          const randomFile =
             filteredFileList[
               Math.floor(Math.random() * filteredFileList.length)
-            ].name;
+            ];
+          if (!randomFile) {
+            throw new Error("Failed to select random file");
+          }
+          const randomFileName = randomFile.name;
 
           const fileUrl = `${rawContentBaseUrl}${randomFileName}`;
           const fileResponse = await fetch(fileUrl);
           const fileContent = await fileResponse.text();
 
           const adages = fileContent.split("%");
-          const randomAdage =
-            adages[Math.floor(Math.random() * adages.length)].trim();
+          const randomAdageRaw =
+            adages[Math.floor(Math.random() * adages.length)];
+          if (!randomAdageRaw) {
+            throw new Error("Failed to select random adage");
+          }
+          const randomAdage = randomAdageRaw.trim();
 
           const match = randomAdage.match(/^(.*?)(?:\s*–\s*(.*))?$/);
-          const adage = match ? match[1].trim() : randomAdage;
-          const attribution = match && match[2] ? match[2].trim() : "";
+          const adage = match?.[1]?.trim() ?? randomAdage;
+          const attribution = match?.[2]?.trim() ?? "";
 
           const formattedAdage = adage.replace(/\n/g, "<br>");
           const adageElement = document.getElementById("adage");

@@ -252,7 +252,9 @@ import dollWepbUrl from "./_do-olls-audacity.webp";
 </script>
 
 <script>
+  // @ts-ignore - CDN import without type declarations
   import WaveSurfer from "https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/wavesurfer.esm.js";
+  // @ts-ignore - CDN import without type declarations
   import RegionsPlugin from "https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/plugins/regions.esm.js";
 
   // Audio markers data structure
@@ -359,9 +361,12 @@ import dollWepbUrl from "./_do-olls-audacity.webp";
     });
 
     // Optional: Click on region to jump to that position
-    regions.on("region-clicked", (region, e) => {
-      e.stopPropagation();
-      wavesurfer.setTime(region.start);
-    });
+    regions.on(
+      "region-clicked",
+      (region: { start: number }, e: { stopPropagation: () => void }) => {
+        e.stopPropagation();
+        wavesurfer.setTime(region.start);
+      }
+    );
   });
 </script>

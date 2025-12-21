@@ -2,7 +2,7 @@
 import { NAV_ITEMS, type NavItem } from "@/types/site";
 
 interface Props {
-  current?: string;
+  current?: string | undefined;
 }
 
 const { current = "" } = Astro.props;
