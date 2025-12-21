@@ -1,12 +1,17 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import dollSvgUrl from "./_dolls-that-will-talk.svg";
+import dollWepbUrl from "./_do-olls-audacity.webp";
 ---
 
 <Layout
   title="The Do-olls That Will Talk - goude.se"
   description="It's Beginning to Look a Lot Like Christmas - timing analysis"
 >
+  <script src="https://cdn.jsdelivr.net/npm/wavesurfer.js@7"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/plugins/regions.js"
+  ></script>
   <h1>The Do-olls That Will Talk</h1>
   <p class="subtitle">It's Beginning to Look a Lot Like Christmas</p>
 
@@ -16,7 +21,14 @@ import dollSvgUrl from "./_dolls-that-will-talk.svg";
       particular attention to where the emphasis lands when singing the word
       "dolls".
     </p>
-    <p></p>
+
+    <p class="notes">
+      We'll use several tools in the analysis: Audacity, MuseScore, Inkscape.
+    </p>
+
+    <p class="thoughts">
+      This is a really fun exercise in adding interactive content to a page.
+    </p>
 
     <h2>Bublé: on the beat</h2>
     <p>
@@ -56,7 +68,89 @@ import dollSvgUrl from "./_dolls-that-will-talk.svg";
       <a href="#" id="play-como">Como (1:54)</a>
     </p>
   </section>
+
+  <section>
+    <h2>Audio Analysis</h2>
+
+    <figure>
+      <img
+        src={dollWepbUrl.src}
+        alt="Two-line timing comparison: Bublé on top, Como below"
+        loading="lazy"
+      />
+      <figcaption>Manual analysis in Audacity.</figcaption>
+    </figure>
+
+    <div id="waveform"></div>
+    <div id="waveform-controls">
+      <button id="play-pause">Play / Pause</button>
+      <button id="reset">Reset</button>
+    </div>
+    <div id="legend">
+      <div class="legend-item">
+        <span class="legend-color" style="background: rgba(100, 100, 255, 0.4);"
+        ></span>
+        <span>Beats</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-color" style="background: rgba(255, 50, 50, 0.6);"
+        ></span>
+        <span>Dolls</span>
+      </div>
+    </div>
+  </section>
 </Layout>
+
+<style>
+  #waveform {
+    margin: 2rem 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  #waveform-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  #waveform-controls button {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border: 1px solid #567;
+    background: #fff;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+
+  #waveform-controls button:hover {
+    background: #f0f0f0;
+  }
+
+  #legend {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 4px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .legend-color {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #999;
+    border-radius: 2px;
+  }
+</style>
 
 <script>
   declare global {
@@ -152,6 +246,121 @@ import dollSvgUrl from "./_dolls-that-will-talk.svg";
     playComo?.addEventListener("click", (e) => {
       e.preventDefault();
       playVideo(playerComo, playerBuble, 114);
+    });
+  });
+</script>
+
+<script>
+  import WaveSurfer from "https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/wavesurfer.esm.js";
+  import RegionsPlugin from "https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/plugins/regions.esm.js";
+
+  // Audio markers data structure
+  interface AudioMarker {
+    time: number;
+    label: string;
+    category: "beat" | "lyric" | "dolls";
+  }
+
+  // Category styling configuration
+  const categoryStyles: Record<AudioMarker["category"], { color: string }> = {
+    beat: { color: "rgba(100, 100, 255, 0.2)" },
+    lyric: { color: "rgba(255, 150, 50, 0.3)" },
+    dolls: { color: "rgba(255, 50, 50, 0.4)" },
+  };
+
+  // Define your markers here - easy to extend
+  const markers: AudioMarker[] = [
+    { time: 0.969, label: "1", category: "beat" },
+    { time: 1.482, label: "2", category: "beat" },
+    { time: 1.985, label: "3", category: "beat" },
+    { time: 2.498, label: "4", category: "beat" },
+    { time: 3.011, label: "1", category: "beat" },
+    { time: 3.514, label: "2", category: "beat" },
+    { time: 4.041, label: "3", category: "beat" },
+    { time: 4.616, label: "4", category: "beat" },
+    { time: 5.166, label: "1", category: "beat" },
+    { time: 5.682, label: "2", category: "beat" },
+    { time: 6.196, label: "3", category: "beat" },
+    { time: 6.727, label: "4", category: "beat" },
+    { time: 4.923, label: "", category: "dolls" },
+    /*
+    { time: 0.969, label: "hopalong 1", category: "beat" },
+    { time: 1.482, label: "boots 2", category: "beat" },
+    { time: 1.985, label: "pistol 3", category: "beat" },
+    { time: 2.498, label: "shoots 4", category: "beat" },
+    { time: 3.011, label: "wish 1", category: "beat" },
+    { time: 3.514, label: "Barney 2", category: "beat" },
+    { time: 4.041, label: "Ben 3", category: "beat" },
+    { time: 4.616, label: "beat 4", category: "beat" },
+    { time: 5.166, label: "-olls 1", category: "beat" },
+    { time: 5.682, label: "talk 2", category: "beat" },
+    { time: 6.196, label: "go for a 3", category: "beat" },
+    { time: 6.727, label: "walk 4", category: "beat" },
+    { time: 4.923, label: "do-", category: "special" },
+    */
+  ];
+
+  // Initialize WaveSurfer
+  document.addEventListener("DOMContentLoaded", () => {
+    const wavesurfer = WaveSurfer.create({
+      container: "#waveform",
+      waveColor: "#567",
+      progressColor: "#223",
+      cursorColor: "#ff0000",
+      barWidth: 2,
+      barGap: 1,
+      barRadius: 2,
+      height: 100,
+      normalize: true,
+      url: "/audio/do-olls-clip.mp4",
+    });
+
+    // Initialize regions plugin
+    const regions = wavesurfer.registerPlugin(RegionsPlugin.create());
+
+    // Add regions when waveform is ready
+    wavesurfer.on("ready", () => {
+      markers.forEach((marker, index) => {
+        const style = categoryStyles[marker.category];
+
+        regions.addRegion({
+          start: marker.time,
+          end: marker.time + 0.05, // Small width for visibility
+          color: style.color,
+          content: marker.label,
+          resize: false,
+          drag: false,
+          id: `marker-${index}`,
+        });
+      });
+    });
+
+    // Control buttons
+    const playPauseBtn = document.getElementById("play-pause");
+    const resetBtn = document.getElementById("reset");
+
+    playPauseBtn?.addEventListener("click", () => {
+      wavesurfer.playPause();
+    });
+
+    resetBtn?.addEventListener("click", () => {
+      wavesurfer.seekTo(0);
+      wavesurfer.pause();
+    });
+
+    // Update button text based on playback state
+    wavesurfer.on("play", () => {
+      if (playPauseBtn) playPauseBtn.textContent = "Pause";
+    });
+
+    wavesurfer.on("pause", () => {
+      if (playPauseBtn) playPauseBtn.textContent = "Play";
+    });
+
+    // Optional: Click on region to jump to that position
+    regions.on("region-clicked", (region, e) => {
+      e.stopPropagation();
+      wavesurfer.setTime(region.start);
     });
   });
 </script>

@@ -10,6 +10,17 @@
     "format": "prettier --write .",
     "lint": "eslint . --ext .ts,.astro"
   },
+  "lint-staged": {
+    "*.{ts,astro}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css,md}": "prettier --write"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  },
   "dependencies": {
     "astro": "^5.16.6"
   },
@@ -17,6 +28,13 @@
     "@astrojs/check": "^0.9.4",
     "@types/node": "^22.10.2",
     "@types/youtube": "^0.1.2",
+    "@typescript-eslint/eslint-plugin": "^8.50.0",
+    "@typescript-eslint/parser": "^8.50.0",
+    "astro-eslint-parser": "^1.2.2",
+    "eslint": "^9.39.2",
+    "eslint-plugin-astro": "^1.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.4.2",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.7.2"
