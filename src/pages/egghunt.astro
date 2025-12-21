@@ -640,11 +640,10 @@ import Layout from "@/layouts/Layout.astro";
           /* wrong key, try next */
         }
       }
+      const randomIndex = Math.floor(Math.random() * WRONG_RESPONSES.length);
       return {
         ok: false,
-        html: WRONG_RESPONSES[
-          Math.floor(Math.random() * WRONG_RESPONSES.length)
-        ],
+        html: WRONG_RESPONSES[randomIndex] ?? WRONG_RESPONSES[0]!,
       };
     }
 
@@ -690,9 +689,10 @@ import Layout from "@/layouts/Layout.astro";
         string,
         { name: string; salt: string; iv: string; ciphertext: string }
       > = {};
-
       for (let i = 0; i < puzzles.length; i++) {
-        const { answer, message } = puzzles[i];
+        const puzzle = puzzles[i];
+        if (!puzzle) continue;
+        const { answer, message } = puzzle;
         const salt = crypto.getRandomValues(new Uint8Array(16));
         const iv = crypto.getRandomValues(new Uint8Array(12));
         const key = await deriveKey(answer, salt, ["encrypt"]);
