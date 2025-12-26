@@ -76,7 +76,7 @@ i {
 
 /* Anchor reset — color handled elsewhere */
 a {
-  text-decoration: none;
+  /* text-decoration: none; */
   color: inherit;
 }
 
