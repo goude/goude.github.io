@@ -41,12 +41,19 @@ tinyproxy -d -c /opt/homebrew/etc/tinyproxy/tinyproxy.conf
 
 Then configure Arduino IDE:
 
-- Proxy type: HTTP
-- Host: 127.0.0.1
-- Port: 8080
+```yaml
+...
+network:
+  proxy: http://127.0.0.1:8080/
+  connection_timeout: 300s
+  download_timeout: 1800s
+```
+
+The timeouts will get rid of `DEADLINE_EXCEEDED` errors.
 
 ### Explanation
 On certain networks, HTTPS traffic is intercepted or handled in a way that some applications do not cope with correctly, even though system tools do. A local forward proxy such as tinyproxy tunnels HTTPS using CONNECT without TLS interception or custom certificates, acting as a compatibility layer for the Arduino IDE.
+
     </Md>
   </section>
 </Layout>
