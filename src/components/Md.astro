@@ -1,10 +1,50 @@
 ---
 // Render markdown content inline within Astro pages.
 // Usage: <Md>## Your markdown here</Md>
-import { marked } from "marked";
+// Supports syntax highlighting via Shiki with light/dark theme support.
+import { marked, type Tokens } from "marked";
+import { codeToHtml } from "shiki";
 
 const raw = await Astro.slots.render("default");
-const html = await marked.parse(raw, { gfm: true });
+
+// Custom renderer for code blocks with Shiki highlighting
+const renderer = new marked.Renderer();
+
+renderer.code = function ({ text, lang }: Tokens.Code) {
+  // Placeholder that we'll replace after async processing
+  return `<!--SHIKI:${lang || "text"}:${Buffer.from(text).toString("base64")}-->`;
+};
+
+let html = await marked.parse(raw, { gfm: true, renderer });
+
+// Process Shiki placeholders with dual themes
+const shikiRegex = /<!--SHIKI:([^:]*):([^-]+)-->/g;
+const matches = [...html.matchAll(shikiRegex)];
+
+for (const match of matches) {
+  const lang = match[1] || "text";
+  const code = Buffer.from(match[2]!, "base64").toString("utf-8"); // ! because the match cannot exist without the group
+
+  const [lightHtml, darkHtml] = await Promise.all([
+    codeToHtml(code, { lang, theme: "github-light-default" }),
+    codeToHtml(code, { lang, theme: "github-dark-default" }),
+  ]);
+
+  const dual = `<div class="shiki-light">${lightHtml}</div><div class="shiki-dark">${darkHtml}</div>`;
+  html = html.replace(match[0], dual);
+}
 ---
 
 <Fragment set:html={html} />
+
+<style is:global>
+  .shiki-dark {
+    display: none;
+  }
+  :root[data-theme-dark] .shiki-light {
+    display: none;
+  }
+  :root[data-theme-dark] .shiki-dark {
+    display: block;
+  }
+</style>
