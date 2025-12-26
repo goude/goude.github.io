@@ -1,0 +1,52 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Md from "@/components/Md.astro";
+---
+
+<Layout
+  title="Knowledge Base - goude.se"
+  description="Technical notes and solutions"
+>
+  <h1>Knowledge Base</h1>
+
+  <section>
+    <!-- prettier-ignore -->
+    <Md>
+## Arduino IDE can't connect to the internet on macOS
+
+### Question
+Arduino IDE on macOS cannot access the internet (Board Manager, Library Manager), while terminal tools like `curl` or `brew` work. Proxy settings in the IDE appear ineffective. How can this be fixed?
+
+### Answer
+Run a local forward HTTP proxy and point Arduino IDE to it.
+
+Install and run:
+
+```sh
+brew install tinyproxy
+
+# Backup config
+cp /opt/homebrew/etc/tinyproxy/tinyproxy.conf /opt/homebrew/etc/tinyproxy/tinyproxy.conf.bak
+
+# Make it listen only on localhost:8080 and allow localhost clients
+perl -0777 -i -pe '
+s/^\s*#?\s*Port\s+\d+/Port 8080/m;
+s/^\s*#?\s*Listen\s+.+/Listen 127.0.0.1/m;
+s/^\s*#?\s*Allow\s+.+/Allow 127.0.0.1/mg;
+' /opt/homebrew/etc/tinyproxy/tinyproxy.conf
+
+# Run in foreground (easy to stop with Ctrl+C)
+tinyproxy -d -c /opt/homebrew/etc/tinyproxy/tinyproxy.conf
+```
+
+Then configure Arduino IDE:
+
+- Proxy type: HTTP
+- Host: 127.0.0.1
+- Port: 8080
+
+### Explanation
+On certain networks, HTTPS traffic is intercepted or handled in a way that some applications do not cope with correctly, even though system tools do. A local forward proxy such as tinyproxy tunnels HTTPS using CONNECT without TLS interception or custom certificates, acting as a compatibility layer for the Arduino IDE.
+    </Md>
+  </section>
+</Layout>

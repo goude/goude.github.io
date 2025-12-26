@@ -4,3 +4,4 @@ export { default as Footer } from "./Footer.astro";
 export { default as Logo } from "./Logo.astro";
 export { default as Nav } from "./Nav.astro";
 export { default as ThemeToggle } from "./ThemeToggle.astro";
+export { default as Md } from "./Md.astro";

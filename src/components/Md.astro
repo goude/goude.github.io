@@ -1,0 +1,10 @@
+---
+// Render markdown content inline within Astro pages.
+// Usage: <Md>## Your markdown here</Md>
+import { marked } from "marked";
+
+const raw = await Astro.slots.render("default");
+const html = await marked.parse(raw, { gfm: true });
+---
+
+<Fragment set:html={html} />
