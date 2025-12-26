@@ -12,7 +12,8 @@ function isSelected(item: NavItem): boolean {
 }
 ---
 
-<header>
+<header class="site-header">
+  <!-- Logo / Home -->
   <a
     href="/"
     class="logo"
@@ -22,7 +23,20 @@ function isSelected(item: NavItem): boolean {
     <span class="sr-only">Home</span>
   </a>
 
-  <nav class="main-nav" aria-label="Main navigation">
+  <!-- Hamburger (mobile only) -->
+  <button
+    class="menu-toggle"
+    id="menu-toggle"
+    type="button"
+    aria-label="Toggle navigation menu"
+    aria-controls="menu-panel"
+    aria-expanded="false"
+  >
+    <i class="fa-solid fa-bars" aria-hidden="true"></i>
+  </button>
+
+  <!-- Desktop nav -->
+  <nav class="main-nav desktop-only" aria-label="Main navigation">
     {
       NAV_ITEMS.map((item) => (
         <a
@@ -39,18 +53,21 @@ function isSelected(item: NavItem): boolean {
     }
   </nav>
 
-  <div class="toggles" aria-label="Appearance controls">
+  <!-- Desktop toggles -->
+  <div class="toggles desktop-only" aria-label="Appearance controls">
     <button
-      class="theme-toggle"
+      class="theme-toggle icon-btn"
       id="theme-toggle"
       type="button"
       aria-label="Toggle theme"
     >
       <i class="fa-regular fa-sun" id="icon-light" aria-hidden="true"></i>
       <i class="fa-solid fa-moon" id="icon-dark" aria-hidden="true"></i>
+      <span class="sr-only">Theme</span>
     </button>
+
     <button
-      class="mode-toggle"
+      class="mode-toggle icon-btn"
       id="mode-toggle"
       type="button"
       aria-label="Toggle content mode"
@@ -61,29 +78,90 @@ function isSelected(item: NavItem): boolean {
         class="fa-regular fa-note-sticky"
         data-mode-icon="notes"
         aria-hidden="true"></i>
-      <i
-        class="fa-solid fa-brain"
-        data-mode-icon="thoughts"
-        aria-hidden="true"
+      <i class="fa-solid fa-brain" data-mode-icon="thoughts" aria-hidden="true"
       ></i>
+      <span class="sr-only">Mode</span>
     </button>
   </div>
+
+  <!-- Mobile pancake menu (everything) -->
+  <nav class="menu-panel" id="menu-panel" aria-label="Menu">
+    <a href="/" class="menu-item">
+      <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+      <span>Home</span>
+    </a>
+
+    <div class="menu-divider" aria-hidden="true"></div>
+
+    {
+      NAV_ITEMS.map((item) => (
+        <a
+          href={item.href}
+          class:list={["menu-item", { selected: isSelected(item) }]}
+          {...(item.external
+            ? { rel: "noopener noreferrer", target: "_blank" }
+            : {})}
+        >
+          <i class={item.icon} aria-hidden="true" />
+          <span>{item.label}</span>
+        </a>
+      ))
+    }
+
+    <div class="menu-divider" aria-hidden="true"></div>
+
+    <button class="menu-item menu-action" id="theme-toggle-menu" type="button">
+      <i class="fa-regular fa-sun" data-theme-icon="light" aria-hidden="true"
+      ></i>
+      <i class="fa-solid fa-moon" data-theme-icon="dark" aria-hidden="true"></i>
+      <span>Theme</span>
+    </button>
+
+    <button class="menu-item menu-action" id="mode-toggle-menu" type="button">
+      <i class="fa-regular fa-circle" data-mode-icon="normal" aria-hidden="true"
+      ></i>
+      <i
+        class="fa-regular fa-note-sticky"
+        data-mode-icon="notes"
+        aria-hidden="true"></i>
+      <i class="fa-solid fa-brain" data-mode-icon="thoughts" aria-hidden="true"
+      ></i>
+      <span>Mode</span>
+    </button>
+  </nav>
 </header>
 
 <style>
-  /* Logo */
-  .logo {
-    font-size: 1.1em;
-    padding: 0.25rem 0.6rem;
-    color: inherit;
-    text-decoration: none;
-    transition: opacity 0.15s ease;
+  /* ---------- header layout ---------- */
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* critical: don’t let the logo drift to center */
+    gap: 0.5rem;
   }
 
+  /* Logo */
+  .logo {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 1.1em;
+    padding: 0.25rem 0.6rem;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.15s ease;
+  }
   .logo:hover {
     opacity: 0.7;
   }
 
+  /* Hamburger: right aligned on the top row (mobile) */
+  .menu-toggle {
+    margin-left: auto;
+  }
+
+  /* Accessibility */
   .sr-only {
     position: absolute;
     width: 1px;
@@ -96,7 +174,7 @@ function isSelected(item: NavItem): boolean {
     border: 0;
   }
 
-  /* Nav */
+  /* Desktop nav */
   .main-nav {
     display: flex;
     align-items: center;
@@ -129,33 +207,16 @@ function isSelected(item: NavItem): boolean {
     color: var(--bg);
   }
 
-  @media (max-width: 480px) {
-    .main-nav {
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.35rem 0.6rem;
-    }
-
-    .nav-link {
-      padding: 0.2rem 0.45rem;
-      letter-spacing: 0.04em;
-      font-size: 0.95em;
-    }
-
-    .nav-link i {
-      font-size: 1em;
-    }
-  }
-
-  /* Toggles */
+  /* Desktop toggles */
   .toggles {
+    margin-left: auto;
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
   }
 
-  .theme-toggle,
-  .mode-toggle {
+  .icon-btn,
+  .menu-toggle {
     background: none;
     border: none;
     font-size: 1.1em;
@@ -165,98 +226,218 @@ function isSelected(item: NavItem): boolean {
     transition: opacity 0.15s ease;
   }
 
-  .theme-toggle:hover,
-  .mode-toggle:hover {
+  .icon-btn:hover,
+  .menu-toggle:hover {
     opacity: 0.7;
   }
 
-  /* Theme icons */
+  /* Theme icons (desktop) */
   #icon-dark {
     display: none;
   }
-
   :global([data-theme-dark]) #icon-light {
     display: none;
   }
-
   :global([data-theme-dark]) #icon-dark {
     display: inline;
   }
 
-  /* Mode icons */
+  /* Mode icons (desktop) */
   .mode-toggle [data-mode-icon="normal"] {
     display: inline;
   }
-
   .mode-toggle [data-mode-icon="notes"],
   .mode-toggle [data-mode-icon="thoughts"] {
     display: none;
   }
-
   :global([data-mode="normal"]) .mode-toggle [data-mode-icon="normal"] {
     display: inline;
   }
-
   :global([data-mode="normal"]) .mode-toggle [data-mode-icon="notes"],
   :global([data-mode="normal"]) .mode-toggle [data-mode-icon="thoughts"] {
     display: none;
   }
-
   :global([data-mode="notes"]) .mode-toggle [data-mode-icon="notes"] {
     display: inline;
   }
-
   :global([data-mode="notes"]) .mode-toggle [data-mode-icon="normal"],
   :global([data-mode="notes"]) .mode-toggle [data-mode-icon="thoughts"] {
     display: none;
   }
-
   :global([data-mode="thoughts"]) .mode-toggle [data-mode-icon="thoughts"] {
     display: inline;
   }
-
   :global([data-mode="thoughts"]) .mode-toggle [data-mode-icon="normal"],
   :global([data-mode="thoughts"]) .mode-toggle [data-mode-icon="notes"] {
     display: none;
+  }
+
+  /* Mobile menu defaults */
+  .menu-toggle,
+  .menu-panel {
+    display: none;
+  }
+
+  @media (max-width: 500px) {
+    /* Top row: logo left, hamburger right, menu below */
+    .site-header {
+      flex-wrap: wrap;
+    }
+
+    .desktop-only {
+      display: none !important;
+    }
+
+    .menu-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .menu-panel {
+      width: 100%;
+      flex-basis: 100%;
+      order: 999; /* ensure it’s below the top row */
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.25rem;
+      padding: 0.25rem 0;
+      font-family: var(--font-sans);
+      font-weight: 700;
+    }
+
+    :global([data-nav-open="true"]) .menu-panel {
+      display: flex;
+    }
+
+    .menu-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.6rem;
+      border-radius: 12px;
+      text-decoration: none;
+      color: inherit;
+      letter-spacing: 0.04em;
+      font-size: 0.98em;
+      transition:
+        background-color 0.15s ease,
+        color 0.15s ease,
+        opacity 0.15s ease;
+    }
+
+    .menu-item i {
+      font-size: 1em;
+    }
+
+    .menu-action {
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .menu-divider {
+      height: 1px;
+      opacity: 0.15;
+      background: currentColor;
+      margin: 0.15rem 0.6rem;
+    }
+
+    /* Theme icons (mobile menu) */
+    .menu-panel [data-theme-icon="dark"] {
+      display: none;
+    }
+    :global([data-theme-dark]) .menu-panel [data-theme-icon="light"] {
+      display: none;
+    }
+    :global([data-theme-dark]) .menu-panel [data-theme-icon="dark"] {
+      display: inline;
+    }
+
+    /* Mode icons (mobile menu) */
+    .menu-panel [data-mode-icon="normal"] {
+      display: inline;
+    }
+    .menu-panel [data-mode-icon="notes"],
+    .menu-panel [data-mode-icon="thoughts"] {
+      display: none;
+    }
+    :global([data-mode="normal"]) .menu-panel [data-mode-icon="normal"] {
+      display: inline;
+    }
+    :global([data-mode="normal"]) .menu-panel [data-mode-icon="notes"],
+    :global([data-mode="normal"]) .menu-panel [data-mode-icon="thoughts"] {
+      display: none;
+    }
+    :global([data-mode="notes"]) .menu-panel [data-mode-icon="notes"] {
+      display: inline;
+    }
+    :global([data-mode="notes"]) .menu-panel [data-mode-icon="normal"],
+    :global([data-mode="notes"]) .menu-panel [data-mode-icon="thoughts"] {
+      display: none;
+    }
+    :global([data-mode="thoughts"]) .menu-panel [data-mode-icon="thoughts"] {
+      display: inline;
+    }
+    :global([data-mode="thoughts"]) .menu-panel [data-mode-icon="normal"],
+    :global([data-mode="thoughts"]) .menu-panel [data-mode-icon="notes"] {
+      display: none;
+    }
   }
 </style>
 
 <script is:inline>
   (function () {
     "use strict";
-    const STORAGE = {
-      theme: "theme",
-      mode: "mode",
-    };
+
+    const STORAGE = { theme: "theme", mode: "mode" };
     const THEMES = ["light", "dark"];
     const MODES = ["normal", "notes", "thoughts"];
     const root = document.documentElement;
+
     const prefersDark = () =>
       window.matchMedia?.("(prefers-color-scheme: dark)").matches;
+
     const readStored = (key, allowed) => {
-      const value = localStorage.getItem(key);
-      return allowed.includes(value) ? value : null;
+      const v = localStorage.getItem(key);
+      return allowed.includes(v) ? v : null;
     };
-    const cycle = (current, list) =>
-      list[(list.indexOf(current) + 1) % list.length];
-    const applyTheme = (theme) => {
-      root.toggleAttribute("data-theme-dark", theme === "dark");
-      root.toggleAttribute("data-theme-light", theme === "light");
+
+    const cycle = (cur, list) => list[(list.indexOf(cur) + 1) % list.length];
+
+    const applyTheme = (t) => {
+      root.toggleAttribute("data-theme-dark", t === "dark");
+      root.toggleAttribute("data-theme-light", t === "light");
     };
-    const applyMode = (mode) => {
-      root.setAttribute("data-mode", mode);
+
+    const applyMode = (m) => {
+      root.setAttribute("data-mode", m);
     };
-    const initialTheme =
-      readStored(STORAGE.theme, THEMES) ?? (prefersDark() ? "dark" : "light");
-    const initialMode = readStored(STORAGE.mode, MODES) ?? "normal";
-    applyTheme(initialTheme);
-    applyMode(initialMode);
-    document.getElementById("theme-toggle")?.addEventListener("click", () => {
-      const current = root.hasAttribute("data-theme-dark") ? "dark" : "light";
-      const next = cycle(current, THEMES);
+
+    const toggleTheme = () => {
+      const cur = root.hasAttribute("data-theme-dark") ? "dark" : "light";
+      const next = cycle(cur, THEMES);
       localStorage.setItem(STORAGE.theme, next);
       applyTheme(next);
-    });
+    };
+
+    const toggleMode = () => {
+      const cur = root.getAttribute("data-mode") ?? "normal";
+      const next = cycle(cur, MODES);
+      localStorage.setItem(STORAGE.mode, next);
+      applyMode(next);
+    };
+
+    // Init
+    applyTheme(
+      readStored(STORAGE.theme, THEMES) ?? (prefersDark() ? "dark" : "light")
+    );
+    applyMode(readStored(STORAGE.mode, MODES) ?? "normal");
+
+    // Follow system theme only if user hasn't chosen a theme
     window
       .matchMedia?.("(prefers-color-scheme: dark)")
       .addEventListener("change", () => {
@@ -264,11 +445,47 @@ function isSelected(item: NavItem): boolean {
           applyTheme(prefersDark() ? "dark" : "light");
         }
       });
-    document.getElementById("mode-toggle")?.addEventListener("click", () => {
-      const current = root.getAttribute("data-mode") ?? "normal";
-      const next = cycle(current, MODES);
-      localStorage.setItem(STORAGE.mode, next);
-      applyMode(next);
+
+    // Wire toggles (desktop + mobile)
+    document
+      .getElementById("theme-toggle")
+      ?.addEventListener("click", toggleTheme);
+    document
+      .getElementById("theme-toggle-menu")
+      ?.addEventListener("click", toggleTheme);
+
+    document
+      .getElementById("mode-toggle")
+      ?.addEventListener("click", toggleMode);
+    document
+      .getElementById("mode-toggle-menu")
+      ?.addEventListener("click", toggleMode);
+
+    // Pancake menu open/close
+    const menuBtn = document.getElementById("menu-toggle");
+    const panel = document.getElementById("menu-panel");
+
+    const setOpen = (open) => {
+      root.setAttribute("data-nav-open", open ? "true" : "false");
+      menuBtn?.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+
+    const isOpen = () => root.getAttribute("data-nav-open") === "true";
+
+    setOpen(false);
+
+    menuBtn?.addEventListener("click", () => setOpen(!isOpen()));
+
+    panel?.addEventListener("click", (e) => {
+      if (e.target?.closest?.("a")) setOpen(false);
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") setOpen(false);
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 500) setOpen(false);
     });
   })();
 </script>
