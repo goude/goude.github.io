@@ -151,6 +151,7 @@ body > header {
   margin-bottom: var(--space-lg);
 }
 
+/*
 @media (max-width: 480px) {
   body > header {
     flex-direction: column;
@@ -158,6 +159,7 @@ body > header {
     gap: var(--space-sm);
   }
 }
+*/
 
 article {
   flex: 1;

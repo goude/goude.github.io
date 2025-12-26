@@ -25,7 +25,7 @@ function isSelected(item: NavItem): boolean {
 
   <!-- Hamburger (mobile only) -->
   <button
-    class="menu-toggle"
+    class="menu-toggle btn"
     id="menu-toggle"
     type="button"
     aria-label="Toggle navigation menu"
@@ -56,7 +56,7 @@ function isSelected(item: NavItem): boolean {
   <!-- Desktop toggles -->
   <div class="toggles desktop-only" aria-label="Appearance controls">
     <button
-      class="theme-toggle icon-btn"
+      class="theme-toggle btn"
       id="theme-toggle"
       type="button"
       aria-label="Toggle theme"
@@ -67,7 +67,7 @@ function isSelected(item: NavItem): boolean {
     </button>
 
     <button
-      class="mode-toggle icon-btn"
+      class="mode-toggle btn"
       id="mode-toggle"
       type="button"
       aria-label="Toggle content mode"
@@ -132,12 +132,39 @@ function isSelected(item: NavItem): boolean {
 </header>
 
 <style>
-  /* ---------- header layout ---------- */
+  /* ---------- base ---------- */
   .site-header {
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* critical: don’t let the logo drift to center */
+    justify-content: flex-start;
     gap: 0.5rem;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Shared button styling */
+  .btn {
+    background: none;
+    border: none;
+    font-size: 1.1em;
+    cursor: pointer;
+    padding: 0.25rem 0.6rem;
+    color: inherit;
+    transition: opacity 0.15s ease;
+  }
+
+  .btn:hover {
+    opacity: 0.7;
   }
 
   /* Logo */
@@ -152,26 +179,9 @@ function isSelected(item: NavItem): boolean {
     color: inherit;
     transition: opacity 0.15s ease;
   }
+
   .logo:hover {
     opacity: 0.7;
-  }
-
-  /* Hamburger: right aligned on the top row (mobile) */
-  .menu-toggle {
-    margin-left: auto;
-  }
-
-  /* Accessibility */
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
   }
 
   /* Desktop nav */
@@ -202,6 +212,7 @@ function isSelected(item: NavItem): boolean {
     font-size: 1.1em;
   }
 
+  /* Shared selected style (desktop + mobile menu items) */
   .selected {
     background: var(--fg);
     color: var(--bg);
@@ -215,20 +226,9 @@ function isSelected(item: NavItem): boolean {
     gap: 0.25rem;
   }
 
-  .icon-btn,
+  /* Hamburger positioning (mobile top row) */
   .menu-toggle {
-    background: none;
-    border: none;
-    font-size: 1.1em;
-    cursor: pointer;
-    padding: 0.25rem 0.6rem;
-    color: inherit;
-    transition: opacity 0.15s ease;
-  }
-
-  .icon-btn:hover,
-  .menu-toggle:hover {
-    opacity: 0.7;
+    margin-left: auto;
   }
 
   /* Theme icons (desktop) */
@@ -278,8 +278,7 @@ function isSelected(item: NavItem): boolean {
     display: none;
   }
 
-  @media (max-width: 500px) {
-    /* Top row: logo left, hamburger right, menu below */
+  @media (max-width: 480px) {
     .site-header {
       flex-wrap: wrap;
     }
@@ -297,7 +296,7 @@ function isSelected(item: NavItem): boolean {
     .menu-panel {
       width: 100%;
       flex-basis: 100%;
-      order: 999; /* ensure it’s below the top row */
+      order: 999;
       display: none;
       flex-direction: column;
       align-items: stretch;
@@ -431,13 +430,11 @@ function isSelected(item: NavItem): boolean {
       applyMode(next);
     };
 
-    // Init
     applyTheme(
       readStored(STORAGE.theme, THEMES) ?? (prefersDark() ? "dark" : "light")
     );
     applyMode(readStored(STORAGE.mode, MODES) ?? "normal");
 
-    // Follow system theme only if user hasn't chosen a theme
     window
       .matchMedia?.("(prefers-color-scheme: dark)")
       .addEventListener("change", () => {
@@ -446,7 +443,6 @@ function isSelected(item: NavItem): boolean {
         }
       });
 
-    // Wire toggles (desktop + mobile)
     document
       .getElementById("theme-toggle")
       ?.addEventListener("click", toggleTheme);
@@ -461,7 +457,6 @@ function isSelected(item: NavItem): boolean {
       .getElementById("mode-toggle-menu")
       ?.addEventListener("click", toggleMode);
 
-    // Pancake menu open/close
     const menuBtn = document.getElementById("menu-toggle");
     const panel = document.getElementById("menu-panel");
 
@@ -485,7 +480,7 @@ function isSelected(item: NavItem): boolean {
     });
 
     window.addEventListener("resize", () => {
-      if (window.innerWidth > 500) setOpen(false);
+      if (window.innerWidth > 480) setOpen(false);
     });
   })();
 </script>
