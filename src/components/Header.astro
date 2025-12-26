@@ -86,11 +86,6 @@ function isSelected(item: NavItem): boolean {
 
   <!-- Mobile pancake menu (everything) -->
   <nav class="menu-panel" id="menu-panel" aria-label="Menu">
-    <a href="/" class="menu-item">
-      <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
-      <span>Home</span>
-    </a>
-
     <div class="menu-divider" aria-hidden="true"></div>
 
     {
@@ -107,8 +102,6 @@ function isSelected(item: NavItem): boolean {
         </a>
       ))
     }
-
-    <div class="menu-divider" aria-hidden="true"></div>
 
     <button class="menu-item menu-action" id="theme-toggle-menu" type="button">
       <i class="fa-regular fa-sun" data-theme-icon="light" aria-hidden="true"
@@ -318,14 +311,19 @@ function isSelected(item: NavItem): boolean {
       padding: 0.45rem 0.6rem;
       border-radius: 12px;
       text-decoration: none;
-      color: inherit;
       letter-spacing: 0.04em;
       font-size: 0.98em;
+      font-family: var(--font-sans);
+      font-weight: 700;
+    }
+    /*
+      color: inherit;
       transition:
         background-color 0.15s ease,
         color 0.15s ease,
         opacity 0.15s ease;
     }
+    */
 
     .menu-item i {
       font-size: 1em;

@@ -1,5 +1,91 @@
 @charset "UTF-8";
 
+/* ==================== Minimal Reset ==================== */
+
+/* Box sizing: predictable layout everywhere */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margins that cause layout surprises */
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+/* Consistent text rendering */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+/* Media elements behave like content, not inline glyphs */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Inherit fonts for form controls */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* Remove default button styles without killing semantics */
+button {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Remove list bullets where lists are explicitly styled later */
+ul,
+ol {
+  padding: 0;
+}
+
+/* Avoid accidental italics/bold from browser defaults */
+address,
+cite,
+dfn,
+em,
+i {
+  font-style: inherit;
+}
+
+/* Anchor reset — color handled elsewhere */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Prevent hidden overflow surprises */
+html,
+body {
+  overflow-x: hidden;
+}
+
 /* ==================== Fonts ==================== */
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&display=swap");
 
@@ -187,7 +273,8 @@ h6 {
 
 h1 {
   font-size: var(--text-3xl);
-  margin-top: var(--space-2xl);
+  /* margin-top: var(--space-2xl); */
+  margin-top: 0;
 }
 
 h2 {
@@ -223,8 +310,10 @@ p.subtitle {
   font-style: italic;
   font-size: var(--text-lg);
   margin-top: calc(-0.75 * var(--space-lg));
+  /*
   margin-bottom: var(--space-lg);
   line-height: 1;
+  */
 }
 
 p,
