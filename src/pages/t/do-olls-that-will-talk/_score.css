@@ -1,0 +1,68 @@
+#waveform {
+  margin: 2rem 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#waveform-controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+#waveform-controls button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border: 1px solid #567;
+  background: #fff;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+#waveform-controls button:hover {
+  background: #f0f0f0;
+}
+
+#legend {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.legend-color {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #999;
+  border-radius: 2px;
+}
+
+.score {
+  margin: 2rem 0;
+  padding: 1rem;
+  border: 1px solid #999;
+  border-radius: 4px;
+  overflow-x: auto;
+  background: #fff;
+  font-family: "peamissywithamarker", sans-serif;
+}
+
+.score svg {
+  max-width: 100%;
+  height: auto;
+  font-family: "peamissywithamarker", sans-serif;
+}
+
+#osmd-container svg text {
+  font-family: "peamissywithamarker", sans-serif !important;
+}

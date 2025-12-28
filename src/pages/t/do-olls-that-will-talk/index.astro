@@ -1,0 +1,151 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import dollWepbUrl from "./_do-olls-audacity.webp";
+import "./_score.css";
+---
+
+<Layout
+  title="The Do-olls That Will Talk - goude.se"
+  description="It's Beginning to Look a Lot Like Christmas - timing analysis"
+>
+  <script src="https://cdn.jsdelivr.net/npm/wavesurfer.js@7"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/plugins/regions.esm.js"
+  ></script>
+  <script
+    src="https://unpkg.com/opensheetmusicdisplay@0.8.3/build/opensheetmusicdisplay.min.js"
+  ></script>
+
+  <h1>The Do-olls That Will Talk</h1>
+  <p class="subtitle">It's Beginning to Look a Lot Like Christmas</p>
+
+  <section>
+    <p>
+      Why does Perry Como sing "dolls" early in <cite>
+        <a
+          href="https://en.wikipedia.org/wiki/It%27s_Beginning_to_Look_a_Lot_Like_Christmas"
+          >It’s Beginning to Look a Lot Like Christmas
+        </a>?
+      </cite>
+    </p>
+    <p>
+      Have a listen to these two renditions of the Christmas classic composed by <a
+        href="https://en.wikipedia.org/wiki/Meredith_Willson"
+        >Meredith Willson</a
+      >. Pay particular attention to where the emphasis lands when singing the
+      word "dolls".
+    </p>
+
+    <div class="notes">
+      <p class="notes">
+        We'll use several tools in the analysis: Audacity, MuseScore, Inkscape.
+      </p>
+      <p>Then we'll embed the examples on this page.</p>
+      <p class="thoughts">
+        This is a really fun exercise in adding interactive content to a page.
+      </p>
+    </div>
+
+    <h2>Bublé: on the beat</h2>
+    <p>
+      Let's start with one of the most famous contemporary versions. Bublé,
+      smooth as ever, is straight on the beat.
+    </p>
+    <figure class="video">
+      <div id="player-buble"></div>
+    </figure>
+
+    <h2>Como and the Fontane Sisters: the canonical version</h2>
+    <p>
+      Now for the original. Here, "dolls" comes slightly before the bar. The
+      first time around it is sung by the Fontane Sisters, keep listening to
+      hear Como's even more prominent offset, or <a href="#" id="skip-to-como"
+        >skip ahead to 1:54</a
+      > if you're impatient.
+    </p>
+    <figure class="video">
+      <div id="player-como"></div>
+    </figure>
+
+    <h2>The notation</h2>
+    <p>
+      In measure six, the word "dolls" enters late, on the last triplet
+      subdivision of the bar, effectively a pickup into the next measure.
+    </p>
+
+    <p class="play-links">
+      Listen:
+      <a href="#" id="play-buble">Contemporary Bublé (1:16)</a> ·
+      <a href="#" id="play-fontane">Canonical Fontane Sisters (0:45)</a> ·
+      <a href="#" id="play-como">Canonical Como (1:54)</a> ·
+      <a href="#" id="play-nothing">Silence Music</a>
+    </p>
+
+    <figure>
+      <div id="osmd-container" class="score"></div>
+      <figcaption>Top: Bublé. Bottom: Como.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Audio Analysis</h2>
+
+    <p>
+      We can now zoom in on the Como recording and inspect the audio itself.
+      When aligned against a click track, a subtle <em>ritardando</em> becomes visible:
+      the tempo eases from roughly 117 BPM down toward 115 BPM across this phrase.
+    </p>
+
+    <p>
+      The word <em>"do-olls"</em> appears clearly in the waveform as a distinctive
+      two-humped shape just after the five-second mark. The initial syllable
+      <em>"do-"</em> does not coincide with a beat; instead, it sits almost exactly
+      midway between beat 4 of measure six and beat 1 of measure seven.
+    </p>
+
+    <p>
+      This places the vocal entrance on the final eighth note of the bar (see
+      measure nine). In other words, the notation captures the <em>idea</em> of the
+      rhythm, but the performance itself leans even further forward than a strict
+      triplet reading would suggest.
+    </p>
+    <figure>
+      <img
+        src={dollWepbUrl.src}
+        alt="Screenshot of an Audacity window, where the waveforms of the Como recording have been manually tagged with beats, and a special marker for where the word dolls begins."
+        loading="lazy"
+      />
+      <figcaption>Manual analysis in Audacity.</figcaption>
+    </figure>
+
+    <div id="waveform"></div>
+    <div id="waveform-controls">
+      <button id="play-pause">Play / Pause</button>
+      <button id="reset">Reset</button>
+    </div>
+    <div id="legend">
+      <div class="legend-item">
+        <span class="legend-color" style="background: rgba(100, 100, 255, 0.4);"
+        ></span>
+        <span>Beats</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-color" style="background: rgba(255, 50, 50, 0.6);"
+        ></span>
+        <span>Dolls</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Conclusion</h2>
+    <p>
+      This just dropped now I have to go and learn more
+      <a href="https://www.youtube.com/watch?v=UExIFCaFeJY"
+        >reharmonization of the piece</a
+      >
+    </p>
+  </section>
+
+  <script src="./_score.ts"></script>
+</Layout>

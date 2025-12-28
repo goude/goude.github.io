@@ -125,6 +125,16 @@ body {
   font-display: swap;
 }
 
+@font-face {
+  font-family: "MuseJazzText";
+  src:
+    url("/fonts/MuseJazz/MuseJazzText.woff2") format("woff2"),
+    url("/fonts/MuseJazz/MuseJazzText.otf") format("otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ==================== Color Palettes ==================== */
 
 :root {
@@ -199,7 +209,7 @@ html {
 
 @media (max-width: 768px) {
   html {
-    font-size: 14px;
+    font-size: 16px;
   }
 }
 
@@ -327,6 +337,10 @@ a {
   color: inherit;
 }
 
+em,
+cite {
+  font-style: italic;
+}
 /* ==================== Media Elements ==================== */
 
 img,
