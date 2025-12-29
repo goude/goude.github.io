@@ -1,5 +1,6 @@
 tmp/
 repomix-output.*
+.mscbackup/
 
 src/pages/README.md
 

@@ -19,6 +19,8 @@ import "./_score.css";
   <h1>The Do-olls That Will Talk</h1>
   <p class="subtitle">It's Beginning to Look a Lot Like Christmas</p>
 
+  <p class="annotation">This is a draft version.</p>
+
   <section>
     <p>
       Why does Perry Como sing "dolls" early in <cite>
@@ -55,6 +57,17 @@ import "./_score.css";
       <div id="player-buble"></div>
     </figure>
 
+    <p>
+      Here is the corresponding notation. Note the triplet maneuver in the
+      beginning to get the "A pair of" rhythmically correct in the notation
+      software (Musescore).
+    </p>
+
+    <figure>
+      <div id="osmd-container-straight" class="score"></div>
+      <figcaption>Straight version.</figcaption>
+    </figure>
+
     <h2>Como and the Fontane Sisters: the canonical version</h2>
     <p>
       Now for the original. Here, "dolls" comes slightly before the bar. The
@@ -67,11 +80,17 @@ import "./_score.css";
       <div id="player-como"></div>
     </figure>
 
-    <h2>The notation</h2>
     <p>
       In measure six, the word "dolls" enters late, on the last triplet
       subdivision of the bar, effectively a pickup into the next measure.
     </p>
+
+    <figure>
+      <div id="osmd-container-triplets" class="score"></div>
+      <figcaption>Early last-eight-triplet version.</figcaption>
+    </figure>
+
+    <p>Playhead links to listen to the various versions presented thus far:</p>
 
     <p class="play-links">
       Listen:
@@ -80,23 +99,6 @@ import "./_score.css";
       <a href="#" id="play-como">Canonical Como (1:54)</a> ·
       <a href="#" id="play-nothing">Silence Music</a>
     </p>
-
-    <figure>
-      <div id="osmd-container-straight" class="score"></div>
-      <figcaption>Straight version.</figcaption>
-    </figure>
-    <figure>
-      <div id="osmd-container-triplets" class="score"></div>
-      <figcaption>Early last-eight-triplet version.</figcaption>
-    </figure>
-    <figure>
-      <div id="osmd-container-eights" class="score"></div>
-      <figcaption>Early last-eighth version.</figcaption>
-    </figure>
-    <figure>
-      <div id="osmd-container-swing" class="score"></div>
-      <figcaption>Swing version.</figcaption>
-    </figure>
   </section>
 
   <section>
@@ -121,14 +123,19 @@ import "./_score.css";
       rhythm, but the performance itself leans even further forward than a strict
       triplet reading would suggest.
     </p>
+
     <figure>
       <img
         src={dollWepbUrl.src}
         alt="Screenshot of an Audacity window, where the waveforms of the Como recording have been manually tagged with beats, and a special marker for where the word dolls begins."
         loading="lazy"
       />
-      <figcaption>Manual analysis in Audacity.</figcaption>
+      <figcaption>
+        Manual analysis through visual inspection in Audacity.
+      </figcaption>
     </figure>
+
+    <p>Here is the section in question, with a playback interface:</p>
 
     <div id="waveform"></div>
     <div id="waveform-controls">
@@ -147,9 +154,28 @@ import "./_score.css";
         <span>Dolls</span>
       </div>
     </div>
+
+    <p>The adapted notation looks like this:</p>
+
+    <figure>
+      <div id="osmd-container-eights" class="score"></div>
+      <figcaption>Early last-eighth version.</figcaption>
+    </figure>
   </section>
 
   <section>
+    <h2>Not so hard, try you mustn't</h2>
+
+    <p>
+      Of course, there is a simpler answer. We turn on swing, and all is well in
+      the land of Christmas again.
+    </p>
+
+    <figure>
+      <div id="osmd-container-swing" class="score"></div>
+      <figcaption>Swing version.</figcaption>
+    </figure>
+
     <h2>Conclusion</h2>
     <p>
       This just dropped now I have to go and learn more

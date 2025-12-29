@@ -141,6 +141,7 @@ body {
   --palette-bg: #faf8f5;
   --palette-fg: #2d2a26;
   --palette-accent: #6b5c4d;
+  --palette-paper: #f4f1ec;
 
   --bg: var(--palette-bg);
   --fg: var(--palette-fg);
@@ -148,6 +149,7 @@ body {
   --rule: color-mix(in srgb, var(--palette-fg) 15%, var(--palette-bg));
   --surface: color-mix(in srgb, var(--palette-fg) 4%, var(--palette-bg));
   --accent: var(--palette-accent);
+  --paper: var(--palette-paper);
 
   --page-max: 900px;
   --page-pad: 24px;
@@ -521,6 +523,11 @@ hr {
 }
 
 /* ==================== Mode-based Content Visibility ==================== */
+
+/* Jazz class uses a Real Book-like typeface */
+.annotation {
+  font-family: "MuseJazzText";
+}
 
 /* Hide notes and thoughts in normal mode */
 [data-mode="normal"] .notes,
