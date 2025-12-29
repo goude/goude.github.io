@@ -211,14 +211,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   const osmd = new opensheetmusicdisplay.OpenSheetMusicDisplay(
     "osmd-container",
     {
-      drawTitle: true,
       followCursor: false,
       backend: "svg",
       autoResize: true,
+
+      drawTitle: false,
+      drawSubtitle: false,
+      drawComposer: false,
+      drawLyricist: false,
     }
   );
 
-  await osmd.load("/files/scores/dolls-that-will-talk.mxl");
+  await osmd.load("/files/scores/dolls-that-will-talk-straight.mxl");
   await document.fonts.ready;
   const container = document.getElementById("osmd-container");
   if (container != null) {
