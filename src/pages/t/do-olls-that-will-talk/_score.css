@@ -73,3 +73,21 @@
   margin-right: 0.4em;
   opacity: 0.85;
 }
+
+figure.video {
+  margin: 1.5rem 0;
+}
+
+figure.video > div {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* The iframe is created by the YouTube API inside the div */
+figure.video iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border: 0;
+}

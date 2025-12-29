@@ -19,76 +19,85 @@ import "./_score.css";
   <h1>The Do-olls That Will Talk</h1>
   <p class="subtitle">It's Beginning to Look a Lot Like Christmas</p>
 
-  <p class="annotation">This is a draft version.</p>
-
-  <p class="musescore-link">
-    <a href="/files/scores/dolls-that-will-talk-all.mscz">
-      <i class="fa-solid fa-music"></i>
-      Hear it for yourself in MuseScore
-    </a>
-  </p>
+  <aside>
+    <p class="annotation">This is a draft version.</p>
+  </aside>
 
   <section>
     <p>
-      Why does Perry Como sing "dolls" early in <cite>
+      Why does Perry Como sing "dolls" early in
+      <cite>
         <a
           href="https://en.wikipedia.org/wiki/It%27s_Beginning_to_Look_a_Lot_Like_Christmas"
-          >It’s Beginning to Look a Lot Like Christmas
-        </a>?
+        >
+          It’s Beginning to Look a Lot Like Christmas
+        </a>
       </cite>
+      ?
     </p>
+
     <p>
-      Have a listen to these two renditions of the Christmas classic composed by <a
-        href="https://en.wikipedia.org/wiki/Meredith_Willson"
+      Have a listen to these two renditions of the Christmas classic composed by
+      <a href="https://en.wikipedia.org/wiki/Meredith_Willson"
         >Meredith Willson</a
       >. Pay particular attention to where the emphasis lands when singing the
       word "dolls".
     </p>
 
-    <div class="notes">
-      <p class="notes">
-        We'll use several tools in the analysis: Audacity, MuseScore, Inkscape.
-      </p>
-      <p>Then we'll embed the examples on this page.</p>
+    <aside class="notes">
+      <p>Tools used: Audacity, MuseScore, Inkscape.</p>
+      <p>The examples below are embedded directly on this page.</p>
       <p class="thoughts">
-        This is a really fun exercise in adding interactive content to a page.
+        A small but satisfying exercise in interactive analysis.
       </p>
-    </div>
 
+      <p class="musescore-link">
+        <a href="/files/scores/dolls-that-will-talk-all.mscz">
+          <i class="fa-solid fa-music"></i>
+          Hear it for yourself in MuseScore (download the full score)
+        </a>
+      </p>
+    </aside>
+  </section>
+
+  <section>
     <h2>Bublé: on the beat</h2>
     <p>
-      Let's start with one of the most famous contemporary versions. Bublé,
-      smooth as ever, is straight on the beat.
+      Let’s start with one of the most famous contemporary versions. Bublé,
+      smooth as ever, sits squarely on the beat.
     </p>
+
     <figure class="video">
       <div id="player-buble"></div>
     </figure>
 
     <p>
-      Here is the corresponding notation. Note the triplet maneuver in the
-      beginning to get the "A pair of" rhythmically correct in the notation
-      software (Musescore).
+      Here is the corresponding notation. Note the small triplet adjustment at
+      the start: it mainly exists to make “A pair of” scan cleanly in MuseScore.
     </p>
 
     <figure>
       <div id="osmd-container-straight" class="score"></div>
       <figcaption>Straight version.</figcaption>
     </figure>
+  </section>
 
+  <section>
     <h2>Como and the Fontane Sisters: the canonical version</h2>
     <p>
-      Now for the original. Here, "dolls" comes slightly before the bar. The
-      first time around it is sung by the Fontane Sisters, keep listening to
-      hear Como's even more prominent offset, or <a href="#" id="skip-to-como"
-        >skip ahead to 1:54</a
-      > if you're impatient.
+      Now for the original. Here, "dolls" arrives slightly before the bar. The
+      first time around it’s sung by the Fontane Sisters; keep listening to hear
+      Como’s even more pronounced offset, or
+      <a href="#" id="skip-to-como">skip ahead to 1:54</a>
+      if you’re impatient.
     </p>
+
     <figure class="video">
       <div id="player-como"></div>
     </figure>
 
     <p>
-      In measure six, the word "dolls" enters late, on the last triplet
+      In measure six, the word "dolls" enters late: on the final triplet
       subdivision of the bar, effectively a pickup into the next measure.
     </p>
 
@@ -97,7 +106,7 @@ import "./_score.css";
       <figcaption>Early last-eight-triplet version.</figcaption>
     </figure>
 
-    <p>Playhead links to listen to the various versions presented thus far:</p>
+    <p>Playhead links to the versions shown so far:</p>
 
     <p class="play-links">
       Listen:
@@ -109,7 +118,7 @@ import "./_score.css";
   </section>
 
   <section>
-    <h2>Audio Analysis</h2>
+    <h2>Audio analysis</h2>
 
     <p>
       We can now zoom in on the Como recording and inspect the audio itself.
@@ -137,9 +146,7 @@ import "./_score.css";
         alt="Screenshot of an Audacity window, where the waveforms of the Como recording have been manually tagged with beats, and a special marker for where the word dolls begins."
         loading="lazy"
       />
-      <figcaption>
-        Manual analysis through visual inspection in Audacity.
-      </figcaption>
+      <figcaption>Manual analysis in Audacity.</figcaption>
     </figure>
 
     <p>Here is the section in question, with a playback interface:</p>
@@ -149,6 +156,7 @@ import "./_score.css";
       <button id="play-pause">Play / Pause</button>
       <button id="reset">Reset</button>
     </div>
+
     <div id="legend">
       <div class="legend-item">
         <span class="legend-color" style="background: rgba(100, 100, 255, 0.4);"
@@ -171,24 +179,25 @@ import "./_score.css";
   </section>
 
   <section>
-    <h2>Not so hard, try you mustn't</h2>
-
+    <h2>The easy fix: swing</h2>
     <p>
-      Of course, there is a simpler answer. We turn on swing, and all is well in
-      the land of Christmas again.
+      Of course, there is a simpler answer. Turn on swing, and everything
+      suddenly makes sense again.
     </p>
 
     <figure>
       <div id="osmd-container-swing" class="score"></div>
       <figcaption>Swing version.</figcaption>
     </figure>
+  </section>
 
+  <section>
     <h2>Conclusion</h2>
     <p>
-      This just dropped now I have to go and learn more
-      <a href="https://www.youtube.com/watch?v=UExIFCaFeJY"
-        >reharmonization of the piece</a
-      >
+      This just dropped, so I’m off to learn more:
+      <a href="https://www.youtube.com/watch?v=UExIFCaFeJY">
+        reharmonization of the piece
+      </a>.
     </p>
   </section>
 

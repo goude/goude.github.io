@@ -19,106 +19,101 @@ interface YTPlayer {
   playVideo: () => void;
 }
 
-function isBrowser(): boolean {
-  return typeof window !== "undefined" && typeof document !== "undefined";
-}
+const $id = <T extends HTMLElement = HTMLElement>(id: string) =>
+  document.getElementById(id) as T | null;
 
-if (isBrowser()) {
+const onReady = (fn: () => void | Promise<void>) =>
+  document.addEventListener("DOMContentLoaded", () => void fn());
+
+const isBrowser = () =>
+  typeof window !== "undefined" && typeof document !== "undefined";
+
+if (!isBrowser()) {
+  // no-op on server
+} else {
   // -------------------------
-  // YouTube players
+  // YouTube
   // -------------------------
-  let playerBuble: YTPlayer | null = null;
-  let playerComo: YTPlayer | null = null;
+  let buble: YTPlayer | null = null;
+  let como: YTPlayer | null = null;
 
-  function onPlayerStateChange(event: { data: number; target: YTPlayer }) {
-    // When one video starts playing, pause the other
-    if (event.data === window.YT.PlayerState.PLAYING) {
-      if (event.target === playerBuble && playerComo) {
-        playerComo.pauseVideo();
-      } else if (event.target === playerComo && playerBuble) {
-        playerBuble.pauseVideo();
-      }
-    }
-  }
+  const pauseOther = (current: YTPlayer) => {
+    if (current === buble) como?.pauseVideo();
+    if (current === como) buble?.pauseVideo();
+  };
 
-  window.onYouTubeIframeAPIReady = function () {
-    playerBuble = new window.YT.Player("player-buble", {
+  const playAt = (player: YTPlayer | null, t: number) => {
+    if (!player) return;
+    pauseOther(player);
+    player.seekTo(t, true);
+    player.playVideo();
+  };
+
+  window.onYouTubeIframeAPIReady = () => {
+    const onStateChange = (e: { data: number; target: YTPlayer }) => {
+      if (e.data === window.YT.PlayerState.PLAYING) pauseOther(e.target);
+    };
+
+    buble = new window.YT.Player("player-buble", {
       videoId: "0bhsXykXxfg",
       playerVars: { start: 76, rel: 0 },
-      events: { onStateChange: onPlayerStateChange },
+      events: { onStateChange },
     }) as unknown as YTPlayer;
 
-    playerComo = new window.YT.Player("player-como", {
+    como = new window.YT.Player("player-como", {
       videoId: "SnunPV-XTbA",
       playerVars: { start: 45, rel: 0 },
-      events: { onStateChange: onPlayerStateChange },
+      events: { onStateChange },
     }) as unknown as YTPlayer;
   };
 
-  // Load YouTube iframe API
-  const tag = document.createElement("script");
-  tag.src = "https://www.youtube.com/iframe_api";
-  document.head.appendChild(tag);
+  {
+    const tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(tag);
+  }
 
-  // Play links
-  document.addEventListener("DOMContentLoaded", () => {
-    const skipLink = document.getElementById("skip-to-como");
-    const playBuble = document.getElementById("play-buble");
-    const playFontane = document.getElementById("play-fontane");
-    const playComo = document.getElementById("play-como");
-    const playNothing = document.getElementById("play-nothing");
+  onReady(() => {
+    const bind = (id: string, fn: (e: MouseEvent) => void) =>
+      $id<HTMLAnchorElement>(id)?.addEventListener("click", fn);
 
-    function playVideo(
-      player: YTPlayer | null,
-      other: YTPlayer | null,
-      time: number
-    ) {
-      if (!player) return;
-      other?.pauseVideo();
-      player.seekTo(time, true);
-      player.playVideo();
-    }
-
-    skipLink?.addEventListener("click", (e) => {
+    bind("skip-to-como", (e) => {
       e.preventDefault();
-      playVideo(playerComo, playerBuble, 114);
+      playAt(como, 114);
     });
 
-    playBuble?.addEventListener("click", (e) => {
+    bind("play-buble", (e) => {
       e.preventDefault();
-      playVideo(playerBuble, playerComo, 76);
+      playAt(buble, 76);
     });
 
-    playFontane?.addEventListener("click", (e) => {
+    bind("play-fontane", (e) => {
       e.preventDefault();
-      playVideo(playerComo, playerBuble, 45);
+      playAt(como, 45);
     });
 
-    playComo?.addEventListener("click", (e) => {
+    bind("play-como", (e) => {
       e.preventDefault();
-      playVideo(playerComo, playerBuble, 114);
+      playAt(como, 114);
     });
 
-    playNothing?.addEventListener("click", (e) => {
+    bind("play-nothing", (e) => {
       e.preventDefault();
-      playerComo?.pauseVideo();
-      playerBuble?.pauseVideo();
+      como?.pauseVideo();
+      buble?.pauseVideo();
     });
   });
 
   // -------------------------
-  // WaveSurfer markers
+  // WaveSurfer
   // -------------------------
-  interface AudioMarker {
-    time: number;
-    label: string;
-    category: "beat" | "lyric" | "dolls";
-  }
+  type MarkerCategory = "beat" | "lyric" | "dolls";
+  type AudioMarker = { time: number; label: string; category: MarkerCategory };
 
-  const categoryStyles: Record<AudioMarker["category"], { color: string }> = {
-    beat: { color: "rgba(100, 100, 255, 0.2)" },
-    lyric: { color: "rgba(255, 150, 50, 0.3)" },
-    dolls: { color: "rgba(255, 50, 50, 0.4)" },
+  const categoryColor: Record<MarkerCategory, string> = {
+    beat: "rgba(100, 100, 255, 0.2)",
+    lyric: "rgba(255, 150, 50, 0.3)",
+    dolls: "rgba(255, 50, 50, 0.4)",
   };
 
   const markers: AudioMarker[] = [
@@ -137,11 +132,10 @@ if (isBrowser()) {
     { time: 4.923, label: "", category: "dolls" },
   ];
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const waveformEl = document.querySelector("#waveform");
-    if (!waveformEl) return;
+  onReady(() => {
+    if (!$id("waveform")) return;
 
-    const wavesurfer = WaveSurfer.create({
+    const ws = WaveSurfer.create({
       container: "#waveform",
       waveColor: "#567",
       progressColor: "#223",
@@ -154,121 +148,108 @@ if (isBrowser()) {
       url: "/audio/do-olls-clip.mp4",
     });
 
-    const regions = wavesurfer.registerPlugin(RegionsPlugin.create());
+    const regions = ws.registerPlugin(RegionsPlugin.create());
 
-    wavesurfer.on("ready", () => {
-      markers.forEach((marker, index) => {
-        const style = categoryStyles[marker.category];
+    ws.on("ready", () => {
+      markers.forEach((m, i) => {
         regions.addRegion({
-          start: marker.time,
-          end: marker.time + 0.05,
-          color: style.color,
-          content: marker.label,
+          start: m.time,
+          end: m.time + 0.05,
+          color: categoryColor[m.category],
+          content: m.label,
           resize: false,
           drag: false,
-          id: `marker-${index}`,
+          id: `marker-${i}`,
         });
       });
     });
 
-    const playPauseBtn = document.getElementById("play-pause");
-    const resetBtn = document.getElementById("reset");
+    const playPause = $id<HTMLButtonElement>("play-pause");
+    const reset = $id<HTMLButtonElement>("reset");
 
-    playPauseBtn?.addEventListener("click", () => wavesurfer.playPause());
-
-    resetBtn?.addEventListener("click", () => {
-      wavesurfer.seekTo(0);
-      wavesurfer.pause();
+    playPause?.addEventListener("click", () => ws.playPause());
+    reset?.addEventListener("click", () => {
+      ws.seekTo(0);
+      ws.pause();
     });
 
-    wavesurfer.on("play", () => {
-      if (playPauseBtn) playPauseBtn.textContent = "Pause";
+    ws.on("play", () => {
+      if (playPause) playPause.textContent = "Pause";
     });
-
-    wavesurfer.on("pause", () => {
-      if (playPauseBtn) playPauseBtn.textContent = "Play";
+    ws.on("pause", () => {
+      if (playPause) playPause.textContent = "Play";
     });
 
     regions.on(
       "region-clicked",
-      (region: { start: number }, e: { stopPropagation: () => void }) => {
+      (r: { start: number }, e: { stopPropagation: () => void }) => {
         e.stopPropagation();
-        wavesurfer.setTime(region.start);
+        ws.setTime(r.start);
       }
     );
   });
 
   // -------------------------
-  // OSMD: render 4 score variants
+  // OSMD (4 variants)
   // -------------------------
-  type ScoreSpec = { containerId: string; file: string; swing: boolean };
+  type ScoreSpec = { id: string; file: string };
 
   const scores: ScoreSpec[] = [
     {
-      containerId: "osmd-container-straight",
+      id: "osmd-container-straight",
       file: "/files/scores/dolls-that-will-talk-straight.mxl",
-      swing: false,
     },
     {
-      containerId: "osmd-container-triplets",
+      id: "osmd-container-triplets",
       file: "/files/scores/dolls-that-will-talk-triplet.mxl",
-      swing: false,
     },
     {
-      containerId: "osmd-container-eights",
+      id: "osmd-container-eights",
       file: "/files/scores/dolls-that-will-talk-eighth.mxl",
-      swing: false,
     },
-    {
-      containerId: "osmd-container-swing",
-      file: "/files/scores/dolls-that-will-talk-swing.mxl",
-      swing: true,
-    },
+    { id: "osmd-container-swing", file: "/files/scores/dolls-that-will-talk-swing.mxl" },
   ];
 
-  function computeZoom(width: number): number {
-    if (width < 420) return 0.45;
-    if (width < 480) return 0.55;
-    if (width < 768) return 0.7;
+  const zoomFor = (w: number) => {
+    if (w < 420) return 0.45;
+    if (w < 480) return 0.55;
+    if (w < 768) return 0.7;
     return 0.85;
-  }
+  };
 
-  async function renderScore(spec: ScoreSpec): Promise<void> {
-    const container = document.getElementById(spec.containerId);
+  const applySvgFont = (container: HTMLElement) => {
+    const svg = container.querySelector("svg");
+    if (!svg) return;
+    svg.querySelectorAll("text").forEach((t) => {
+      t.removeAttribute("font-family");
+      t.style.fontFamily = "MuseJazzText, sans-serif";
+    });
+  };
+
+  const renderScore = async (spec: ScoreSpec) => {
+    const container = $id(spec.id);
     if (!container) return;
 
-    const osmd = new opensheetmusicdisplay.OpenSheetMusicDisplay(
-      spec.containerId,
-      {
-        followCursor: false,
-        backend: "svg",
-        autoResize: true,
-        drawTitle: false,
-        drawSubtitle: false,
-        drawComposer: false,
-        drawLyricist: false,
-      }
-    );
+    const osmd = new opensheetmusicdisplay.OpenSheetMusicDisplay(spec.id, {
+      followCursor: false,
+      backend: "svg",
+      autoResize: true,
+      drawTitle: false,
+      drawSubtitle: false,
+      drawComposer: false,
+      drawLyricist: false,
+    });
 
     await osmd.load(spec.file);
     await document.fonts.ready;
 
-    const width = container.clientWidth || 800;
-    osmd.Zoom = computeZoom(width);
+    osmd.Zoom = zoomFor(container.clientWidth || 800);
 
     await osmd.render();
+    applySvgFont(container);
+  };
 
-    const svg = container.querySelector("svg");
-    if (spec.swing && svg) {
-      svg.querySelectorAll("text").forEach((t) => {
-        t.removeAttribute("font-family");
-        t.style.fontFamily = "MuseJazzText, sans-serif";
-      });
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", async () => {
-    // Only try if OSMD is present
+  onReady(async () => {
     if (
       typeof opensheetmusicdisplay === "undefined" ||
       !opensheetmusicdisplay?.OpenSheetMusicDisplay
@@ -276,7 +257,6 @@ if (isBrowser()) {
       return;
     }
 
-    // Render sequentially (simpler, avoids spiky CPU)
     for (const spec of scores) {
       // eslint-disable-next-line no-await-in-loop
       await renderScore(spec);
