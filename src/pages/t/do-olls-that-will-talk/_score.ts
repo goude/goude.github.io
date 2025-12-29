@@ -207,7 +207,10 @@ if (!isBrowser()) {
       id: "osmd-container-eights",
       file: "/files/scores/dolls-that-will-talk-eighth.mxl",
     },
-    { id: "osmd-container-swing", file: "/files/scores/dolls-that-will-talk-swing.mxl" },
+    {
+      id: "osmd-container-swing",
+      file: "/files/scores/dolls-that-will-talk-swing.mxl",
+    },
   ];
 
   const zoomFor = (w: number) => {

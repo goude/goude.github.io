@@ -1,3 +1,4 @@
+/* ---- Waveform ---- */
 #waveform {
   margin: 2rem 0;
   border: 1px solid var(--accent);
@@ -7,15 +8,15 @@
 #waveform-controls {
   display: flex;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin: 0 0 1rem;
 }
 
 #waveform-controls button {
   padding: 0.5rem 1rem;
   cursor: pointer;
   border: 1px solid var(--accent);
-  background: var(--bg);
   border-radius: 4px;
+  background: var(--bg);
   transition: background-color 0.2s;
 }
 
@@ -23,14 +24,15 @@
   background: var(--bg);
 }
 
+/* ---- Legend ---- */
 #legend {
   display: flex;
-  gap: 1.5rem;
   flex-wrap: wrap;
+  gap: 1.5rem;
   margin-top: 1rem;
   padding: 1rem;
-  background: var(--bg);
   border-radius: 4px;
+  background: var(--bg);
 }
 
 .legend-item {
@@ -40,19 +42,19 @@
 }
 
 .legend-color {
-  display: inline-block;
   width: 20px;
   height: 20px;
   border: 1px solid var(--fg);
   border-radius: 2px;
 }
 
+/* ---- Scores ---- */
 .score {
   margin: 2rem 0;
   padding: 1rem;
+  overflow-x: auto;
   border: 1px solid var(--fg);
   border-radius: 4px;
-  overflow-x: auto;
   background: var(--paper);
 }
 
@@ -61,29 +63,30 @@
   height: auto;
 }
 
+/* ---- MuseScore download link ---- */
 .musescore-link a {
-  text-decoration: none;
   font-weight: 500;
+  text-decoration: none;
 }
 
 .musescore-link a:hover {
   text-decoration: underline;
 }
+
 .musescore-link i {
   margin-right: 0.4em;
   opacity: 0.85;
 }
 
+/* ---- YouTube embeds ---- */
 figure.video {
   margin: 1.5rem 0;
 }
 
 figure.video > div {
   width: 100%;
-  max-width: 100%;
 }
 
-/* The iframe is created by the YouTube API inside the div */
 figure.video iframe {
   display: block;
   width: 100%;
