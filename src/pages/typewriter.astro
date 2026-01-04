@@ -1,0 +1,225 @@
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="Typewriter" description="A quiet cloud-backed typewriter">
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- CodeMirror -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.css"
+  />
+  <script
+    src="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.js"
+    defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5/keymap/vim.js" defer
+  ></script>
+
+  <section class="paper-wrap">
+    <textarea id="editor"></textarea>
+    <div id="status">loading…</div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      const SERVICE_URL = "https://cop.daniel-goude.workers.dev/cop";
+      const statusEl = document.getElementById("status");
+
+      let editor;
+      let dirty = false;
+      let vimMode = "insert";
+
+      /* ---------------- backend ---------------- */
+
+      function utf8ToBase64(text) {
+        const b = new TextEncoder().encode(text);
+        let s = "";
+        for (let i = 0; i < b.length; i++) s += String.fromCharCode(b[i]);
+        return btoa(s);
+      }
+
+      function base64ToUtf8_safe(b64) {
+        try {
+          const bin = atob(b64.trim());
+          const b = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) b[i] = bin.charCodeAt(i);
+          return new TextDecoder().decode(b);
+        } catch {
+          return b64;
+        }
+      }
+
+      async function load() {
+        const res = await fetch(SERVICE_URL);
+        return base64ToUtf8_safe(await res.text());
+      }
+
+      async function save(text, withBell) {
+        statusEl.textContent = "saving…";
+        await fetch(SERVICE_URL, {
+          method: "POST",
+          body: utf8ToBase64(text),
+        });
+        dirty = false;
+        statusEl.textContent = "saved";
+        if (withBell) playSample("bell");
+      }
+
+      /* ---------------- sound ---------------- */
+
+      let audioCtx = null;
+      let buffers = {};
+      let audioReady = false;
+
+      const SAMPLE_PATH = "/audio/typewriter/";
+      const SAMPLE_MAP = {
+        key: "manual_key.ogg",
+        space: "manual_space.ogg",
+        enter: "manual_return.ogg",
+        backspace: "manual_backspace.ogg",
+        bell: "manual_bell.ogg",
+      };
+
+      function ensureAudio() {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+      }
+
+      async function loadAllSamples() {
+        ensureAudio();
+        for (const [k, f] of Object.entries(SAMPLE_MAP)) {
+          const res = await fetch(SAMPLE_PATH + f);
+          buffers[k] = await audioCtx.decodeAudioData(await res.arrayBuffer());
+        }
+        audioReady = true;
+      }
+
+      function playSample(kind) {
+        if (!audioReady || !buffers[kind]) return;
+
+        const src = audioCtx.createBufferSource();
+        const gain = audioCtx.createGain();
+        gain.gain.value = 0.75 + Math.random() * 0.25;
+
+        src.buffer = buffers[kind];
+        src.connect(gain).connect(audioCtx.destination);
+        src.start();
+      }
+
+      /* ---------------- init ---------------- */
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+          keyMap: "vim",
+          lineWrapping: true,
+        });
+
+        editor.setValue(await load());
+        editor.focus();
+        statusEl.textContent = "saved";
+
+        CodeMirror.on(editor, "vim-mode-change", (e) => {
+          vimMode = e.mode;
+        });
+
+        editor.on("keydown", async () => {
+          if (!audioReady) {
+            await loadAllSamples();
+          }
+        });
+
+        editor.on("beforeChange", (_, change) => {
+          if (!audioReady) return;
+          if (change.origin !== "+input") return;
+          if (vimMode !== "insert") return;
+
+          const ch = change.text[0];
+          if (ch === "") playSample("backspace");
+          else if (ch === " ") playSample("space");
+          else if (ch === "\n") playSample("enter");
+          else playSample("key");
+        });
+
+        editor.on("change", () => {
+          if (!dirty) {
+            dirty = true;
+            statusEl.textContent = "unsaved";
+          }
+        });
+
+        editor.on("keydown", (_, e) => {
+          if (e.key === "Enter" && vimMode === "insert") {
+            save(editor.getValue(), false);
+          }
+        });
+
+        CodeMirror.Vim.defineEx("write", "w", () => {
+          save(editor.getValue(), true);
+        });
+      });
+    })();
+  </script>
+
+  <style>
+    .paper-wrap {
+      width: 100%;
+      padding: 2rem 1.5rem;
+    }
+
+    /* ---------- CodeMirror global overrides ---------- */
+
+    :global(.CodeMirror) {
+      width: 100%;
+      min-height: 75vh;
+
+      background: #fbfaf8;
+      color: #222;
+
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow:
+        0 1px 0 rgba(0, 0, 0, 0.05),
+        0 10px 36px rgba(0, 0, 0, 0.07);
+
+      padding: 3rem 3.5rem;
+    }
+
+    :global(.CodeMirror pre) {
+      font-family: "Special Elite", monospace !important;
+      font-size: 1rem !important;
+      line-height: 1.65 !important;
+    }
+
+    /* Normal mode: subtle gray block cursor */
+    :global(.cm-fat-cursor .CodeMirror-cursor) {
+      background: rgba(0, 0, 0, 0.25);
+    }
+
+    /* Insert mode: underscore cursor */
+    :global(.CodeMirror:not(.cm-fat-cursor) .CodeMirror-cursor) {
+      border-left: none;
+      border-bottom: 2px solid rgba(0, 0, 0, 0.55);
+      width: 0.6em;
+      margin-left: -0.3em;
+    }
+
+    :global(.CodeMirror-focused),
+    :global(.CodeMirror *) {
+      outline: none !important;
+    }
+
+    #status {
+      margin-top: 0.5rem;
+      font-family: "Elite Typewriter", monospace;
+      font-size: 0.7rem;
+      opacity: 0.55;
+    }
+  </style>
+</Layout>
