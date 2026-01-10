@@ -1,0 +1,705 @@
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout
+  title="Notes – Digitakt Beat Practice Ladder"
+  description="Grounded drum-machine exercises: nail timing, density, and intention before complexity"
+>
+  <!-- article: a self-contained knowledge object; a page you could cite or export as-is -->
+  <article id="beat-practice-ladder">
+    <!-- header: introduction block for the page (title + framing) -->
+    <header>
+      <!-- h1: name of the page-level object; treat as a title, not a sentence -->
+      <h1>Digitakt – Beat Practice Ladder</h1>
+
+      <p class="subtitle">
+        A sequence of beat archetypes designed to build timing, pocket, and
+        arrangement discipline before adding sound design, tricks, or “clever”
+        modulation. Tailored to Digitakt MKI, but written to generalize to any
+        groovebox.
+      </p>
+    </header>
+
+    <!-- p: default unit of explanation; keep one idea per paragraph -->
+    <p>
+      The goal is not to collect patterns. The goal is to acquire a small set of
+      reliable beat “moves” that you can execute cleanly at will. If a beat only
+      works with heavy effects, complex probability, or happy accidents, it is
+      not yet a skill. Start dry. Make it groove with velocity, microtiming, and
+      restraint.
+    </p>
+
+    <p>
+      Constraint for the whole ladder: keep the kit simple. One kick, one
+      snare/clap, one closed hat, one open hat (optional), one percussion voice.
+      If you want flavor, use sample choice and tuning first, then envelopes,
+      then filters. Effects last.
+    </p>
+
+    <!-- nav: conceptual navigation; an index into the ladder -->
+    <nav aria-label="Beat Ladder Index">
+      <!-- ol: use when order matters (a ladder has a recommended sequence) -->
+      <ol>
+        <li><a href="#four-on-the-floor">Four-on-the-Floor Foundation</a></li>
+        <li><a href="#backbeat">Backbeat and Pocket</a></li>
+        <li><a href="#eighth-hats">Eighth-Note Hats and Dynamics</a></li>
+        <li>
+          <a href="#sixteenth-hats">Sixteenth Hats: Swing Without Slop</a>
+        </li>
+        <li><a href="#kick-variants">Kick Variants and Negative Space</a></li>
+        <li><a href="#ghost-notes">Ghost Notes and Accents</a></li>
+        <li><a href="#syncopation">Syncopation: Off-Grid Energy</a></li>
+        <li><a href="#fills">Fills That Respect the Groove</a></li>
+        <li><a href="#transition-bars">Transition Bars and Arrangement</a></li>
+        <li>
+          <a href="#performance">Performance: One Pattern, Many Moments</a>
+        </li>
+      </ol>
+    </nav>
+
+    <!-- section: major thematic grouping; keep headings shallow (h1–h3) -->
+    <section id="beats">
+      <!-- h2: stable category label -->
+      <h2>Beats</h2>
+
+      <section id="four-on-the-floor">
+        <!-- h3: concept/object label; treat as a name -->
+        <h3>Four-on-the-Floor Foundation</h3>
+
+        <p>
+          This is the irreducible core. If you cannot make a simple kick pattern
+          feel good, every added layer will only make the groove more confusing.
+          The aim is to make the kick feel inevitable.
+        </p>
+
+        <!-- dl: term → meaning; “patch notes” equivalent for beats -->
+        <dl aria-label="Beat Notes">
+          <dt>Archetype</dt>
+          <dd>
+            House/techno foundation: kick on every quarter note, minimal
+            supporting elements.
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Make the groove work with only kick + a quiet timing reference
+            (closed hat or rim). No reverb. No delay. No “character” tricks.
+            Just time and weight.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            The kick is not just a sound, it is the metronome of the body.
+            Tuning, decay, and level determine whether it feels like motion or
+            like punishment.
+          </dd>
+
+          <dt>Digitakt Start</dt>
+          <dd>
+            Pattern at 120–130 BPM. Place kick on 1, 5, 9, 13 (one per quarter
+            in a 16-step bar). Add a closed hat on every 8th (1, 3, 5, 7, 9, 11,
+            13, 15) at low level. Use velocity to keep hats from sounding like a
+            sewing machine.
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            The kick should feel steady without feeling identical. Small level
+            changes (1–2 dB) are often enough. If it feels stiff, adjust swing
+            or microtiming on hats, not on the kick.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Try two kick samples: one with a shorter tail, one with a longer
+            tail. Keep the pattern identical and decide which one gives the
+            groove room. Then try subtle filter envelope on hats rather than
+            changing the pattern.
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>Donna Summer – <cite>I Feel Love</cite> (1977)</li>
+              <li>Giorgio Moroder – <cite>Chase</cite> (1979)</li>
+              <li>New Order – <cite>Blue Monday</cite> (1983)</li>
+            </ul>
+          </dd>
+        </dl>
+
+        <!-- aside: adjacent context; not the main instruction line -->
+        <aside>
+          <p>
+            If you find yourself wanting “more,” treat it as a signal to go back
+            to sound choice and envelope timing. Most early groove problems are
+            not compositional, they are physical.
+          </p>
+        </aside>
+      </section>
+
+      <section id="backbeat">
+        <h3>Backbeat and Pocket</h3>
+
+        <p>
+          The backbeat is where a beat becomes social. This is about making a
+          snare/clap feel like a decision, not a default. The aim is to find the
+          pocket between the kick and the backbeat.
+        </p>
+
+        <dl aria-label="Beat Notes">
+          <dt>Archetype</dt>
+          <dd>
+            Kick + snare on 2 and 4: the shared skeleton of funk, pop, rock,
+            electro, and countless hybrids.
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Make a basic kick pattern plus snare/clap feel alive without adding
+            extra percussion. If it feels stiff, solve it with timing and
+            dynamics, not layers.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            The backbeat defines attitude. Microtiming the snare slightly behind
+            the grid often increases “human weight,” but too much becomes
+            drunken.
+          </dd>
+
+          <dt>Digitakt Start</dt>
+          <dd>
+            16-step bar at 90–110 BPM (or stay at 120+ if you prefer). Put
+            snare/clap on 5 and 13 (beats 2 and 4). Keep it dry. Nudge snare
+            microtiming slightly late and compare against perfectly on-grid.
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            The groove should feel like it “leans,” not like it stumbles. If it
+            feels late, reduce microtiming and instead lower hat velocity on
+            offbeats.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Layer clap and snare as two tracks with different envelopes and
+            slightly different velocity patterns. Then mute one: if the beat
+            collapses, you were using layering to hide timing uncertainty.
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>Prince – <cite>When Doves Cry</cite> (1984)</li>
+              <li>Michael Jackson – <cite>Billie Jean</cite> (1982)</li>
+              <li>Run-D.M.C. – <cite>It’s Like That</cite> (1983)</li>
+            </ul>
+          </dd>
+        </dl>
+      </section>
+
+      <section id="eighth-hats">
+        <h3>Eighth-Note Hats and Dynamics</h3>
+
+        <p>
+          Eighth-note hats are the first real test of endurance and taste. The
+          job is to support the groove without becoming the groove.
+        </p>
+
+        <dl aria-label="Beat Notes">
+          <dt>Archetype</dt>
+          <dd>
+            Closed hats in steady eighths with dynamic variation: the simplest
+            “motion generator.”
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Make hats feel like air and forward motion rather than a metronome.
+            Achieve this with velocity, subtle filtering, and small timing
+            choices.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            Dynamics create groove more reliably than extra notes. A flat hat
+            line usually reads as mechanical even if the timing is correct.
+          </dd>
+
+          <dt>Digitakt Start</dt>
+          <dd>
+            Use your existing kick + snare. Add closed hat on eighths. Make
+            every second hat a bit softer. Then invert it. Then make a repeating
+            4-step velocity motif. Keep changes small.
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            Does the groove “breathe”? If hats dominate, reduce hat decay or
+            filter a little. If hats disappear, raise level slightly and shorten
+            decay rather than boosting highs.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Put a barely audible open hat on the “and” of 4 (step 16 or 15
+            depending on grid). Then remove it again and check if it improved
+            groove or just added decoration.
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>Talking Heads – <cite>Once in a Lifetime</cite> (1980)</li>
+              <li>Joy Division – <cite>Disorder</cite> (1979)</li>
+              <li>Grandmaster Flash – <cite>The Message</cite> (1982)</li>
+            </ul>
+          </dd>
+        </dl>
+      </section>
+
+      <section id="sixteenth-hats">
+        <h3>Sixteenth Hats: Swing Without Slop</h3>
+
+        <p>
+          Sixteenths bring energy, but also reveal every weakness. The point is
+          to make density feel controlled and intentional.
+        </p>
+
+        <dl aria-label="Beat Notes">
+          <dt>Archetype</dt>
+          <dd>
+            16th-note hats with swing: a classic machine-groove signature across
+            funk, hip-hop, and house variants.
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Maintain clarity at high density. A good 16th hat pattern feels like
+            motion, not like noise.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            Swing is not randomness. It is a consistent bias. Apply swing
+            globally first, then use microtiming only for small, deliberate
+            exceptions.
+          </dd>
+
+          <dt>Digitakt Start</dt>
+          <dd>
+            Add closed hat on all 16 steps. Reduce decay. Lower overall level.
+            Apply swing modestly. Then remove every 4th hat (or every 3rd) and
+            compare groove. Density is a choice.
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            If the groove loses definition, you likely need fewer notes or
+            shorter envelopes, not more EQ. If swing feels lurchy, reduce swing
+            amount and reintroduce dynamics.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Use conditional trigs or probability very lightly on a few hat
+            steps, but only after the non-random version grooves. The random
+            version should feel like a variation, not a fix.
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>James Brown – <cite>Funky Drummer</cite> (1970)</li>
+              <li>Herbie Hancock – <cite>Chameleon</cite> (1973)</li>
+              <li>
+                Mantronix – <cite>Planet Rock</cite> (1982) (via influence chain)
+              </li>
+            </ul>
+          </dd>
+        </dl>
+      </section>
+
+      <section id="kick-variants">
+        <h3>Kick Variants and Negative Space</h3>
+
+        <p>
+          Once the skeleton grooves, variation becomes meaningful. This is about
+          making the kick pattern communicate direction without becoming busy.
+        </p>
+
+        <dl aria-label="Beat Notes">
+          <dt>Archetype</dt>
+          <dd>
+            A small family of kick placements that signal “push,” “relax,” or
+            “turnaround.”
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Create three kick variants that each feel clearly different, while
+            keeping everything else constant.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            Negative space is part of rhythm. Removing a kick can feel stronger
+            than adding one, because it creates expectation and release.
+          </dd>
+
+          <dt>Digitakt Start</dt>
+          <dd>
+            Take your basic beat. Make Variant A: remove the kick on beat 3.
+            Variant B: add a kick just before beat 3 (one 16th early). Variant
+            C: add a kick just after beat 3 (one 16th late). Keep snare and hats
+            unchanged.
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            Which variant makes the bar feel like it “turns the corner”? Which
+            makes it feel heavy? If differences are unclear, your hats or snare
+            may be too dominant.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Assign each variant to a different pattern and practice switching
+            with no fills. If the transition feels wrong, it’s usually because a
+            single hat or percussion hit needs to be muted, not because you need
+            more notes.
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>Public Enemy – <cite>Rebel Without a Pause</cite> (1987)</li>
+              <li>Depeche Mode – <cite>People Are People</cite> (1984)</li>
+              <li>Gary Numan – <cite>Cars</cite> (1979)</li>
+            </ul>
+          </dd>
+        </dl>
+      </section>
+
+      <section id="ghost-notes">
+        <h3>Ghost Notes and Accents</h3>
+
+        <p>
+          Ghost notes create depth. The trap is turning them into audible
+          clutter. This exercise is about learning how quiet a note can be while
+          still changing the groove.
+        </p>
+
+        <dl aria-label="Beat Notes">
+          <dt>Archetype</dt>
+          <dd>
+            Subtle secondary hits: soft snares, light percs, low-velocity hats,
+            quiet rim clicks.
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Add groove complexity without increasing perceived loudness. The
+            beat should still feel simple, just more alive.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            Ghost notes are felt, not heard. If you notice them as “events,”
+            they are too loud or too frequent.
+          </dd>
+
+          <dt>Digitakt Start</dt>
+          <dd>
+            Add two very low-velocity snare ghosts: one 16th before the
+            backbeat, one 16th after. Keep them short. Then try the same with a
+            rim/percussion sound instead of snare.
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            The backbeat should feel stronger because of contrast. If the
+            backbeat gets weaker, your ghosts are masking it.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Use velocity-to-filter (or velocity-to-sample-start if you like) for
+            ghosts to keep them soft and dull. Avoid turning them into “mini
+            snares.”
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>Steely Dan – <cite>Peg</cite> (1977)</li>
+              <li>David Bowie – <cite>Let’s Dance</cite> (1983)</li>
+              <li>Talking Heads – <cite>Life During Wartime</cite> (1979)</li>
+            </ul>
+          </dd>
+        </dl>
+      </section>
+
+      <section id="syncopation">
+        <h3>Syncopation: Off-Grid Energy</h3>
+
+        <p>
+          Syncopation is not “random offbeats.” It is the intentional placement
+          of emphasis where the listener does not expect it, while still keeping
+          the underlying pulse clear.
+        </p>
+
+        <dl aria-label="Beat Notes">
+          <dt>Archetype</dt>
+          <dd>
+            Percussion that answers the backbeat and kick rather than
+            duplicating them.
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Add one syncopated percussion voice that increases movement without
+            confusing the meter.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            Syncopation must be anchored. Keep one element boring (kick or hats)
+            so the ear always knows where “one” is.
+          </dd>
+
+          <dt>Digitakt Start</dt>
+          <dd>
+            Choose a short percussion sample (conga, woodblock, clave, rim).
+            Place it on two offbeat positions: e.g., step 7 and 11. Then move
+            one hit by one step and observe the change.
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            Does the percussion feel like it “pulls” the bar forward? If it
+            feels like stumbling, reduce hits, shorten envelopes, or lower
+            level.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Use trig conditions for a single rare syncopation hit (e.g., 1:4).
+            But keep the base pattern strong enough that the rare hit reads as
+            surprise, not rescue.
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>Fela Kuti – <cite>Water No Get Enemy</cite> (1975)</li>
+              <li>Grace Jones – <cite>Pull Up to the Bumper</cite> (1981)</li>
+              <li>Prince – <cite>Controversy</cite> (1981)</li>
+            </ul>
+          </dd>
+        </dl>
+      </section>
+
+      <section id="fills">
+        <h3>Fills That Respect the Groove</h3>
+
+        <p>
+          A fill is a promise: “something is about to change.” The most common
+          mistake is to make a fill that destroys the groove you worked to
+          establish.
+        </p>
+
+        <dl aria-label="Beat Notes">
+          <dt>Archetype</dt>
+          <dd>
+            One-beat or half-bar transitions: small variations that preserve
+            pulse and energy.
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Create three fills that each work at low volume and without effects.
+            A good fill should still make sense in headphones at quiet listening
+            levels.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            A fill is usually subtraction plus one clear gesture. Often, muting
+            the kick for one beat is more effective than adding twelve hits.
+          </dd>
+
+          <dt>Digitakt Start</dt>
+          <dd>
+            Make Fill A: mute hats for the last 2 steps and add one snare flam.
+            Fill B: add a single tom hit on step 15. Fill C: add a short snare
+            roll (3 hits) with descending velocity.
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            The downbeat after the fill should feel stronger. If it feels
+            weaker, your fill is stealing attention rather than directing it.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Use retrig very lightly with a clear velocity ramp. Keep retrigs
+            short and quiet. If you feel tempted to crank them, the fill idea
+            isn’t strong enough yet.
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>Phil Collins – <cite>In the Air Tonight</cite> (1981)</li>
+              <li>Kate Bush – <cite>Running Up That Hill</cite> (1985)</li>
+              <li>Queen – <cite>Another One Bites the Dust</cite> (1980)</li>
+            </ul>
+          </dd>
+        </dl>
+      </section>
+
+      <section id="transition-bars">
+        <h3>Transition Bars and Arrangement</h3>
+
+        <p>
+          Grooveboxes tempt you to live in the loop. This exercise turns “a
+          loop” into “a section” by building deliberate transitions.
+        </p>
+
+        <dl aria-label="Beat Notes">
+          <dt>Archetype</dt>
+          <dd>
+            A-bar / B-bar: two closely related patterns where one feels like
+            continuation and the other feels like arrival.
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Make two patterns that alternate (A then B) and feel like a phrase,
+            not like two random loops.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            Arrangement is mostly controlled repetition. If every bar changes,
+            nothing feels like a “section.”
+          </dd>
+
+          <dt>Digitakt Start</dt>
+          <dd>
+            Duplicate your base pattern. In the duplicate, change only one
+            thing: remove a kick, add an open hat, or add a single percussion
+            hit. Practice alternating every 4 bars.
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            A should feel like “home.” B should feel like “motion” or “lift”
+            without sounding like a different song.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Build a third pattern that acts as a transition: it should contain
+            one clear cue (a fill, a mute, a new hat) and then hand back to A
+            cleanly.
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>Depeche Mode – <cite>Behind the Wheel</cite> (1987)</li>
+              <li>
+                Talking Heads – <cite>Burning Down the House</cite> (1983)
+              </li>
+              <li>Yello – <cite>Oh Yeah</cite> (1985)</li>
+            </ul>
+          </dd>
+        </dl>
+      </section>
+
+      <section id="performance">
+        <h3>Performance: One Pattern, Many Moments</h3>
+
+        <p>
+          This is where the machine becomes an instrument. The constraint is:
+          use one pattern and make it feel like progression through performance
+          controls and taste.
+        </p>
+
+        <dl aria-label="Beat Notes">
+          <dt>Archetype</dt>
+          <dd>
+            Live variation: mute/unmute, velocity control, filter moves, and
+            subtle sound changes that preserve groove.
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Perform a two-minute “track” using one pattern. The listener should
+            perceive sections: intro, build, peak, release, ending.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            Performance is mostly subtraction and return. If you only add, you
+            run out of headroom. Silence and re-entry create structure.
+          </dd>
+
+          <dt>Digitakt Start</dt>
+          <dd>
+            Choose one pattern that already grooves. Practice: (1) start with
+            hats only, then add kick; (2) add snare; (3) drop hats briefly; (4)
+            bring them back with higher velocity; (5) open filter slightly on a
+            single element; (6) return to baseline.
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            Sections should be perceptible even without melody. If everything
+            feels the same, you need stronger contrast (mute decisions, density
+            changes), not more “effects.”
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Assign one macro gesture: e.g., the mod wheel or a knob that changes
+            hat decay and filter together slightly. Practice returning to a
+            known “home” position reliably.
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>Kraftwerk – <cite>Tour de France</cite> (1983)</li>
+              <li>New Order – <cite>Confusion</cite> (1983)</li>
+              <li>Yellow Magic Orchestra – <cite>Rydeen</cite> (1979)</li>
+            </ul>
+          </dd>
+        </dl>
+
+        <!-- aside: adjacent context -->
+        <aside>
+          <p>
+            If you can only make progression by switching patterns, you are
+            practicing composition. If you can make progression inside one
+            pattern, you are practicing musicianship.
+          </p>
+        </aside>
+      </section>
+    </section>
+
+    <!-- footer: closing material for the article -->
+    <footer>
+      <p class="text-muted">
+        Keep this ladder editable. Add variations, but preserve the discipline:
+        simplest viable kit, dry first, groove before tricks. When you add
+        complexity, be able to explain what it buys you.
+      </p>
+    </footer>
+  </article>
+</Layout>

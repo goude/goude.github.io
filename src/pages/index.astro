@@ -3,39 +3,57 @@ import Layout from "@/layouts/Layout.astro";
 ---
 
 <Layout title="goude.se" description="Personal site">
-  <h1 id="entry-point">Point of Entry</h1>
-  <p class="subtitle">
-    Leave the campground a little cleaner than you found it.
-  </p>
+  <!-- article: a self-contained, citable knowledge object; your homepage is an index object -->
+  <article id="entry-point">
+    <!-- header: title + framing for this page -->
+    <header>
+      <!-- h1: name of the page-level object -->
+      <h1>Point of Entry</h1>
 
-  <section>
-    <h2>It's Beginning to Look a Lot Like Christmas</h2>
-    <p>
-      Dolls or do-olls? <a href="t/do-olls-that-will-talk/"> It's a mystery!</a>
-    </p>
-  </section>
+      <!-- p.subtitle: short framing line; keep it as prose, not a heading -->
+      <p class="subtitle">
+        Leave the campground a little cleaner than you found it.
+      </p>
+    </header>
+
+    <!-- section: a major grouping of links/notes on the homepage -->
+    <section id="seasonal">
+      <h2>It’s Beginning to Look a Lot Like Christmas</h2>
+
+      <p>
+        Dolls or do-olls?
+        <!-- a: links are graph edges; use meaningful link text -->
+        <a href="/t/do-olls-that-will-talk/">It’s a mystery.</a>
+      </p>
+    </section>
+
+    <section id="learning-ladders">
+      <h2>Practice Ladders</h2>
+
+      <p>
+        Two “nail the basics first” ladders: one for synth patches, one for
+        beats. They are written to be hand-editable, readable, and reusable
+        across devices.
+      </p>
+
+      <!-- nav: conceptual neighborhood; an index to nearby knowledge objects -->
+      <nav aria-label="Ladder Pages">
+        <ul>
+          <li>
+            <a href="/t/patch-learn" rel="category">Patch Practice Ladder</a>
+          </li>
+          <li>
+            <a href="/t/beats-learn" rel="category">Beat Practice Ladder</a>
+          </li>
+        </ul>
+      </nav>
+    </section>
+
+    <!-- footer: end matter for the page-level article -->
+    <footer>
+      <p class="text-muted">
+        This is where I keep some of my notes and put stuff that I find useful.
+      </p>
+    </footer>
+  </article>
 </Layout>
-
-<style>
-  .notation-link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-    margin: var(--space-xl) 0;
-  }
-
-  .notation-preview {
-    margin: 0;
-    max-width: 100%;
-  }
-
-  .notation-frame {
-    width: 100%;
-    border-radius: 4px;
-  }
-
-  .notation-frame img {
-    width: 100%;
-    filter: contrast(0.95);
-  }
-</style>
