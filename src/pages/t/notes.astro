@@ -1,0 +1,284 @@
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="Notes – goude.se" description="Prose-first knowledge notes">
+  <!-- article: a self-contained, citable knowledge object; use for content that could stand alone -->
+  <article id="notes">
+    <!-- header: introductory block for the nearest section/article (title, subtitle, metadata) -->
+    <header>
+      <!-- h1: the name of this page-level knowledge object -->
+      <h1>Notes</h1>
+      <p class="subtitle">
+        A prose-first, semantically grounded notebook that happens to be a
+        website.
+      </p>
+    </header>
+
+    <!-- p: the default unit of explanation; keep one main idea per paragraph -->
+    <p>
+      These notes are written with two audiences in mind: my future self, and a
+      competent stranger who arrives without context. The structure exists to
+      support explanation, not to replace it.
+    </p>
+
+    <!-- section: a thematic grouping; use when you would draw a box around related content -->
+    <section id="tools">
+      <!-- h2: a stable category label; keep it short and noun-heavy -->
+      <h2>Tools</h2>
+
+      <section id="just">
+        <header>
+          <!-- h3: a concept/object label (not a sentence); treat it like a name -->
+          <h3><code>just</code> Task Runner</h3>
+        </header>
+
+        <p>
+          <code>just</code> is a command runner that values explicitness over cleverness.
+          It makes the operational shape of a project legible at a glance, which matters
+          more to me than historical compatibility or maximal flexibility.
+        </p>
+
+        <p>
+          The project lives at
+          <!-- a: links are graph edges; prefer meaningful link text over “click here” -->
+          <a href="https://github.com/casey/just">github.com/casey/just</a>, and
+          its README is unusually worth reading in full.
+        </p>
+
+        <p>
+          What <code>just</code> calls a <em>recipe</em> is simply a named intention.
+          A recipe may depend on other recipes, and those dependencies are declared
+          directly, rather than being inferred from filenames or timestamps.
+        </p>
+
+        <!-- dl: term → meaning; use for concept definition blocks (mind-map friendly) -->
+        <dl aria-label="Key Terms">
+          <dt>Recipe</dt>
+          <dd>
+            A named task consisting of one or more shell commands, intended to
+            be read by humans first.
+          </dd>
+
+          <dt>Dependency</dt>
+          <dd>Another recipe that must complete before this one runs.</dd>
+
+          <dt>Parameter</dt>
+          <dd>
+            A value supplied at invocation time, shaping the behavior of a
+            recipe without modifying it.
+          </dd>
+        </dl>
+
+        <p>
+          In practice, this leads to small entry-point recipes that compose
+          others. The file reads more like a table of contents than a build
+          script.
+        </p>
+
+        <!-- figure: an idea paired with a concrete representation (example, diagram, etc.) -->
+        <figure>
+          <!-- pre/code: literal artifact; use for copyable blocks and exact text -->
+          <pre><code class="language-just">
+dev:
+    just build
+    just test
+          </code></pre>
+          <figcaption>
+            A minimal development entry point composed from smaller recipes.
+          </figcaption>
+        </figure>
+
+        <!-- aside: adjacent context (constraints, cautions, personal rationale); not the main line -->
+        <aside>
+          <p>
+            I reach for <code>just</code> in contexts where I care about re-entering
+            a codebase after months away, or handing it to someone else without a
+            guided tour.
+          </p>
+        </aside>
+
+        <!-- nav: conceptual neighborhood; links to nearby ideas, not necessarily site navigation -->
+        <nav aria-label="Related Concepts">
+          <!-- ul: a conceptual grouping where order is not important -->
+          <ul>
+            <li><a href="#make" rel="contrast">make</a></li>
+            <li><a href="#task-runners" rel="category">task runners</a></li>
+            <li><a href="#shell" rel="depends-on">shell behavior</a></li>
+          </ul>
+        </nav>
+      </section>
+    </section>
+
+    <section id="writing-style">
+      <h2>Writing Style and Structure</h2>
+
+      <p>
+        These notes are influenced by a simple idea often associated with
+        Feynman-style explanation: if you cannot explain something clearly in
+        ordinary language, you do not yet understand it.
+      </p>
+
+      <p>
+        Structure is allowed to emerge from explanation, not the other way
+        around. Paragraphs come first. Headings are added only when the reader
+        needs help re-orienting.
+      </p>
+
+      <p>
+        A useful test is this: if all headings were removed, the text should
+        still read sensibly from top to bottom.
+      </p>
+
+      <dl aria-label="Working Rules">
+        <dt>Paragraphs</dt>
+        <dd>
+          Each paragraph should express a single idea. If a paragraph contains
+          more than one conceptual move, split it.
+        </dd>
+
+        <dt>Headings</dt>
+        <dd>
+          Headings orient the reader; they do not carry explanation. If a
+          heading needs a comma or a justification clause, it probably belongs
+          in the prose.
+        </dd>
+
+        <dt>Examples</dt>
+        <dd>
+          Examples are tests of understanding. If an example does not clarify
+          the idea, remove it or replace it.
+        </dd>
+      </dl>
+
+      <!-- details/summary: collapsible, optional depth; use for checklists and side material -->
+      <details>
+        <summary>Feynman-Style Checklist</summary>
+        <ul>
+          <li>Could I explain this to a smart stranger without jargon?</li>
+          <li>Is each paragraph doing one conceptual job?</li>
+          <li>Do examples test the claim, rather than decorate it?</li>
+          <li>Are headings orienting, not explaining?</li>
+        </ul>
+      </details>
+    </section>
+
+    <section id="heading-capitalization">
+      <h2>Heading Capitalization</h2>
+
+      <p>
+        Headings are capitalized using a restrained, human form of title case.
+        They are treated as names, not sentences.
+      </p>
+
+      <dl aria-label="Capitalization Rules">
+        <dt><code>h1</code></dt>
+        <dd>The name of the document or knowledge object.</dd>
+
+        <dt><code>h2</code></dt>
+        <dd>Domain or category names. Short, noun-heavy, stable over time.</dd>
+
+        <dt><code>h3</code></dt>
+        <dd>Concept or object names. Labels, not explanations.</dd>
+      </dl>
+
+      <p>
+        If a heading starts to read like a sentence, move the explanation into a
+        paragraph below it.
+      </p>
+    </section>
+
+    <section id="semantics-and-attributes">
+      <h2>Semantics and Attributes</h2>
+
+      <p>
+        Plain HTML already carries a great deal of meaning. Attributes should be
+        added only when they clarify intent for either humans or machines.
+      </p>
+
+      <p>
+        Two attribute families are occasionally useful here:
+        <code>data-*</code> and ARIA.
+      </p>
+
+      <dl aria-label="Attributes">
+        <dt><code>data-*</code></dt>
+        <dd>
+          Custom attributes for attaching non-visual meaning to elements. Useful
+          when you want to mark “what kind of thing this is” without changing
+          structure.
+        </dd>
+
+        <dt>When to Use <code>data-*</code></dt>
+        <dd>
+          Use them when you have code that will read them, or when you notice
+          repetition that could be made explicit (for example, distinguishing a
+          “tool note” from a “concept note”).
+        </dd>
+
+        <dt>When Not to Use <code>data-*</code></dt>
+        <dd>
+          Do not add them speculatively. If nothing consumes the data yet, it is
+          probably too early.
+        </dd>
+
+        <dt>ARIA Attributes</dt>
+        <dd>
+          Accessibility hints for assistive technologies. Prefer native HTML
+          semantics first; add ARIA only where meaning would otherwise be
+          unclear.
+        </dd>
+
+        <dt>Useful ARIA Patterns Here</dt>
+        <dd>
+          <ul>
+            <li>
+              <code>aria-label</code> on <code>nav</code> to state the kind of neighborhood
+              (“Related Concepts”, “Further Reading”, etc.).
+            </li>
+            <li>
+              <code>aria-label</code> on <code>dl</code> to describe the role of the
+              definitions (“Key Terms”, “Patch Notes”, etc.).
+            </li>
+          </ul>
+        </dd>
+
+        <dt>ARIA to Avoid</dt>
+        <dd>
+          Avoid roles that duplicate what the element already expresses (for
+          example, adding <code>role="navigation"</code> to <code
+            >&lt;nav&gt;</code
+          >).
+        </dd>
+      </dl>
+
+      <p>
+        A guiding rule: if the meaning is already clear from the element and its
+        content, no attribute is needed.
+      </p>
+    </section>
+
+    <section id="closing-note">
+      <h2>Closing Note</h2>
+
+      <p>
+        These notes are not optimized for search engines, frameworks, or static
+        analysis. They are optimized for sustained thinking over time.
+      </p>
+
+      <p>
+        If structure begins to feel heavy, return to sentences and explanation
+        first.
+      </p>
+    </section>
+
+    <!-- footer: end matter for the nearest article (epilogue, credits, revision notes) -->
+    <footer>
+      <p class="text-muted">
+        This page is intentionally written in plain HTML semantics so it remains
+        legible to humans, accessible to assistive tech, and easy to transform
+        later.
+      </p>
+    </footer>
+  </article>
+</Layout>

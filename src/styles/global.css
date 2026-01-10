@@ -2,7 +2,6 @@
 
 /* ==================== Fonts ==================== */
 @import url("https://fonts.googleapis.com/css2?family=Special+Elite&display=swap");
-
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&display=swap");
 
 @font-face {
@@ -53,14 +52,12 @@
 
 /* ==================== Minimal Reset ==================== */
 
-/* Box sizing: predictable layout everywhere */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-/* Remove default margins that cause layout surprises */
 html,
 body,
 h1,
@@ -77,13 +74,11 @@ dd {
   margin: 0;
 }
 
-/* Consistent text rendering */
 html {
   -webkit-text-size-adjust: 100%;
   text-rendering: optimizeLegibility;
 }
 
-/* Media elements behave like content, not inline glyphs */
 img,
 picture,
 video,
@@ -93,7 +88,6 @@ svg {
   max-width: 100%;
 }
 
-/* Inherit fonts for form controls */
 input,
 button,
 textarea,
@@ -102,7 +96,6 @@ select {
   color: inherit;
 }
 
-/* Remove default button styles without killing semantics */
 button {
   background: none;
   border: 0;
@@ -110,13 +103,11 @@ button {
   cursor: pointer;
 }
 
-/* Remove list bullets where lists are explicitly styled later */
 ul,
 ol {
   padding: 0;
 }
 
-/* Avoid accidental italics/bold from browser defaults */
 address,
 cite,
 dfn,
@@ -125,13 +116,10 @@ i {
   font-style: inherit;
 }
 
-/* Anchor reset — color handled elsewhere */
 a {
-  /* text-decoration: none; */
   color: inherit;
 }
 
-/* Prevent hidden overflow surprises */
 html,
 body {
   overflow-x: hidden;
@@ -199,24 +187,6 @@ body {
   --palette-accent: #6b5c4d;
 }
 
-/* ==================== Reset ==================== */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html {
-  font-size: 16px;
-}
-
-@media (max-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
 /* ==================== Base ==================== */
 
 body {
@@ -234,14 +204,6 @@ body {
   line-height: var(--lh-body);
 }
 
-@media (max-width: 480px) {
-  body {
-    --page-pad: 16px;
-  }
-}
-
-/* ==================== Layout ==================== */
-
 body > header {
   display: flex;
   justify-content: space-between;
@@ -250,16 +212,6 @@ body > header {
   border-bottom: 1px solid var(--rule);
   margin-bottom: var(--space-lg);
 }
-
-/*
-@media (max-width: 480px) {
-  body > header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-sm);
-  }
-}
-*/
 
 article {
   flex: 1;
@@ -274,10 +226,7 @@ section {
 
 h1,
 h2,
-h3,
-h4,
-h5,
-h6 {
+h3 {
   font-family: var(--font-serif);
   font-weight: 400;
   line-height: var(--lh-tight);
@@ -287,7 +236,6 @@ h6 {
 
 h1 {
   font-size: var(--text-3xl);
-  /* margin-top: var(--space-2xl); */
   margin-top: 0;
 }
 
@@ -301,35 +249,6 @@ h3 {
   font-style: italic;
 }
 
-h4 {
-  font-size: var(--text-lg);
-  font-variant: small-caps;
-}
-
-@media (max-width: 480px) {
-  h1 {
-    font-size: var(--text-2xl);
-  }
-
-  h2 {
-    font-size: var(--text-xl);
-  }
-
-  h3 {
-    font-size: var(--text-lg);
-  }
-}
-
-p.subtitle {
-  font-style: italic;
-  font-size: var(--text-lg);
-  margin-top: calc(-0.75 * var(--space-lg));
-  /*
-  margin-bottom: var(--space-lg);
-  line-height: 1;
-  */
-}
-
 p,
 ol,
 ul,
@@ -337,32 +256,70 @@ dl {
   margin-bottom: var(--space-lg);
 }
 
-a {
-  color: inherit;
+/* ==================== Definition Lists ==================== */
+
+dl {
+  padding-left: var(--space-md);
+  border-left: 2px solid var(--rule);
 }
 
-em,
-cite {
-  font-style: italic;
+dt {
+  font-weight: 600;
+  margin-top: var(--space-md);
 }
-/* ==================== Media Elements ==================== */
 
-img,
-video {
-  max-width: 100%;
-  height: auto;
-  display: block;
+dd {
+  margin-left: 0;
+  color: var(--fg-muted);
 }
+
+/* ==================== Lists ==================== */
+
+ul,
+ol {
+  padding-left: var(--space-lg);
+}
+
+li {
+  margin-bottom: var(--space-sm);
+}
+
+ul li::marker {
+  color: var(--fg-muted);
+}
+
+/* ==================== Code ==================== */
+
+code {
+  font-family: var(--font-code);
+  font-size: 0.95em;
+  padding: 0.1em 0.35em;
+  background: var(--surface);
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+pre {
+  margin: var(--space-xl) 0;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--paper);
+  border-left: 3px solid var(--rule);
+  overflow-x: auto;
+  border-radius: 2px;
+}
+
+pre code {
+  padding: 0;
+  background: none;
+  white-space: pre;
+  font-size: 0.95em;
+  line-height: 1.5;
+}
+
+/* ==================== Figures ==================== */
 
 figure {
   margin: var(--space-xl) 0;
-  padding: 0;
-}
-
-figure img,
-figure video {
-  width: 100%;
-  border-radius: 4px;
 }
 
 figcaption {
@@ -373,252 +330,18 @@ figcaption {
   text-align: center;
 }
 
-/* ==================== Embedded Content ==================== */
-
-iframe {
-  max-width: 100%;
-  border: 0;
-  border-radius: 4px;
-}
-
-/* Responsive video wrapper */
-.video-wrapper {
-  position: relative;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
-  height: 0;
-  overflow: hidden;
-  margin: var(--space-xl) 0;
-  border-radius: 4px;
-}
-
-.video-wrapper iframe,
-.video-wrapper video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 4px;
-}
-
-/* ==================== Code ==================== */
-
-pre,
-code {
-  font-family: var(--font-code);
-  font-size: var(--text-sm);
-}
-
-pre {
-  overflow-x: auto;
-  padding: var(--space-md);
-  background: var(--surface);
-  border-radius: 4px;
-  margin: var(--space-lg) 0;
-}
-
-code {
-  padding: 0.1em 0.3em;
-  background: var(--surface);
-  border-radius: 3px;
-}
-
-pre code {
-  padding: 0;
-  background: none;
-}
-
-@media (max-width: 480px) {
-  pre {
-    font-size: 0.85rem;
-    padding: var(--space-sm);
-  }
-}
-
-/* ==================== Tables ==================== */
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: var(--space-lg) 0;
-  font-size: var(--text-sm);
-}
-
-th,
-td {
-  padding: var(--space-sm);
-  text-align: left;
-  border-bottom: 1px solid var(--rule);
-}
-
-th {
-  font-weight: 600;
-  font-family: var(--font-sans);
-  background: var(--surface);
-}
-
-@media (max-width: 768px) {
-  table {
-    font-size: 0.9rem;
-  }
-
-  th,
-  td {
-    padding: var(--space-sm) 0.5rem;
-  }
-}
-
 /* ==================== Blockquotes ==================== */
 
 blockquote {
-  margin: var(--space-lg) 0;
+  margin: var(--space-xl) 0;
   padding-left: var(--space-lg);
   border-left: 3px solid var(--rule);
   font-style: italic;
-}
-
-blockquote footer {
-  font-size: var(--text-sm);
-  margin-top: var(--space-sm);
   color: var(--fg-muted);
-}
-
-@media (max-width: 480px) {
-  blockquote {
-    padding-left: var(--space-md);
-    border-left-width: 2px;
-  }
-}
-
-/* ==================== Lists ==================== */
-
-ul,
-ol {
-  padding-left: var(--space-xl);
-}
-
-li {
-  margin-bottom: var(--space-sm);
-}
-
-ul ul,
-ol ol,
-ul ol,
-ol ul {
-  margin-top: var(--space-sm);
-  margin-bottom: var(--space-sm);
-}
-
-@media (max-width: 480px) {
-  ul,
-  ol {
-    padding-left: var(--space-lg);
-  }
-}
-
-/* ==================== Horizontal Rules ==================== */
-
-hr {
-  border: 0;
-  border-top: 1px solid var(--rule);
-  margin: var(--space-2xl) 0;
-}
-
-/* ==================== Mode-based Content Visibility ==================== */
-
-/* Jazz class uses a Real Book-like typeface */
-.annotation {
-  font-family: "MuseJazzText";
-}
-
-/* Hide notes and thoughts in normal mode */
-[data-mode="normal"] .notes,
-[data-mode="normal"] .thoughts {
-  display: none;
-}
-
-/* Hide thoughts in notes mode */
-[data-mode="notes"] .thoughts {
-  display: none;
-}
-
-/* In thoughts mode, show everything (default behavior) */
-
-/* Optional: visual styling for different content types */
-.notes {
-  font-style: italic;
-  opacity: 0.9;
-}
-
-.thoughts {
-  font-style: italic;
-  opacity: 0.85;
 }
 
 /* ==================== Utilities ==================== */
 
-.no-style-link {
-  text-decoration: none;
-}
-
-.nowrap {
-  white-space: nowrap;
-}
-
-.text-center {
-  text-align: center;
-}
-
 .text-muted {
   color: var(--fg-muted);
-}
-
-/* ==================== Responsive Utilities ==================== */
-
-@media (max-width: 768px) {
-  .hide-mobile {
-    display: none !important;
-  }
-}
-
-@media (min-width: 769px) {
-  .show-mobile {
-    display: none !important;
-  }
-}
-
-/* ==================== Print Styles ==================== */
-
-@media print {
-  body {
-    max-width: 100%;
-    padding-inline: 0;
-    font-size: 12pt;
-    line-height: 1.5;
-    background: white;
-    color: black;
-  }
-
-  body > header {
-    border-bottom: 1px solid black;
-  }
-
-  a {
-    text-decoration: underline;
-  }
-
-  a[href^="http"]:after {
-    content: " (" attr(href) ")";
-    font-size: 0.85em;
-  }
-
-  pre,
-  code {
-    border: 1px solid #ccc;
-  }
-
-  img,
-  figure {
-    page-break-inside: avoid;
-  }
 }

@@ -1,0 +1,746 @@
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout
+  title="Notes – Novation Peak Sound Design Practice Ladder"
+  description="Grounded sound-design exercises using classic synth archetypes"
+>
+  <!-- article: a self-contained knowledge object (a page you could cite or export as-is) -->
+  <article id="practice-ladder">
+    <!-- header: the introduction block for the page (title + framing) -->
+    <header>
+      <!-- h1: name of the page-level object; treat as a title, not a sentence -->
+      <h1>Novation Peak – Sound Design Practice Ladder</h1>
+
+      <!-- p: the default unit of explanation; keep one idea per paragraph -->
+      <p class="subtitle">
+        A sequence of “patch archetypes” designed to build control before
+        complexity. Each patch is a small study: do it fast once, then repeat
+        until it becomes boringly dependable.
+      </p>
+    </header>
+
+    <p>
+      The intent is not to collect presets, but to build a mental model: how
+      oscillators, envelopes, filters, and modulation interact, and how little
+      you can use while still making something expressive. If you want a
+      constraint: avoid effects until the patch itself feels alive.
+    </p>
+
+    <!-- nav: conceptual navigation; here it’s an index into the ladder -->
+    <nav aria-label="Practice Ladder Index">
+      <!-- ol: use when order matters (a ladder has a recommended sequence) -->
+      <ol>
+        <li>
+          <a href="#single-oscillator-saw-lead">Single-Oscillator Saw Lead</a>
+        </li>
+        <li><a href="#square-bass-with-snap">Square Bass With Snap</a></li>
+        <li><a href="#two-saw-poly-pad">Two-Saw Poly Pad</a></li>
+        <li><a href="#pwm-pad-strings">PWM Pad / Strings</a></li>
+        <li><a href="#hard-sync-lead">Hard-Sync Lead</a></li>
+        <li><a href="#poly-brass-stab">Poly Brass Stab</a></li>
+        <li><a href="#fm-bell-electric-piano">FM Bell / Electric Piano</a></li>
+        <li><a href="#acid-bassline">Acid Bassline</a></li>
+        <li><a href="#string-ensemble">String Ensemble</a></li>
+        <li><a href="#evolving-cinematic-pad">Evolving Cinematic Pad</a></li>
+      </ol>
+    </nav>
+
+    <!-- section: a major thematic grouping; keep headings shallow (h1–h3) -->
+    <section id="synthesis">
+      <!-- h2: stable category label -->
+      <h2>Synthesis</h2>
+
+      <section id="single-oscillator-saw-lead">
+        <!-- h3: concept/object label; treat as a name -->
+        <h3>Single-Oscillator Saw Lead</h3>
+
+        <p>
+          This is the irreducible core: one oscillator, one filter, one
+          envelope. The aim is to feel how much expression is available before
+          you add layers that can hide weak articulation.
+        </p>
+
+        <!-- dl: term → meaning; great for learnable “patch notes” -->
+        <dl aria-label="Patch Notes">
+          <dt>Archetype</dt>
+          <dd>
+            Minimoog-style monosynth lead: forward midrange, clear articulation,
+            expressive cutoff.
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Make a lead that feels good with only cutoff, envelope amount, and
+            playing dynamics. If it does not “speak” here, adding more will
+            usually just add noise.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            Treat filter cutoff as tone control, not as an effect. Use envelope
+            depth as a controlled transient shaper rather than “more
+            brightness.”
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>
+                Pink Floyd – <cite>Shine On You Crazy Diamond</cite> (1975)
+              </li>
+              <li>Jean-Michel Jarre – <cite>Oxygène IV</cite> (1976)</li>
+              <li>Tangerine Dream – <cite>Phaedra</cite> (1974)</li>
+            </ul>
+          </dd>
+
+          <dt>Start</dt>
+          <dd>
+            Init patch. One saw at 8’. Resonance low. Amp envelope: fast attack,
+            medium decay, low sustain (or moderate sustain if you want legato).
+            Filter envelope: moderate amount, decay tuned by ear. Keep effects
+            off.
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            A stable “core vowel” that changes smoothly with cutoff. The
+            transient should be defined without sounding clicky. Notes should
+            feel consistent across the keyboard.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Add slight key tracking on the filter for consistency. Map
+            aftertouch to cutoff with a small range. Try a tiny amount of drive
+            before touching resonance.
+          </dd>
+        </dl>
+
+        <!-- aside: adjacent context; not the main instruction line -->
+        <aside>
+          <p>
+            If this patch does not feel expressive under the fingers, treat it
+            as a diagnostic. The fix is almost always envelope timing and gain
+            staging, not “more oscillators.”
+          </p>
+        </aside>
+      </section>
+
+      <section id="square-bass-with-snap">
+        <h3>Square Bass With Snap</h3>
+
+        <p>
+          Bass teaches discipline. The margin between punch and mud is narrow,
+          and envelope timing matters more than waveform choice.
+        </p>
+
+        <dl aria-label="Patch Notes">
+          <dt>Archetype</dt>
+          <dd>
+            SH-101 / electro bass: focused fundamental, clean transient,
+            controlled low-end.
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Build a bass that “locks” with a kick without relying on distortion,
+            compression, or loudness tricks.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            Perceived impact is mostly envelope shape. The attack transient
+            should be created by filter movement, not by over-bright oscillator
+            content.
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>Newcleus – <cite>Jam On It</cite> (1984)</li>
+              <li>Cybotron – <cite>Clear</cite> (1983)</li>
+              <li>Kraftwerk – <cite>Numbers</cite> (1981)</li>
+            </ul>
+          </dd>
+
+          <dt>Start</dt>
+          <dd>
+            Square wave at 16’. Filter fairly closed, resonance low. Filter
+            envelope: fast attack, short decay, sustain at zero (or very low),
+            small-to-moderate envelope amount. Amp envelope: fast attack, medium
+            decay, sustain to taste.
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            A clean “thump” that is present even at low volume. If it feels
+            dull, increase envelope amount slightly before opening cutoff. If it
+            feels boomy, shorten decay before touching EQ or drive.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Map velocity to filter envelope amount (not volume) to create
+            accents. Try a tiny sub-oscillator blend; then remove it again and
+            see if you actually needed it.
+          </dd>
+        </dl>
+
+        <aside>
+          <p>
+            Adjust only filter decay until the bass locks in. Avoid compensating
+            with volume or distortion; those hide timing problems.
+          </p>
+        </aside>
+      </section>
+
+      <section id="two-saw-poly-pad">
+        <h3>Two-Saw Poly Pad</h3>
+
+        <p>
+          This introduces width without complexity. The sound should feel large
+          yet stable, like a chord that holds its shape.
+        </p>
+
+        <dl aria-label="Patch Notes">
+          <dt>Archetype</dt>
+          <dd>
+            Juno / Prophet baseline pad: two saws, gentle detune, slow
+            envelopes, restrained filter.
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Create width through tuning and voicing, not through modulation
+            noise. The pad should stay coherent over long sustains.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            Detune creates width up to a point; beyond that it becomes “sour.”
+            Voice spread and stereo placement can do more than extra detune.
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>Vangelis – <cite>Blade Runner Blues</cite> (1982)</li>
+              <li>Simple Minds – <cite>New Gold Dream</cite> (1982)</li>
+              <li>Talk Talk – <cite>It’s My Life</cite> (1984)</li>
+            </ul>
+          </dd>
+
+          <dt>Start</dt>
+          <dd>
+            Two saw oscillators, same octave, light detune. 12 dB low-pass,
+            minimal resonance, cutoff set to remove fizz. Amp envelope: slow
+            attack, long release. Filter envelope: either off or very subtle.
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            A chord that feels wide but not wobbly. The sound should not “beat”
+            obviously unless you want that. If it does, reduce detune before
+            changing anything else.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Add barely-audible slow LFO to pitch for “life” (depth near zero).
+            Compare chorus vs. subtle stereo delay, and keep whichever preserves
+            chord clarity.
+          </dd>
+        </dl>
+
+        <aside>
+          <p>
+            “Warm” usually means fewer high harmonics and less edge, not more
+            modulation.
+          </p>
+        </aside>
+      </section>
+
+      <section id="pwm-pad-strings">
+        <h3>PWM Pad / Strings</h3>
+
+        <p>
+          This patch demonstrates how slow modulation creates life without
+          obvious motion. The goal is animation that stays in the background.
+        </p>
+
+        <dl aria-label="Patch Notes">
+          <dt>Archetype</dt>
+          <dd>
+            Juno-style PWM pad/strings: pulse wave movement plus gentle
+            ensemble/chorus character.
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Get “alive but stable.” You should feel motion, but not be able to
+            point at it.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            One slow modulation in the right place beats many fast ones. Depth
+            is usually the problem, not rate.
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>Japan – <cite>Ghosts</cite> (1981)</li>
+              <li>Depeche Mode – <cite>Stripped</cite> (1986)</li>
+              <li>The Cure – <cite>Plainsong</cite> (1989)</li>
+            </ul>
+          </dd>
+
+          <dt>Start</dt>
+          <dd>
+            Pulse waves with different widths. Slow LFO to PWM with small depth.
+            Filter gently rolled off. Add chorus sparingly if needed; the PWM
+            should do most of the work.
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            Motion that does not “call attention.” If you notice a repeating
+            cycle, reduce depth first, then consider changing rate.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Try two slow LFOs at unrelated rates: one to PWM (very small), one
+            to filter cutoff (even smaller). If it starts to sound seasick, back
+            out immediately.
+          </dd>
+        </dl>
+
+        <aside>
+          <p>
+            If the motion draws attention to itself, reduce modulation depth,
+            not rate.
+          </p>
+        </aside>
+      </section>
+
+      <section id="hard-sync-lead">
+        <h3>Hard-Sync Lead</h3>
+
+        <p>
+          Oscillator sync introduces controlled harmonic aggression. The musical
+          trick is to move timbre via pitch modulation without sounding like a
+          siren.
+        </p>
+
+        <dl aria-label="Patch Notes">
+          <dt>Archetype</dt>
+          <dd>
+            1980s “hero lead” sync sound: bright, cutting, but controlled by
+            small pitch motions.
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Create a lead where expressive range comes from subtle performance
+            control (mod wheel, aftertouch, envelope amount), not from extreme
+            settings.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            Sync timbre movement is pitch movement. The ear reads small changes
+            as expression; large changes read as effect.
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>Van Halen – <cite>Jump</cite> (1984)</li>
+              <li>a-ha – <cite>Take On Me</cite> (1985)</li>
+              <li>Europe – <cite>The Final Countdown</cite> (1986)</li>
+            </ul>
+          </dd>
+
+          <dt>Start</dt>
+          <dd>
+            Sync one oscillator to another. Use a saw as the synced oscillator.
+            Set a stable base tone with filter. Route an envelope or wheel to
+            the master oscillator’s pitch in a small range.
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            A consistent fundamental with “ripping” harmonics that move
+            smoothly. If the tone loses pitch center, reduce modulation range.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Try adding a tiny amount of portamento for phrasing. Map aftertouch
+            to modulation depth so you can “lean in” on held notes without
+            overshooting.
+          </dd>
+        </dl>
+
+        <aside>
+          <p>
+            The expressive range lives in small pitch movements. Large ones are
+            for special effects.
+          </p>
+        </aside>
+      </section>
+
+      <section id="poly-brass-stab">
+        <h3>Poly Brass Stab</h3>
+
+        <p>
+          Brass sounds are about articulation, not realism. The character is
+          mostly envelope punch and how the filter opens and settles.
+        </p>
+
+        <dl aria-label="Patch Notes">
+          <dt>Archetype</dt>
+          <dd>
+            Prophet / OB-style brass hit: two saws (or saw + pulse), fast filter
+            envelope, controlled bite.
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Make a chord stab that barks and then sits back. It should cut
+            through without becoming harsh, and it should “snap” even with
+            effects off.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            The identity is in the filter envelope: fast attack, moderate decay,
+            low sustain. The oscillator stack supplies body; the envelope
+            supplies the mouth.
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>Prince – <cite>1999</cite> (1982)</li>
+              <li>Herbie Hancock – <cite>Rockit</cite> (1983)</li>
+              <li>Duran Duran – <cite>Rio</cite> (1982)</li>
+            </ul>
+          </dd>
+
+          <dt>Start</dt>
+          <dd>
+            Two saws, slight detune. Optional subtle third oscillator for body.
+            Filter moderately closed with low resonance. Filter envelope: fast
+            attack, moderate decay, low sustain, moderate amount. Amp envelope:
+            fast attack, decay to a steady sustain (for stabs, sustain can be
+            low).
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            A “bark” at the front, then a stable body. If it sounds thin, add
+            body with oscillator balance before opening the filter. If it sounds
+            harsh, reduce envelope amount before lowering cutoff.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Try slight unison (if available) at low detune for thickness.
+            Compare 12 dB vs 24 dB filter slopes for how the stab sits in a mix.
+          </dd>
+        </dl>
+
+        <aside>
+          <p>The goal is a bark, not brightness.</p>
+        </aside>
+      </section>
+
+      <section id="fm-bell-electric-piano">
+        <h3>FM Bell / Electric Piano</h3>
+
+        <p>
+          This introduces frequency modulation in a controlled, musical way.
+          With FM, brightness is often better controlled by FM depth than by
+          filter cutoff.
+        </p>
+
+        <dl aria-label="Patch Notes">
+          <dt>Archetype</dt>
+          <dd>
+            DX-inspired bells and electric pianos: clean transients, bright
+            partials, playable dynamics.
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Make a sound that gets brighter when played harder without becoming
+            brittle. The aim is “playability”: it should reward touch.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            FM index controls brightness. Scaling (velocity or mod mapping)
+            preserves musicality. If you solve dynamics with a filter only, FM
+            sounds often lose their identity.
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>Phil Collins – <cite>One More Night</cite> (1985)</li>
+              <li>Toto – <cite>Africa</cite> (1982)</li>
+              <li>Peter Gabriel – <cite>Sledgehammer</cite> (1986)</li>
+            </ul>
+          </dd>
+
+          <dt>Start</dt>
+          <dd>
+            Set one oscillator as carrier, another as modulator (FM). Keep
+            filter mostly open with minimal resonance. Use amp envelope
+            appropriate to bell/EP: quick attack, medium decay, moderate
+            sustain, medium release. Control tone primarily with FM depth.
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            A clear strike transient and harmonics that “sparkle” rather than
+            fizz. If the tone is glassy, reduce FM depth before touching the
+            filter.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Map velocity to FM depth (small range) and compare to
+            velocity-to-filter. Add a gentle high-pass (if available) to keep
+            low-end clean without dulling the strike.
+          </dd>
+        </dl>
+
+        <aside>
+          <p>
+            Velocity-to-FM is often more convincing than velocity-to-filter.
+          </p>
+        </aside>
+      </section>
+
+      <section id="acid-bassline">
+        <h3>Acid Bassline</h3>
+
+        <p>
+          This patch teaches how envelopes and resonance interact dynamically.
+          The “acid” character is as much about performance variation as about
+          the static settings.
+        </p>
+
+        <dl aria-label="Patch Notes">
+          <dt>Archetype</dt>
+          <dd>
+            TB-303 spirit: resonant filter, snappy envelope, accents that change
+            the phrase contour.
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Make a bassline sound that can be expressive with small changes:
+            cutoff moves, envelope amount changes, and accent dynamics.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            Resonance plus envelope amount creates vowel-like motion. The
+            envelope defines how the “mouth” opens and closes; resonance defines
+            how vocal it becomes.
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>Phuture – <cite>Acid Tracks</cite> (1987)</li>
+              <li>A Guy Called Gerald – <cite>Voodoo Ray</cite> (1988)</li>
+              <li>Adonis – <cite>No Way Back</cite> (1986)</li>
+            </ul>
+          </dd>
+
+          <dt>Start</dt>
+          <dd>
+            Saw or square into a resonant 24 dB filter. Resonance
+            moderate-to-high (but not self-osc). Filter envelope: fast attack,
+            short-to-medium decay, low sustain, strong amount. Use velocity as
+            “accent” control (brighter and/or louder).
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            A talking quality when cutoff moves. Accented notes should feel like
+            they reshape the phrase, not just get louder. If it turns to
+            whistle, reduce resonance before lowering cutoff.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Map mod wheel to envelope amount for live “push.” Add a subtle drive
+            to make resonance read as formant rather than pure sine.
+          </dd>
+        </dl>
+
+        <aside>
+          <p>
+            The characteristic sound emerges from performance variation, not
+            static settings.
+          </p>
+        </aside>
+      </section>
+
+      <section id="string-ensemble">
+        <h3>String Ensemble</h3>
+
+        <p>
+          Ensemble sounds rely on many small instabilities rather than one large
+          modulation. The trick is to imply “many players” without obvious
+          wobble.
+        </p>
+
+        <dl aria-label="Patch Notes">
+          <dt>Archetype</dt>
+          <dd>
+            Solina-style string machine: layered saws, gentle drift, generous
+            ensemble/chorus.
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Create a wide, lush sustain that stays musical. The sound should
+            feel like a section, not like one synth with a big LFO.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            Multiple small errors beat one big one. Slight detunes, slight phase
+            differences, slight stereo spread: together they suggest many
+            sources.
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>Donna Summer – <cite>I Feel Love</cite> (1977)</li>
+              <li>ABBA – <cite>The Winner Takes It All</cite> (1980)</li>
+              <li>Jean-Michel Jarre – <cite>Équinoxe Part 4</cite> (1978)</li>
+            </ul>
+          </dd>
+
+          <dt>Start</dt>
+          <dd>
+            Three saw oscillators with very small detune differences. Filter
+            gently rolled off. Add chorus/ensemble generously. If you use pitch
+            LFO, keep depth extremely low and rate slow.
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            A steady “bed” that remains pleasant over long holds. If the sound
+            swims, reduce pitch modulation first, then reduce chorus depth.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Compare two approaches: (1) more detune, less chorus; (2) less
+            detune, more chorus. Keep the one that preserves pitch center on
+            sustained chords.
+          </dd>
+        </dl>
+
+        <aside>
+          <p>
+            If the sound swims, reduce pitch modulation first, chorus second.
+          </p>
+        </aside>
+      </section>
+
+      <section id="evolving-cinematic-pad">
+        <h3>Evolving Cinematic Pad</h3>
+
+        <p>
+          This integrates everything learned so far into a restrained,
+          expressive whole. The movement should be felt over time, not noticed
+          moment-to-moment.
+        </p>
+
+        <dl aria-label="Patch Notes">
+          <dt>Archetype</dt>
+          <dd>
+            Modern cinematic/ambient pad rooted in analog discipline: slow
+            motion, stable tone, intentional modulation.
+          </dd>
+
+          <dt>Goal</dt>
+          <dd>
+            Build an evolving texture that stays emotionally coherent. It should
+            support harmony and melody rather than compete with them.
+          </dd>
+
+          <dt>Principle</dt>
+          <dd>
+            Design modulation intentionally: what moves, how much, and why. If
+            you can hear the modulation “doing a thing,” it is probably too
+            strong.
+          </dd>
+
+          <dt>Reference</dt>
+          <dd>
+            <ul>
+              <li>Brian Eno – <cite>An Ending (Ascent)</cite> (1983)</li>
+              <li>
+                Tangerine Dream – <cite>Love On A Real Train</cite> (1984)
+              </li>
+              <li>Vangelis – <cite>Memories of Green</cite> (1980)</li>
+            </ul>
+          </dd>
+
+          <dt>Start</dt>
+          <dd>
+            Choose a stable oscillator base (saws/pulses/wavetables kept
+            gentle). Use slow LFOs with very small depths. If you use wavetable
+            motion, make it subtle and slow. Add performance controls
+            (aftertouch, mod wheel) for intentional movement.
+          </dd>
+
+          <dt>Listen For</dt>
+          <dd>
+            A sound that stays “about one thing” over time. The harmonic content
+            should drift without losing pitch center. If the pad becomes
+            restless, reduce depth before changing rates.
+          </dd>
+
+          <dt>Further Ideas</dt>
+          <dd>
+            Create two versions: one with no effects, one with minimal reverb.
+            The no-effects version should still feel complete. Then try mapping
+            a single performance control to two targets (for example cutoff + FM
+            depth), both in tiny ranges, to make one gesture feel rich.
+          </dd>
+        </dl>
+
+        <aside>
+          <p>
+            If you can hear the modulation working, it is already too strong.
+          </p>
+        </aside>
+      </section>
+    </section>
+
+    <!-- footer: closing material for the article -->
+    <footer>
+      <p class="text-muted">
+        This ladder is meant to stay editable. Add variants freely, but try to
+        preserve the basic format: a clear goal, a small set of controls, and a
+        few tests for whether it worked.
+      </p>
+    </footer>
+  </article>
+</Layout>
