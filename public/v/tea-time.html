@@ -1,0 +1,2494 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary metadata -->
+    <title>Tea Temperature Dynamics</title>
+    <meta
+      name="description"
+      content="A visual timer showing when tea is ready to steep, drink, or has gone cold."
+    />
+
+    <!-- Open Graph (iOS Messages, WhatsApp, Signal, Slack, etc.) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Tea Temperature Dynamics" />
+    <meta
+      property="og:description"
+      content="A visual timer showing when tea is ready to steep, drink, or has gone cold."
+    />
+    <meta property="og:url" content="https://goude.se/v/tea-time.html" />
+    <meta
+      property="og:image"
+      content="https://goude.se/v/tea-time-preview.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Tea Temperature Dynamics" />
+    <meta
+      name="twitter:description"
+      content="A visual timer showing when tea is ready to steep, drink, or has gone cold."
+    />
+    <meta
+      name="twitter:image"
+      content="https://goude.se/v/tea-time-preview.png"
+    />
+
+    <!-- Canonical (prevents weird caching / duplication issues) -->
+    <link rel="canonical" href="https://goude.se/v/tea-time.html" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      :root {
+        --bg: #1a1612;
+        --surface: #252019;
+        --surface-raised: #2d2620;
+        --accent: #d4a574;
+        --accent-dim: #8b6f4e;
+        --text: #e8e0d5;
+        --text-muted: #9a8f80;
+        --brew: #c45c3a;
+        --steep: #d4a574;
+        --cool: #5b8a72;
+        --drinkable: #6b9ac4;
+        --cold: #7a6f82;
+        --radius: 12px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Fraunces", Georgia, serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        line-height: 1.5;
+        padding: 1rem;
+        padding-bottom: 4rem;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      header {
+        text-align: center;
+        padding: 1.5rem 0;
+        border-bottom: 1px solid var(--accent-dim);
+        margin-bottom: 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: var(--accent);
+        letter-spacing: 0.02em;
+      }
+
+      .subtitle {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-top: 0.25rem;
+      }
+
+      /* Timer Section */
+      .timer-section {
+        background: var(--surface);
+        border-radius: var(--radius);
+        padding: 1rem;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+
+      .timer-display {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 2.5rem;
+        color: var(--accent);
+        margin: 0.5rem 0;
+      }
+
+      .timer-phase {
+        font-size: 0.9rem;
+        color: var(--text);
+        margin-bottom: 0.75rem;
+        min-height: 1.4em;
+      }
+
+      .timer-instruction {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        font-style: italic;
+        min-height: 1.2em;
+      }
+
+      .timer-buttons {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      .timer-btn {
+        padding: 0.6rem 1.5rem;
+        font-family: "Fraunces", serif;
+        font-size: 0.85rem;
+        border: 1px solid var(--accent-dim);
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .timer-btn.primary {
+        background: var(--accent);
+        color: var(--bg);
+        border-color: var(--accent);
+      }
+
+      .timer-btn.secondary {
+        background: var(--surface-raised);
+        color: var(--text);
+      }
+
+      .timer-btn:hover {
+        opacity: 0.85;
+      }
+
+      .timer-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      /* Sticky toggle */
+      .sticky-toggle {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        z-index: 1000;
+        background: var(--surface-raised);
+        border: 1px solid var(--accent-dim);
+        border-radius: var(--radius);
+        padding: 0.6rem 1rem;
+        color: var(--accent);
+        font-family: "Fraunces", serif;
+        font-size: 0.8rem;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s;
+      }
+
+      .sticky-toggle:hover {
+        background: var(--accent-dim);
+      }
+
+      .sticky-toggle.active {
+        background: var(--accent);
+        color: var(--bg);
+      }
+
+      .sticky-toggle svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* Overlay chart */
+      .chart-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 999;
+        background: var(--bg);
+        border-bottom: 1px solid var(--accent-dim);
+        padding: 0.75rem 1rem;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      }
+
+      .chart-overlay.visible {
+        transform: translateY(0);
+      }
+
+      .chart-overlay .chart-wrapper {
+        height: 200px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .chart-overlay .chart-legend {
+        max-width: 600px;
+        margin: 0.5rem auto 0;
+      }
+
+      /* Spacer when overlay is active */
+      body.overlay-active {
+        padding-bottom: 320px;
+      }
+
+      /* Chart Container */
+      .chart-section {
+        margin-bottom: 1.5rem;
+      }
+
+      .chart-container {
+        background: var(--surface);
+        border-radius: var(--radius);
+        padding: 1rem;
+        position: relative;
+      }
+
+      .chart-wrapper {
+        position: relative;
+        width: 100%;
+        height: 280px;
+      }
+
+      canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      .chart-legend {
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 0.75rem;
+        font-size: 0.65rem;
+        flex-wrap: wrap;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+
+      .legend-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+
+      .legend-dot.steep {
+        background: var(--steep);
+      }
+      .legend-dot.cool {
+        background: var(--cool);
+      }
+      .legend-dot.drinkable {
+        background: var(--drinkable);
+      }
+      .legend-dot.cold {
+        background: var(--cold);
+      }
+
+      .legend-marker {
+        width: 2px;
+        height: 10px;
+      }
+
+      .legend-marker.add {
+        background: var(--steep);
+      }
+      .legend-marker.remove {
+        background: var(--brew);
+      }
+
+      /* Current temp indicator */
+      .current-temp {
+        text-align: center;
+        padding: 1rem;
+        background: var(--surface-raised);
+        border-radius: var(--radius);
+        margin-bottom: 1rem;
+      }
+
+      .current-temp-label {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      .current-temp-value {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 2rem;
+        color: var(--accent);
+        font-weight: 500;
+      }
+
+      .current-temp-phase {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-top: 0.25rem;
+      }
+
+      /* Markers info */
+      .markers-info {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .marker-card {
+        background: var(--surface);
+        border-radius: var(--radius);
+        padding: 0.75rem;
+        text-align: center;
+      }
+
+      .marker-card-label {
+        font-size: 0.6rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        min-height: 2.4em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .marker-card-value {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 1rem;
+        margin-top: 0.25rem;
+      }
+
+      .marker-card-value.add {
+        color: var(--steep);
+      }
+      .marker-card-value.remove {
+        color: var(--brew);
+      }
+      .marker-card-value.drinkable {
+        color: var(--drinkable);
+      }
+
+      .marker-card-value.done {
+        color: var(--cool);
+      }
+
+      /* Time scrubber */
+      .time-scrubber {
+        margin-top: 1rem;
+      }
+
+      .time-display {
+        text-align: center;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.9rem;
+        color: var(--text);
+        margin-bottom: 0.5rem;
+      }
+
+      /* Equation Display */
+      .equation-box {
+        background: var(--surface-raised);
+        border-radius: var(--radius);
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.75rem;
+        overflow-x: auto;
+      }
+
+      .equation-title {
+        color: var(--text-muted);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.5rem;
+        font-family: "Fraunces", serif;
+      }
+
+      .equation {
+        color: var(--accent);
+        white-space: nowrap;
+        font-size: 0.85rem;
+      }
+
+      .equation-values {
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-size: 0.7rem;
+        line-height: 1.8;
+      }
+
+      .equation-values span {
+        color: var(--text);
+      }
+
+      .equation-section {
+        margin-top: 1rem;
+        border-top: 1px solid var(--accent-dim);
+      }
+
+      .equation-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .equation-toggle:hover {
+        color: var(--accent);
+      }
+
+      .equation-section-title {
+        color: var(--accent);
+        font-size: 0.7rem;
+        font-family: "Fraunces", serif;
+      }
+
+      .equation-toggle-icon {
+        color: var(--accent);
+        font-size: 0.8rem;
+        transition: transform 0.2s;
+      }
+
+      .equation-toggle-icon.open {
+        transform: rotate(180deg);
+      }
+
+      .equation-details {
+        display: none;
+        padding-bottom: 0.5rem;
+      }
+
+      .equation-details.open {
+        display: block;
+      }
+
+      .equation-note {
+        color: var(--text-muted);
+        font-size: 0.65rem;
+        margin-top: 0.5rem;
+        font-style: italic;
+      }
+
+      /* Controls */
+      .controls-section {
+        background: var(--surface);
+        border-radius: var(--radius);
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .section-title {
+        color: var(--accent);
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .control-group {
+        margin-bottom: 1.25rem;
+      }
+
+      .control-group:last-child {
+        margin-bottom: 0;
+      }
+
+      .control-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 0.5rem;
+      }
+
+      .control-label label {
+        font-size: 0.85rem;
+        color: var(--text);
+      }
+
+      .control-value {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.8rem;
+        color: var(--accent);
+        background: var(--surface-raised);
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+      }
+
+      input[type="range"] {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 8px;
+        background: var(--surface-raised);
+        border-radius: 4px;
+        outline: none;
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 28px;
+        height: 28px;
+        background: var(--accent);
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      input[type="range"]::-moz-range-thumb {
+        width: 28px;
+        height: 28px;
+        background: var(--accent);
+        border-radius: 50%;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Select dropdown */
+      .select-wrapper {
+        position: relative;
+      }
+
+      select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-family: "Fraunces", serif;
+        font-size: 0.9rem;
+        background: var(--surface-raised);
+        color: var(--text);
+        border: 1px solid var(--accent-dim);
+        border-radius: var(--radius);
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+      }
+
+      .select-wrapper::after {
+        content: "▼";
+        font-size: 0.6rem;
+        color: var(--accent);
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+      }
+
+      /* Info Tabs */
+      .info-tabs {
+        margin-top: 1.5rem;
+      }
+
+      .tab-buttons {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 0.25rem;
+      }
+
+      .tab-buttons::-webkit-scrollbar {
+        display: none;
+      }
+
+      .tab-btn {
+        flex-shrink: 0;
+        padding: 0.6rem 0.85rem;
+        font-family: "Fraunces", serif;
+        font-size: 0.75rem;
+        background: var(--surface);
+        color: var(--text-muted);
+        border: 1px solid transparent;
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .tab-btn.active {
+        background: var(--surface-raised);
+        color: var(--accent);
+        border-color: var(--accent-dim);
+      }
+
+      .tab-content {
+        background: var(--surface);
+        border-radius: var(--radius);
+        padding: 1.25rem;
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .tab-content h3 {
+        color: var(--accent);
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .tab-content h4 {
+        color: var(--steep);
+        font-size: 0.9rem;
+        margin: 1rem 0 0.5rem 0;
+      }
+
+      .tab-content p {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .tab-content p:last-child {
+        margin-bottom: 0;
+      }
+
+      .tab-content ul {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        margin-left: 1.25rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .tab-content li {
+        margin-bottom: 0.4rem;
+      }
+
+      .tab-content code {
+        font-family: "JetBrains Mono", monospace;
+        background: var(--surface-raised);
+        padding: 0.1rem 0.3rem;
+        border-radius: 3px;
+        font-size: 0.8rem;
+        color: var(--accent);
+      }
+
+      .tab-content .step {
+        display: flex;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background: var(--surface-raised);
+        border-radius: var(--radius);
+      }
+
+      .tab-content .step-num {
+        flex-shrink: 0;
+        width: 28px;
+        height: 28px;
+        background: var(--accent);
+        color: var(--bg);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.85rem;
+      }
+
+      .tab-content .step-content {
+        flex: 1;
+      }
+
+      .tab-content .step-title {
+        color: var(--text);
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+
+      .tab-content .step-detail {
+        color: var(--text-muted);
+        font-size: 0.8rem;
+      }
+
+      .xanthine-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.75rem;
+        margin: 0.75rem 0;
+      }
+
+      .xanthine-table th,
+      .xanthine-table td {
+        padding: 0.5rem;
+        text-align: left;
+        border-bottom: 1px solid var(--accent-dim);
+      }
+
+      .xanthine-table th {
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .xanthine-table td {
+        color: var(--text-muted);
+      }
+
+      /* Signature */
+      .signature {
+        text-align: center;
+        padding: 2rem 1rem;
+        margin-top: 2rem;
+        border-top: 1px solid var(--accent-dim);
+      }
+
+      .signature-text {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+      }
+
+      .signature-name {
+        font-size: 1.1rem;
+        color: var(--accent);
+        margin-top: 0.5rem;
+        font-style: italic;
+      }
+
+      /* Preset buttons for k */
+      .k-presets {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-top: 0.5rem;
+      }
+
+      .k-preset-btn {
+        padding: 0.3rem 0.6rem;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        background: var(--surface-raised);
+        color: var(--text-muted);
+        border: 1px solid var(--accent-dim);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+
+      .k-preset-btn:hover {
+        background: var(--accent-dim);
+        color: var(--text);
+      }
+
+      .k-preset-btn.active {
+        background: var(--accent);
+        color: var(--bg);
+        border-color: var(--accent);
+      }
+
+      .logo,
+      .logo:visited,
+      .logo:hover,
+      .logo:active,
+      .logo:focus,
+      .logo:focus-visible {
+        color: var(--color);
+      }
+
+      /* make the icon inherit link color */
+      .logo i {
+        color: currentColor;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sticky overlay chart -->
+    <div class="chart-overlay" id="chartOverlay">
+      <div class="chart-wrapper">
+        <canvas id="overlayChart"></canvas>
+      </div>
+      <div class="chart-legend">
+        <div class="legend-item">
+          <span class="legend-dot steep"></span> Steeping
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot cool"></span> Cooling
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot drinkable"></span> Ideal
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot cold"></span> Cold
+        </div>
+        <div class="legend-item">
+          <span class="legend-marker add"></span> Add
+        </div>
+        <div class="legend-item">
+          <span class="legend-marker remove"></span> Remove
+        </div>
+      </div>
+    </div>
+
+    <!-- Sticky toggle button -->
+    <button class="sticky-toggle" id="stickyToggle">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+      <span id="toggleText">Pin Graph</span>
+    </button>
+
+    <div class="container">
+      <header>
+        <a href="/" class="logo" title="Back to the top.">
+          <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+          <span class="sr-only">Home</span>
+        </a>
+
+        <h1>Tea Temperature Dynamics</h1>
+        <div class="subtitle">Pour · Steep · Cool · Drink</div>
+      </header>
+
+      <!-- Real-time Timer -->
+      <div class="timer-section">
+        <div class="current-temp-label">Live Timer</div>
+        <div class="timer-display" id="timerDisplay">0:00</div>
+        <div class="timer-phase" id="timerPhase">Ready to start</div>
+        <div class="timer-instruction" id="timerInstruction">
+          Press Start when you pour the water
+        </div>
+        <div class="timer-buttons">
+          <button class="timer-btn primary" id="timerStartBtn">Start</button>
+          <button class="timer-btn secondary" id="timerResetBtn" disabled>
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <div class="current-temp">
+        <div class="current-temp-label" id="currentTempLabel">
+          Temperature at cursor
+        </div>
+        <div class="current-temp-value" id="currentTemp">100.0°C</div>
+        <div class="current-temp-phase" id="currentPhase">Just poured</div>
+      </div>
+
+      <div class="markers-info">
+        <div class="marker-card">
+          <div class="marker-card-label" id="addTeaLabel">Add Tea At</div>
+          <div class="marker-card-value add" id="addTeaTime">0:00</div>
+        </div>
+        <div class="marker-card">
+          <div class="marker-card-label" id="removeTeaLabel">Remove Tea At</div>
+          <div class="marker-card-value remove" id="removeTeaTime">4:00</div>
+        </div>
+        <div class="marker-card">
+          <div class="marker-card-label" id="drinkableLabel">Drinkable At</div>
+          <div class="marker-card-value drinkable" id="drinkableTime">--</div>
+        </div>
+      </div>
+
+      <div class="chart-section">
+        <div class="chart-container">
+          <div class="chart-wrapper">
+            <canvas id="tempChart"></canvas>
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item">
+              <span class="legend-dot steep"></span> Steeping
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot cool"></span> Cooling
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot drinkable"></span> Ideal
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot cold"></span> Cold
+            </div>
+            <div class="legend-item">
+              <span class="legend-marker add"></span> Add tea
+            </div>
+            <div class="legend-item">
+              <span class="legend-marker remove"></span> Remove tea
+            </div>
+          </div>
+          <div class="time-scrubber">
+            <div class="time-display">
+              Time: <span id="timeDisplay">0:00</span>
+            </div>
+            <input type="range" id="timeScrubber" min="0" max="100" value="0" />
+          </div>
+        </div>
+      </div>
+
+      <div class="equation-box">
+        <div class="equation-title">Newton's Law of Cooling</div>
+        <div class="equation">
+          T(t) = <span id="eqTambMain">22</span> + (<span id="eqT0Main"
+            >100</span
+          >
+          − <span id="eqTambMain2">22</span>) · e<sup
+            >−<span id="eqKeffMain">0.0250</span>·t</sup
+          >
+        </div>
+
+        <div class="equation-values">
+          <strong>Current Parameters:</strong><br />
+          T<sub>amb</sub> = <span id="eqTamb">22</span>°C (ambient/room
+          temperature)<br />
+          T<sub>0</sub> = <span>100</span>°C (initial pour temperature)<br />
+          k<sub>base</sub> = <span id="eqKbase">0.025</span> min⁻¹ (material
+          constant)<br />
+          V = <span id="eqVolume">250</span> ml<br />
+          k<sub>eff</sub> = k<sub>base</sub> · √(250/V) =
+          <span id="eqKeff">0.0250</span> min⁻¹
+        </div>
+
+        <div class="equation-section">
+          <div class="equation-toggle" id="equationToggle">
+            <span class="equation-section-title">Detailed Calculations</span>
+            <span class="equation-toggle-icon" id="equationToggleIcon">▼</span>
+          </div>
+          <div class="equation-details" id="equationDetails">
+            <div class="equation-values">
+              <strong>Phase 1: Pre-steep cooling</strong> (t = 0 to
+              t<sub>add</sub>)<br />
+              T(t) = <span id="eqTamb2">22</span> + (<span>100</span> −
+              <span id="eqTamb3">22</span>) · e<sup
+                >−<span id="eqK1">0.0250</span>·t</sup
+              ><br />
+              <br />
+              <strong
+                >Time to reach brew temp (<span id="eqBrewTemp">95</span
+                >°C):</strong
+              ><br />
+              t<sub>add</sub> = −ln((<span id="eqBrewTemp2">95</span> −
+              <span id="eqTamb8">22</span>) / (<span>100</span> −
+              <span id="eqTamb9">22</span>)) / <span id="eqK4">0.0250</span
+              ><br />
+              t<sub>add</sub> = <span id="eqTadd">0.00</span> min<br />
+              <br />
+              <strong>Phase 2: Steeping</strong> (t<sub>add</sub> to
+              t<sub>remove</sub>)<br />
+              T(t) = <span id="eqTamb4">22</span> + (T<sub>add</sub> −
+              <span id="eqTamb5">22</span>) · e<sup
+                >−<span id="eqK2">0.0250</span>·(t − t<sub>add</sub>)</sup
+              ><br />
+              where T<sub>add</sub> = <span id="eqTaddTemp">95.0</span>°C<br />
+              t<sub>remove</sub> = t<sub>add</sub> +
+              <span id="eqSteepTime">4.0</span> =
+              <span id="eqTremove">4.00</span> min<br />
+              T<sub>remove</sub> = <span id="eqTremoveTemp">87.3</span>°C<br />
+              <br />
+              <strong>Phase 3: Post-steep cooling</strong> (t >
+              t<sub>remove</sub>)<br />
+              T(t) = <span id="eqTamb6">22</span> + (T<sub>remove</sub> −
+              <span id="eqTamb7">22</span>) · e<sup
+                >−<span id="eqK3">0.0250</span>·(t − t<sub>remove</sub>)</sup
+              >
+            </div>
+            <div class="equation-note">
+              All three phases use identical k<sub>eff</sub> =
+              <span id="eqKeffNote">0.0250</span> min⁻¹. The curve is
+              continuous—each phase starts where the previous ended.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls-section">
+        <div class="section-title">Tea Selection</div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <label>Tea Type</label>
+          </div>
+          <div class="select-wrapper">
+            <select id="teaType">
+              <option value="black">Black Tea (95°C, 4 min)</option>
+              <option value="green">Green Tea (80°C, 2 min)</option>
+              <option value="white">White Tea (75°C, 3 min)</option>
+              <option value="oolong">Oolong Tea (90°C, 3 min)</option>
+              <option value="herbal">Herbal Infusion (100°C, 5 min)</option>
+              <option value="rooibos">Rooibos (100°C, 5 min)</option>
+              <option value="custom">Custom Settings</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls-section">
+        <div class="section-title">Brew Parameters</div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <label>Add Tea at Temperature</label>
+            <span class="control-value" id="brewTempValue">95°C</span>
+          </div>
+          <input type="range" id="brewTemp" min="70" max="100" value="95" />
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <label>Steep Time</label>
+            <span class="control-value" id="steepTimeValue">4 min</span>
+          </div>
+          <input
+            type="range"
+            id="steepTime"
+            min="0.5"
+            max="10"
+            value="4"
+            step="0.5"
+          />
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <label>Water Volume</label>
+            <span class="control-value" id="volumeValue">250 ml</span>
+          </div>
+          <input
+            type="range"
+            id="volume"
+            min="100"
+            max="500"
+            value="250"
+            step="25"
+          />
+        </div>
+      </div>
+
+      <div class="controls-section">
+        <div class="section-title">Environment</div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <label>Cup Material / Cooling Constant</label>
+            <span class="control-value" id="kValue">0.025</span>
+          </div>
+          <input
+            type="range"
+            id="kSlider"
+            min="0.001"
+            max="0.200"
+            value="0.025"
+            step="0.001"
+          />
+          <div class="k-presets">
+            <button
+              class="k-preset-btn"
+              data-k="0.001"
+              title="Perfect vacuum flask"
+            >
+              Vacuum (0.001)
+            </button>
+            <button
+              class="k-preset-btn"
+              data-k="0.008"
+              title="Double-walled insulated"
+            >
+              Insulated (0.008)
+            </button>
+            <button
+              class="k-preset-btn active"
+              data-k="0.025"
+              title="Standard ceramic mug"
+            >
+              Ceramic (0.025)
+            </button>
+            <button class="k-preset-btn" data-k="0.030" title="Glass cup">
+              Glass (0.030)
+            </button>
+            <button
+              class="k-preset-btn"
+              data-k="0.035"
+              title="Paper/cardboard cup"
+            >
+              Paper (0.035)
+            </button>
+            <button class="k-preset-btn" data-k="0.040" title="Thin metal cup">
+              Metal (0.040)
+            </button>
+            <button
+              class="k-preset-btn"
+              data-k="0.100"
+              title="Metal cup with spoon, windy day"
+            >
+              Windy Metal (0.100)
+            </button>
+            <button
+              class="k-preset-btn"
+              data-k="0.200"
+              title="Shallow dish, fan blowing"
+            >
+              Petri Dish + Fan (0.200)
+            </button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <label>Room Temperature</label>
+            <span class="control-value" id="roomTempValue">22°C</span>
+          </div>
+          <input type="range" id="roomTemp" min="15" max="30" value="22" />
+        </div>
+      </div>
+
+      <div class="controls-section">
+        <div class="section-title">Drinking Zone</div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <label>Safe to Drink (upper)</label>
+            <span class="control-value" id="drinkableTempValue">60°C</span>
+          </div>
+          <input type="range" id="drinkableTemp" min="50" max="70" value="60" />
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <label>Too Cold (lower)</label>
+            <span class="control-value" id="coldTempValue">45°C</span>
+          </div>
+          <input type="range" id="coldTemp" min="35" max="55" value="45" />
+        </div>
+      </div>
+
+      <div class="info-tabs">
+        <div class="tab-buttons">
+          <button class="tab-btn active" data-tab="howto">How To</button>
+          <button class="tab-btn" data-tab="physics">Physics</button>
+          <button class="tab-btn" data-tab="xanthines">Xanthines</button>
+          <button class="tab-btn" data-tab="tea">Tea Guide</button>
+          <button class="tab-btn" data-tab="tips">Temperatures</button>
+        </div>
+
+        <div class="tab-content active" id="tab-howto">
+          <h3>How to Use This Timer</h3>
+
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Boil water</div>
+              <div class="step-detail">
+                Bring fresh water to a rolling boil (100°C).
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Pour & Start timer</div>
+              <div class="step-detail">
+                Pour boiling water into your cup and immediately press
+                <strong>Start</strong>. The timer begins tracking temperature.
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Wait for "Add Tea" alert</div>
+              <div class="step-detail">
+                When water reaches <span id="howtoBrewTemp">95°C</span>, add
+                your tea leaves or bag. The timer will tell you.
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Remove tea at steep end</div>
+              <div class="step-detail">
+                After <span id="howtoSteepTime">4 minutes</span> of steeping,
+                remove the tea to prevent bitterness.
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">Wait for drinkable temperature</div>
+              <div class="step-detail">
+                The timer shows when tea reaches
+                <span id="howtoDrinkTemp">60°C</span>—safe to drink without
+                burning your mouth.
+              </div>
+            </div>
+          </div>
+
+          <p style="margin-top: 1rem">
+            <strong>Tip:</strong> The graph line moves in real-time, showing
+            exactly where you are in the process.
+          </p>
+        </div>
+
+        <div class="tab-content" id="tab-physics">
+          <h3>The Physics of Cooling</h3>
+          <p>
+            Newton's Law of Cooling states that the rate of heat loss is
+            proportional to the temperature difference between the object and
+            its surroundings:
+          </p>
+          <p><code>dT/dt = −k(T − T<sub>amb</sub>)</code></p>
+          <p>
+            Solving this differential equation gives the exponential decay
+            formula shown above.
+          </p>
+          <p>The cooling constant <code>k</code> depends on:</p>
+          <ul>
+            <li>
+              <strong>Surface area to volume ratio</strong> — wider cups cool
+              faster
+            </li>
+            <li>
+              <strong>Material thermal conductivity</strong> — metal conducts
+              heat away faster than ceramic
+            </li>
+            <li>
+              <strong>Convection</strong> — air movement accelerates cooling
+            </li>
+            <li>
+              <strong>Insulation</strong> — vacuum flasks dramatically slow heat
+              loss
+            </li>
+          </ul>
+          <p>
+            We model volume effects with
+            <code>k<sub>eff</sub> = k<sub>base</sub> · √(250/V)</code>. This
+            approximates how larger volumes have relatively less surface area
+            for heat loss.
+          </p>
+
+          <h4>Extreme k values</h4>
+          <p>
+            <strong>Very low k (0.001):</strong> A perfect vacuum flask. Heat
+            can only escape via the lid and radiation—takes hours to cool
+            significantly.
+          </p>
+          <p>
+            <strong>Very high k (0.200):</strong> A shallow petri dish with a
+            fan blowing across it. Maximum surface area, forced convection, and
+            thin liquid layer. Cools in minutes.
+          </p>
+
+          <p>
+            <strong>Note:</strong> Real-world cooling involves radiation and
+            evaporation too, but Newton's Law provides a good first-order model
+            for beverage cooling.
+          </p>
+        </div>
+
+        <div class="tab-content" id="tab-xanthines">
+          <h3>Xanthines in Tea</h3>
+          <p>
+            Tea contains several methylxanthine alkaloids—psychoactive compounds
+            that affect the nervous system. The three main ones:
+          </p>
+
+          <h4>Caffeine (1,3,7-trimethylxanthine)</h4>
+          <p>
+            The primary stimulant. Blocks adenosine receptors, promoting
+            alertness. Half-life: 3-7 hours.
+          </p>
+
+          <h4>Theophylline (1,3-dimethylxanthine)</h4>
+          <p>
+            Bronchodilator and mild stimulant. Relaxes smooth muscle. Present in
+            small amounts in tea. Used medically for asthma.
+          </p>
+
+          <h4>Theobromine (3,7-dimethylxanthine)</h4>
+          <p>
+            Milder stimulant than caffeine. Longer half-life (~7 hours). Creates
+            a gentler, more sustained effect. Also found in chocolate.
+          </p>
+
+          <table class="xanthine-table">
+            <thead>
+              <tr>
+                <th>Tea Type</th>
+                <th>Caffeine</th>
+                <th>L-Theanine</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Black</td>
+                <td>40-70mg</td>
+                <td>24mg</td>
+                <td>Highest caffeine, full oxidation</td>
+              </tr>
+              <tr>
+                <td>Oolong</td>
+                <td>30-50mg</td>
+                <td>~20mg</td>
+                <td>Partial oxidation, varies widely</td>
+              </tr>
+              <tr>
+                <td>Green</td>
+                <td>20-45mg</td>
+                <td>~20mg</td>
+                <td>Unoxidized, more L-theanine</td>
+              </tr>
+              <tr>
+                <td>White</td>
+                <td>15-30mg</td>
+                <td>~18mg</td>
+                <td>Minimal processing, delicate</td>
+              </tr>
+              <tr>
+                <td>Herbal</td>
+                <td>0mg</td>
+                <td>0mg</td>
+                <td>Not <em>Camellia sinensis</em></td>
+              </tr>
+              <tr>
+                <td>Rooibos</td>
+                <td>0mg</td>
+                <td>0mg</td>
+                <td><em>Aspalathus linearis</em>, caffeine-free</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            <em
+              >Values per 240ml cup. Actual content varies by cultivar, harvest,
+              and brewing parameters.</em
+            >
+          </p>
+
+          <h4>L-Theanine</h4>
+          <p>
+            Not a xanthine, but notable: this amino acid unique to tea promotes
+            calm alertness by increasing alpha brain waves. It modulates
+            caffeine's effects, explaining why tea feels different from coffee
+            despite similar caffeine content.
+          </p>
+        </div>
+
+        <div class="tab-content" id="tab-tea">
+          <h3>Optimal Brewing by Type</h3>
+          <p>
+            <strong>Black tea:</strong> Add at 95°C, steep 3-5 min. Full
+            oxidation requires hot water to extract tannins and develop malty,
+            robust flavors.
+          </p>
+          <p>
+            <strong>Green tea:</strong> Add at 75-80°C, steep 2-3 min. High
+            temperatures extract bitter catechins. Cooler water preserves
+            grassy, vegetal notes.
+          </p>
+          <p>
+            <strong>White tea:</strong> Add at 75°C, steep 3-5 min. Minimal
+            processing means delicate buds that scorch easily.
+          </p>
+          <p>
+            <strong>Oolong:</strong> Add at 85-90°C, steep 2-4 min. Partial
+            oxidation spans a wide flavor range—adjust to the specific oolong.
+          </p>
+          <p>
+            <strong>Herbal infusions:</strong> Add at 100°C, steep 5-7 min. Not
+            actually tea—these dried herbs, flowers, and fruits need longer
+            extraction.
+          </p>
+          <p>
+            <strong>Rooibos:</strong> Add at 100°C, steep 5-7 min. South African
+            "red bush" is naturally caffeine-free with sweet, slightly nutty
+            flavor. Very forgiving—won't turn bitter with long steeping.
+          </p>
+        </div>
+
+        <div class="tab-content" id="tab-tips">
+          <h3>Temperature Zones</h3>
+          <p>
+            <strong>Above 65°C:</strong> Risk of oral burns. The WHO classifies
+            beverages above 65°C as "probably carcinogenic to humans" (Group 2A)
+            with repeated exposure—thermal damage to esophageal tissue.
+          </p>
+          <p>
+            <strong>60-65°C:</strong> Hot but generally safe. Flavor compounds
+            are volatile and aromatic at these temperatures.
+          </p>
+          <p>
+            <strong>55-60°C:</strong> Comfortable drinking zone for most people.
+            Optimal balance of heat and flavor release.
+          </p>
+          <p>
+            <strong>45-55°C:</strong> Lukewarm. Still pleasant but flavor
+            becomes less vibrant as fewer volatile compounds reach your nose.
+          </p>
+          <p>
+            <strong>Below 45°C:</strong> Cold tea. Aromatic compounds no longer
+            volatilize effectively. Some people enjoy cold tea, but it's a
+            different flavor profile.
+          </p>
+          <p>
+            The chart shows a
+            <span style="color: var(--drinkable)">blue "ideal" zone</span>
+            between your drinkable temperature and the "too cold" threshold, and
+            a <span style="color: var(--cold)">gray "cold" zone</span> below
+            that.
+          </p>
+        </div>
+      </div>
+
+      <div class="signature">
+        <div class="signature-text">A Production of</div>
+        <div class="signature-name">The Ethical Oil Company</div>
+      </div>
+    </div>
+
+    <script>
+      // Tea presets: target temp to add tea, steep duration
+      const teaPresets = {
+        black: { temp: 95, steep: 4 },
+        green: { temp: 80, steep: 2 },
+        white: { temp: 75, steep: 3 },
+        oolong: { temp: 90, steep: 3 },
+        herbal: { temp: 100, steep: 5 },
+        rooibos: { temp: 100, steep: 5 },
+        custom: null,
+      };
+
+      // State
+      let params = {
+        brewTemp: 95,
+        steepTime: 4,
+        volume: 250,
+        roomTemp: 22,
+        coolingConstant: 0.025, // k_base
+        drinkableTemp: 60,
+        coldTemp: 45,
+      };
+
+      let chartData = [];
+      let markers = { addTea: 0, removeTea: 0, drinkable: 0 };
+      let currentTimeIndex = 0;
+      let overlayActive = false;
+      let equationDetailsOpen = false;
+
+      // Timer state
+      let timerRunning = false;
+      let timerStartTime = null;
+      let timerInterval = null;
+      let timerElapsed = 0; // in seconds
+      let currentTimerTemp = 100;
+
+      // DOM elements
+      const mainCanvas = document.getElementById("tempChart");
+      const mainCtx = mainCanvas.getContext("2d");
+      const overlayCanvas = document.getElementById("overlayChart");
+      const overlayCtx = overlayCanvas.getContext("2d");
+
+      // Calculate effective k
+      function getEffectiveK() {
+        const volumeFactor = Math.sqrt(250 / params.volume);
+        return params.coolingConstant * volumeFactor;
+      }
+
+      // Temperature at time t using Newton's Law of Cooling
+      function tempAtTime(t, T_initial, k, T_amb) {
+        return T_amb + (T_initial - T_amb) * Math.exp(-k * t);
+      }
+
+      // Time to reach target temp from initial temp
+      function timeToTemp(T_target, T_initial, k, T_amb) {
+        if (T_target >= T_initial) return 0;
+        if (T_target <= T_amb) return Infinity;
+        return -Math.log((T_target - T_amb) / (T_initial - T_amb)) / k;
+      }
+
+      // Calculate temperature curve
+      function calculateCurve() {
+        chartData = [];
+        const pourTemp = 100;
+        const totalMinutes = 40;
+        const k = getEffectiveK();
+        const T_amb = params.roomTemp;
+
+        // Calculate when to add tea
+        let addTeaTime = 0;
+        if (params.brewTemp < pourTemp) {
+          addTeaTime = timeToTemp(params.brewTemp, pourTemp, k, T_amb);
+        }
+
+        const removeTeaTime = addTeaTime + params.steepTime;
+
+        // Temperature at key points
+        const tempAtAdd = tempAtTime(addTeaTime, pourTemp, k, T_amb);
+        const tempAtRemove = tempAtTime(params.steepTime, tempAtAdd, k, T_amb);
+
+        // Generate data points
+        for (let t = 0; t <= totalMinutes; t += 0.05) {
+          let temp, phase;
+
+          if (t < addTeaTime) {
+            temp = tempAtTime(t, pourTemp, k, T_amb);
+            phase = "cooling-pre";
+          } else if (t < removeTeaTime) {
+            const steepT = t - addTeaTime;
+            temp = tempAtTime(steepT, tempAtAdd, k, T_amb);
+            phase = "steeping";
+          } else {
+            const coolT = t - removeTeaTime;
+            temp = tempAtTime(coolT, tempAtRemove, k, T_amb);
+            phase = "cooling";
+          }
+
+          // Determine drinking zone
+          if (temp <= params.drinkableTemp && temp > params.coldTemp) {
+            phase = "drinkable";
+          } else if (temp <= params.coldTemp) {
+            phase = "cold";
+          }
+
+          chartData.push({ time: t, temp, phase });
+        }
+
+        // Find drinkable time
+        let drinkableTime = null;
+        for (let i = 0; i < chartData.length; i++) {
+          if (chartData[i].temp <= params.drinkableTemp) {
+            drinkableTime = chartData[i].time;
+            break;
+          }
+        }
+
+        markers = {
+          addTea: addTeaTime,
+          removeTea: removeTeaTime,
+          drinkable: drinkableTime,
+        };
+
+        return chartData;
+      }
+
+      // Get current temperature at a given time (minutes)
+      function getTempAtMinutes(minutes) {
+        const k = getEffectiveK();
+        const T_amb = params.roomTemp;
+        const pourTemp = 100;
+
+        if (minutes < markers.addTea) {
+          return tempAtTime(minutes, pourTemp, k, T_amb);
+        } else if (minutes < markers.removeTea) {
+          const tempAtAdd = tempAtTime(markers.addTea, pourTemp, k, T_amb);
+          return tempAtTime(minutes - markers.addTea, tempAtAdd, k, T_amb);
+        } else {
+          const tempAtAdd = tempAtTime(markers.addTea, pourTemp, k, T_amb);
+          const tempAtRemove = tempAtTime(
+            params.steepTime,
+            tempAtAdd,
+            k,
+            T_amb
+          );
+          return tempAtTime(
+            minutes - markers.removeTea,
+            tempAtRemove,
+            k,
+            T_amb
+          );
+        }
+      }
+
+      // Format time as M:SS
+      function formatTime(minutes) {
+        if (minutes === Infinity || isNaN(minutes)) return "--";
+        const mins = Math.floor(minutes);
+        const secs = Math.round((minutes - mins) * 60);
+        return `${mins}:${secs.toString().padStart(2, "0")}`;
+      }
+
+      // Format steep time for display
+      function formatSteepTime(minutes) {
+        if (minutes === Math.floor(minutes)) {
+          return `${minutes} min`;
+        } else {
+          const mins = Math.floor(minutes);
+          const secs = (minutes - mins) * 60;
+          return `${mins}:${secs.toString().padStart(2, "0")}`;
+        }
+      }
+
+      // Draw chart
+      function drawChart(
+        canvas,
+        ctx,
+        compact = false,
+        timerTimeMinutes = null
+      ) {
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+
+        const width = rect.width;
+        const height = rect.height;
+        const padding = compact
+          ? { top: 15, right: 15, bottom: 25, left: 40 }
+          : { top: 20, right: 20, bottom: 35, left: 45 };
+        const chartWidth = width - padding.left - padding.right;
+        const chartHeight = height - padding.top - padding.bottom;
+
+        ctx.clearRect(0, 0, width, height);
+
+        const maxTime = chartData[chartData.length - 1].time;
+        const minTemp = params.roomTemp - 5;
+        const maxTemp = 105;
+
+        const xScale = (t) => padding.left + (t / maxTime) * chartWidth;
+        const yScale = (temp) =>
+          padding.top +
+          chartHeight -
+          ((temp - minTemp) / (maxTemp - minTemp)) * chartHeight;
+
+        // Draw grid
+        ctx.strokeStyle = "#3a3328";
+        ctx.lineWidth = 1;
+
+        for (
+          let temp = Math.ceil(minTemp / 10) * 10;
+          temp <= maxTemp;
+          temp += 10
+        ) {
+          ctx.beginPath();
+          ctx.moveTo(padding.left, yScale(temp));
+          ctx.lineTo(width - padding.right, yScale(temp));
+          ctx.stroke();
+        }
+
+        for (let t = 0; t <= maxTime; t += 5) {
+          ctx.beginPath();
+          ctx.moveTo(xScale(t), padding.top);
+          ctx.lineTo(xScale(t), height - padding.bottom);
+          ctx.stroke();
+        }
+
+        // Draw cold zone
+        ctx.fillStyle = "rgba(122, 111, 130, 0.12)";
+        ctx.fillRect(
+          padding.left,
+          yScale(params.coldTemp),
+          chartWidth,
+          height - padding.bottom - yScale(params.coldTemp)
+        );
+
+        // Draw ideal drinking zone
+        ctx.fillStyle = "rgba(107, 154, 196, 0.15)";
+        ctx.fillRect(
+          padding.left,
+          yScale(params.drinkableTemp),
+          chartWidth,
+          yScale(params.coldTemp) - yScale(params.drinkableTemp)
+        );
+
+        // Draw threshold lines
+        ctx.setLineDash([4, 4]);
+
+        ctx.strokeStyle = "rgba(107, 154, 196, 0.5)";
+        ctx.beginPath();
+        ctx.moveTo(padding.left, yScale(params.drinkableTemp));
+        ctx.lineTo(width - padding.right, yScale(params.drinkableTemp));
+        ctx.stroke();
+
+        ctx.strokeStyle = "rgba(122, 111, 130, 0.5)";
+        ctx.beginPath();
+        ctx.moveTo(padding.left, yScale(params.coldTemp));
+        ctx.lineTo(width - padding.right, yScale(params.coldTemp));
+        ctx.stroke();
+
+        ctx.setLineDash([]);
+
+        // Draw vertical markers
+        if (markers.addTea > 0) {
+          ctx.strokeStyle = "#d4a574";
+          ctx.lineWidth = 2;
+          ctx.setLineDash([6, 3]);
+          ctx.beginPath();
+          ctx.moveTo(xScale(markers.addTea), padding.top);
+          ctx.lineTo(xScale(markers.addTea), height - padding.bottom);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          if (!compact) {
+            ctx.fillStyle = "#d4a574";
+            ctx.font = '10px "JetBrains Mono", monospace';
+            ctx.textAlign = "center";
+            ctx.fillText("ADD", xScale(markers.addTea), padding.top - 5);
+          }
+        }
+
+        ctx.strokeStyle = "#c45c3a";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([6, 3]);
+        ctx.beginPath();
+        ctx.moveTo(xScale(markers.removeTea), padding.top);
+        ctx.lineTo(xScale(markers.removeTea), height - padding.bottom);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        if (!compact) {
+          ctx.fillStyle = "#c45c3a";
+          ctx.font = '10px "JetBrains Mono", monospace';
+          ctx.textAlign = "center";
+          ctx.fillText("REMOVE", xScale(markers.removeTea), padding.top - 5);
+        }
+
+        if (markers.drinkable && markers.drinkable < maxTime) {
+          ctx.strokeStyle = "#6b9ac4";
+          ctx.lineWidth = 2;
+          ctx.setLineDash([6, 3]);
+          ctx.beginPath();
+          ctx.moveTo(xScale(markers.drinkable), padding.top);
+          ctx.lineTo(xScale(markers.drinkable), height - padding.bottom);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          if (!compact) {
+            ctx.fillStyle = "#6b9ac4";
+            ctx.font = '10px "JetBrains Mono", monospace';
+            ctx.textAlign = "center";
+            ctx.fillText("DRINK", xScale(markers.drinkable), padding.top - 5);
+          }
+        }
+
+        // Draw temperature curve
+        const phases = {
+          "cooling-pre": "#5b8a72",
+          steeping: "#d4a574",
+          cooling: "#5b8a72",
+          drinkable: "#6b9ac4",
+          cold: "#7a6f82",
+        };
+
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+
+        let currentPhase = null;
+        ctx.beginPath();
+
+        chartData.forEach((point, i) => {
+          const x = xScale(point.time);
+          const y = yScale(point.temp);
+
+          if (i === 0) {
+            ctx.moveTo(x, y);
+            currentPhase = point.phase;
+          } else {
+            if (point.phase !== currentPhase) {
+              ctx.strokeStyle = phases[currentPhase];
+              ctx.stroke();
+              ctx.beginPath();
+              ctx.moveTo(
+                xScale(chartData[i - 1].time),
+                yScale(chartData[i - 1].temp)
+              );
+              currentPhase = point.phase;
+            }
+            ctx.lineTo(x, y);
+          }
+        });
+        ctx.strokeStyle = phases[currentPhase];
+        ctx.stroke();
+
+        // Draw timer position if running
+        if (timerTimeMinutes !== null && timerTimeMinutes <= maxTime) {
+          const timerTemp = getTempAtMinutes(timerTimeMinutes);
+          const x = xScale(timerTimeMinutes);
+          const y = yScale(timerTemp);
+
+          // Glowing vertical line
+          ctx.strokeStyle = "rgba(232, 224, 213, 0.3)";
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(x, padding.top);
+          ctx.lineTo(x, height - padding.bottom);
+          ctx.stroke();
+
+          ctx.strokeStyle = "#e8e0d5";
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(x, padding.top);
+          ctx.lineTo(x, height - padding.bottom);
+          ctx.stroke();
+
+          // Determine phase for color
+          let pointPhase = "cooling";
+          if (timerTimeMinutes < markers.addTea) pointPhase = "cooling-pre";
+          else if (timerTimeMinutes < markers.removeTea)
+            pointPhase = "steeping";
+          else if (timerTemp <= params.coldTemp) pointPhase = "cold";
+          else if (timerTemp <= params.drinkableTemp) pointPhase = "drinkable";
+
+          // Animated point
+          ctx.fillStyle = "#e8e0d5";
+          ctx.beginPath();
+          ctx.arc(x, y, 8, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = phases[pointPhase] || "#d4a574";
+          ctx.beginPath();
+          ctx.arc(x, y, 5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        // Draw scrubber position (only if timer not running)
+        else if (currentTimeIndex >= 0 && currentTimeIndex < chartData.length) {
+          const point = chartData[currentTimeIndex];
+          const x = xScale(point.time);
+          const y = yScale(point.temp);
+
+          ctx.strokeStyle = "#e8e0d5";
+          ctx.lineWidth = 1;
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          ctx.moveTo(x, padding.top);
+          ctx.lineTo(x, height - padding.bottom);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          ctx.fillStyle = "#e8e0d5";
+          ctx.beginPath();
+          ctx.arc(x, y, 6, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = phases[point.phase] || "#5b8a72";
+          ctx.beginPath();
+          ctx.arc(x, y, 4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Axes labels
+        ctx.fillStyle = "#9a8f80";
+        ctx.font = compact
+          ? '9px "JetBrains Mono", monospace'
+          : '11px "JetBrains Mono", monospace';
+        ctx.textAlign = "center";
+
+        const xStep = compact ? 10 : 5;
+        for (let t = 0; t <= maxTime; t += xStep) {
+          ctx.fillText(
+            `${t}m`,
+            xScale(t),
+            height - padding.bottom + (compact ? 15 : 20)
+          );
+        }
+
+        ctx.textAlign = "right";
+        const yStep = 20;
+        for (
+          let temp = Math.ceil(minTemp / 10) * 10;
+          temp <= maxTemp;
+          temp += yStep
+        ) {
+          ctx.fillText(`${temp}°`, padding.left - 8, yScale(temp) + 4);
+        }
+      }
+
+      // Update marker displays
+      function updateMarkers(timerMinutes = null) {
+        if (timerRunning && timerMinutes !== null) {
+          // Timer running: show countdown/status
+          const addRemaining = markers.addTea - timerMinutes;
+          const removeRemaining = markers.removeTea - timerMinutes;
+          const drinkRemaining = markers.drinkable
+            ? markers.drinkable - timerMinutes
+            : null;
+
+          // Add tea
+          if (addRemaining > 0) {
+            document.getElementById("addTeaLabel").textContent = "Add Tea In";
+            document.getElementById("addTeaTime").textContent =
+              formatTime(addRemaining);
+            document.getElementById("addTeaTime").classList.remove("done");
+          } else {
+            document.getElementById("addTeaLabel").textContent = "Tea Added";
+            document.getElementById("addTeaTime").textContent = "✓";
+            document.getElementById("addTeaTime").classList.add("done");
+          }
+
+          // Remove tea
+          if (removeRemaining > 0) {
+            document.getElementById("removeTeaLabel").textContent =
+              "Remove Tea In";
+            document.getElementById("removeTeaTime").textContent =
+              formatTime(removeRemaining);
+            document.getElementById("removeTeaTime").classList.remove("done");
+          } else {
+            document.getElementById("removeTeaLabel").textContent =
+              "Tea Removed";
+            document.getElementById("removeTeaTime").textContent = "✓";
+            document.getElementById("removeTeaTime").classList.add("done");
+          }
+
+          // Drinkable
+          if (drinkRemaining !== null && drinkRemaining > 0) {
+            document.getElementById("drinkableLabel").textContent =
+              "Drinkable In";
+            document.getElementById("drinkableTime").textContent =
+              formatTime(drinkRemaining);
+            document.getElementById("drinkableTime").classList.remove("done");
+          } else if (drinkRemaining !== null) {
+            document.getElementById("drinkableLabel").textContent = "Drinkable";
+            document.getElementById("drinkableTime").textContent = "✓ Now";
+            document.getElementById("drinkableTime").classList.add("done");
+          } else {
+            document.getElementById("drinkableLabel").textContent =
+              "Drinkable At";
+            document.getElementById("drinkableTime").textContent = "--";
+          }
+        } else {
+          // Timer not running: show absolute times
+          document.getElementById("addTeaLabel").textContent = "Add Tea At";
+          document.getElementById("addTeaTime").textContent = formatTime(
+            markers.addTea
+          );
+          document.getElementById("addTeaTime").classList.remove("done");
+
+          document.getElementById("removeTeaLabel").textContent =
+            "Remove Tea At";
+          document.getElementById("removeTeaTime").textContent = formatTime(
+            markers.removeTea
+          );
+          document.getElementById("removeTeaTime").classList.remove("done");
+
+          document.getElementById("drinkableLabel").textContent =
+            "Drinkable At";
+          document.getElementById("drinkableTime").textContent =
+            markers.drinkable ? formatTime(markers.drinkable) : "--";
+          document.getElementById("drinkableTime").classList.remove("done");
+        }
+      }
+
+      // Update equation display
+      function updateEquation() {
+        const k = getEffectiveK();
+        const kStr = k.toFixed(4);
+        const T_amb = params.roomTemp;
+
+        // Main equation
+        document.getElementById("eqTambMain").textContent = T_amb;
+        document.getElementById("eqT0Main").textContent = "100";
+        document.getElementById("eqTambMain2").textContent = T_amb;
+        document.getElementById("eqKeffMain").textContent = kStr;
+
+        // Parameters
+        document.getElementById("eqTamb").textContent = T_amb;
+        document.getElementById("eqKbase").textContent =
+          params.coolingConstant.toFixed(3);
+        document.getElementById("eqVolume").textContent = params.volume;
+        document.getElementById("eqKeff").textContent = kStr;
+
+        // Detailed section
+        document.getElementById("eqTamb2").textContent = T_amb;
+        document.getElementById("eqTamb3").textContent = T_amb;
+        document.getElementById("eqK1").textContent = kStr;
+
+        document.getElementById("eqBrewTemp").textContent = params.brewTemp;
+        document.getElementById("eqBrewTemp2").textContent = params.brewTemp;
+        document.getElementById("eqTamb8").textContent = T_amb;
+        document.getElementById("eqTamb9").textContent = T_amb;
+        document.getElementById("eqK4").textContent = kStr;
+        document.getElementById("eqTadd").textContent =
+          markers.addTea.toFixed(2);
+
+        document.getElementById("eqTamb4").textContent = T_amb;
+        document.getElementById("eqTamb5").textContent = T_amb;
+        document.getElementById("eqK2").textContent = kStr;
+
+        // Calculate actual temps
+        const tempAtAdd = getTempAtMinutes(markers.addTea);
+        const tempAtRemove = getTempAtMinutes(markers.removeTea);
+
+        document.getElementById("eqTaddTemp").textContent =
+          tempAtAdd.toFixed(1);
+        document.getElementById("eqSteepTime").textContent =
+          params.steepTime.toFixed(1);
+        document.getElementById("eqTremove").textContent =
+          markers.removeTea.toFixed(2);
+        document.getElementById("eqTremoveTemp").textContent =
+          tempAtRemove.toFixed(1);
+
+        document.getElementById("eqTamb6").textContent = T_amb;
+        document.getElementById("eqTamb7").textContent = T_amb;
+        document.getElementById("eqK3").textContent = kStr;
+
+        document.getElementById("eqKeffNote").textContent = kStr;
+      }
+
+      // Update how-to tab values
+      function updateHowTo() {
+        document.getElementById("howtoBrewTemp").textContent =
+          params.brewTemp + "°C";
+        document.getElementById("howtoSteepTime").textContent = formatSteepTime(
+          params.steepTime
+        );
+        document.getElementById("howtoDrinkTemp").textContent =
+          params.drinkableTemp + "°C";
+      }
+
+      // Update current temp display
+      function updateCurrentTemp(timerMinutes = null) {
+        if (timerRunning && timerMinutes !== null) {
+          // Show current temperature from timer
+          const temp = getTempAtMinutes(timerMinutes);
+          currentTimerTemp = temp;
+
+          document.getElementById("currentTempLabel").textContent =
+            "Current Temperature";
+          document.getElementById("currentTemp").textContent =
+            `${temp.toFixed(1)}°C`;
+
+          let phaseText;
+          if (timerMinutes < markers.addTea) {
+            phaseText = "Cooling to brew temp";
+          } else if (timerMinutes < markers.removeTea) {
+            phaseText = "Steeping tea";
+          } else if (temp > params.drinkableTemp) {
+            phaseText = "Too hot to drink";
+          } else if (temp > params.coldTemp) {
+            phaseText = "✓ Ideal drinking zone";
+          } else {
+            phaseText = "Getting cold";
+          }
+          document.getElementById("currentPhase").textContent = phaseText;
+        } else if (
+          currentTimeIndex >= 0 &&
+          currentTimeIndex < chartData.length
+        ) {
+          // Show temperature at cursor
+          const point = chartData[currentTimeIndex];
+
+          document.getElementById("currentTempLabel").textContent =
+            "Temperature at cursor";
+          document.getElementById("currentTemp").textContent =
+            `${point.temp.toFixed(1)}°C`;
+
+          let phaseText;
+          if (point.time < markers.addTea) {
+            phaseText = "Cooling to brew temp";
+          } else if (point.time < markers.removeTea) {
+            phaseText = "Steeping tea";
+          } else if (point.temp > params.drinkableTemp) {
+            phaseText = "Too hot to drink";
+          } else if (point.temp > params.coldTemp) {
+            phaseText = "✓ Ideal drinking zone";
+          } else {
+            phaseText = "Getting cold";
+          }
+          document.getElementById("currentPhase").textContent = phaseText;
+          document.getElementById("timeDisplay").textContent = formatTime(
+            point.time
+          );
+        }
+      }
+
+      // Timer functions
+      function startTimer() {
+        timerRunning = true;
+        timerStartTime = Date.now() - timerElapsed * 1000;
+        document.getElementById("timerStartBtn").textContent = "Pause";
+        document.getElementById("timerResetBtn").disabled = false;
+
+        timerInterval = setInterval(updateTimer, 100);
+      }
+
+      function pauseTimer() {
+        timerRunning = false;
+        clearInterval(timerInterval);
+        document.getElementById("timerStartBtn").textContent = "Resume";
+
+        // Revert to cursor mode
+        updateMarkers(null);
+        updateCurrentTemp(null);
+      }
+
+      function resetTimer() {
+        timerRunning = false;
+        clearInterval(timerInterval);
+        timerElapsed = 0;
+        timerStartTime = null;
+        document.getElementById("timerStartBtn").textContent = "Start";
+        document.getElementById("timerResetBtn").disabled = true;
+        document.getElementById("timerDisplay").textContent = "0:00";
+        document.getElementById("timerPhase").textContent = "Ready to start";
+        document.getElementById("timerInstruction").textContent =
+          "Press Start when you pour the water";
+
+        updateMarkers(null);
+        updateCurrentTemp(null);
+        drawChart(mainCanvas, mainCtx, false, null);
+        if (overlayActive) {
+          drawChart(overlayCanvas, overlayCtx, true, null);
+        }
+      }
+
+      function updateTimer() {
+        timerElapsed = (Date.now() - timerStartTime) / 1000;
+        const minutes = timerElapsed / 60;
+
+        // Update timer display
+        const mins = Math.floor(minutes);
+        const secs = Math.floor(timerElapsed % 60);
+        document.getElementById("timerDisplay").textContent =
+          `${mins}:${secs.toString().padStart(2, "0")}`;
+
+        // Get current temp
+        const currentTemp = getTempAtMinutes(minutes);
+
+        // Update phase and instruction
+        let phase, instruction;
+
+        if (minutes < markers.addTea) {
+          const timeToAdd = markers.addTea - minutes;
+          phase = `Cooling... ${currentTemp.toFixed(1)}°C`;
+          if (timeToAdd < 0.5) {
+            instruction = "⏰ Almost time to add tea!";
+          } else {
+            instruction = `Add tea in ${formatTime(timeToAdd)}`;
+          }
+        } else if (minutes < markers.removeTea) {
+          const timeToRemove = markers.removeTea - minutes;
+          phase = `Steeping... ${currentTemp.toFixed(1)}°C`;
+          if (timeToRemove < 0.5) {
+            instruction = "⏰ Almost done steeping!";
+          } else {
+            instruction = `Remove tea in ${formatTime(timeToRemove)}`;
+          }
+        } else if (currentTemp > params.drinkableTemp) {
+          const timeToDrink = markers.drinkable
+            ? markers.drinkable - minutes
+            : null;
+          phase = `Cooling... ${currentTemp.toFixed(1)}°C`;
+          if (timeToDrink !== null && timeToDrink < 0.5 && timeToDrink > 0) {
+            instruction = "⏰ Almost drinkable!";
+          } else if (timeToDrink !== null && timeToDrink > 0) {
+            instruction = `Drinkable in ${formatTime(timeToDrink)}`;
+          } else {
+            instruction = "Should be drinkable soon";
+          }
+        } else if (currentTemp > params.coldTemp) {
+          phase = `✓ Ready! ${currentTemp.toFixed(1)}°C`;
+          instruction = "Enjoy your tea!";
+        } else {
+          phase = `Cold: ${currentTemp.toFixed(1)}°C`;
+          instruction = "Tea is getting cold";
+        }
+
+        document.getElementById("timerPhase").textContent = phase;
+        document.getElementById("timerInstruction").textContent = instruction;
+
+        // Update markers and temp display
+        updateMarkers(minutes);
+        updateCurrentTemp(minutes);
+
+        // Redraw chart with timer position
+        drawChart(mainCanvas, mainCtx, false, minutes);
+        if (overlayActive) {
+          drawChart(overlayCanvas, overlayCtx, true, minutes);
+        }
+      }
+
+      // Update all
+      function update() {
+        calculateCurve();
+
+        const timerMinutes = timerRunning ? timerElapsed / 60 : null;
+        drawChart(mainCanvas, mainCtx, false, timerMinutes);
+        if (overlayActive) {
+          drawChart(overlayCanvas, overlayCtx, true, timerMinutes);
+        }
+
+        updateMarkers(timerMinutes);
+        updateEquation();
+        updateHowTo();
+        updateCurrentTemp(timerMinutes);
+
+        document.getElementById("timeScrubber").max = chartData.length - 1;
+      }
+
+      // Update k preset buttons
+      function updateKPresetButtons() {
+        document.querySelectorAll(".k-preset-btn").forEach((btn) => {
+          const btnK = parseFloat(btn.dataset.k);
+          if (Math.abs(btnK - params.coolingConstant) < 0.0005) {
+            btn.classList.add("active");
+          } else {
+            btn.classList.remove("active");
+          }
+        });
+      }
+
+      // Toggle overlay
+      function toggleOverlay() {
+        overlayActive = !overlayActive;
+        const overlay = document.getElementById("chartOverlay");
+        const toggle = document.getElementById("stickyToggle");
+        const toggleText = document.getElementById("toggleText");
+
+        if (overlayActive) {
+          overlay.classList.add("visible");
+          toggle.classList.add("active");
+          toggleText.textContent = "Unpin";
+          document.body.classList.add("overlay-active");
+          const timerMinutes = timerRunning ? timerElapsed / 60 : null;
+          drawChart(overlayCanvas, overlayCtx, true, timerMinutes);
+        } else {
+          overlay.classList.remove("visible");
+          toggle.classList.remove("active");
+          toggleText.textContent = "Pin Graph";
+          document.body.classList.remove("overlay-active");
+        }
+      }
+
+      // Toggle equation details
+      function toggleEquationDetails() {
+        equationDetailsOpen = !equationDetailsOpen;
+        const details = document.getElementById("equationDetails");
+        const icon = document.getElementById("equationToggleIcon");
+
+        if (equationDetailsOpen) {
+          details.classList.add("open");
+          icon.classList.add("open");
+        } else {
+          details.classList.remove("open");
+          icon.classList.remove("open");
+        }
+      }
+
+      // Event listeners
+      document
+        .getElementById("stickyToggle")
+        .addEventListener("click", toggleOverlay);
+      document
+        .getElementById("equationToggle")
+        .addEventListener("click", toggleEquationDetails);
+
+      document.getElementById("timerStartBtn").addEventListener("click", () => {
+        if (timerRunning) {
+          pauseTimer();
+        } else {
+          startTimer();
+        }
+      });
+
+      document
+        .getElementById("timerResetBtn")
+        .addEventListener("click", resetTimer);
+
+      document.getElementById("teaType").addEventListener("change", (e) => {
+        const preset = teaPresets[e.target.value];
+        if (preset) {
+          params.brewTemp = preset.temp;
+          params.steepTime = preset.steep;
+          document.getElementById("brewTemp").value = preset.temp;
+          document.getElementById("steepTime").value = preset.steep;
+          document.getElementById("brewTempValue").textContent =
+            `${preset.temp}°C`;
+          document.getElementById("steepTimeValue").textContent =
+            formatSteepTime(preset.steep);
+        }
+        update();
+      });
+
+      document.getElementById("brewTemp").addEventListener("input", (e) => {
+        params.brewTemp = parseInt(e.target.value);
+        document.getElementById("brewTempValue").textContent =
+          `${params.brewTemp}°C`;
+        document.getElementById("teaType").value = "custom";
+        update();
+      });
+
+      document.getElementById("steepTime").addEventListener("input", (e) => {
+        params.steepTime = parseFloat(e.target.value);
+        document.getElementById("steepTimeValue").textContent = formatSteepTime(
+          params.steepTime
+        );
+        document.getElementById("teaType").value = "custom";
+        update();
+      });
+
+      document.getElementById("volume").addEventListener("input", (e) => {
+        params.volume = parseInt(e.target.value);
+        document.getElementById("volumeValue").textContent =
+          `${params.volume} ml`;
+        update();
+      });
+
+      document.getElementById("kSlider").addEventListener("input", (e) => {
+        params.coolingConstant = parseFloat(e.target.value);
+        document.getElementById("kValue").textContent =
+          params.coolingConstant.toFixed(3);
+        updateKPresetButtons();
+        update();
+      });
+
+      // K preset buttons
+      document.querySelectorAll(".k-preset-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          params.coolingConstant = parseFloat(btn.dataset.k);
+          document.getElementById("kSlider").value = params.coolingConstant;
+          document.getElementById("kValue").textContent =
+            params.coolingConstant.toFixed(3);
+          updateKPresetButtons();
+          update();
+        });
+      });
+
+      document.getElementById("roomTemp").addEventListener("input", (e) => {
+        params.roomTemp = parseInt(e.target.value);
+        document.getElementById("roomTempValue").textContent =
+          `${params.roomTemp}°C`;
+        update();
+      });
+
+      document
+        .getElementById("drinkableTemp")
+        .addEventListener("input", (e) => {
+          params.drinkableTemp = parseInt(e.target.value);
+          document.getElementById("drinkableTempValue").textContent =
+            `${params.drinkableTemp}°C`;
+          if (params.coldTemp >= params.drinkableTemp) {
+            params.coldTemp = params.drinkableTemp - 5;
+            document.getElementById("coldTemp").value = params.coldTemp;
+            document.getElementById("coldTempValue").textContent =
+              `${params.coldTemp}°C`;
+          }
+          update();
+        });
+
+      document.getElementById("coldTemp").addEventListener("input", (e) => {
+        params.coldTemp = parseInt(e.target.value);
+        document.getElementById("coldTempValue").textContent =
+          `${params.coldTemp}°C`;
+        if (params.drinkableTemp <= params.coldTemp) {
+          params.drinkableTemp = params.coldTemp + 5;
+          document.getElementById("drinkableTemp").value = params.drinkableTemp;
+          document.getElementById("drinkableTempValue").textContent =
+            `${params.drinkableTemp}°C`;
+        }
+        update();
+      });
+
+      document.getElementById("timeScrubber").addEventListener("input", (e) => {
+        if (!timerRunning) {
+          currentTimeIndex = parseInt(e.target.value);
+          drawChart(mainCanvas, mainCtx, false, null);
+          if (overlayActive) {
+            drawChart(overlayCanvas, overlayCtx, true, null);
+          }
+          updateCurrentTemp(null);
+        }
+      });
+
+      // Tab switching
+      document.querySelectorAll(".tab-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".tab-btn")
+            .forEach((b) => b.classList.remove("active"));
+          document
+            .querySelectorAll(".tab-content")
+            .forEach((c) => c.classList.remove("active"));
+          btn.classList.add("active");
+          document
+            .getElementById(`tab-${btn.dataset.tab}`)
+            .classList.add("active");
+        });
+      });
+
+      // Canvas interaction
+      function handleCanvasInteraction(
+        canvas,
+        e,
+        isTouch = false,
+        compact = false
+      ) {
+        if (timerRunning) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const x = isTouch
+          ? e.touches[0].clientX - rect.left
+          : e.clientX - rect.left;
+        const padding = compact
+          ? { left: 40, right: 15 }
+          : { left: 45, right: 20 };
+        const chartWidth = rect.width - padding.left - padding.right;
+
+        if (x >= padding.left && x <= rect.width - padding.right) {
+          const ratio = (x - padding.left) / chartWidth;
+          currentTimeIndex = Math.round(ratio * (chartData.length - 1));
+          document.getElementById("timeScrubber").value = currentTimeIndex;
+          drawChart(mainCanvas, mainCtx, false, null);
+          if (overlayActive) {
+            drawChart(overlayCanvas, overlayCtx, true, null);
+          }
+          updateCurrentTemp(null);
+        }
+      }
+
+      mainCanvas.addEventListener("mousemove", (e) =>
+        handleCanvasInteraction(mainCanvas, e, false, false)
+      );
+      mainCanvas.addEventListener(
+        "touchmove",
+        (e) => {
+          e.preventDefault();
+          handleCanvasInteraction(mainCanvas, e, true, false);
+        },
+        { passive: false }
+      );
+
+      overlayCanvas.addEventListener("mousemove", (e) =>
+        handleCanvasInteraction(overlayCanvas, e, false, true)
+      );
+      overlayCanvas.addEventListener(
+        "touchmove",
+        (e) => {
+          e.preventDefault();
+          handleCanvasInteraction(overlayCanvas, e, true, true);
+        },
+        { passive: false }
+      );
+
+      // Resize handling
+      window.addEventListener("resize", () => {
+        const timerMinutes = timerRunning ? timerElapsed / 60 : null;
+        drawChart(mainCanvas, mainCtx, false, timerMinutes);
+        if (overlayActive) {
+          drawChart(overlayCanvas, overlayCtx, true, timerMinutes);
+        }
+      });
+
+      // Initial render
+      update();
+    </script>
+  </body>
+</html>
