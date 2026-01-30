@@ -1,0 +1,166 @@
+# Tea Cooling Measurement Protocol
+# Version: 1.0
+#
+# Instructions:
+#   1. Copy this template for each measurement session
+#   2. Fill in values before/during measurement
+#   3. Use ~ for unknown/unmeasured values
+#   4. Times in minutes, temperatures in °C, volumes in ml, masses in g, lengths in mm
+
+metadata:
+  session_id: "2026-01-30_burleigh-blue-calico_001"
+  date: "2026-01-30"
+  time: "17:20"
+  notes: "First measurement session, establishing baseline"
+
+environment:
+  room_temp_c: 20.0
+  humidity_percent: ~ # nice-to-have: affects evaporative cooling
+  air_movement: "still" # still | light | drafty
+  surface: "wooden table" # what cup sits on (insulating vs conducting)
+
+vessel:
+  name: "Burleigh Blue Calico Teacup"
+  type: "teacup" # teacup | mug | glass | thermos | bowl | other
+  material: "earthenware" # ceramic | earthenware | porcelain | glass | metal | paper | plastic | insulated
+
+  # Measured properties
+  mass_empty_g: 252
+
+  # Dimensions (measured with ruler)
+  height_mm: 78 # outer height
+  diameter_top_mm: 110 # outer diameter at rim
+  diameter_bottom_mm: 50 # outer diameter at base
+  wall_thickness_mm: 5
+
+  # Derived inner dimensions
+  inner_diameter_top_mm: 100
+  inner_diameter_bottom_mm: 40
+  inner_height_mm: 73
+
+  # Capacity
+  measured_full_volume_ml: 375
+
+  # Condition
+  preheated: false # was cup pre-warmed with hot water?
+  lid: false # lid/cover during cooling?
+
+liquid:
+  type: "water" # water | tea | coffee | other
+  volume_ml: 275
+  fill_level: "to_brim" # to_brim | normal | half | measured_from_rim_mm
+  fill_from_rim_mm: ~ # if measured: distance from rim to liquid surface
+
+  # If tea:
+  tea_type: ~ # black | green | oolong | white | herbal | rooibos
+  tea_added_at_min: ~ # when tea was added (if applicable)
+  tea_removed_at_min: ~ # when tea was removed (if applicable)
+
+water_source:
+  initial_temp_c: 100.0 # measured or assumed boiling
+  heating_method: "stovetop" # stovetop | kettle | microwave | other
+  measured_at_pour: false # did you measure temp right at pour?
+
+thermometer:
+  model: "Weber grill thermometer"
+  type: "probe" # probe | infrared | mercury | digital
+  probe_position: "bottom" # bottom | middle | floating | side
+  response_time_s: ~ # how fast does it respond? (spec or estimate)
+
+  # Calibration (if performed)
+  calibrated: true
+  calibration_date: "2026-01-30"
+  calibration_method: "ice water, boiling, sous vide"
+  calibration_points:
+    - { reference_c: 0, measured_c: 0.0 }
+    - { reference_c: 30, measured_c: 29.9 }
+    - { reference_c: 40, measured_c: 40.1 }
+    - { reference_c: 50, measured_c: 50.2 }
+    - { reference_c: 60, measured_c: 59.9 }
+    - { reference_c: 70, measured_c: 70.1 }
+    - { reference_c: 80, measured_c: 80.2 }
+    - { reference_c: 100, measured_c: 100.1 }
+
+procedure:
+  # Timing
+  time_pour_to_first_reading_s: ~ # IMPORTANT: seconds from pour to t=0 reading
+  stirred: false # was liquid stirred during measurement?
+
+  # Measurement schedule (what you actually did)
+  schedule_description: "Every 30s for first 12 min, then every 60s, then sparse"
+
+  # Recommended schedule for future measurements:
+  # 0:00 - 5:00  -> every 30 seconds (fast ceramic equilibration)
+  # 5:00 - 15:00 -> every 60 seconds (transition region)
+  # 15:00 - 30:00 -> every 2-3 minutes (slow cooling, well-characterized)
+  # 30:00+ -> every 5 minutes (approaching room temp)
+
+# Temperature readings
+# Format: [time_minutes, temp_c]
+readings:
+  - [0.0, 94.0]
+  - [0.5, 85.7]
+  - [1.0, 84.7]
+  - [1.5, 83.0]
+  - [2.0, 80.8]
+  - [2.5, 78.3]
+  - [3.0, 76.8]
+  - [3.5, 76.0]
+  - [4.0, 74.5]
+  - [4.5, 73.4]
+  - [5.0, 72.5]
+  - [5.5, 71.2]
+  - [6.0, 70.0]
+  - [6.5, 68.9]
+  - [7.0, 67.9]
+  - [7.5, 67.0]
+  - [8.0, 66.2]
+  - [8.5, 65.4]
+  - [9.0, 64.5]
+  - [9.5, 63.5]
+  - [10.0, 62.6]
+  - [10.5, 61.9]
+  - [11.0, 61.1]
+  - [11.5, 60.2]
+  - [12.0, 59.5]
+  - [13.0, 58.2]
+  - [14.0, 56.9]
+  - [15.0, 56.1]
+  - [16.0, 55.0]
+  - [17.0, 54.1]
+  - [18.0, 53.2]
+  - [19.0, 52.0]
+  - [20.0, 50.8]
+  - [21.0, 49.9]
+  - [22.0, 49.1]
+  - [23.0, 47.7]
+  - [24.0, 47.4]
+  - [25.0, 46.7]
+  - [28.0, 44.2]
+  - [30.0, 43.3]
+  - [35.0, 40.7]
+  - [40.0, 38.1]
+  - [47.0, 35.5]
+  - [51.0, 34.1]
+  - [56.0, 32.7]
+  - [60.0, 31.5]
+
+# Analysis results (filled in after fitting)
+# This section is OUTPUT - don't fill manually
+analysis:
+  model: "two_exponential"
+  equation: "T(t) = T_amb + A1·exp(-k1·t) + A2·exp(-k2·t)"
+  parameters:
+    T_amb_c: 20.0
+    A1_c: 17.70
+    k1_per_min: 0.2196
+    tau1_min: 4.55
+    A2_c: 52.69
+    k2_per_min: 0.0266
+    tau2_min: 37.58
+  fit_quality:
+    rmse_c: 0.79
+    max_error_c: 3.61
+  physical_interpretation:
+    fast_component: "ceramic-water thermal equilibration"
+    slow_component: "convective/radiative loss to air"
