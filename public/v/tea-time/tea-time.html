@@ -4,21 +4,44 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tea Temperature Dynamics</title>
-    <meta name="description" content="A visual timer showing when tea is ready to steep, drink, or has gone cold." />
+    <meta
+      name="description"
+      content="A visual timer showing when tea is ready to steep, drink, or has gone cold."
+    />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Tea Temperature Dynamics" />
-    <meta property="og:description" content="A visual timer showing when tea is ready to steep, drink, or has gone cold." />
+    <meta
+      property="og:description"
+      content="A visual timer showing when tea is ready to steep, drink, or has gone cold."
+    />
     <meta property="og:url" content="https://goude.se/v/tea-time.html" />
-    <meta property="og:image" content="https://goude.se/v/tea-time-preview.png" />
+    <meta
+      property="og:image"
+      content="https://goude.se/v/tea-time-preview.png"
+    />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Tea Temperature Dynamics" />
-    <meta name="twitter:description" content="A visual timer showing when tea is ready to steep, drink, or has gone cold." />
-    <meta name="twitter:image" content="https://goude.se/v/tea-time-preview.png" />
+    <meta
+      name="twitter:description"
+      content="A visual timer showing when tea is ready to steep, drink, or has gone cold."
+    />
+    <meta
+      name="twitter:image"
+      content="https://goude.se/v/tea-time-preview.png"
+    />
     <link rel="canonical" href="https://goude.se/v/tea-time.html" />
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <link rel="stylesheet" href="style.css" />
     <script src="script.js" defer></script>
   </head>
@@ -29,18 +52,35 @@
         <canvas id="overlayChart"></canvas>
       </div>
       <div class="chart-legend">
-        <div class="legend-item"><span class="legend-dot steep"></span> Steeping</div>
-        <div class="legend-item"><span class="legend-dot cool"></span> Cooling</div>
-        <div class="legend-item"><span class="legend-dot drinkable"></span> Ideal</div>
-        <div class="legend-item"><span class="legend-dot cold"></span> Cold</div>
-        <div class="legend-item"><span class="legend-marker add"></span> Add</div>
-        <div class="legend-item"><span class="legend-marker remove"></span> Remove</div>
+        <div class="legend-item">
+          <span class="legend-dot steep"></span> Steeping
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot cool"></span> Cooling
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot drinkable"></span> Ideal
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot cold"></span> Cold
+        </div>
+        <div class="legend-item">
+          <span class="legend-marker add"></span> Add
+        </div>
+        <div class="legend-item">
+          <span class="legend-marker remove"></span> Remove
+        </div>
       </div>
     </div>
 
     <!-- Sticky toggle button -->
     <button class="sticky-toggle" id="stickyToggle">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
         <path d="M4 6h16M4 12h16M4 18h16" />
       </svg>
       <span id="toggleText">Pin Graph</span>
@@ -61,11 +101,18 @@
         <div class="current-temp-label">Live Timer</div>
         <div class="timer-display" id="timerDisplay">0:00</div>
         <div class="timer-phase" id="timerPhase">Ready to start</div>
-        <div class="timer-instruction" id="timerInstruction">Press Start to begin countdown</div>
+        <div class="timer-instruction" id="timerInstruction">
+          Press Start to begin countdown
+        </div>
         <div class="timer-buttons">
           <button class="timer-btn primary" id="timerStartBtn">Start</button>
         </div>
-        <a href="#tab-howto" class="timer-help-link" onclick="document.querySelector('[data-tab=howto]').click()">First time? See instructions ↓</a>
+        <a
+          href="#tab-howto"
+          class="timer-help-link"
+          onclick="document.querySelector('[data-tab=howto]').click()"
+          >First time? See instructions ↓</a
+        >
       </div>
 
       <div class="markers-info">
@@ -89,15 +136,29 @@
             <canvas id="tempChart"></canvas>
           </div>
           <div class="chart-legend">
-            <div class="legend-item"><span class="legend-dot steep"></span> Steeping</div>
-            <div class="legend-item"><span class="legend-dot cool"></span> Cooling</div>
-            <div class="legend-item"><span class="legend-dot drinkable"></span> Ideal</div>
-            <div class="legend-item"><span class="legend-dot cold"></span> Cold</div>
-            <div class="legend-item"><span class="legend-marker add"></span> Add tea</div>
-            <div class="legend-item"><span class="legend-marker remove"></span> Remove tea</div>
+            <div class="legend-item">
+              <span class="legend-dot steep"></span> Steeping
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot cool"></span> Cooling
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot drinkable"></span> Ideal
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot cold"></span> Cold
+            </div>
+            <div class="legend-item">
+              <span class="legend-marker add"></span> Add tea
+            </div>
+            <div class="legend-item">
+              <span class="legend-marker remove"></span> Remove tea
+            </div>
           </div>
           <div class="time-scrubber">
-            <div class="time-display">Time: <span id="timeDisplay">0:00</span></div>
+            <div class="time-display">
+              Time: <span id="timeDisplay">0:00</span>
+            </div>
             <input type="range" id="timeScrubber" min="0" max="100" value="0" />
           </div>
         </div>
@@ -135,7 +196,14 @@
             <label>Steep Time</label>
             <span class="control-value" id="steepTimeValue">4 min</span>
           </div>
-          <input type="range" id="steepTime" min="0.5" max="10" value="4" step="0.5" />
+          <input
+            type="range"
+            id="steepTime"
+            min="0.5"
+            max="10"
+            value="4"
+            step="0.5"
+          />
         </div>
       </div>
 
@@ -171,7 +239,14 @@
             <label>A₁ (ceramic absorption)</label>
             <span class="control-value" id="A1Value">14.0°C</span>
           </div>
-          <input type="range" id="A1Slider" min="0" max="40" value="14.0" step="0.1" />
+          <input
+            type="range"
+            id="A1Slider"
+            min="0"
+            max="40"
+            value="14.0"
+            step="0.1"
+          />
         </div>
 
         <div class="control-group">
@@ -179,7 +254,14 @@
             <label>k₁ (ceramic rate)</label>
             <span class="control-value" id="k1Value">0.350 min⁻¹</span>
           </div>
-          <input type="range" id="k1Slider" min="0.05" max="1.0" value="0.35" step="0.005" />
+          <input
+            type="range"
+            id="k1Slider"
+            min="0.05"
+            max="1.0"
+            value="0.35"
+            step="0.005"
+          />
         </div>
 
         <div class="control-group">
@@ -187,7 +269,14 @@
             <label>A₂ (initial excess temp)</label>
             <span class="control-value" id="A2Value">56.0°C</span>
           </div>
-          <input type="range" id="A2Slider" min="30" max="80" value="56.0" step="0.1" />
+          <input
+            type="range"
+            id="A2Slider"
+            min="30"
+            max="80"
+            value="56.0"
+            step="0.1"
+          />
         </div>
 
         <div class="control-group">
@@ -195,7 +284,14 @@
             <label>k₂ (air cooling rate)</label>
             <span class="control-value" id="k2Value">0.022 min⁻¹</span>
           </div>
-          <input type="range" id="k2Slider" min="0.005" max="0.100" value="0.022" step="0.001" />
+          <input
+            type="range"
+            id="k2Slider"
+            min="0.005"
+            max="0.100"
+            value="0.022"
+            step="0.001"
+          />
         </div>
       </div>
 
@@ -232,78 +328,123 @@
             <div class="step-num">1</div>
             <div class="step-content">
               <div class="step-title">Boil water</div>
-              <div class="step-detail">Bring fresh water to a rolling boil (100°C).</div>
+              <div class="step-detail">
+                Bring fresh water to a rolling boil (100°C).
+              </div>
             </div>
           </div>
           <div class="step">
             <div class="step-num">2</div>
             <div class="step-content">
               <div class="step-title">Press Start</div>
-              <div class="step-detail">A 5-second countdown begins. Pour when it says "Pour now!"</div>
+              <div class="step-detail">
+                A 5-second countdown begins. Pour when it says "Pour now!"
+              </div>
             </div>
           </div>
           <div class="step">
             <div class="step-num">3</div>
             <div class="step-content">
               <div class="step-title">Wait for "Add Tea" alert</div>
-              <div class="step-detail">When water reaches <span id="howtoBrewTemp">95°C</span>, add your tea leaves or bag.</div>
+              <div class="step-detail">
+                When water reaches <span id="howtoBrewTemp">95°C</span>, add
+                your tea leaves or bag.
+              </div>
             </div>
           </div>
           <div class="step">
             <div class="step-num">4</div>
             <div class="step-content">
               <div class="step-title">Remove tea at steep end</div>
-              <div class="step-detail">After <span id="howtoSteepTime">4 minutes</span> of steeping, remove the tea.</div>
+              <div class="step-detail">
+                After <span id="howtoSteepTime">4 minutes</span> of steeping,
+                remove the tea.
+              </div>
             </div>
           </div>
           <div class="step">
             <div class="step-num">5</div>
             <div class="step-content">
               <div class="step-title">Wait for drinkable temperature</div>
-              <div class="step-detail">The timer shows when tea reaches <span id="howtoDrinkTemp">60°C</span>.</div>
+              <div class="step-detail">
+                The timer shows when tea reaches
+                <span id="howtoDrinkTemp">60°C</span>.
+              </div>
             </div>
           </div>
           <p style="margin-top: 1rem">
-            <strong>Logging:</strong> Use the temperature slider below to record actual measurements for model calibration.
+            <strong>Logging:</strong> Use the temperature slider below to record
+            actual measurements for model calibration.
           </p>
         </div>
 
         <div class="tab-content" id="tab-model">
           <h3>Why Two Exponentials?</h3>
-          <p>Simple Newton's Law assumes heat only flows to the air. But when you pour boiling water into a cold ceramic cup, two things happen:</p>
+          <p>
+            Simple Newton's Law assumes heat only flows to the air. But when you
+            pour boiling water into a cold ceramic cup, two things happen:
+          </p>
           <h4>Fast process: Ceramic equilibration</h4>
-          <p>The cold cup absorbs heat from the water. A 252g ceramic cup at 20°C can absorb enough heat to drop water temperature by 10-15°C. This happens quickly (τ ≈ 3-5 min).</p>
+          <p>
+            The cold cup absorbs heat from the water. A 252g ceramic cup at 20°C
+            can absorb enough heat to drop water temperature by 10-15°C. This
+            happens quickly (τ ≈ 3-5 min).
+          </p>
           <h4>Slow process: Air cooling</h4>
-          <p>Heat escapes to the surrounding air via convection and radiation. This is slower (τ ≈ 40-50 min) because air is a poor heat conductor.</p>
+          <p>
+            Heat escapes to the surrounding air via convection and radiation.
+            This is slower (τ ≈ 40-50 min) because air is a poor heat conductor.
+          </p>
           <p>The two-exponential model captures both:</p>
           <p><code>T(t) = T_amb + A₁·e^(-k₁t) + A₂·e^(-k₂t)</code></p>
-          <p>This reduces RMSE from ~2.4°C (simple Newton) to ~0.5°C, especially improving accuracy in the critical first 10 minutes.</p>
+          <p>
+            This reduces RMSE from ~2.4°C (simple Newton) to ~0.5°C, especially
+            improving accuracy in the critical first 10 minutes.
+          </p>
           <h4>Pre-heating eliminates A₁</h4>
-          <p>If you pre-heat the cup with hot water first, A₁ → 0 and you get simple Newton cooling.</p>
+          <p>
+            If you pre-heat the cup with hot water first, A₁ → 0 and you get
+            simple Newton cooling.
+          </p>
 
           <!-- Equation box moved here -->
           <div class="equation-box-inline">
             <div class="equation-title">Two-Exponential Model Info</div>
             <div class="equation">
               T(t) = <span id="eqTambMain">20</span> +
-              <span id="eqA1Main">14.0</span>·e<sup>−<span id="eqK1Main">0.350</span>t</sup> +
-              <span id="eqA2Main">56.0</span>·e<sup>−<span id="eqK2Main">0.022</span>t</sup>
+              <span id="eqA1Main">14.0</span>·e<sup
+                >−<span id="eqK1Main">0.350</span>t</sup
+              >
+              + <span id="eqA2Main">56.0</span>·e<sup
+                >−<span id="eqK2Main">0.022</span>t</sup
+              >
             </div>
             <div class="equation-section">
               <div class="equation-toggle" id="equationToggle">
                 <span class="equation-section-title">Current Parameters</span>
-                <span class="equation-toggle-icon" id="equationToggleIcon">▼</span>
+                <span class="equation-toggle-icon" id="equationToggleIcon"
+                  >▼</span
+                >
               </div>
               <div class="equation-details" id="equationDetails">
                 <div class="equation-values">
                   T<sub>amb</sub> = <span id="eqTamb">20</span>°C (ambient)<br />
-                  A₁ = <span id="eqA1">14.0</span>°C, k₁ = <span id="eqK1">0.350</span> min⁻¹ (τ₁ = <span id="eqTau1">2.9</span> min) — ceramic<br />
-                  A₂ = <span id="eqA2">56.0</span>°C, k₂ = <span id="eqK2">0.022</span> min⁻¹ (τ₂ = <span id="eqTau2">45.5</span> min) — air<br /><br />
-                  <strong>T(0) = T<sub>amb</sub> + A₁ + A₂ = <span id="eqT0calc">90.0</span>°C</strong><br />
-                  Lower than 100°C due to heat lost during pour and initial ceramic contact.
+                  A₁ = <span id="eqA1">14.0</span>°C, k₁ =
+                  <span id="eqK1">0.350</span> min⁻¹ (τ₁ =
+                  <span id="eqTau1">2.9</span> min) — ceramic<br />
+                  A₂ = <span id="eqA2">56.0</span>°C, k₂ =
+                  <span id="eqK2">0.022</span> min⁻¹ (τ₂ =
+                  <span id="eqTau2">45.5</span> min) — air<br /><br />
+                  <strong
+                    >T(0) = T<sub>amb</sub> + A₁ + A₂ =
+                    <span id="eqT0calc">90.0</span>°C</strong
+                  ><br />
+                  Lower than 100°C due to heat lost during pour and initial
+                  ceramic contact.
                 </div>
                 <div class="equation-note">
-                  Model fitted to Burleigh Blue Calico cup (252g earthenware, 275ml water, 20°C room). RMSE ≈ 0.5°C.
+                  Model fitted to Burleigh Blue Calico cup (252g earthenware,
+                  275ml water, 20°C room). RMSE ≈ 0.5°C.
                 </div>
               </div>
             </div>
@@ -312,28 +453,65 @@
 
         <div class="tab-content" id="tab-xanthines">
           <h3>Xanthines in Tea</h3>
-          <p>Tea contains several methylxanthine alkaloids—psychoactive compounds that affect the nervous system.</p>
+          <p>
+            Tea contains several methylxanthine alkaloids—psychoactive compounds
+            that affect the nervous system.
+          </p>
           <h4>Caffeine (1,3,7-trimethylxanthine)</h4>
-          <p>The primary stimulant. Blocks adenosine receptors, promoting alertness. Half-life: 3-7 hours.</p>
+          <p>
+            The primary stimulant. Blocks adenosine receptors, promoting
+            alertness. Half-life: 3-7 hours.
+          </p>
           <h4>Theophylline (1,3-dimethylxanthine)</h4>
           <p>Bronchodilator and mild stimulant. Used medically for asthma.</p>
           <h4>Theobromine (3,7-dimethylxanthine)</h4>
-          <p>Milder stimulant than caffeine. Longer half-life (~7 hours). Also found in chocolate.</p>
+          <p>
+            Milder stimulant than caffeine. Longer half-life (~7 hours). Also
+            found in chocolate.
+          </p>
           <table class="xanthine-table">
             <thead>
-              <tr><th>Tea Type</th><th>Caffeine</th><th>L-Theanine</th></tr>
+              <tr>
+                <th>Tea Type</th>
+                <th>Caffeine</th>
+                <th>L-Theanine</th>
+              </tr>
             </thead>
             <tbody>
-              <tr><td>Black</td><td>40-70mg</td><td>24mg</td></tr>
-              <tr><td>Oolong</td><td>30-50mg</td><td>~20mg</td></tr>
-              <tr><td>Green</td><td>20-45mg</td><td>~20mg</td></tr>
-              <tr><td>White</td><td>15-30mg</td><td>~18mg</td></tr>
-              <tr><td>Herbal/Rooibos</td><td>0mg</td><td>0mg</td></tr>
+              <tr>
+                <td>Black</td>
+                <td>40-70mg</td>
+                <td>24mg</td>
+              </tr>
+              <tr>
+                <td>Oolong</td>
+                <td>30-50mg</td>
+                <td>~20mg</td>
+              </tr>
+              <tr>
+                <td>Green</td>
+                <td>20-45mg</td>
+                <td>~20mg</td>
+              </tr>
+              <tr>
+                <td>White</td>
+                <td>15-30mg</td>
+                <td>~18mg</td>
+              </tr>
+              <tr>
+                <td>Herbal/Rooibos</td>
+                <td>0mg</td>
+                <td>0mg</td>
+              </tr>
             </tbody>
           </table>
           <p><em>Values per 240ml cup.</em></p>
           <h4>L-Theanine</h4>
-          <p>Not a xanthine, but notable: this amino acid unique to tea promotes calm alertness by increasing alpha brain waves, modulating caffeine's effects.</p>
+          <p>
+            Not a xanthine, but notable: this amino acid unique to tea promotes
+            calm alertness by increasing alpha brain waves, modulating
+            caffeine's effects.
+          </p>
         </div>
 
         <div class="tab-content" id="tab-tea">
@@ -343,17 +521,39 @@
           <p><strong>White tea:</strong> Add at 75°C, steep 3-5 min.</p>
           <p><strong>Oolong:</strong> Add at 85-90°C, steep 2-4 min.</p>
           <p><strong>Herbal infusions:</strong> Add at 100°C, steep 5-7 min.</p>
-          <p><strong>Rooibos:</strong> Add at 100°C, steep 5-7 min. Won't turn bitter.</p>
+          <p>
+            <strong>Rooibos:</strong> Add at 100°C, steep 5-7 min. Won't turn
+            bitter.
+          </p>
         </div>
 
         <div class="tab-content" id="tab-tips">
           <h3>Temperature Zones</h3>
-          <p><strong>Above 65°C:</strong> Risk of oral burns. WHO classifies beverages above 65°C as "probably carcinogenic" with repeated exposure.</p>
-          <p><strong>60-65°C:</strong> Hot but generally safe. Flavor compounds are volatile.</p>
-          <p><strong>55-60°C:</strong> Comfortable drinking zone for most people.</p>
-          <p><strong>45-55°C:</strong> Lukewarm. Flavor becomes less vibrant.</p>
-          <p><strong>Below 45°C:</strong> Cold tea. Different flavor profile.</p>
-          <p>The chart shows a <span style="color: var(--drinkable)">blue "ideal" zone</span> between your drinkable temperature and the "too cold" threshold, and a <span style="color: var(--cold)">gray "cold" zone</span> below that.</p>
+          <p>
+            <strong>Above 65°C:</strong> Risk of oral burns. WHO classifies
+            beverages above 65°C as "probably carcinogenic" with repeated
+            exposure.
+          </p>
+          <p>
+            <strong>60-65°C:</strong> Hot but generally safe. Flavor compounds
+            are volatile.
+          </p>
+          <p>
+            <strong>55-60°C:</strong> Comfortable drinking zone for most people.
+          </p>
+          <p>
+            <strong>45-55°C:</strong> Lukewarm. Flavor becomes less vibrant.
+          </p>
+          <p>
+            <strong>Below 45°C:</strong> Cold tea. Different flavor profile.
+          </p>
+          <p>
+            The chart shows a
+            <span style="color: var(--drinkable)">blue "ideal" zone</span>
+            between your drinkable temperature and the "too cold" threshold, and
+            a <span style="color: var(--cold)">gray "cold" zone</span> below
+            that.
+          </p>
         </div>
       </div>
 
@@ -365,7 +565,14 @@
             <label>Measured Temperature</label>
             <span class="control-value" id="measuredTempValue">90°C</span>
           </div>
-          <input type="range" id="measuredTemp" min="30" max="100" value="90" step="1" />
+          <input
+            type="range"
+            id="measuredTemp"
+            min="30"
+            max="100"
+            value="90"
+            step="1"
+          />
         </div>
         <div class="measurement-buttons">
           <button class="timer-btn primary" id="logTempBtn" disabled>
@@ -380,8 +587,16 @@
       <!-- Measurement Log -->
       <div class="controls-section log-section">
         <div class="section-title">Measurement Log</div>
-        <p class="log-description">Copy this YAML data for model calibration. Log persists across resets but clears on page reload.</p>
-        <textarea id="measurementLog" class="measurement-log" readonly placeholder="Start a timer session to begin logging..."></textarea>
+        <p class="log-description">
+          Copy this YAML data for model calibration. Log persists across resets
+          but clears on page reload.
+        </p>
+        <textarea
+          id="measurementLog"
+          class="measurement-log"
+          readonly
+          placeholder="Start a timer session to begin logging..."
+        ></textarea>
         <button class="timer-btn secondary copy-btn" id="copyLogBtn">
           <i class="fa-solid fa-copy"></i> Copy to Clipboard
         </button>
