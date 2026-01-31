@@ -1,10 +1,10 @@
 // =============================================================================
 // TEA TEMPERATURE DYNAMICS - Two-Exponential Cooling Model
-// Version 2.0.0
+// Version 2.1.0
 // T(t) = T_amb + A1*exp(-k1*t) + A2*exp(-k2*t)
 // =============================================================================
 
-const APP_VERSION = "2.0.0";
+const APP_VERSION = "2.1.0";
 
 // Tea presets
 const teaPresets = {
@@ -17,9 +17,9 @@ const teaPresets = {
   custom: null,
 };
 
-// Cup presets: [A1, k1, A2, k2]
+// Cup presets: [A1, k1, A2, k2] - burleigh updated from measurements
 const cupPresets = {
-  burleigh: { A1: 17.7, k1: 0.22, A2: 52.7, k2: 0.027, name: "Burleigh Blue Calico" },
+  burleigh: { A1: 14.0, k1: 0.35, A2: 56.0, k2: 0.022, name: "Burleigh Blue Calico" },
   preheated: { A1: 0, k1: 0.22, A2: 80.0, k2: 0.025, name: "Pre-heated ceramic" },
   thin_ceramic: { A1: 12.0, k1: 0.3, A2: 58.0, k2: 0.03, name: "Thin ceramic" },
   thick_ceramic: { A1: 22.0, k1: 0.15, A2: 48.0, k2: 0.022, name: "Thick stoneware" },
@@ -34,10 +34,10 @@ let params = {
   brewTemp: 95,
   steepTime: 4,
   roomTemp: 20,
-  A1: 17.7,
-  k1: 0.22,
-  A2: 52.7,
-  k2: 0.027,
+  A1: 14.0,
+  k1: 0.35,
+  A2: 56.0,
+  k2: 0.022,
   drinkableTemp: 60,
   coldTemp: 45,
 };
@@ -48,12 +48,11 @@ let currentTimeIndex = 0;
 let overlayActive = false;
 let equationDetailsOpen = false;
 
-// Timer state
-let timerRunning = false;
+// Timer state: idle | countdown | running | confirm
+let timerState = "idle";
 let timerStartTime = null;
 let timerInterval = null;
-let timerElapsed = 0; // in seconds (can be negative during countdown)
-let countdownPhase = false;
+let timerElapsed = 0;
 const COUNTDOWN_SECONDS = 5;
 
 // Logging state
@@ -71,23 +70,11 @@ const overlayCtx = overlayCanvas.getContext("2d");
 // TWO-EXPONENTIAL MODEL
 // =============================================================================
 
-/**
- * Temperature at time t using two-exponential model
- * T(t) = T_amb + A1*exp(-k1*t) + A2*exp(-k2*t)
- */
 function tempAtTime(t) {
   if (t < 0) t = 0;
-  return (
-    params.roomTemp +
-    params.A1 * Math.exp(-params.k1 * t) +
-    params.A2 * Math.exp(-params.k2 * t)
-  );
+  return params.roomTemp + params.A1 * Math.exp(-params.k1 * t) + params.A2 * Math.exp(-params.k2 * t);
 }
 
-/**
- * Find time when temperature reaches target
- * Uses Newton-Raphson iteration
- */
 function timeToTemp(T_target) {
   const T0 = tempAtTime(0);
   if (T_target >= T0) return 0;
@@ -96,13 +83,9 @@ function timeToTemp(T_target) {
   let t = 5;
   for (let i = 0; i < 50; i++) {
     const T = tempAtTime(t);
-    const dTdt =
-      -params.k1 * params.A1 * Math.exp(-params.k1 * t) -
-      params.k2 * params.A2 * Math.exp(-params.k2 * t);
-
+    const dTdt = -params.k1 * params.A1 * Math.exp(-params.k1 * t) - params.k2 * params.A2 * Math.exp(-params.k2 * t);
     const error = T - T_target;
     if (Math.abs(error) < 0.01) break;
-
     t = t - error / dTdt;
     if (t < 0) t = 0.1;
     if (t > 200) return Infinity;
@@ -110,44 +93,29 @@ function timeToTemp(T_target) {
   return t;
 }
 
-// Calculate temperature curve
 function calculateCurve() {
   chartData = [];
-  const totalMinutes = 60;
+  const totalMinutes = 30;
 
   const addTeaTime = timeToTemp(params.brewTemp);
   const removeTeaTime = addTeaTime + params.steepTime;
   const drinkableTime = timeToTemp(params.drinkableTemp);
 
-  markers = {
-    addTea: addTeaTime,
-    removeTea: removeTeaTime,
-    drinkable: drinkableTime,
-  };
+  markers = { addTea: addTeaTime, removeTea: removeTeaTime, drinkable: drinkableTime };
 
   for (let t = 0; t <= totalMinutes; t += 0.05) {
     const temp = tempAtTime(t);
     let phase;
-
-    if (t < addTeaTime) {
-      phase = "cooling-pre";
-    } else if (t < removeTeaTime) {
-      phase = "steeping";
-    } else if (temp > params.drinkableTemp) {
-      phase = "cooling";
-    } else if (temp > params.coldTemp) {
-      phase = "drinkable";
-    } else {
-      phase = "cold";
-    }
-
+    if (t < addTeaTime) phase = "cooling-pre";
+    else if (t < removeTeaTime) phase = "steeping";
+    else if (temp > params.drinkableTemp) phase = "cooling";
+    else if (temp > params.coldTemp) phase = "drinkable";
+    else phase = "cold";
     chartData.push({ time: t, temp, phase });
   }
-
   return chartData;
 }
 
-// Format time as M:SS (handles negative for countdown)
 function formatTime(minutes) {
   if (minutes === Infinity || isNaN(minutes)) return "--";
   const negative = minutes < 0;
@@ -159,15 +127,16 @@ function formatTime(minutes) {
 }
 
 function formatSteepTime(minutes) {
-  if (minutes === Math.floor(minutes)) {
-    return `${minutes} min`;
-  }
+  if (minutes === Math.floor(minutes)) return `${minutes} min`;
   const mins = Math.floor(minutes);
   const secs = (minutes - mins) * 60;
   return `${mins}:${secs.toString().padStart(2, "0")}`;
 }
 
-// Draw chart
+// =============================================================================
+// CHART DRAWING
+// =============================================================================
+
 function drawChart(canvas, ctx, compact = false, timerTimeMinutes = null) {
   const dpr = window.devicePixelRatio || 1;
   const rect = canvas.getBoundingClientRect();
@@ -177,78 +146,56 @@ function drawChart(canvas, ctx, compact = false, timerTimeMinutes = null) {
 
   const width = rect.width;
   const height = rect.height;
-  const padding = compact
-    ? { top: 15, right: 15, bottom: 25, left: 40 }
-    : { top: 20, right: 20, bottom: 35, left: 45 };
+  const padding = compact ? { top: 15, right: 15, bottom: 25, left: 40 } : { top: 20, right: 20, bottom: 35, left: 45 };
   const chartWidth = width - padding.left - padding.right;
   const chartHeight = height - padding.top - padding.bottom;
 
   ctx.clearRect(0, 0, width, height);
 
-  const maxTime = 60;
+  const maxTime = 30;
   const minTemp = params.roomTemp - 5;
   const maxTemp = 105;
 
   const xScale = (t) => padding.left + (t / maxTime) * chartWidth;
-  const yScale = (temp) =>
-    padding.top +
-    chartHeight -
-    ((temp - minTemp) / (maxTemp - minTemp)) * chartHeight;
+  const yScale = (temp) => padding.top + chartHeight - ((temp - minTemp) / (maxTemp - minTemp)) * chartHeight;
 
-  // Draw grid
+  // Grid
   ctx.strokeStyle = "#3a3328";
   ctx.lineWidth = 1;
-
   for (let temp = Math.ceil(minTemp / 10) * 10; temp <= maxTemp; temp += 10) {
     ctx.beginPath();
     ctx.moveTo(padding.left, yScale(temp));
     ctx.lineTo(width - padding.right, yScale(temp));
     ctx.stroke();
   }
-
-  for (let t = 0; t <= maxTime; t += 10) {
+  for (let t = 0; t <= maxTime; t += 5) {
     ctx.beginPath();
     ctx.moveTo(xScale(t), padding.top);
     ctx.lineTo(xScale(t), height - padding.bottom);
     ctx.stroke();
   }
 
-  // Draw cold zone
+  // Zones
   ctx.fillStyle = "rgba(122, 111, 130, 0.12)";
-  ctx.fillRect(
-    padding.left,
-    yScale(params.coldTemp),
-    chartWidth,
-    height - padding.bottom - yScale(params.coldTemp)
-  );
-
-  // Draw ideal drinking zone
+  ctx.fillRect(padding.left, yScale(params.coldTemp), chartWidth, height - padding.bottom - yScale(params.coldTemp));
   ctx.fillStyle = "rgba(107, 154, 196, 0.15)";
-  ctx.fillRect(
-    padding.left,
-    yScale(params.drinkableTemp),
-    chartWidth,
-    yScale(params.coldTemp) - yScale(params.drinkableTemp)
-  );
+  ctx.fillRect(padding.left, yScale(params.drinkableTemp), chartWidth, yScale(params.coldTemp) - yScale(params.drinkableTemp));
 
-  // Draw threshold lines
+  // Threshold lines
   ctx.setLineDash([4, 4]);
-
   ctx.strokeStyle = "rgba(107, 154, 196, 0.5)";
   ctx.beginPath();
   ctx.moveTo(padding.left, yScale(params.drinkableTemp));
   ctx.lineTo(width - padding.right, yScale(params.drinkableTemp));
   ctx.stroke();
-
   ctx.strokeStyle = "rgba(122, 111, 130, 0.5)";
   ctx.beginPath();
   ctx.moveTo(padding.left, yScale(params.coldTemp));
   ctx.lineTo(width - padding.right, yScale(params.coldTemp));
   ctx.stroke();
-
   ctx.setLineDash([]);
 
-  // Draw vertical markers
+  // Vertical markers
   const drawMarker = (time, color, label) => {
     if (time <= 0 || time >= maxTime) return;
     ctx.strokeStyle = color;
@@ -259,7 +206,6 @@ function drawChart(canvas, ctx, compact = false, timerTimeMinutes = null) {
     ctx.lineTo(xScale(time), height - padding.bottom);
     ctx.stroke();
     ctx.setLineDash([]);
-
     if (!compact) {
       ctx.fillStyle = color;
       ctx.font = '10px "JetBrains Mono", monospace';
@@ -270,30 +216,20 @@ function drawChart(canvas, ctx, compact = false, timerTimeMinutes = null) {
 
   if (markers.addTea > 0) drawMarker(markers.addTea, "#d4a574", "ADD");
   drawMarker(markers.removeTea, "#c45c3a", "REMOVE");
-  if (markers.drinkable && markers.drinkable < maxTime) {
-    drawMarker(markers.drinkable, "#6b9ac4", "DRINK");
-  }
+  if (markers.drinkable && markers.drinkable < maxTime) drawMarker(markers.drinkable, "#6b9ac4", "DRINK");
 
-  // Draw temperature curve
-  const phases = {
-    "cooling-pre": "#5b8a72",
-    steeping: "#d4a574",
-    cooling: "#5b8a72",
-    drinkable: "#6b9ac4",
-    cold: "#7a6f82",
-  };
-
+  // Temperature curve
+  const phases = { "cooling-pre": "#5b8a72", steeping: "#d4a574", cooling: "#5b8a72", drinkable: "#6b9ac4", cold: "#7a6f82" };
   ctx.lineWidth = 2.5;
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
 
   let currentPhase = null;
   ctx.beginPath();
-
   chartData.forEach((point, i) => {
+    if (point.time > maxTime) return;
     const x = xScale(point.time);
     const y = yScale(point.temp);
-
     if (i === 0) {
       ctx.moveTo(x, y);
       currentPhase = point.phase;
@@ -311,7 +247,7 @@ function drawChart(canvas, ctx, compact = false, timerTimeMinutes = null) {
   ctx.strokeStyle = phases[currentPhase];
   ctx.stroke();
 
-  // Draw timer position if running (and not in countdown)
+  // Timer position
   if (timerTimeMinutes !== null && timerTimeMinutes >= 0 && timerTimeMinutes <= maxTime) {
     const timerTemp = tempAtTime(timerTimeMinutes);
     const x = xScale(timerTimeMinutes);
@@ -341,12 +277,11 @@ function drawChart(canvas, ctx, compact = false, timerTimeMinutes = null) {
     ctx.beginPath();
     ctx.arc(x, y, 8, 0, Math.PI * 2);
     ctx.fill();
-
     ctx.fillStyle = phases[pointPhase] || "#d4a574";
     ctx.beginPath();
     ctx.arc(x, y, 5, 0, Math.PI * 2);
     ctx.fill();
-  } else if (currentTimeIndex >= 0 && currentTimeIndex < chartData.length && !timerRunning) {
+  } else if (currentTimeIndex >= 0 && currentTimeIndex < chartData.length && timerState === "idle") {
     const point = chartData[currentTimeIndex];
     const x = xScale(point.time);
     const y = yScale(point.temp);
@@ -364,7 +299,6 @@ function drawChart(canvas, ctx, compact = false, timerTimeMinutes = null) {
     ctx.beginPath();
     ctx.arc(x, y, 6, 0, Math.PI * 2);
     ctx.fill();
-
     ctx.fillStyle = phases[point.phase] || "#5b8a72";
     ctx.beginPath();
     ctx.arc(x, y, 4, 0, Math.PI * 2);
@@ -373,48 +307,36 @@ function drawChart(canvas, ctx, compact = false, timerTimeMinutes = null) {
 
   // Axes labels
   ctx.fillStyle = "#9a8f80";
-  ctx.font = compact
-    ? '9px "JetBrains Mono", monospace'
-    : '11px "JetBrains Mono", monospace';
+  ctx.font = compact ? '9px "JetBrains Mono", monospace' : '11px "JetBrains Mono", monospace';
   ctx.textAlign = "center";
-
-  const xStep = compact ? 20 : 10;
+  const xStep = compact ? 10 : 5;
   for (let t = 0; t <= maxTime; t += xStep) {
     ctx.fillText(`${t}m`, xScale(t), height - padding.bottom + (compact ? 15 : 20));
   }
-
   ctx.textAlign = "right";
   for (let temp = Math.ceil(minTemp / 10) * 10; temp <= maxTemp; temp += 20) {
     ctx.fillText(`${temp}°`, padding.left - 8, yScale(temp) + 4);
   }
 }
 
-// Update marker displays
+// =============================================================================
+// UI UPDATES
+// =============================================================================
+
 function updateMarkers(timerMinutes = null) {
-  if (timerRunning && timerMinutes !== null && timerMinutes >= 0) {
+  const isRunning = timerState === "running" || timerState === "confirm";
+  if (isRunning && timerMinutes !== null && timerMinutes >= 0) {
     const addRemaining = markers.addTea - timerMinutes;
     const removeRemaining = markers.removeTea - timerMinutes;
     const drinkRemaining = markers.drinkable ? markers.drinkable - timerMinutes : null;
 
-    if (addRemaining > 0) {
-      document.getElementById("addTeaLabel").textContent = "Add Tea In";
-      document.getElementById("addTeaTime").textContent = formatTime(addRemaining);
-      document.getElementById("addTeaTime").classList.remove("done");
-    } else {
-      document.getElementById("addTeaLabel").textContent = "Tea Added";
-      document.getElementById("addTeaTime").textContent = "✓";
-      document.getElementById("addTeaTime").classList.add("done");
-    }
+    document.getElementById("addTeaLabel").textContent = addRemaining > 0 ? "Add Tea In" : "Tea Added";
+    document.getElementById("addTeaTime").textContent = addRemaining > 0 ? formatTime(addRemaining) : "✓";
+    document.getElementById("addTeaTime").classList.toggle("done", addRemaining <= 0);
 
-    if (removeRemaining > 0) {
-      document.getElementById("removeTeaLabel").textContent = "Remove Tea In";
-      document.getElementById("removeTeaTime").textContent = formatTime(removeRemaining);
-      document.getElementById("removeTeaTime").classList.remove("done");
-    } else {
-      document.getElementById("removeTeaLabel").textContent = "Tea Removed";
-      document.getElementById("removeTeaTime").textContent = "✓";
-      document.getElementById("removeTeaTime").classList.add("done");
-    }
+    document.getElementById("removeTeaLabel").textContent = removeRemaining > 0 ? "Remove Tea In" : "Tea Removed";
+    document.getElementById("removeTeaTime").textContent = removeRemaining > 0 ? formatTime(removeRemaining) : "✓";
+    document.getElementById("removeTeaTime").classList.toggle("done", removeRemaining <= 0);
 
     if (drinkRemaining !== null && drinkRemaining > 0) {
       document.getElementById("drinkableLabel").textContent = "Drinkable In";
@@ -424,28 +346,20 @@ function updateMarkers(timerMinutes = null) {
       document.getElementById("drinkableLabel").textContent = "Drinkable";
       document.getElementById("drinkableTime").textContent = "✓ Now";
       document.getElementById("drinkableTime").classList.add("done");
-    } else {
-      document.getElementById("drinkableLabel").textContent = "Drinkable At";
-      document.getElementById("drinkableTime").textContent = "--";
     }
   } else {
     document.getElementById("addTeaLabel").textContent = "Add Tea At";
     document.getElementById("addTeaTime").textContent = formatTime(markers.addTea);
     document.getElementById("addTeaTime").classList.remove("done");
-
     document.getElementById("removeTeaLabel").textContent = "Remove Tea At";
     document.getElementById("removeTeaTime").textContent = formatTime(markers.removeTea);
     document.getElementById("removeTeaTime").classList.remove("done");
-
     document.getElementById("drinkableLabel").textContent = "Drinkable At";
-    document.getElementById("drinkableTime").textContent = markers.drinkable
-      ? formatTime(markers.drinkable)
-      : "--";
+    document.getElementById("drinkableTime").textContent = markers.drinkable ? formatTime(markers.drinkable) : "--";
     document.getElementById("drinkableTime").classList.remove("done");
   }
 }
 
-// Update equation display
 function updateEquation() {
   const tau1 = 1 / params.k1;
   const tau2 = 1 / params.k2;
@@ -467,62 +381,10 @@ function updateEquation() {
   document.getElementById("eqT0calc").textContent = T0.toFixed(1);
 }
 
-// Update how-to tab values
 function updateHowTo() {
   document.getElementById("howtoBrewTemp").textContent = params.brewTemp + "°C";
   document.getElementById("howtoSteepTime").textContent = formatSteepTime(params.steepTime);
   document.getElementById("howtoDrinkTemp").textContent = params.drinkableTemp + "°C";
-}
-
-// Update current temp display
-function updateCurrentTemp(timerMinutes = null) {
-  if (countdownPhase) {
-    document.getElementById("currentTempLabel").textContent = "Predicted Temperature";
-    document.getElementById("currentTemp").textContent = `${tempAtTime(0).toFixed(1)}°C`;
-    document.getElementById("currentPhase").textContent = "Waiting for pour...";
-    return;
-  }
-
-  if (timerRunning && timerMinutes !== null && timerMinutes >= 0) {
-    const temp = tempAtTime(timerMinutes);
-
-    document.getElementById("currentTempLabel").textContent = "Current Temperature";
-    document.getElementById("currentTemp").textContent = `${temp.toFixed(1)}°C`;
-
-    let phaseText;
-    if (timerMinutes < markers.addTea) {
-      phaseText = "Cooling to brew temp";
-    } else if (timerMinutes < markers.removeTea) {
-      phaseText = "Steeping tea";
-    } else if (temp > params.drinkableTemp) {
-      phaseText = "Too hot to drink";
-    } else if (temp > params.coldTemp) {
-      phaseText = "✓ Ideal drinking zone";
-    } else {
-      phaseText = "Getting cold";
-    }
-    document.getElementById("currentPhase").textContent = phaseText;
-  } else if (currentTimeIndex >= 0 && currentTimeIndex < chartData.length) {
-    const point = chartData[currentTimeIndex];
-
-    document.getElementById("currentTempLabel").textContent = "Temperature at cursor";
-    document.getElementById("currentTemp").textContent = `${point.temp.toFixed(1)}°C`;
-
-    let phaseText;
-    if (point.time < markers.addTea) {
-      phaseText = "Cooling to brew temp";
-    } else if (point.time < markers.removeTea) {
-      phaseText = "Steeping tea";
-    } else if (point.temp > params.drinkableTemp) {
-      phaseText = "Too hot to drink";
-    } else if (point.temp > params.coldTemp) {
-      phaseText = "✓ Ideal drinking zone";
-    } else {
-      phaseText = "Getting cold";
-    }
-    document.getElementById("currentPhase").textContent = phaseText;
-    document.getElementById("timeDisplay").textContent = formatTime(point.time);
-  }
 }
 
 function updateSliderDisplays() {
@@ -538,11 +400,7 @@ function updateSliderDisplays() {
 
 function getCupPresetName() {
   const select = document.getElementById("cupPreset");
-  const value = select.value;
-  if (cupPresets[value]) {
-    return cupPresets[value].name || value;
-  }
-  return "Custom";
+  return cupPresets[select.value]?.name || "Custom";
 }
 
 function getTeaPresetName() {
@@ -552,8 +410,6 @@ function getTeaPresetName() {
 
 function startNewLogSession() {
   const now = new Date();
-  const timestamp = now.toISOString();
-  
   const sessionHeader = `
 # ============================================================
 # Tea Cooling Measurement Session
@@ -561,7 +417,7 @@ function startNewLogSession() {
 
 session:
   app_version: "${APP_VERSION}"
-  started_at: "${timestamp}"
+  started_at: "${now.toISOString()}"
   
 model_parameters:
   T_amb: ${params.roomTemp}
@@ -582,7 +438,6 @@ cup_preset: "${getCupPresetName()}"
 readings:
   # time_min, measured_temp_c, predicted_temp_c, status
 `;
-
   measurementLog += sessionHeader;
   currentSessionMeasurements = [];
   sessionActive = true;
@@ -590,32 +445,32 @@ readings:
 }
 
 function logTemperature() {
-  if (!sessionActive || !timerRunning || timerElapsed < 0) return;
+  if (!sessionActive || timerState !== "running" || timerElapsed < 0) return;
 
   const minutes = timerElapsed / 60;
-  const measuredTemp = parseFloat(document.getElementById("measuredTemp").value);
+  const slider = document.getElementById("measuredTemp");
+  const measuredTemp = parseFloat(slider.value);
   const predictedTemp = tempAtTime(minutes);
 
-  const entry = {
-    time: minutes,
-    measured: measuredTemp,
-    predicted: predictedTemp,
-    undone: false,
-  };
+  currentSessionMeasurements.push({ time: minutes, measured: measuredTemp, predicted: predictedTemp, undone: false });
+  measurementLog += `  - [${minutes.toFixed(2)}, ${measuredTemp.toFixed(1)}, ${predictedTemp.toFixed(1)}, "ok"]\n`;
 
-  currentSessionMeasurements.push(entry);
-  
-  const logLine = `  - [${minutes.toFixed(2)}, ${measuredTemp.toFixed(1)}, ${predictedTemp.toFixed(1)}, "ok"]\n`;
-  measurementLog += logLine;
-  
+  // Visual feedback
+  const btn = document.getElementById("logTempBtn");
+  btn.classList.add("flash");
+  setTimeout(() => btn.classList.remove("flash"), 200);
+
+  // Decrease slider by 1°C for next measurement
+  const newVal = Math.max(30, measuredTemp - 1);
+  slider.value = newVal;
+  document.getElementById("measuredTempValue").textContent = `${newVal.toFixed(0)}°C`;
+
   updateLogDisplay();
   updateUndoButton();
 }
 
 function undoLastLog() {
   if (currentSessionMeasurements.length === 0) return;
-
-  // Find last non-undone entry
   let lastIndex = -1;
   for (let i = currentSessionMeasurements.length - 1; i >= 0; i--) {
     if (!currentSessionMeasurements[i].undone) {
@@ -623,111 +478,97 @@ function undoLastLog() {
       break;
     }
   }
-  
   if (lastIndex === -1) return;
 
   const lastEntry = currentSessionMeasurements[lastIndex];
   lastEntry.undone = true;
-  
-  const undoLine = `  - [${lastEntry.time.toFixed(2)}, ${lastEntry.measured.toFixed(1)}, ${lastEntry.predicted.toFixed(1)}, "undone"]\n`;
-  measurementLog += undoLine;
-  
+  measurementLog += `  - [${lastEntry.time.toFixed(2)}, ${lastEntry.measured.toFixed(1)}, ${lastEntry.predicted.toFixed(1)}, "undone"]\n`;
   updateLogDisplay();
   updateUndoButton();
 }
 
 function updateLogDisplay() {
-  document.getElementById("measurementLog").value = measurementLog;
-  // Scroll to bottom
   const textarea = document.getElementById("measurementLog");
+  textarea.value = measurementLog;
   textarea.scrollTop = textarea.scrollHeight;
 }
 
 function updateUndoButton() {
   const btn = document.getElementById("undoLogBtn");
-  const hasUndoable = currentSessionMeasurements.some(m => !m.undone);
-  btn.disabled = !hasUndoable || !timerRunning;
+  const hasUndoable = currentSessionMeasurements.some((m) => !m.undone);
+  btn.disabled = !hasUndoable || timerState !== "running";
 }
 
 function updateLogButtons() {
-  const logBtn = document.getElementById("logTempBtn");
-  const undoBtn = document.getElementById("undoLogBtn");
-  
-  const canLog = timerRunning && !countdownPhase && timerElapsed >= 0;
-  logBtn.disabled = !canLog;
-  
-  const hasUndoable = currentSessionMeasurements.some(m => !m.undone);
-  undoBtn.disabled = !hasUndoable || !timerRunning;
+  document.getElementById("logTempBtn").disabled = timerState !== "running" || timerElapsed < 0;
+  updateUndoButton();
+}
+
+function copyLog() {
+  const textarea = document.getElementById("measurementLog");
+  navigator.clipboard.writeText(textarea.value).then(() => {
+    const btn = document.getElementById("copyLogBtn");
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied';
+    setTimeout(() => (btn.innerHTML = originalText), 1500);
+  });
 }
 
 // =============================================================================
-// TIMER FUNCTIONS
+// TIMER - Simple state machine: idle -> countdown -> running <-> confirm -> idle
 // =============================================================================
+
+function updateTimerButton() {
+  const btn = document.getElementById("timerStartBtn");
+  const labels = { idle: "Start", countdown: "...", running: "Stop", confirm: "Confirm" };
+  btn.textContent = labels[timerState];
+  btn.disabled = timerState === "countdown";
+  btn.classList.toggle("danger", timerState === "confirm");
+}
+
+function handleTimerClick() {
+  switch (timerState) {
+    case "idle":
+      startTimer();
+      break;
+    case "running":
+      timerState = "confirm";
+      updateTimerButton();
+      break;
+    case "confirm":
+      stopTimer();
+      break;
+  }
+}
 
 function startTimer() {
-  // Start countdown phase
-  countdownPhase = true;
-  timerRunning = true;
+  timerState = "countdown";
   timerElapsed = -COUNTDOWN_SECONDS;
   timerStartTime = Date.now() + COUNTDOWN_SECONDS * 1000;
-  
-  document.getElementById("timerStartBtn").textContent = "...";
-  document.getElementById("timerStartBtn").disabled = true;
-  document.getElementById("timerResetBtn").disabled = false;
-  
-  // Start new log session
   startNewLogSession();
-
+  updateTimerButton();
   timerInterval = setInterval(updateTimer, 100);
 }
 
-function pauseTimer() {
-  timerRunning = false;
+function stopTimer() {
   clearInterval(timerInterval);
-  document.getElementById("timerStartBtn").textContent = "Resume";
-  document.getElementById("timerStartBtn").disabled = false;
-
-  document.getElementById("timerDisplay").classList.remove("countdown");
-  document.getElementById("timerInstruction").classList.remove("countdown-instruction");
-  
-  updateMarkers(null);
-  updateCurrentTemp(null);
-  updateLogButtons();
-}
-
-function resumeTimer() {
-  timerRunning = true;
-  timerStartTime = Date.now() - timerElapsed * 1000;
-  document.getElementById("timerStartBtn").textContent = "Pause";
-
-  timerInterval = setInterval(updateTimer, 100);
-}
-
-function resetTimer() {
-  timerRunning = false;
-  countdownPhase = false;
-  clearInterval(timerInterval);
+  timerState = "idle";
   timerElapsed = 0;
   timerStartTime = null;
   sessionActive = false;
   currentSessionMeasurements = [];
-  
-  document.getElementById("timerStartBtn").textContent = "Start";
-  document.getElementById("timerStartBtn").disabled = false;
-  document.getElementById("timerResetBtn").disabled = true;
+
   document.getElementById("timerDisplay").textContent = "0:00";
   document.getElementById("timerDisplay").classList.remove("countdown");
   document.getElementById("timerPhase").textContent = "Ready to start";
   document.getElementById("timerInstruction").textContent = "Press Start to begin countdown";
   document.getElementById("timerInstruction").classList.remove("countdown-instruction");
 
+  updateTimerButton();
   updateMarkers(null);
-  updateCurrentTemp(null);
   updateLogButtons();
   drawChart(mainCanvas, mainCtx, false, null);
-  if (overlayActive) {
-    drawChart(overlayCanvas, overlayCtx, true, null);
-  }
+  if (overlayActive) drawChart(overlayCanvas, overlayCtx, true, null);
 }
 
 function updateTimer() {
@@ -740,32 +581,22 @@ function updateTimer() {
 
   // Countdown phase
   if (timerElapsed < 0) {
-    countdownPhase = true;
     const secondsLeft = Math.ceil(-timerElapsed);
-    
     timerDisplay.textContent = secondsLeft.toString();
     timerDisplay.classList.add("countdown");
-    
-    if (secondsLeft === 1) {
-      timerPhase.textContent = "Get ready...";
-      timerInstruction.textContent = "🫖 POUR NOW!";
-    } else {
-      timerPhase.textContent = "Countdown";
-      timerInstruction.textContent = `Pour water in ${secondsLeft}...`;
-    }
+    timerPhase.textContent = secondsLeft === 1 ? "Get ready..." : "Countdown";
+    timerInstruction.textContent = secondsLeft === 1 ? "🫖 POUR NOW!" : `Pour boiling water into room temperature cup in ${secondsLeft}...`;
     timerInstruction.classList.add("countdown-instruction");
-    
     updateLogButtons();
     return;
   }
 
   // Transition from countdown to running
-  if (countdownPhase) {
-    countdownPhase = false;
+  if (timerState === "countdown") {
+    timerState = "running";
     timerDisplay.classList.remove("countdown");
     timerInstruction.classList.remove("countdown-instruction");
-    document.getElementById("timerStartBtn").textContent = "Pause";
-    document.getElementById("timerStartBtn").disabled = false;
+    updateTimerButton();
   }
 
   // Normal timer display
@@ -774,35 +605,22 @@ function updateTimer() {
   timerDisplay.textContent = `${mins}:${secs.toString().padStart(2, "0")}`;
 
   const currentTemp = tempAtTime(minutes);
-
   let phase, instruction;
 
   if (minutes < markers.addTea) {
     const timeToAdd = markers.addTea - minutes;
     phase = `Cooling... ${currentTemp.toFixed(1)}°C`;
-    if (timeToAdd < 0.5) {
-      instruction = "⏰ Almost time to add tea!";
-    } else {
-      instruction = `Add tea in ${formatTime(timeToAdd)}`;
-    }
+    instruction = timeToAdd < 0.5 ? "⏰ Almost time to add tea!" : `Add tea in ${formatTime(timeToAdd)}`;
   } else if (minutes < markers.removeTea) {
     const timeToRemove = markers.removeTea - minutes;
     phase = `Steeping... ${currentTemp.toFixed(1)}°C`;
-    if (timeToRemove < 0.5) {
-      instruction = "⏰ Almost done steeping!";
-    } else {
-      instruction = `Remove tea in ${formatTime(timeToRemove)}`;
-    }
+    instruction = timeToRemove < 0.5 ? "⏰ Almost done steeping!" : `Remove tea in ${formatTime(timeToRemove)}`;
   } else if (currentTemp > params.drinkableTemp) {
     const timeToDrink = markers.drinkable ? markers.drinkable - minutes : null;
     phase = `Cooling... ${currentTemp.toFixed(1)}°C`;
-    if (timeToDrink !== null && timeToDrink < 0.5 && timeToDrink > 0) {
-      instruction = "⏰ Almost drinkable!";
-    } else if (timeToDrink !== null && timeToDrink > 0) {
-      instruction = `Drinkable in ${formatTime(timeToDrink)}`;
-    } else {
-      instruction = "Should be drinkable soon";
-    }
+    if (timeToDrink !== null && timeToDrink < 0.5 && timeToDrink > 0) instruction = "⏰ Almost drinkable!";
+    else if (timeToDrink !== null && timeToDrink > 0) instruction = `Drinkable in ${formatTime(timeToDrink)}`;
+    else instruction = "Should be drinkable soon";
   } else if (currentTemp > params.coldTemp) {
     phase = `✓ Ready! ${currentTemp.toFixed(1)}°C`;
     instruction = "Enjoy your tea!";
@@ -815,35 +633,27 @@ function updateTimer() {
   timerInstruction.textContent = instruction;
 
   updateMarkers(minutes);
-  updateCurrentTemp(minutes);
   updateLogButtons();
-
   drawChart(mainCanvas, mainCtx, false, minutes);
-  if (overlayActive) {
-    drawChart(overlayCanvas, overlayCtx, true, minutes);
-  }
+  if (overlayActive) drawChart(overlayCanvas, overlayCtx, true, minutes);
 }
 
-// Update all
+// =============================================================================
+// MAIN UPDATE
+// =============================================================================
+
 function update() {
   calculateCurve();
-
-  const timerMinutes = timerRunning && timerElapsed >= 0 ? timerElapsed / 60 : null;
+  const timerMinutes = (timerState === "running" || timerState === "confirm") && timerElapsed >= 0 ? timerElapsed / 60 : null;
   drawChart(mainCanvas, mainCtx, false, timerMinutes);
-  if (overlayActive) {
-    drawChart(overlayCanvas, overlayCtx, true, timerMinutes);
-  }
-
+  if (overlayActive) drawChart(overlayCanvas, overlayCtx, true, timerMinutes);
   updateMarkers(timerMinutes);
   updateEquation();
   updateHowTo();
-  updateCurrentTemp(timerMinutes);
   updateSliderDisplays();
-
   document.getElementById("timeScrubber").max = chartData.length - 1;
 }
 
-// Toggle overlay
 function toggleOverlay() {
   overlayActive = !overlayActive;
   const overlay = document.getElementById("chartOverlay");
@@ -855,7 +665,7 @@ function toggleOverlay() {
     toggle.classList.add("active");
     toggleText.textContent = "Unpin";
     document.body.classList.add("overlay-active");
-    const timerMinutes = timerRunning && timerElapsed >= 0 ? timerElapsed / 60 : null;
+    const timerMinutes = (timerState === "running" || timerState === "confirm") && timerElapsed >= 0 ? timerElapsed / 60 : null;
     drawChart(overlayCanvas, overlayCtx, true, timerMinutes);
   } else {
     overlay.classList.remove("visible");
@@ -867,16 +677,8 @@ function toggleOverlay() {
 
 function toggleEquationDetails() {
   equationDetailsOpen = !equationDetailsOpen;
-  const details = document.getElementById("equationDetails");
-  const icon = document.getElementById("equationToggleIcon");
-
-  if (equationDetailsOpen) {
-    details.classList.add("open");
-    icon.classList.add("open");
-  } else {
-    details.classList.remove("open");
-    icon.classList.remove("open");
-  }
+  document.getElementById("equationDetails").classList.toggle("open", equationDetailsOpen);
+  document.getElementById("equationToggleIcon").classList.toggle("open", equationDetailsOpen);
 }
 
 function applyCupPreset(presetName) {
@@ -886,7 +688,6 @@ function applyCupPreset(presetName) {
     params.k1 = preset.k1;
     params.A2 = preset.A2;
     params.k2 = preset.k2;
-
     document.getElementById("A1Slider").value = preset.A1;
     document.getElementById("k1Slider").value = preset.k1;
     document.getElementById("A2Slider").value = preset.A2;
@@ -900,28 +701,16 @@ function applyCupPreset(presetName) {
 
 document.getElementById("stickyToggle").addEventListener("click", toggleOverlay);
 document.getElementById("equationToggle").addEventListener("click", toggleEquationDetails);
+document.getElementById("timerStartBtn").addEventListener("click", handleTimerClick);
 
-document.getElementById("timerStartBtn").addEventListener("click", () => {
-  if (timerRunning) {
-    pauseTimer();
-  } else if (timerElapsed > 0) {
-    resumeTimer();
-  } else {
-    startTimer();
-  }
-});
-
-document.getElementById("timerResetBtn").addEventListener("click", resetTimer);
-
-// Measurement logging
 document.getElementById("measuredTemp").addEventListener("input", (e) => {
-  document.getElementById("measuredTempValue").textContent = `${parseFloat(e.target.value).toFixed(1)}°C`;
+  document.getElementById("measuredTempValue").textContent = `${parseFloat(e.target.value).toFixed(0)}°C`;
 });
 
 document.getElementById("logTempBtn").addEventListener("click", logTemperature);
 document.getElementById("undoLogBtn").addEventListener("click", undoLastLog);
+document.getElementById("copyLogBtn").addEventListener("click", copyLog);
 
-// Tea type
 document.getElementById("teaType").addEventListener("change", (e) => {
   const preset = teaPresets[e.target.value];
   if (preset) {
@@ -1007,17 +796,16 @@ document.getElementById("coldTemp").addEventListener("input", (e) => {
 });
 
 document.getElementById("timeScrubber").addEventListener("input", (e) => {
-  if (!timerRunning) {
+  if (timerState === "idle") {
     currentTimeIndex = parseInt(e.target.value);
     drawChart(mainCanvas, mainCtx, false, null);
-    if (overlayActive) {
-      drawChart(overlayCanvas, overlayCtx, true, null);
+    if (overlayActive) drawChart(overlayCanvas, overlayCtx, true, null);
+    if (currentTimeIndex >= 0 && currentTimeIndex < chartData.length) {
+      document.getElementById("timeDisplay").textContent = formatTime(chartData[currentTimeIndex].time);
     }
-    updateCurrentTemp(null);
   }
 });
 
-// Tab switching
 document.querySelectorAll(".tab-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
@@ -1029,57 +817,42 @@ document.querySelectorAll(".tab-btn").forEach((btn) => {
 
 // Canvas interaction
 function handleCanvasInteraction(canvas, e, isTouch = false, compact = false) {
-  if (timerRunning) return;
-
+  if (timerState !== "idle") return;
   const rect = canvas.getBoundingClientRect();
   const x = isTouch ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
   const padding = compact ? { left: 40, right: 15 } : { left: 45, right: 20 };
   const chartWidth = rect.width - padding.left - padding.right;
 
   if (x >= padding.left && x <= rect.width - padding.right) {
-    const ratio = (x - padding.left) / chartWidth;
-    currentTimeIndex = Math.round(ratio * (chartData.length - 1));
+    const maxTime = 30;
+    const time = ((x - padding.left) / chartWidth) * maxTime;
+    currentTimeIndex = Math.round(time / 0.05);
+    currentTimeIndex = Math.max(0, Math.min(currentTimeIndex, chartData.length - 1));
     document.getElementById("timeScrubber").value = currentTimeIndex;
     drawChart(mainCanvas, mainCtx, false, null);
-    if (overlayActive) {
-      drawChart(overlayCanvas, overlayCtx, true, null);
+    if (overlayActive) drawChart(overlayCanvas, overlayCtx, true, null);
+    if (currentTimeIndex >= 0 && currentTimeIndex < chartData.length) {
+      document.getElementById("timeDisplay").textContent = formatTime(chartData[currentTimeIndex].time);
     }
-    updateCurrentTemp(null);
   }
 }
 
-mainCanvas.addEventListener("mousemove", (e) =>
-  handleCanvasInteraction(mainCanvas, e, false, false)
-);
-mainCanvas.addEventListener(
-  "touchmove",
-  (e) => {
-    e.preventDefault();
-    handleCanvasInteraction(mainCanvas, e, true, false);
-  },
-  { passive: false }
-);
-
-overlayCanvas.addEventListener("mousemove", (e) =>
-  handleCanvasInteraction(overlayCanvas, e, false, true)
-);
-overlayCanvas.addEventListener(
-  "touchmove",
-  (e) => {
-    e.preventDefault();
-    handleCanvasInteraction(overlayCanvas, e, true, true);
-  },
-  { passive: false }
-);
-
-// Resize handling
-window.addEventListener("resize", () => {
-  const timerMinutes = timerRunning && timerElapsed >= 0 ? timerElapsed / 60 : null;
-  drawChart(mainCanvas, mainCtx, false, timerMinutes);
-  if (overlayActive) {
-    drawChart(overlayCanvas, overlayCtx, true, timerMinutes);
-  }
+mainCanvas.addEventListener("mousemove", (e) => handleCanvasInteraction(mainCanvas, e, false, false));
+mainCanvas.addEventListener("touchmove", (e) => {
+  e.preventDefault();
+  handleCanvasInteraction(mainCanvas, e, true, false);
+});
+overlayCanvas.addEventListener("mousemove", (e) => handleCanvasInteraction(overlayCanvas, e, false, true));
+overlayCanvas.addEventListener("touchmove", (e) => {
+  e.preventDefault();
+  handleCanvasInteraction(overlayCanvas, e, true, true);
 });
 
-// Initial render
+window.addEventListener("resize", () => {
+  const timerMinutes = (timerState === "running" || timerState === "confirm") && timerElapsed >= 0 ? timerElapsed / 60 : null;
+  drawChart(mainCanvas, mainCtx, false, timerMinutes);
+  if (overlayActive) drawChart(overlayCanvas, overlayCtx, true, timerMinutes);
+});
+
+// Initialize
 update();

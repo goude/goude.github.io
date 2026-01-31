@@ -1,0 +1,55 @@
+# Tea Cooling Measurement
+# Session: 2026-01-31_burleigh-blue-calico_002
+
+metadata:
+  session_id: "2026-01-31_burleigh-blue-calico_002"
+  date: "2026-01-31"
+  purpose: "High-resolution early cooling phase"
+
+environment:
+  room_temp_c: 19.6
+
+vessel:
+  name: "Burleigh Blue Calico Teacup"
+  material: "earthenware"
+  preheated: false
+
+liquid:
+  type: "water"
+  volume_ml: 275
+
+water_source:
+  initial_temp_c: 100.0
+  heating_method: "kettle"
+  measured_at_pour: true
+
+thermometer:
+  model: "Weber grill thermometer"
+  type: "probe"
+
+# Format: [time_min, temp_c]
+# Times converted from mm:ss / hh:mm:ss timecode
+readings:
+  - [0.00, 95.7]
+  - [3.42, 95.4]
+  - [5.37, 95.2]
+  - [7.35, 93.9]
+  - [9.27, 91.1]
+  - [11.03, 88.6]
+  - [12.25, 88.2]
+  - [14.02, 87.3]
+  - [17.00, 86.4]
+  - [20.10, 84.9]
+  - [29.35, 84.1]
+  - [36.45, 83.5]
+  - [47.23, 83.0]
+  - [60.43, 82.3]
+  - [88.20, 81.2]
+  - [110.02, 80.6]
+  - [124.25, 80.0]
+  - [139.22, 79.8]
+
+notes: |
+  Long-duration measurement (~2h 19m).
+  First reading at t=0 immediately after pour.
+  Timecode source: video with Timecode Stamper app.
