@@ -103,7 +103,7 @@
         </a>
 
         <h1>Tea Temperature Dynamics</h1>
-        <div class="subtitle">Pour · Steep · Cool · Drink</div>
+        <div class="subtitle">Two-Exponential Cooling Model</div>
       </header>
 
       <!-- Real-time Timer -->
@@ -112,7 +112,7 @@
         <div class="timer-display" id="timerDisplay">0:00</div>
         <div class="timer-phase" id="timerPhase">Ready to start</div>
         <div class="timer-instruction" id="timerInstruction">
-          Press Start when you pour the water
+          Press Start to begin countdown
         </div>
         <div class="timer-buttons">
           <button class="timer-btn primary" id="timerStartBtn">Start</button>
@@ -126,7 +126,7 @@
         <div class="current-temp-label" id="currentTempLabel">
           Temperature at cursor
         </div>
-        <div class="current-temp-value" id="currentTemp">100.0°C</div>
+        <div class="current-temp-value" id="currentTemp">90.4°C</div>
         <div class="current-temp-phase" id="currentPhase">Just poured</div>
       </div>
 
@@ -142,6 +142,33 @@
         <div class="marker-card">
           <div class="marker-card-label" id="drinkableLabel">Drinkable At</div>
           <div class="marker-card-value drinkable" id="drinkableTime">--</div>
+        </div>
+      </div>
+
+      <!-- Measurement logging section -->
+      <div class="controls-section measurement-section" id="measurementSection">
+        <div class="section-title">Temperature Logging</div>
+        <div class="control-group">
+          <div class="control-label">
+            <label>Measured Temperature</label>
+            <span class="control-value" id="measuredTempValue">90.0°C</span>
+          </div>
+          <input
+            type="range"
+            id="measuredTemp"
+            min="30"
+            max="100"
+            value="90"
+            step="0.5"
+          />
+        </div>
+        <div class="measurement-buttons">
+          <button class="timer-btn primary" id="logTempBtn" disabled>
+            <i class="fa-solid fa-plus"></i> Log Temperature
+          </button>
+          <button class="timer-btn secondary" id="undoLogBtn" disabled>
+            <i class="fa-solid fa-undo"></i> Undo
+          </button>
         </div>
       </div>
 
@@ -180,75 +207,55 @@
       </div>
 
       <div class="equation-box">
-        <div class="equation-title">Newton's Law of Cooling</div>
+        <div class="equation-title">Two-Exponential Cooling Model</div>
         <div class="equation">
-          T(t) = <span id="eqTambMain">22</span> + (<span id="eqT0Main"
-            >100</span
+          T(t) = <span id="eqTambMain">20</span> +
+          <span id="eqA1Main">17.7</span>·e<sup
+            >−<span id="eqK1Main">0.220</span>t</sup
           >
-          − <span id="eqTambMain2">22</span>) · e<sup
-            >−<span id="eqKeffMain">0.0250</span>·t</sup
+          + <span id="eqA2Main">52.7</span>·e<sup
+            >−<span id="eqK2Main">0.027</span>t</sup
           >
         </div>
 
         <div class="equation-values">
           <strong>Current Parameters:</strong><br />
-          T<sub>amb</sub> = <span id="eqTamb">22</span>°C (ambient/room
+          T<sub>amb</sub> = <span id="eqTamb">20</span>°C (ambient
           temperature)<br />
-          T<sub>0</sub> = <span>100</span>°C (initial pour temperature)<br />
-          k<sub>base</sub> = <span id="eqKbase">0.025</span> min⁻¹ (material
-          constant)<br />
-          V = <span id="eqVolume">250</span> ml<br />
-          k<sub>eff</sub> = k<sub>base</sub> · √(250/V) =
-          <span id="eqKeff">0.0250</span> min⁻¹
+          A₁ = <span id="eqA1">17.7</span>°C, k₁ =
+          <span id="eqK1">0.220</span> min⁻¹ (τ₁ = <span id="eqTau1">4.6</span>
+          min) — ceramic<br />
+          A₂ = <span id="eqA2">52.7</span>°C, k₂ =
+          <span id="eqK2">0.027</span> min⁻¹ (τ₂ = <span id="eqTau2">37.6</span>
+          min) — air
         </div>
 
         <div class="equation-section">
           <div class="equation-toggle" id="equationToggle">
-            <span class="equation-section-title">Detailed Calculations</span>
+            <span class="equation-section-title">Physical Interpretation</span>
             <span class="equation-toggle-icon" id="equationToggleIcon">▼</span>
           </div>
           <div class="equation-details" id="equationDetails">
             <div class="equation-values">
-              <strong>Phase 1: Pre-steep cooling</strong> (t = 0 to
-              t<sub>add</sub>)<br />
-              T(t) = <span id="eqTamb2">22</span> + (<span>100</span> −
-              <span id="eqTamb3">22</span>) · e<sup
-                >−<span id="eqK1">0.0250</span>·t</sup
-              ><br />
-              <br />
+              <strong>Fast component (A₁, k₁):</strong><br />
+              Heat transfer between water and ceramic cup. The cold cup absorbs
+              heat from the water, causing rapid initial cooling. τ₁ ≈ 4-5
+              min.<br /><br />
+
+              <strong>Slow component (A₂, k₂):</strong><br />
+              Convective and radiative heat loss to surrounding air. Dominates
+              after ceramic equilibration. τ₂ ≈ 35-40 min.<br /><br />
+
               <strong
-                >Time to reach brew temp (<span id="eqBrewTemp">95</span
-                >°C):</strong
+                >T(0) = T<sub>amb</sub> + A₁ + A₂ =
+                <span id="eqT0calc">90.4</span>°C</strong
               ><br />
-              t<sub>add</sub> = −ln((<span id="eqBrewTemp2">95</span> −
-              <span id="eqTamb8">22</span>) / (<span>100</span> −
-              <span id="eqTamb9">22</span>)) / <span id="eqK4">0.0250</span
-              ><br />
-              t<sub>add</sub> = <span id="eqTadd">0.00</span> min<br />
-              <br />
-              <strong>Phase 2: Steeping</strong> (t<sub>add</sub> to
-              t<sub>remove</sub>)<br />
-              T(t) = <span id="eqTamb4">22</span> + (T<sub>add</sub> −
-              <span id="eqTamb5">22</span>) · e<sup
-                >−<span id="eqK2">0.0250</span>·(t − t<sub>add</sub>)</sup
-              ><br />
-              where T<sub>add</sub> = <span id="eqTaddTemp">95.0</span>°C<br />
-              t<sub>remove</sub> = t<sub>add</sub> +
-              <span id="eqSteepTime">4.0</span> =
-              <span id="eqTremove">4.00</span> min<br />
-              T<sub>remove</sub> = <span id="eqTremoveTemp">87.3</span>°C<br />
-              <br />
-              <strong>Phase 3: Post-steep cooling</strong> (t >
-              t<sub>remove</sub>)<br />
-              T(t) = <span id="eqTamb6">22</span> + (T<sub>remove</sub> −
-              <span id="eqTamb7">22</span>) · e<sup
-                >−<span id="eqK3">0.0250</span>·(t − t<sub>remove</sub>)</sup
-              >
+              Lower than 100°C due to heat lost during pour and initial ceramic
+              contact.
             </div>
             <div class="equation-note">
-              All three phases use identical k<sub>eff</sub> =
-              <span id="eqKeffNote">0.0250</span> min⁻¹. The curve is
-              continuous—each phase starts where the previous ended.
+              Model fitted to Burleigh Blue Calico cup (252g earthenware, 275ml
+              water, 20°C room). RMSE = 0.79°C.
             </div>
           </div>
         </div>
@@ -300,97 +307,95 @@
             step="0.5"
           />
         </div>
-
-        <div class="control-group">
-          <div class="control-label">
-            <label>Water Volume</label>
-            <span class="control-value" id="volumeValue">250 ml</span>
-          </div>
-          <input
-            type="range"
-            id="volume"
-            min="100"
-            max="500"
-            value="250"
-            step="25"
-          />
-        </div>
       </div>
 
       <div class="controls-section">
-        <div class="section-title">Environment</div>
+        <div class="section-title">Model Parameters</div>
 
         <div class="control-group">
           <div class="control-label">
-            <label>Cup Material / Cooling Constant</label>
-            <span class="control-value" id="kValue">0.025</span>
+            <label>Room Temperature (T<sub>amb</sub>)</label>
+            <span class="control-value" id="roomTempValue">20°C</span>
           </div>
-          <input
-            type="range"
-            id="kSlider"
-            min="0.001"
-            max="0.200"
-            value="0.025"
-            step="0.001"
-          />
-          <div class="k-presets">
-            <button
-              class="k-preset-btn"
-              data-k="0.001"
-              title="Perfect vacuum flask"
-            >
-              Vacuum (0.001)
-            </button>
-            <button
-              class="k-preset-btn"
-              data-k="0.008"
-              title="Double-walled insulated"
-            >
-              Insulated (0.008)
-            </button>
-            <button
-              class="k-preset-btn active"
-              data-k="0.025"
-              title="Standard ceramic mug"
-            >
-              Ceramic (0.025)
-            </button>
-            <button class="k-preset-btn" data-k="0.030" title="Glass cup">
-              Glass (0.030)
-            </button>
-            <button
-              class="k-preset-btn"
-              data-k="0.035"
-              title="Paper/cardboard cup"
-            >
-              Paper (0.035)
-            </button>
-            <button class="k-preset-btn" data-k="0.040" title="Thin metal cup">
-              Metal (0.040)
-            </button>
-            <button
-              class="k-preset-btn"
-              data-k="0.100"
-              title="Metal cup with spoon, windy day"
-            >
-              Windy Metal (0.100)
-            </button>
-            <button
-              class="k-preset-btn"
-              data-k="0.200"
-              title="Shallow dish, fan blowing"
-            >
-              Petri Dish + Fan (0.200)
-            </button>
+          <input type="range" id="roomTemp" min="15" max="30" value="20" />
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <label>Cup Preset</label>
+          </div>
+          <div class="select-wrapper">
+            <select id="cupPreset">
+              <option value="burleigh">Burleigh Blue Calico (measured)</option>
+              <option value="preheated">Pre-heated ceramic</option>
+              <option value="thin_ceramic">Thin ceramic / porcelain</option>
+              <option value="thick_ceramic">Thick stoneware mug</option>
+              <option value="glass">Glass cup</option>
+              <option value="insulated">Insulated / double-wall</option>
+              <option value="paper">Paper cup</option>
+              <option value="custom">Custom parameters</option>
+            </select>
           </div>
         </div>
 
         <div class="control-group">
           <div class="control-label">
-            <label>Room Temperature</label>
-            <span class="control-value" id="roomTempValue">22°C</span>
+            <label>A₁ (ceramic absorption)</label>
+            <span class="control-value" id="A1Value">17.7°C</span>
           </div>
-          <input type="range" id="roomTemp" min="15" max="30" value="22" />
+          <input
+            type="range"
+            id="A1Slider"
+            min="0"
+            max="40"
+            value="17.7"
+            step="0.1"
+          />
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <label>k₁ (ceramic rate)</label>
+            <span class="control-value" id="k1Value">0.220 min⁻¹</span>
+          </div>
+          <input
+            type="range"
+            id="k1Slider"
+            min="0.05"
+            max="1.0"
+            value="0.22"
+            step="0.005"
+          />
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <label>A₂ (initial excess temp)</label>
+            <span class="control-value" id="A2Value">52.7°C</span>
+          </div>
+          <input
+            type="range"
+            id="A2Slider"
+            min="30"
+            max="80"
+            value="52.7"
+            step="0.1"
+          />
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <label>k₂ (air cooling rate)</label>
+            <span class="control-value" id="k2Value">0.027 min⁻¹</span>
+          </div>
+          <input
+            type="range"
+            id="k2Slider"
+            min="0.005"
+            max="0.100"
+            value="0.027"
+            step="0.001"
+          />
         </div>
       </div>
 
@@ -417,7 +422,7 @@
       <div class="info-tabs">
         <div class="tab-buttons">
           <button class="tab-btn active" data-tab="howto">How To</button>
-          <button class="tab-btn" data-tab="physics">Physics</button>
+          <button class="tab-btn" data-tab="model">The Model</button>
           <button class="tab-btn" data-tab="xanthines">Xanthines</button>
           <button class="tab-btn" data-tab="tea">Tea Guide</button>
           <button class="tab-btn" data-tab="tips">Temperatures</button>
@@ -439,10 +444,9 @@
           <div class="step">
             <div class="step-num">2</div>
             <div class="step-content">
-              <div class="step-title">Pour & Start timer</div>
+              <div class="step-title">Press Start</div>
               <div class="step-detail">
-                Pour boiling water into your cup and immediately press
-                <strong>Start</strong>. The timer begins tracking temperature.
+                A 5-second countdown begins. Pour when it says "Pour now!"
               </div>
             </div>
           </div>
@@ -453,7 +457,7 @@
               <div class="step-title">Wait for "Add Tea" alert</div>
               <div class="step-detail">
                 When water reaches <span id="howtoBrewTemp">95°C</span>, add
-                your tea leaves or bag. The timer will tell you.
+                your tea leaves or bag.
               </div>
             </div>
           </div>
@@ -464,7 +468,7 @@
               <div class="step-title">Remove tea at steep end</div>
               <div class="step-detail">
                 After <span id="howtoSteepTime">4 minutes</span> of steeping,
-                remove the tea to prevent bitterness.
+                remove the tea.
               </div>
             </div>
           </div>
@@ -475,71 +479,50 @@
               <div class="step-title">Wait for drinkable temperature</div>
               <div class="step-detail">
                 The timer shows when tea reaches
-                <span id="howtoDrinkTemp">60°C</span>—safe to drink without
-                burning your mouth.
+                <span id="howtoDrinkTemp">60°C</span>.
               </div>
             </div>
           </div>
 
           <p style="margin-top: 1rem">
-            <strong>Tip:</strong> The graph line moves in real-time, showing
-            exactly where you are in the process.
+            <strong>Logging:</strong> Use the temperature slider and "Log
+            Temperature" button to record actual measurements for model
+            calibration.
           </p>
         </div>
 
-        <div class="tab-content" id="tab-physics">
-          <h3>The Physics of Cooling</h3>
+        <div class="tab-content" id="tab-model">
+          <h3>Why Two Exponentials?</h3>
           <p>
-            Newton's Law of Cooling states that the rate of heat loss is
-            proportional to the temperature difference between the object and
-            its surroundings:
-          </p>
-          <p><code>dT/dt = −k(T − T<sub>amb</sub>)</code></p>
-          <p>
-            Solving this differential equation gives the exponential decay
-            formula shown above.
-          </p>
-          <p>The cooling constant <code>k</code> depends on:</p>
-          <ul>
-            <li>
-              <strong>Surface area to volume ratio</strong> — wider cups cool
-              faster
-            </li>
-            <li>
-              <strong>Material thermal conductivity</strong> — metal conducts
-              heat away faster than ceramic
-            </li>
-            <li>
-              <strong>Convection</strong> — air movement accelerates cooling
-            </li>
-            <li>
-              <strong>Insulation</strong> — vacuum flasks dramatically slow heat
-              loss
-            </li>
-          </ul>
-          <p>
-            We model volume effects with
-            <code>k<sub>eff</sub> = k<sub>base</sub> · √(250/V)</code>. This
-            approximates how larger volumes have relatively less surface area
-            for heat loss.
+            Simple Newton's Law assumes heat only flows to the air. But when you
+            pour boiling water into a cold ceramic cup, two things happen:
           </p>
 
-          <h4>Extreme k values</h4>
+          <h4>Fast process: Ceramic equilibration</h4>
           <p>
-            <strong>Very low k (0.001):</strong> A perfect vacuum flask. Heat
-            can only escape via the lid and radiation—takes hours to cool
-            significantly.
-          </p>
-          <p>
-            <strong>Very high k (0.200):</strong> A shallow petri dish with a
-            fan blowing across it. Maximum surface area, forced convection, and
-            thin liquid layer. Cools in minutes.
+            The cold cup absorbs heat from the water. A 252g ceramic cup at 20°C
+            can absorb enough heat to drop water temperature by 10-15°C. This
+            happens quickly (τ ≈ 4-5 min).
           </p>
 
+          <h4>Slow process: Air cooling</h4>
           <p>
-            <strong>Note:</strong> Real-world cooling involves radiation and
-            evaporation too, but Newton's Law provides a good first-order model
-            for beverage cooling.
+            Heat escapes to the surrounding air via convection and radiation.
+            This is slower (τ ≈ 35-40 min) because air is a poor heat conductor.
+          </p>
+
+          <p>The two-exponential model captures both:</p>
+          <p><code>T(t) = T_amb + A₁·e^(-k₁t) + A₂·e^(-k₂t)</code></p>
+
+          <p>
+            This reduces RMSE from ~2.4°C (simple Newton) to ~0.8°C, especially
+            improving accuracy in the critical first 10 minutes.
+          </p>
+
+          <h4>Pre-heating eliminates A₁</h4>
+          <p>
+            If you pre-heat the cup with hot water first, A₁ → 0 and you get
+            simple Newton cooling.
           </p>
         </div>
 
@@ -547,7 +530,7 @@
           <h3>Xanthines in Tea</h3>
           <p>
             Tea contains several methylxanthine alkaloids—psychoactive compounds
-            that affect the nervous system. The three main ones:
+            that affect the nervous system.
           </p>
 
           <h4>Caffeine (1,3,7-trimethylxanthine)</h4>
@@ -557,15 +540,12 @@
           </p>
 
           <h4>Theophylline (1,3-dimethylxanthine)</h4>
-          <p>
-            Bronchodilator and mild stimulant. Relaxes smooth muscle. Present in
-            small amounts in tea. Used medically for asthma.
-          </p>
+          <p>Bronchodilator and mild stimulant. Used medically for asthma.</p>
 
           <h4>Theobromine (3,7-dimethylxanthine)</h4>
           <p>
-            Milder stimulant than caffeine. Longer half-life (~7 hours). Creates
-            a gentler, more sustained effect. Also found in chocolate.
+            Milder stimulant than caffeine. Longer half-life (~7 hours). Also
+            found in chocolate.
           </p>
 
           <table class="xanthine-table">
@@ -574,7 +554,6 @@
                 <th>Tea Type</th>
                 <th>Caffeine</th>
                 <th>L-Theanine</th>
-                <th>Notes</th>
               </tr>
             </thead>
             <tbody>
@@ -582,111 +561,71 @@
                 <td>Black</td>
                 <td>40-70mg</td>
                 <td>24mg</td>
-                <td>Highest caffeine, full oxidation</td>
               </tr>
               <tr>
                 <td>Oolong</td>
                 <td>30-50mg</td>
                 <td>~20mg</td>
-                <td>Partial oxidation, varies widely</td>
               </tr>
               <tr>
                 <td>Green</td>
                 <td>20-45mg</td>
                 <td>~20mg</td>
-                <td>Unoxidized, more L-theanine</td>
               </tr>
               <tr>
                 <td>White</td>
                 <td>15-30mg</td>
                 <td>~18mg</td>
-                <td>Minimal processing, delicate</td>
               </tr>
               <tr>
-                <td>Herbal</td>
+                <td>Herbal/Rooibos</td>
                 <td>0mg</td>
                 <td>0mg</td>
-                <td>Not <em>Camellia sinensis</em></td>
-              </tr>
-              <tr>
-                <td>Rooibos</td>
-                <td>0mg</td>
-                <td>0mg</td>
-                <td><em>Aspalathus linearis</em>, caffeine-free</td>
               </tr>
             </tbody>
           </table>
-          <p>
-            <em
-              >Values per 240ml cup. Actual content varies by cultivar, harvest,
-              and brewing parameters.</em
-            >
-          </p>
+          <p><em>Values per 240ml cup.</em></p>
 
           <h4>L-Theanine</h4>
           <p>
             Not a xanthine, but notable: this amino acid unique to tea promotes
-            calm alertness by increasing alpha brain waves. It modulates
-            caffeine's effects, explaining why tea feels different from coffee
-            despite similar caffeine content.
+            calm alertness by increasing alpha brain waves, modulating
+            caffeine's effects.
           </p>
         </div>
 
         <div class="tab-content" id="tab-tea">
           <h3>Optimal Brewing by Type</h3>
+          <p><strong>Black tea:</strong> Add at 95°C, steep 3-5 min.</p>
+          <p><strong>Green tea:</strong> Add at 75-80°C, steep 2-3 min.</p>
+          <p><strong>White tea:</strong> Add at 75°C, steep 3-5 min.</p>
+          <p><strong>Oolong:</strong> Add at 85-90°C, steep 2-4 min.</p>
+          <p><strong>Herbal infusions:</strong> Add at 100°C, steep 5-7 min.</p>
           <p>
-            <strong>Black tea:</strong> Add at 95°C, steep 3-5 min. Full
-            oxidation requires hot water to extract tannins and develop malty,
-            robust flavors.
-          </p>
-          <p>
-            <strong>Green tea:</strong> Add at 75-80°C, steep 2-3 min. High
-            temperatures extract bitter catechins. Cooler water preserves
-            grassy, vegetal notes.
-          </p>
-          <p>
-            <strong>White tea:</strong> Add at 75°C, steep 3-5 min. Minimal
-            processing means delicate buds that scorch easily.
-          </p>
-          <p>
-            <strong>Oolong:</strong> Add at 85-90°C, steep 2-4 min. Partial
-            oxidation spans a wide flavor range—adjust to the specific oolong.
-          </p>
-          <p>
-            <strong>Herbal infusions:</strong> Add at 100°C, steep 5-7 min. Not
-            actually tea—these dried herbs, flowers, and fruits need longer
-            extraction.
-          </p>
-          <p>
-            <strong>Rooibos:</strong> Add at 100°C, steep 5-7 min. South African
-            "red bush" is naturally caffeine-free with sweet, slightly nutty
-            flavor. Very forgiving—won't turn bitter with long steeping.
+            <strong>Rooibos:</strong> Add at 100°C, steep 5-7 min. Won't turn
+            bitter.
           </p>
         </div>
 
         <div class="tab-content" id="tab-tips">
           <h3>Temperature Zones</h3>
           <p>
-            <strong>Above 65°C:</strong> Risk of oral burns. The WHO classifies
-            beverages above 65°C as "probably carcinogenic to humans" (Group 2A)
-            with repeated exposure—thermal damage to esophageal tissue.
+            <strong>Above 65°C:</strong> Risk of oral burns. WHO classifies
+            beverages above 65°C as "probably carcinogenic" with repeated
+            exposure.
           </p>
           <p>
             <strong>60-65°C:</strong> Hot but generally safe. Flavor compounds
-            are volatile and aromatic at these temperatures.
+            are volatile.
           </p>
           <p>
             <strong>55-60°C:</strong> Comfortable drinking zone for most people.
-            Optimal balance of heat and flavor release.
           </p>
           <p>
-            <strong>45-55°C:</strong> Lukewarm. Still pleasant but flavor
-            becomes less vibrant as fewer volatile compounds reach your nose.
+            <strong>45-55°C:</strong> Lukewarm. Flavor becomes less vibrant.
           </p>
           <p>
-            <strong>Below 45°C:</strong> Cold tea. Aromatic compounds no longer
-            volatilize effectively. Some people enjoy cold tea, but it's a
-            different flavor profile.
+            <strong>Below 45°C:</strong> Cold tea. Different flavor profile.
           </p>
           <p>
             The chart shows a
@@ -696,6 +635,21 @@
             that.
           </p>
         </div>
+      </div>
+
+      <!-- Measurement Log -->
+      <div class="controls-section log-section">
+        <div class="section-title">Measurement Log</div>
+        <p class="log-description">
+          Copy this YAML data and paste it for model calibration. Log persists
+          across resets but clears on page reload.
+        </p>
+        <textarea
+          id="measurementLog"
+          class="measurement-log"
+          readonly
+          placeholder="Start a timer session to begin logging..."
+        ></textarea>
       </div>
 
       <div class="signature">

@@ -71,6 +71,11 @@ h1 {
   margin: 0.5rem 0;
 }
 
+.timer-display.countdown {
+  color: var(--brew);
+  font-size: 3rem;
+}
+
 .timer-phase {
   font-size: 0.9rem;
   color: var(--text);
@@ -83,6 +88,13 @@ h1 {
   color: var(--text-muted);
   font-style: italic;
   min-height: 1.2em;
+}
+
+.timer-instruction.countdown-instruction {
+  color: var(--brew);
+  font-weight: 600;
+  font-style: normal;
+  font-size: 1rem;
 }
 
 .timer-buttons {
@@ -120,6 +132,25 @@ h1 {
 .timer-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+/* Measurement section */
+.measurement-section {
+  border: 2px dashed var(--accent-dim);
+}
+
+.measurement-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.measurement-buttons .timer-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 /* Sticky toggle */
@@ -693,6 +724,36 @@ select {
   color: var(--text-muted);
 }
 
+/* Log section */
+.log-section {
+  margin-top: 1.5rem;
+}
+
+.log-description {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.measurement-log {
+  width: 100%;
+  min-height: 200px;
+  max-height: 400px;
+  padding: 1rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  background: var(--bg);
+  color: var(--text-muted);
+  border: 1px solid var(--accent-dim);
+  border-radius: var(--radius);
+  resize: vertical;
+}
+
+.measurement-log::placeholder {
+  color: var(--accent-dim);
+}
+
 /* Signature */
 .signature {
   text-align: center;
@@ -715,44 +776,13 @@ select {
   font-style: italic;
 }
 
-/* Preset buttons for k */
-.k-presets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 0.5rem;
-}
-
-.k-preset-btn {
-  padding: 0.3rem 0.6rem;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.65rem;
-  background: var(--surface-raised);
-  color: var(--text-muted);
-  border: 1px solid var(--accent-dim);
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.k-preset-btn:hover {
-  background: var(--accent-dim);
-  color: var(--text);
-}
-
-.k-preset-btn.active {
-  background: var(--accent);
-  color: var(--bg);
-  border-color: var(--accent);
-}
-
 .logo,
 .logo:visited,
 .logo:hover,
 .logo:active,
 .logo:focus,
 .logo:focus-visible {
-  color: var(--color);
+  color: var(--accent);
 }
 
 /* make the icon inherit link color */
