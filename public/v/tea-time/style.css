@@ -759,3 +759,196 @@ select {
 .logo i {
   color: currentColor;
 }
+
+/* Dual-handle range slider styles */
+.range-slider {
+  position: relative;
+  height: 6px;
+  background: var(--surface-raised);
+  border-radius: 3px;
+  margin: 10px 0;
+}
+
+.range-slider-track {
+  position: absolute;
+  height: 100%;
+  background: var(--drinkable);
+  border-radius: 3px;
+  opacity: 0.5;
+}
+
+.range-slider input[type="range"] {
+  position: absolute;
+  width: 100%;
+  height: 6px;
+  background: transparent;
+  pointer-events: none;
+  -webkit-appearance: none;
+  margin: 0;
+  top: 0;
+}
+
+.range-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.range-slider input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  border: none;
+}
+
+.range-values {
+  display: flex;
+  justify-content: space-between;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.75rem;
+  color: var(--accent);
+  margin-top: 0.5rem;
+}
+
+/* Timer context info */
+.timer-context {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.timer-context-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.timer-context-item i {
+  color: var(--accent-dim);
+  font-size: 0.7rem;
+}
+
+/* Live model params in measurement section */
+.live-params {
+  background: var(--surface-raised);
+  border-radius: var(--radius);
+  padding: 0.75rem;
+  margin-top: 0.75rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.live-params-title {
+  font-size: 0.65rem;
+  color: var(--accent-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.live-params-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.live-params-value {
+  color: var(--accent);
+}
+
+.live-params-insufficient {
+  color: var(--accent-dim);
+  font-style: italic;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+/* Collapsible log section */
+.log-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--accent-dim);
+  margin-top: 1rem;
+}
+
+.log-toggle-title {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.log-toggle-icon {
+  font-size: 0.6rem;
+  color: var(--accent-dim);
+  transition: transform 0.2s;
+}
+
+.log-toggle-icon.open {
+  transform: rotate(180deg);
+}
+
+.log-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.log-content.open {
+  max-height: 500px;
+}
+
+.log-inner {
+  padding-top: 0.75rem;
+}
+.signature-name a,
+.signature-name a:visited {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.signature-name a:hover {
+  text-decoration: underline;
+}
+
+.molecule-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.molecule-block p {
+  margin: 0;
+  flex: 1;
+}
+
+.molecule {
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+
+.molecule {
+  width: 160px;
+  height: auto;
+}
+.binomial {
+  font-style: italic;
+}

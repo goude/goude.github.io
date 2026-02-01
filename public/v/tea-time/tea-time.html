@@ -19,175 +19,6 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <link rel="stylesheet" href="style.css" />
-    <style>
-      /* Dual-handle range slider styles */
-      .range-slider {
-        position: relative;
-        height: 6px;
-        background: var(--surface-raised);
-        border-radius: 3px;
-        margin: 10px 0;
-      }
-
-      .range-slider-track {
-        position: absolute;
-        height: 100%;
-        background: var(--drinkable);
-        border-radius: 3px;
-        opacity: 0.5;
-      }
-
-      .range-slider input[type="range"] {
-        position: absolute;
-        width: 100%;
-        height: 6px;
-        background: transparent;
-        pointer-events: none;
-        -webkit-appearance: none;
-        margin: 0;
-        top: 0;
-      }
-
-      .range-slider input[type="range"]::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        width: 18px;
-        height: 18px;
-        background: var(--accent);
-        border-radius: 50%;
-        cursor: pointer;
-        pointer-events: auto;
-        position: relative;
-        z-index: 2;
-      }
-
-      .range-slider input[type="range"]::-moz-range-thumb {
-        width: 18px;
-        height: 18px;
-        background: var(--accent);
-        border-radius: 50%;
-        cursor: pointer;
-        pointer-events: auto;
-        border: none;
-      }
-
-      .range-values {
-        display: flex;
-        justify-content: space-between;
-        font-family: "JetBrains Mono", monospace;
-        font-size: 0.75rem;
-        color: var(--accent);
-        margin-top: 0.5rem;
-      }
-
-      /* Timer context info */
-      .timer-context {
-        display: flex;
-        justify-content: center;
-        gap: 1.5rem;
-        font-size: 0.75rem;
-        color: var(--text-muted);
-        margin-top: 0.5rem;
-        padding-top: 0.5rem;
-      }
-
-      .timer-context-item {
-        display: flex;
-        align-items: center;
-        gap: 0.35rem;
-      }
-
-      .timer-context-item i {
-        color: var(--accent-dim);
-        font-size: 0.7rem;
-      }
-
-      /* Live model params in measurement section */
-      .live-params {
-        background: var(--surface-raised);
-        border-radius: var(--radius);
-        padding: 0.75rem;
-        margin-top: 0.75rem;
-        font-family: "JetBrains Mono", monospace;
-        font-size: 0.7rem;
-        color: var(--text-muted);
-        line-height: 1.6;
-      }
-
-      .live-params-title {
-        font-size: 0.65rem;
-        color: var(--accent-dim);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-bottom: 0.5rem;
-      }
-
-      .live-params-row {
-        display: flex;
-        justify-content: space-between;
-      }
-
-      .live-params-value {
-        color: var(--accent);
-      }
-
-      .live-params-insufficient {
-        color: var(--accent-dim);
-        font-style: italic;
-        text-align: center;
-        padding: 0.5rem;
-      }
-
-      /* Collapsible log section */
-      .log-toggle {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        cursor: pointer;
-        padding: 0.5rem 0;
-        border-top: 1px solid var(--accent-dim);
-        margin-top: 1rem;
-      }
-
-      .log-toggle-title {
-        font-size: 0.7rem;
-        color: var(--text-muted);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-      }
-
-      .log-toggle-icon {
-        font-size: 0.6rem;
-        color: var(--accent-dim);
-        transition: transform 0.2s;
-      }
-
-      .log-toggle-icon.open {
-        transform: rotate(180deg);
-      }
-
-      .log-content {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-      }
-
-      .log-content.open {
-        max-height: 500px;
-      }
-
-      .log-inner {
-        padding-top: 0.75rem;
-      }
-      .signature-name a,
-      .signature-name a:visited {
-        color: var(--accent);
-        text-decoration: none;
-      }
-
-      .signature-name a:hover {
-        text-decoration: underline;
-      }
-    </style>
   </head>
   <body>
     <div class="chart-overlay" id="chartOverlay">
@@ -243,8 +74,9 @@
           href="#tab-howto"
           class="timer-help-link"
           onclick="document.querySelector('[data-tab=howto]').click()"
-          >First time? See instructions ↓</a
         >
+          <i class="fa-solid fa-circle-info"></i> First time? See instructions ↓
+        </a>
       </div>
 
       <div class="markers-info">
@@ -483,8 +315,9 @@
             <div class="step-content">
               <div class="step-title">Wait for "Add Tea" alert</div>
               <div class="step-detail">
-                When water reaches <span id="howtoBrewTemp">95°C</span>, add
-                your tea leaves or bag.
+                Add tea when the timer tells you. If brewing at near-boiling,
+                just add tea right after pouring. A cold ceramic cup cools the
+                water instantly.
               </div>
             </div>
           </div>
@@ -492,10 +325,7 @@
             <div class="step-num">4</div>
             <div class="step-content">
               <div class="step-title">Remove tea at steep end</div>
-              <div class="step-detail">
-                After <span id="howtoSteepTime">4 minutes</span> of steeping,
-                remove the tea.
-              </div>
+              <div class="step-detail">After steeping, remove the tea.</div>
             </div>
           </div>
           <div class="step">
@@ -503,15 +333,10 @@
             <div class="step-content">
               <div class="step-title">Wait for drinkable temperature</div>
               <div class="step-detail">
-                The timer shows when tea reaches
-                <span id="howtoDrinkTemp">60°C</span>.
+                The timer shows when tea reaches the ideal drinking temperature.
               </div>
             </div>
           </div>
-          <p style="margin-top: 1rem">
-            <strong>Logging:</strong> Use the temperature slider below to record
-            actual measurements for model calibration.
-          </p>
         </div>
 
         <div class="tab-content" id="tab-model">
@@ -593,18 +418,413 @@
             Tea contains several methylxanthine alkaloids—psychoactive compounds
             that affect the nervous system.
           </p>
+
           <h4>Caffeine (1,3,7-trimethylxanthine)</h4>
-          <p>
-            The primary stimulant. Blocks adenosine receptors, promoting
-            alertness. Half-life: 3-7 hours.
-          </p>
+          <div class="molecule-block">
+            <svg class="molecule" viewBox="0 0 120 100" width="80" height="67">
+              <!-- Purine ring system -->
+              <path
+                d="M30,70 L30,45 L52,32 L74,45 L74,70 L52,83 Z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <path
+                d="M52,32 L52,15 L74,28 L74,45"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <!-- Double bonds -->
+              <path
+                d="M34,48 L34,67"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <path
+                d="M56,18 L70,26"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <!-- Atoms -->
+              <text
+                x="52"
+                y="12"
+                text-anchor="middle"
+                font-size="8"
+                fill="var(--drinkable)"
+              >
+                O
+              </text>
+              <text
+                x="22"
+                y="73"
+                text-anchor="middle"
+                font-size="8"
+                fill="var(--drinkable)"
+              >
+                O
+              </text>
+              <text
+                x="30"
+                y="38"
+                text-anchor="middle"
+                font-size="8"
+                fill="var(--brew)"
+              >
+                N
+              </text>
+              <text
+                x="74"
+                y="38"
+                text-anchor="middle"
+                font-size="8"
+                fill="var(--brew)"
+              >
+                N
+              </text>
+              <text
+                x="82"
+                y="73"
+                text-anchor="middle"
+                font-size="8"
+                fill="var(--brew)"
+              >
+                N
+              </text>
+              <text
+                x="52"
+                y="90"
+                text-anchor="middle"
+                font-size="8"
+                fill="var(--brew)"
+              >
+                N
+              </text>
+              <!-- Methyl groups -->
+              <line
+                x1="30"
+                y1="35"
+                x2="18"
+                y2="25"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <text
+                x="12"
+                y="22"
+                text-anchor="middle"
+                font-size="7"
+                fill="currentColor"
+              >
+                CH₃
+              </text>
+              <line
+                x1="52"
+                y1="86"
+                x2="52"
+                y2="98"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <text
+                x="52"
+                y="106"
+                text-anchor="middle"
+                font-size="7"
+                fill="currentColor"
+              >
+                CH₃
+              </text>
+              <line
+                x1="82"
+                y1="70"
+                x2="95"
+                y2="70"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <text
+                x="105"
+                y="73"
+                text-anchor="middle"
+                font-size="7"
+                fill="currentColor"
+              >
+                CH₃
+              </text>
+            </svg>
+            <p>
+              The primary stimulant. Blocks adenosine receptors, promoting
+              alertness. Half-life: 3-7 hours.
+            </p>
+          </div>
+
           <h4>Theophylline (1,3-dimethylxanthine)</h4>
-          <p>Bronchodilator and mild stimulant. Used medically for asthma.</p>
+          <div class="molecule-block">
+            <svg class="molecule" viewBox="0 0 120 100" width="80" height="67">
+              <path
+                d="M30,70 L30,45 L52,32 L74,45 L74,70 L52,83 Z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <path
+                d="M52,32 L52,15 L74,28 L74,45"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <path
+                d="M34,48 L34,67"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <path
+                d="M56,18 L70,26"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <text
+                x="52"
+                y="12"
+                text-anchor="middle"
+                font-size="8"
+                fill="var(--drinkable)"
+              >
+                O
+              </text>
+              <text
+                x="22"
+                y="73"
+                text-anchor="middle"
+                font-size="8"
+                fill="var(--drinkable)"
+              >
+                O
+              </text>
+              <text
+                x="30"
+                y="38"
+                text-anchor="middle"
+                font-size="8"
+                fill="var(--brew)"
+              >
+                N
+              </text>
+              <text
+                x="74"
+                y="38"
+                text-anchor="middle"
+                font-size="8"
+                fill="var(--brew)"
+              >
+                N
+              </text>
+              <text
+                x="82"
+                y="73"
+                text-anchor="middle"
+                font-size="8"
+                fill="var(--brew)"
+              >
+                N
+              </text>
+              <text
+                x="52"
+                y="90"
+                text-anchor="middle"
+                font-size="8"
+                fill="var(--brew)"
+              >
+                N
+              </text>
+              <!-- Methyl groups: 1,3 positions only -->
+              <line
+                x1="30"
+                y1="35"
+                x2="18"
+                y2="25"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <text
+                x="12"
+                y="22"
+                text-anchor="middle"
+                font-size="7"
+                fill="currentColor"
+              >
+                CH₃
+              </text>
+              <line
+                x1="52"
+                y1="86"
+                x2="52"
+                y2="98"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <text
+                x="52"
+                y="106"
+                text-anchor="middle"
+                font-size="7"
+                fill="currentColor"
+              >
+                CH₃
+              </text>
+              <!-- H at position 7 -->
+              <text
+                x="92"
+                y="73"
+                text-anchor="middle"
+                font-size="7"
+                fill="var(--text-muted)"
+              >
+                H
+              </text>
+            </svg>
+            <p>Bronchodilator and mild stimulant. Used medically for asthma.</p>
+          </div>
+
           <h4>Theobromine (3,7-dimethylxanthine)</h4>
-          <p>
-            Milder stimulant than caffeine. Longer half-life (~7 hours). Also
-            found in chocolate.
-          </p>
+          <div class="molecule-block">
+            <svg class="molecule" viewBox="0 0 120 100" width="80" height="67">
+              <path
+                d="M30,70 L30,45 L52,32 L74,45 L74,70 L52,83 Z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <path
+                d="M52,32 L52,15 L74,28 L74,45"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <path
+                d="M34,48 L34,67"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <path
+                d="M56,18 L70,26"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <text
+                x="52"
+                y="12"
+                text-anchor="middle"
+                font-size="8"
+                fill="var(--drinkable)"
+              >
+                O
+              </text>
+              <text
+                x="22"
+                y="73"
+                text-anchor="middle"
+                font-size="8"
+                fill="var(--drinkable)"
+              >
+                O
+              </text>
+              <text
+                x="30"
+                y="38"
+                text-anchor="middle"
+                font-size="8"
+                fill="var(--brew)"
+              >
+                N
+              </text>
+              <text
+                x="74"
+                y="38"
+                text-anchor="middle"
+                font-size="8"
+                fill="var(--brew)"
+              >
+                N
+              </text>
+              <text
+                x="82"
+                y="73"
+                text-anchor="middle"
+                font-size="8"
+                fill="var(--brew)"
+              >
+                N
+              </text>
+              <text
+                x="52"
+                y="90"
+                text-anchor="middle"
+                font-size="8"
+                fill="var(--brew)"
+              >
+                N
+              </text>
+              <!-- Methyl groups: 3,7 positions only -->
+              <line
+                x1="52"
+                y1="86"
+                x2="52"
+                y2="98"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <text
+                x="52"
+                y="106"
+                text-anchor="middle"
+                font-size="7"
+                fill="currentColor"
+              >
+                CH₃
+              </text>
+              <line
+                x1="82"
+                y1="70"
+                x2="95"
+                y2="70"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <text
+                x="105"
+                y="73"
+                text-anchor="middle"
+                font-size="7"
+                fill="currentColor"
+              >
+                CH₃
+              </text>
+              <!-- H at position 1 -->
+              <text
+                x="12"
+                y="22"
+                text-anchor="middle"
+                font-size="7"
+                fill="var(--text-muted)"
+              >
+                H
+              </text>
+            </svg>
+            <p>
+              Milder stimulant than caffeine. Longer half-life (~7 hours). Also
+              found in chocolate.
+            </p>
+          </div>
+
           <table class="xanthine-table">
             <thead>
               <tr>
@@ -642,6 +862,19 @@
             </tbody>
           </table>
           <p><em>Values per 240ml cup.</em></p>
+          <p>
+            Caffeine content varies even among teas from the same plant (<span
+              class="binomial"
+              ><span class="genus">Camellia</span>
+              <span class="species">sinensis</span></span
+            >) due to processing and leaf selection. Young buds and tips contain
+            more caffeine than mature leaves. Oxidation during processing (full
+            for black, partial for oolong, minimal for green/white) also affects
+            extraction rates—more oxidized leaves release caffeine faster when
+            brewed. Steeping time and water temperature matter too: hotter water
+            and longer steeps pull out more caffeine.
+          </p>
+
           <h4>L-Theanine</h4>
           <p>
             Not a xanthine, but notable: this amino acid unique to tea promotes
@@ -649,7 +882,6 @@
             caffeine's effects.
           </p>
         </div>
-
         <div class="tab-content" id="tab-tea">
           <h3>Optimal Brewing by Type</h3>
           <p><strong>Black tea:</strong> Add at 95°C, steep 3-5 min.</p>
