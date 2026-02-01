@@ -2,11 +2,19 @@
 
 /* Base + Light (default source values) */
 :root {
-  /* Light source palette (never overridden) */
+  /* Light source palette (immutable) */
   --palette-bg-light: #faf9f5;
   --palette-fg-light: #3d3d3a;
   --palette-accent-light: #cc7c5e;
   --palette-paper-light: #fbf8f4;
+
+  /* Dark source palette (immutable) */
+  --palette-bg-dark: #191612;        /* page background */
+  --palette-paper-dark: #24201a;    /* paper / panels */
+  --palette-surface-dark: #2c2621;  /* option backgrounds */
+  --palette-rule-dark: #877053;     /* borders, rules */
+  --palette-fg-dark: #e7e0d6;       /* body text */
+  --palette-accent-dark: #cda77b;   /* headings, knobs */
 
   /* Active palette (theme-switchable) */
   --palette-bg: var(--palette-bg-light);
@@ -56,18 +64,25 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme-light]) {
-    --palette-bg: #1a1917;
-    --palette-fg: #e8e4df;
-    --palette-accent: #c9b99a;
-    --palette-paper: #22201d;
+    --palette-bg: var(--palette-bg-dark);
+    --palette-fg: var(--palette-fg-dark);
+    --palette-accent: var(--palette-accent-dark);
+    --palette-paper: var(--palette-paper-dark);
+
+    /* Override derived neutrals explicitly for dark */
+    --surface: var(--palette-surface-dark);
+    --rule: var(--palette-rule-dark);
   }
 }
 
 [data-theme-dark] {
-  --palette-bg: #1a1917;
-  --palette-fg: #e8e4df;
-  --palette-accent: #c9b99a;
-  --palette-paper: #22201d;
+  --palette-bg: var(--palette-bg-dark);
+  --palette-fg: var(--palette-fg-dark);
+  --palette-accent: var(--palette-accent-dark);
+  --palette-paper: var(--palette-paper-dark);
+
+  --surface: var(--palette-surface-dark);
+  --rule: var(--palette-rule-dark);
 }
 
 /* ==================== Explicit Light ==================== */
