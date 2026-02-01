@@ -1,0 +1,49 @@
+/* ==================== Fonts ==================== */
+@import url("https://fonts.googleapis.com/css2?family=Special+Elite&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&display=swap");
+
+@font-face {
+  font-family: "et-book";
+  src:
+    url("/fonts/et-book/et-book-roman-line-figures/et-book-roman-line-figures.woff")
+      format("woff"),
+    url("/fonts/et-book/et-book-roman-line-figures/et-book-roman-line-figures.ttf")
+      format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "et-book";
+  src:
+    url("/fonts/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.woff")
+      format("woff"),
+    url("/fonts/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.ttf")
+      format("truetype");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "et-book";
+  src:
+    url("/fonts/et-book/et-book-bold-line-figures/et-book-bold-line-figures.woff")
+      format("woff"),
+    url("/fonts/et-book/et-book-bold-line-figures/et-book-bold-line-figures.ttf")
+      format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MuseJazzText";
+  src:
+    url("/fonts/MuseJazz/MuseJazzText.woff2") format("woff2"),
+    url("/fonts/MuseJazz/MuseJazzText.otf") format("otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

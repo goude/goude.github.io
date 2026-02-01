@@ -140,7 +140,7 @@ function ensureDrinkableAfterRemove() {
       params.coldTemp + 5,
       Math.min(75, Math.floor(tempAtRemove - 1))
     );
-    
+
     if (newDrinkable !== params.drinkableTemp) {
       params.drinkableTemp = newDrinkable;
       document.getElementById("drinkableTemp").value = newDrinkable;
@@ -241,11 +241,7 @@ function drawChart(canvas, ctx, compact = false, timerTimeMinutes = null) {
   // Grid
   ctx.strokeStyle = "#3a3328";
   ctx.lineWidth = 1;
-  for (
-    let temp = Math.ceil(minTemp / 10) * 10;
-    temp <= maxTemp;
-    temp += 10
-  ) {
+  for (let temp = Math.ceil(minTemp / 10) * 10; temp <= maxTemp; temp += 10) {
     ctx.beginPath();
     ctx.moveTo(padding.left, yScale(temp));
     ctx.lineTo(width - padding.right, yScale(temp));
@@ -432,11 +428,7 @@ function drawChart(canvas, ctx, compact = false, timerTimeMinutes = null) {
     );
   }
   ctx.textAlign = "right";
-  for (
-    let temp = Math.ceil(minTemp / 10) * 10;
-    temp <= maxTemp;
-    temp += 20
-  ) {
+  for (let temp = Math.ceil(minTemp / 10) * 10; temp <= maxTemp; temp += 20) {
     ctx.fillText(`${temp}°`, padding.left - 8, yScale(temp) + 4);
   }
 }
@@ -550,7 +542,7 @@ function updateDrinkingZoneSlider() {
 
   const track = document.getElementById("drinkingZoneTrack");
   track.style.left = leftPercent + "%";
-  track.style.width = (rightPercent - leftPercent) + "%";
+  track.style.width = rightPercent - leftPercent + "%";
 
   document.getElementById("coldTempValue").textContent = cold + "°C";
   document.getElementById("drinkableTempValue").textContent = drinkable + "°C";
@@ -803,7 +795,9 @@ fitted_parameters:
 function toggleLogExpanded() {
   logExpanded = !logExpanded;
   document.getElementById("logContent").classList.toggle("open", logExpanded);
-  document.getElementById("logToggleIcon").classList.toggle("open", logExpanded);
+  document
+    .getElementById("logToggleIcon")
+    .classList.toggle("open", logExpanded);
 }
 
 // =============================================================================
@@ -1048,10 +1042,18 @@ function applyCupPreset(presetName) {
 // EVENT LISTENERS
 // =============================================================================
 
-document.getElementById("stickyToggle").addEventListener("click", toggleOverlay);
-document.getElementById("equationToggle").addEventListener("click", toggleEquationDetails);
-document.getElementById("timerStartBtn").addEventListener("click", handleTimerClick);
-document.getElementById("logToggle").addEventListener("click", toggleLogExpanded);
+document
+  .getElementById("stickyToggle")
+  .addEventListener("click", toggleOverlay);
+document
+  .getElementById("equationToggle")
+  .addEventListener("click", toggleEquationDetails);
+document
+  .getElementById("timerStartBtn")
+  .addEventListener("click", handleTimerClick);
+document
+  .getElementById("logToggle")
+  .addEventListener("click", toggleLogExpanded);
 
 document.getElementById("measuredTemp").addEventListener("input", (e) => {
   document.getElementById("measuredTempValue").textContent =
