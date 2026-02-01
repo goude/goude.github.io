@@ -1,48 +1,1153 @@
-# ~/.config/fish/functions/yo.fish # Context-aware micro-hints for Fish shell #
------------------------------------------------------------- # State handling
-(stored in ~/.local/state/yo/) #
------------------------------------------------------------- function
-__yo_state_dir set -l dir ~/.local/state/yo test -d $dir; or mkdir -p $dir echo
-$dir end function __yo_state_get set -l file (__yo_state_dir)/$argv[1] test -f
-$file; and cat $file end function __yo_state_set echo $argv[2] >
-(__yo_state_dir)/$argv[1] end #
------------------------------------------------------------- # Time helpers #
------------------------------------------------------------- function __yo_today
-date +%Y-%m-%d end #
------------------------------------------------------------- # Context helpers #
------------------------------------------------------------- function
-__yo_git_root command git rev-parse --show-toplevel 2>/dev/null end function
-__yo_is_git_root set -l root (__yo_git_root) test -n "$root"; and test "$PWD" =
-"$root" end # ------------------------------------------------------------ #
-Hint logic # ------------------------------------------------------------
-function __yo_check_hints set -l hints set -l today (__yo_today) set -l hour
-(date +%H) set -l minute (date +%M) set -l hhmm (date +%H:%M) # --- Deep nesting
-hint --- set -l rel_path (string replace -r "^$HOME" "" $PWD) set -l depth
-(string split "/" $rel_path | count) if test $depth -ge 4 set -a hints "cdr gets
-you back to the top of the repo" end # --- Git repo root hint --- if
-__yo_is_git_root set -l key "gitroot_$today" if test "(__yo_state_get $key)" !=
-1 set -a hints "the chk command will give helpful advice" __yo_state_set $key 1
-end end # --- THX o'clock (11:38) --- if test "$hhmm" = "11:38" set -l key
-"thx_$today" if test "(__yo_state_get $key)" != 1 set -a hints "It's THX o'clock
-🔊" __yo_state_set $key 1 end end # --- Hourly chime --- if test "$minute" = 00
-set -l key "hour_{$hour}_{$today}" if test "(__yo_state_get $key)" != 1 set -a
-hints "It's $hour:00." __yo_state_set $key 1 end end string join \n $hints end #
------------------------------------------------------------- # Rendering #
------------------------------------------------------------- function
-__yo_show_hints set -l hints (__yo_check_hints) if test -n "$hints" for hint in
-$hints set_color brblack echo "💡 $hint" set_color normal end return 0 end
-return 1 end # ------------------------------------------------------------ #
-Passive trigger: every 10 commands #
------------------------------------------------------------- function yo_hints
---on-event fish_postexec set -l cmd (string split " " $argv)[1] test "$cmd" =
-yo; and return set -q __yo_cmd_count; or set -g __yo_cmd_count 0 set -g
-__yo_cmd_count (math $__yo_cmd_count + 1) if test (math $__yo_cmd_count % 10)
--eq 0 __yo_show_hints end end #
------------------------------------------------------------- # Manual invocation
-# ------------------------------------------------------------ function yo if
-test "$argv[1]" = --help -o "$argv[1]" = -h echo "yo - context-aware hints" echo
-"" echo "Usage:" echo " yo show relevant hints for current context" echo " yo
---help show this help" echo "" echo "Hints also appear passively every 10
-commands when relevant." echo "State stored in ~/.local/state/yo/" return end
-__yo_show_hints; or begin set_color brblack echo "🤷 no hints right now"
-set_color normal end end
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BIOSYN MARITIME TRACKING SYSTEM</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --glow-primary: #00d4ff;
+        --glow-secondary: #0099cc;
+        --glow-dim: #006688;
+        --glow-faint: #003344;
+        --bg-dark: #000a0f;
+        --bg-panel: rgba(0, 40, 60, 0.6);
+        --danger: #ff3366;
+        --warning: #ffaa00;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--bg-dark);
+        font-family: "Share Tech Mono", monospace;
+        color: var(--glow-primary);
+      }
+
+      #container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      /* Main canvas for the map */
+      #mapCanvas {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      /* CRT Scanline overlay */
+      #scanlines {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 20, 30, 0.3) 2px,
+          rgba(0, 20, 30, 0.3) 4px
+        );
+        z-index: 100;
+      }
+
+      /* CRT flicker and glow */
+      #crt-effects {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 101;
+        animation: flicker 0.15s infinite;
+        box-shadow: inset 0 0 150px rgba(0, 212, 255, 0.03);
+      }
+
+      @keyframes flicker {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.98;
+        }
+        75% {
+          opacity: 0.99;
+        }
+      }
+
+      /* Vignette */
+      #vignette {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 99;
+        background: radial-gradient(
+          ellipse at center,
+          transparent 0%,
+          transparent 50%,
+          rgba(0, 5, 10, 0.5) 80%,
+          rgba(0, 5, 10, 0.9) 100%
+        );
+      }
+
+      /* UI Panels */
+      .ui-panel {
+        position: absolute;
+        background: var(--bg-panel);
+        border: 1px solid var(--glow-dim);
+        padding: 12px 16px;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        z-index: 50;
+        backdrop-filter: blur(4px);
+      }
+
+      .ui-panel::before {
+        content: "";
+        position: absolute;
+        top: -1px;
+        left: 10px;
+        right: 10px;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--glow-primary),
+          transparent
+        );
+      }
+
+      /* Header */
+      #header {
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        background: transparent;
+        border: none;
+      }
+
+      #header::before {
+        display: none;
+      }
+
+      #header h1 {
+        font-family: "Orbitron", sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 8px;
+        color: var(--glow-primary);
+        text-shadow:
+          0 0 20px var(--glow-primary),
+          0 0 40px var(--glow-secondary);
+        margin-bottom: 4px;
+      }
+
+      #header .subtitle {
+        font-size: 9px;
+        color: var(--glow-dim);
+        letter-spacing: 4px;
+      }
+
+      /* Status Panel - Top Left */
+      #status-panel {
+        top: 20px;
+        left: 20px;
+        min-width: 200px;
+      }
+
+      .status-row {
+        display: flex;
+        justify-content: space-between;
+        margin: 6px 0;
+        padding: 4px 0;
+        border-bottom: 1px solid rgba(0, 100, 136, 0.3);
+      }
+
+      .status-label {
+        color: var(--glow-dim);
+      }
+
+      .status-value {
+        color: var(--glow-primary);
+        text-shadow: 0 0 8px var(--glow-primary);
+      }
+
+      .status-value.warning {
+        color: var(--warning);
+        text-shadow: 0 0 8px var(--warning);
+        animation: pulse-warning 1s infinite;
+      }
+
+      .status-value.danger {
+        color: var(--danger);
+        text-shadow: 0 0 8px var(--danger);
+        animation: pulse-danger 0.5s infinite;
+      }
+
+      @keyframes pulse-warning {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.6;
+        }
+      }
+
+      @keyframes pulse-danger {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
+
+      /* Tracking List - Top Right */
+      #tracking-panel {
+        top: 20px;
+        right: 20px;
+        min-width: 240px;
+      }
+
+      .panel-title {
+        font-family: "Orbitron", sans-serif;
+        font-size: 10px;
+        color: var(--glow-secondary);
+        margin-bottom: 10px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid var(--glow-dim);
+      }
+
+      .track-item {
+        display: flex;
+        align-items: center;
+        margin: 8px 0;
+        padding: 6px 8px;
+        background: rgba(0, 50, 70, 0.4);
+        border-left: 2px solid var(--glow-dim);
+        transition: all 0.3s;
+      }
+
+      .track-item:hover {
+        background: rgba(0, 80, 100, 0.5);
+        border-left-color: var(--glow-primary);
+      }
+
+      .track-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+      }
+
+      .track-info {
+        flex: 1;
+      }
+
+      .track-id {
+        font-size: 10px;
+        color: var(--glow-primary);
+      }
+
+      .track-type {
+        font-size: 8px;
+        color: var(--glow-dim);
+      }
+
+      .track-status {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--glow-primary);
+        box-shadow: 0 0 8px var(--glow-primary);
+        animation: blink 2s infinite;
+      }
+
+      .track-status.hostile {
+        background: var(--danger);
+        box-shadow: 0 0 8px var(--danger);
+        animation: blink-fast 0.5s infinite;
+      }
+
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+
+      @keyframes blink-fast {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.2;
+        }
+      }
+
+      /* Coordinates Panel - Bottom Left */
+      #coords-panel {
+        bottom: 20px;
+        left: 20px;
+        min-width: 180px;
+      }
+
+      .coord-display {
+        font-family: "Orbitron", sans-serif;
+        font-size: 12px;
+        margin: 4px 0;
+      }
+
+      /* Depth/Sonar Panel - Bottom Right */
+      #sonar-panel {
+        bottom: 20px;
+        right: 20px;
+        min-width: 200px;
+      }
+
+      .sonar-bar {
+        height: 4px;
+        background: var(--glow-faint);
+        margin: 6px 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .sonar-bar-fill {
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          var(--glow-primary),
+          var(--glow-secondary)
+        );
+        box-shadow: 0 0 10px var(--glow-primary);
+        transition: width 0.5s;
+      }
+
+      .sonar-sweep {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 30%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(0, 212, 255, 0.5),
+          transparent
+        );
+        animation: sweep 2s linear infinite;
+      }
+
+      @keyframes sweep {
+        0% {
+          left: -30%;
+        }
+        100% {
+          left: 100%;
+        }
+      }
+
+      /* Corner decorations */
+      .corner-deco {
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        border: 1px solid var(--glow-dim);
+        z-index: 45;
+        pointer-events: none;
+      }
+
+      .corner-deco.tl {
+        top: 10px;
+        left: 10px;
+        border-right: none;
+        border-bottom: none;
+      }
+
+      .corner-deco.tr {
+        top: 10px;
+        right: 10px;
+        border-left: none;
+        border-bottom: none;
+      }
+
+      .corner-deco.bl {
+        bottom: 10px;
+        left: 10px;
+        border-right: none;
+        border-top: none;
+      }
+
+      .corner-deco.br {
+        bottom: 10px;
+        right: 10px;
+        border-left: none;
+        border-top: none;
+      }
+
+      /* Radar sweep indicator */
+      #radar-indicator {
+        position: absolute;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 9px;
+        color: var(--glow-dim);
+        letter-spacing: 3px;
+        z-index: 50;
+      }
+
+      #radar-indicator span {
+        display: inline-block;
+        animation: radar-text 3s linear infinite;
+      }
+
+      @keyframes radar-text {
+        0%,
+        100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      /* Alert banner */
+      #alert-banner {
+        position: absolute;
+        top: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 51, 102, 0.15);
+        border: 1px solid var(--danger);
+        padding: 8px 24px;
+        font-family: "Orbitron", sans-serif;
+        font-size: 10px;
+        color: var(--danger);
+        letter-spacing: 4px;
+        z-index: 60;
+        opacity: 0;
+        transition: opacity 0.3s;
+        text-shadow: 0 0 10px var(--danger);
+      }
+
+      #alert-banner.active {
+        opacity: 1;
+        animation: alert-flash 1s infinite;
+      }
+
+      @keyframes alert-flash {
+        0%,
+        100% {
+          background: rgba(255, 51, 102, 0.15);
+        }
+        50% {
+          background: rgba(255, 51, 102, 0.3);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <canvas id="mapCanvas"></canvas>
+
+      <div id="scanlines"></div>
+      <div id="crt-effects"></div>
+      <div id="vignette"></div>
+
+      <div class="corner-deco tl"></div>
+      <div class="corner-deco tr"></div>
+      <div class="corner-deco bl"></div>
+      <div class="corner-deco br"></div>
+
+      <div id="header">
+        <h1>BIOSYN MARITIME TRACKING</h1>
+        <div class="subtitle">SANCTUARY PERIMETER DEFENSE NETWORK</div>
+      </div>
+
+      <div id="alert-banner">
+        ⚠ PROXIMITY ALERT - HOSTILE SIGNATURE DETECTED ⚠
+      </div>
+
+      <div class="ui-panel" id="status-panel">
+        <div class="panel-title">◆ System Status</div>
+        <div class="status-row">
+          <span class="status-label">Network</span>
+          <span class="status-value" id="network-status">ONLINE</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">Satellites</span>
+          <span class="status-value" id="sat-count">4/4 LINKED</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">Ping</span>
+          <span class="status-value" id="ping-value">24ms</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">Threat Level</span>
+          <span class="status-value warning" id="threat-level">ELEVATED</span>
+        </div>
+      </div>
+
+      <div class="ui-panel" id="tracking-panel">
+        <div class="panel-title">◆ Active Signatures</div>
+        <div id="track-list"></div>
+      </div>
+
+      <div class="ui-panel" id="coords-panel">
+        <div class="panel-title">◆ Cursor Position</div>
+        <div class="coord-display">
+          LAT: <span id="lat-val">--°--'--"N</span>
+        </div>
+        <div class="coord-display">
+          LON: <span id="lon-val">--°--'--"W</span>
+        </div>
+        <div
+          class="coord-display"
+          style="margin-top: 8px; font-size: 9px; color: var(--glow-dim)"
+        >
+          DEPTH: <span id="depth-val">---</span>M
+        </div>
+      </div>
+
+      <div class="ui-panel" id="sonar-panel">
+        <div class="panel-title">◆ Sonar Array</div>
+        <div class="status-row">
+          <span class="status-label">Frequency</span>
+          <span class="status-value">12.4 kHz</span>
+        </div>
+        <div class="sonar-bar">
+          <div class="sonar-bar-fill" style="width: 78%"></div>
+          <div class="sonar-sweep"></div>
+        </div>
+        <div class="status-row">
+          <span class="status-label">Range</span>
+          <span class="status-value">2.4 NM</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">Contacts</span>
+          <span class="status-value" id="contact-count">7</span>
+        </div>
+      </div>
+
+      <div id="radar-indicator"><span>◄</span> SCANNING <span>►</span></div>
+    </div>
+
+    <script>
+      const canvas = document.getElementById("mapCanvas");
+      const ctx = canvas.getContext("2d");
+
+      let width, height;
+      let mouseX = 0,
+        mouseY = 0;
+      let time = 0;
+
+      // Colors
+      const colors = {
+        primary: "#00d4ff",
+        secondary: "#0099cc",
+        dim: "#006688",
+        faint: "#003344",
+        danger: "#ff3366",
+        warning: "#ffaa00",
+        bg: "#000a0f",
+      };
+
+      // Tracked entities
+      const entities = [];
+      const particles = [];
+      const waveRings = [];
+
+      // Entity types
+      const entityTypes = {
+        boat: { icon: "▲", label: "VESSEL", color: colors.primary, size: 12 },
+        cargo: {
+          icon: "■",
+          label: "CARGO SHIP",
+          color: colors.secondary,
+          size: 14,
+        },
+        dino_large: {
+          icon: "◆",
+          label: "MOSASAURUS",
+          color: colors.danger,
+          size: 16,
+          hostile: true,
+        },
+        dino_medium: {
+          icon: "◆",
+          label: "PLESIOSAURUS",
+          color: colors.warning,
+          size: 12,
+          hostile: true,
+        },
+        dino_small: {
+          icon: "●",
+          label: "UNKNOWN BIO",
+          color: colors.warning,
+          size: 8,
+          hostile: true,
+        },
+      };
+
+      function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+
+      function createPath(complexity = 8) {
+        const path = [];
+        const centerX = width * (0.2 + Math.random() * 0.6);
+        const centerY = height * (0.2 + Math.random() * 0.6);
+        const radius = Math.min(width, height) * (0.15 + Math.random() * 0.2);
+
+        for (let i = 0; i <= complexity; i++) {
+          const angle = (i / complexity) * Math.PI * 2 + Math.random() * 0.5;
+          const r = radius * (0.5 + Math.random() * 0.5);
+          path.push({
+            x: centerX + Math.cos(angle) * r,
+            y: centerY + Math.sin(angle) * r,
+          });
+        }
+        return path;
+      }
+
+      function createEntity(type) {
+        const typeData = entityTypes[type];
+        const path = createPath(6 + Math.floor(Math.random() * 6));
+
+        return {
+          type,
+          typeData,
+          path,
+          pathIndex: 0,
+          pathProgress: 0,
+          speed: 0.001 + Math.random() * 0.002,
+          x: path[0].x,
+          y: path[0].y,
+          trail: [],
+          id: "SIG-" + Math.random().toString(36).substr(2, 6).toUpperCase(),
+          pulsePhase: Math.random() * Math.PI * 2,
+        };
+      }
+
+      function initEntities() {
+        // Add boats
+        for (let i = 0; i < 3; i++) {
+          entities.push(createEntity("boat"));
+        }
+        entities.push(createEntity("cargo"));
+
+        // Add dinosaurs
+        entities.push(createEntity("dino_large"));
+        entities.push(createEntity("dino_medium"));
+        entities.push(createEntity("dino_medium"));
+        for (let i = 0; i < 2; i++) {
+          entities.push(createEntity("dino_small"));
+        }
+
+        updateTrackingList();
+      }
+
+      function updateTrackingList() {
+        const list = document.getElementById("track-list");
+        list.innerHTML = entities
+          .map(
+            (e) => `
+                <div class="track-item">
+                    <div class="track-icon" style="color: ${e.typeData.color}; text-shadow: 0 0 8px ${e.typeData.color}">${e.typeData.icon}</div>
+                    <div class="track-info">
+                        <div class="track-id">${e.id}</div>
+                        <div class="track-type">${e.typeData.label}</div>
+                    </div>
+                    <div class="track-status ${e.typeData.hostile ? "hostile" : ""}"></div>
+                </div>
+            `
+          )
+          .join("");
+
+        document.getElementById("contact-count").textContent = entities.length;
+      }
+
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
+
+      function updateEntity(entity) {
+        entity.pathProgress += entity.speed;
+
+        if (entity.pathProgress >= 1) {
+          entity.pathProgress = 0;
+          entity.pathIndex = (entity.pathIndex + 1) % entity.path.length;
+        }
+
+        const currentPoint = entity.path[entity.pathIndex];
+        const nextPoint =
+          entity.path[(entity.pathIndex + 1) % entity.path.length];
+
+        entity.x = lerp(currentPoint.x, nextPoint.x, entity.pathProgress);
+        entity.y = lerp(currentPoint.y, nextPoint.y, entity.pathProgress);
+
+        // Update trail
+        entity.trail.unshift({ x: entity.x, y: entity.y, age: 0 });
+        if (entity.trail.length > 60) entity.trail.pop();
+        entity.trail.forEach((t) => t.age++);
+
+        // Spawn particles for hostile entities
+        if (entity.typeData.hostile && Math.random() < 0.1) {
+          particles.push({
+            x: entity.x + (Math.random() - 0.5) * 20,
+            y: entity.y + (Math.random() - 0.5) * 20,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5,
+            life: 1,
+            decay: 0.02,
+            color: entity.typeData.color,
+            size: 2 + Math.random() * 2,
+          });
+        }
+      }
+
+      function updateParticles() {
+        for (let i = particles.length - 1; i >= 0; i--) {
+          const p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.life -= p.decay;
+
+          if (p.life <= 0) {
+            particles.splice(i, 1);
+          }
+        }
+      }
+
+      function drawGrid() {
+        ctx.strokeStyle = colors.faint;
+        ctx.lineWidth = 0.5;
+
+        const gridSize = 80;
+        const offsetX = (time * 5) % gridSize;
+        const offsetY = (time * 3) % gridSize;
+
+        // Vertical lines
+        for (let x = -gridSize + offsetX; x < width + gridSize; x += gridSize) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, height);
+          ctx.stroke();
+        }
+
+        // Horizontal lines
+        for (
+          let y = -gridSize + offsetY;
+          y < height + gridSize;
+          y += gridSize
+        ) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(width, y);
+          ctx.stroke();
+        }
+
+        // Draw coastline/landmass
+        drawLandmass();
+      }
+
+      function drawLandmass() {
+        ctx.save();
+        ctx.strokeStyle = colors.dim;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 10]);
+
+        // Island shape
+        ctx.beginPath();
+        ctx.moveTo(width * 0.7, height * 0.1);
+        ctx.bezierCurveTo(
+          width * 0.85,
+          height * 0.15,
+          width * 0.9,
+          height * 0.3,
+          width * 0.85,
+          height * 0.45
+        );
+        ctx.bezierCurveTo(
+          width * 0.8,
+          height * 0.55,
+          width * 0.7,
+          height * 0.5,
+          width * 0.65,
+          height * 0.4
+        );
+        ctx.bezierCurveTo(
+          width * 0.6,
+          height * 0.25,
+          width * 0.62,
+          height * 0.12,
+          width * 0.7,
+          height * 0.1
+        );
+        ctx.stroke();
+
+        // Fill with subtle pattern
+        ctx.fillStyle = "rgba(0, 50, 68, 0.2)";
+        ctx.fill();
+
+        // Contour lines
+        ctx.lineWidth = 0.5;
+        ctx.setLineDash([2, 8]);
+        for (let i = 1; i <= 3; i++) {
+          ctx.beginPath();
+          const scale = 0.9 - i * 0.15;
+          ctx.moveTo(
+            width * (0.7 + (1 - scale) * 0.05),
+            height * (0.1 + (1 - scale) * 0.1)
+          );
+          ctx.bezierCurveTo(
+            width * (0.85 - (1 - scale) * 0.05),
+            height * (0.15 + (1 - scale) * 0.05),
+            width * (0.9 - (1 - scale) * 0.1),
+            height * (0.3 + (1 - scale) * 0.02),
+            width * (0.85 - (1 - scale) * 0.08),
+            height * (0.45 - (1 - scale) * 0.05)
+          );
+          ctx.stroke();
+        }
+
+        ctx.restore();
+      }
+
+      function drawRadarSweep() {
+        const centerX = width * 0.5;
+        const centerY = height * 0.6;
+        const maxRadius = Math.max(width, height) * 0.8;
+        const angle = (time * 0.5) % (Math.PI * 2);
+
+        // Sweep gradient
+        const gradient = ctx.createConicalGradient
+          ? ctx.createConicalGradient(angle, centerX, centerY)
+          : ctx.createRadialGradient(
+              centerX,
+              centerY,
+              0,
+              centerX,
+              centerY,
+              maxRadius
+            );
+
+        ctx.save();
+        ctx.globalAlpha = 0.1;
+
+        // Draw sweep arc
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, maxRadius, angle - 0.5, angle, false);
+        ctx.closePath();
+
+        const sweepGradient = ctx.createRadialGradient(
+          centerX,
+          centerY,
+          0,
+          centerX,
+          centerY,
+          maxRadius
+        );
+        sweepGradient.addColorStop(0, "rgba(0, 212, 255, 0.3)");
+        sweepGradient.addColorStop(1, "rgba(0, 212, 255, 0)");
+
+        ctx.fillStyle = sweepGradient;
+        ctx.fill();
+
+        ctx.restore();
+
+        // Pulse rings
+        if (Math.random() < 0.02) {
+          waveRings.push({
+            x: centerX,
+            y: centerY,
+            radius: 0,
+            maxRadius: maxRadius * 0.5,
+            speed: 2,
+            alpha: 0.3,
+          });
+        }
+      }
+
+      function drawWaveRings() {
+        for (let i = waveRings.length - 1; i >= 0; i--) {
+          const ring = waveRings[i];
+          ring.radius += ring.speed;
+          ring.alpha *= 0.98;
+
+          if (ring.radius > ring.maxRadius || ring.alpha < 0.01) {
+            waveRings.splice(i, 1);
+            continue;
+          }
+
+          ctx.beginPath();
+          ctx.arc(ring.x, ring.y, ring.radius, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(0, 212, 255, ${ring.alpha})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      }
+
+      function drawEntity(entity) {
+        const { x, y, typeData, trail, pulsePhase } = entity;
+        const pulse = Math.sin(time * 3 + pulsePhase) * 0.3 + 0.7;
+
+        // Draw path (faded)
+        ctx.save();
+        ctx.strokeStyle = `${typeData.color}22`;
+        ctx.lineWidth = 1;
+        ctx.setLineDash([4, 8]);
+        ctx.beginPath();
+        entity.path.forEach((p, i) => {
+          if (i === 0) ctx.moveTo(p.x, p.y);
+          else ctx.lineTo(p.x, p.y);
+        });
+        ctx.closePath();
+        ctx.stroke();
+        ctx.restore();
+
+        // Draw trail
+        ctx.save();
+        trail.forEach((t, i) => {
+          const alpha = 1 - t.age / 60;
+          ctx.fillStyle = `${typeData.color}${Math.floor(alpha * 50)
+            .toString(16)
+            .padStart(2, "0")}`;
+          ctx.beginPath();
+          ctx.arc(t.x, t.y, 2, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        ctx.restore();
+
+        // Draw entity marker
+        ctx.save();
+
+        // Outer glow
+        ctx.shadowColor = typeData.color;
+        ctx.shadowBlur = 20 * pulse;
+
+        // Ring
+        ctx.strokeStyle = typeData.color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(x, y, typeData.size + 6, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Inner marker
+        ctx.fillStyle = typeData.color;
+        ctx.font = `${typeData.size}px Arial`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(typeData.icon, x, y);
+
+        // ID label
+        ctx.font = '9px "Share Tech Mono"';
+        ctx.fillStyle = `${typeData.color}aa`;
+        ctx.shadowBlur = 5;
+        ctx.fillText(entity.id, x, y + typeData.size + 16);
+
+        // Direction indicator
+        if (trail.length > 1) {
+          const dx = x - trail[1].x;
+          const dy = y - trail[1].y;
+          const angle = Math.atan2(dy, dx);
+
+          ctx.strokeStyle = typeData.color;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(
+            x + Math.cos(angle) * (typeData.size + 15),
+            y + Math.sin(angle) * (typeData.size + 15)
+          );
+          ctx.stroke();
+        }
+
+        ctx.restore();
+
+        // Hostile warning circle
+        if (typeData.hostile) {
+          ctx.save();
+          ctx.strokeStyle = typeData.color;
+          ctx.lineWidth = 1;
+          ctx.setLineDash([4, 4]);
+          ctx.globalAlpha = 0.3 + pulse * 0.2;
+
+          const warningRadius = 40 + Math.sin(time * 2 + pulsePhase) * 10;
+          ctx.beginPath();
+          ctx.arc(x, y, warningRadius, 0, Math.PI * 2);
+          ctx.stroke();
+
+          ctx.restore();
+        }
+      }
+
+      function drawParticles() {
+        particles.forEach((p) => {
+          ctx.save();
+          ctx.globalAlpha = p.life;
+          ctx.fillStyle = p.color;
+          ctx.shadowColor = p.color;
+          ctx.shadowBlur = 10;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        });
+      }
+
+      function drawDepthIndicator() {
+        // Depth gradient overlay at bottom
+        const gradient = ctx.createLinearGradient(0, height - 100, 0, height);
+        gradient.addColorStop(0, "transparent");
+        gradient.addColorStop(1, "rgba(0, 30, 50, 0.5)");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, height - 100, width, 100);
+      }
+
+      function updateUI() {
+        // Update coordinates based on mouse
+        const lat = (90 - (mouseY / height) * 180).toFixed(4);
+        const lon = ((mouseX / width) * 360 - 180).toFixed(4);
+
+        const latDir = lat >= 0 ? "N" : "S";
+        const lonDir = lon >= 0 ? "E" : "W";
+
+        document.getElementById("lat-val").textContent =
+          `${Math.abs(lat).toFixed(2)}°${latDir}`;
+        document.getElementById("lon-val").textContent =
+          `${Math.abs(lon).toFixed(2)}°${lonDir}`;
+
+        // Simulated depth
+        const depth = Math.floor(
+          50 + Math.sin(mouseX * 0.01) * 30 + Math.cos(mouseY * 0.01) * 20
+        );
+        document.getElementById("depth-val").textContent = depth;
+
+        // Ping fluctuation
+        const ping = 20 + Math.floor(Math.random() * 15);
+        document.getElementById("ping-value").textContent = `${ping}ms`;
+
+        // Check for proximity alerts
+        const hasHostileNearby = entities.some((e) => {
+          if (!e.typeData.hostile) return false;
+          return entities.some((other) => {
+            if (other.typeData.hostile) return false;
+            const dx = e.x - other.x;
+            const dy = e.y - other.y;
+            return Math.sqrt(dx * dx + dy * dy) < 100;
+          });
+        });
+
+        document
+          .getElementById("alert-banner")
+          .classList.toggle("active", hasHostileNearby);
+
+        const threatLevel = document.getElementById("threat-level");
+        if (hasHostileNearby) {
+          threatLevel.textContent = "CRITICAL";
+          threatLevel.className = "status-value danger";
+        } else {
+          threatLevel.textContent = "ELEVATED";
+          threatLevel.className = "status-value warning";
+        }
+      }
+
+      function draw() {
+        time += 0.016;
+
+        // Clear
+        ctx.fillStyle = colors.bg;
+        ctx.fillRect(0, 0, width, height);
+
+        // Draw layers
+        drawGrid();
+        drawRadarSweep();
+        drawWaveRings();
+        drawDepthIndicator();
+
+        // Update and draw entities
+        entities.forEach((e) => {
+          updateEntity(e);
+          drawEntity(e);
+        });
+
+        // Particles
+        updateParticles();
+        drawParticles();
+
+        // UI updates
+        updateUI();
+
+        requestAnimationFrame(draw);
+      }
+
+      // Event listeners
+      window.addEventListener("resize", resize);
+
+      canvas.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      // Initialize
+      resize();
+      initEntities();
+      draw();
+
+      // Occasionally add wave rings from random positions
+      setInterval(() => {
+        if (waveRings.length < 5) {
+          const randomEntity =
+            entities[Math.floor(Math.random() * entities.length)];
+          if (randomEntity) {
+            waveRings.push({
+              x: randomEntity.x,
+              y: randomEntity.y,
+              radius: 0,
+              maxRadius: 80,
+              speed: 1,
+              alpha: 0.2,
+            });
+          }
+        }
+      }, 2000);
+    </script>
+  </body>
+</html>
