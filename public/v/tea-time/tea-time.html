@@ -4,78 +4,200 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tea Temperature Dynamics</title>
-    <meta
-      name="description"
-      content="A visual timer showing when tea is ready to steep, drink, or has gone cold."
-    />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Tea Temperature Dynamics" />
-    <meta
-      property="og:description"
-      content="A visual timer showing when tea is ready to steep, drink, or has gone cold."
-    />
-    <meta property="og:url" content="https://goude.se/v/tea-time.html" />
-    <meta
-      property="og:image"
-      content="https://goude.se/v/tea-time-preview.png"
-    />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Tea Temperature Dynamics" />
-    <meta
-      name="twitter:description"
-      content="A visual timer showing when tea is ready to steep, drink, or has gone cold."
-    />
-    <meta
-      name="twitter:image"
-      content="https://goude.se/v/tea-time-preview.png"
-    />
-    <link rel="canonical" href="https://goude.se/v/tea-time.html" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🫖</text></svg>"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
     />
     <link rel="stylesheet" href="style.css" />
-    <script src="script.js" defer></script>
+    <style>
+      /* Dual-handle range slider styles */
+      .range-slider {
+        position: relative;
+        height: 6px;
+        background: var(--surface-raised);
+        border-radius: 3px;
+        margin: 10px 0;
+      }
+
+      .range-slider-track {
+        position: absolute;
+        height: 100%;
+        background: var(--drinkable);
+        border-radius: 3px;
+        opacity: 0.5;
+      }
+
+      .range-slider input[type="range"] {
+        position: absolute;
+        width: 100%;
+        height: 6px;
+        background: transparent;
+        pointer-events: none;
+        -webkit-appearance: none;
+        margin: 0;
+        top: 0;
+      }
+
+      .range-slider input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        background: var(--accent);
+        border-radius: 50%;
+        cursor: pointer;
+        pointer-events: auto;
+        position: relative;
+        z-index: 2;
+      }
+
+      .range-slider input[type="range"]::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        background: var(--accent);
+        border-radius: 50%;
+        cursor: pointer;
+        pointer-events: auto;
+        border: none;
+      }
+
+      .range-values {
+        display: flex;
+        justify-content: space-between;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.75rem;
+        color: var(--accent);
+        margin-top: 0.5rem;
+      }
+
+      /* Timer context info */
+      .timer-context {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+      }
+
+      .timer-context-item {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+
+      .timer-context-item i {
+        color: var(--accent-dim);
+        font-size: 0.7rem;
+      }
+
+      /* Live model params in measurement section */
+      .live-params {
+        background: var(--surface-raised);
+        border-radius: var(--radius);
+        padding: 0.75rem;
+        margin-top: 0.75rem;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+      }
+
+      .live-params-title {
+        font-size: 0.65rem;
+        color: var(--accent-dim);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.5rem;
+      }
+
+      .live-params-row {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .live-params-value {
+        color: var(--accent);
+      }
+
+      .live-params-insufficient {
+        color: var(--accent-dim);
+        font-style: italic;
+        text-align: center;
+        padding: 0.5rem;
+      }
+
+      /* Collapsible log section */
+      .log-toggle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        padding: 0.5rem 0;
+        border-top: 1px solid var(--accent-dim);
+        margin-top: 1rem;
+      }
+
+      .log-toggle-title {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .log-toggle-icon {
+        font-size: 0.6rem;
+        color: var(--accent-dim);
+        transition: transform 0.2s;
+      }
+
+      .log-toggle-icon.open {
+        transform: rotate(180deg);
+      }
+
+      .log-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+
+      .log-content.open {
+        max-height: 500px;
+      }
+
+      .log-inner {
+        padding-top: 0.75rem;
+      }
+      .signature-name a,
+      .signature-name a:visited {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      .signature-name a:hover {
+        text-decoration: underline;
+      }
+    </style>
   </head>
   <body>
-    <!-- Sticky overlay chart -->
     <div class="chart-overlay" id="chartOverlay">
-      <div class="chart-wrapper">
-        <canvas id="overlayChart"></canvas>
-      </div>
-      <div class="chart-legend">
-        <div class="legend-item">
-          <span class="legend-dot steep"></span> Steeping
-        </div>
-        <div class="legend-item">
-          <span class="legend-dot cool"></span> Cooling
-        </div>
-        <div class="legend-item">
-          <span class="legend-dot drinkable"></span> Ideal
-        </div>
-        <div class="legend-item">
-          <span class="legend-dot cold"></span> Cold
-        </div>
-        <div class="legend-item">
-          <span class="legend-marker add"></span> Add
-        </div>
-        <div class="legend-item">
-          <span class="legend-marker remove"></span> Remove
-        </div>
-      </div>
+      <canvas id="overlayChart"></canvas>
     </div>
 
-    <!-- Sticky toggle button -->
     <button class="sticky-toggle" id="stickyToggle">
       <svg
+        width="16"
+        height="16"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -106,6 +228,16 @@
         </div>
         <div class="timer-buttons">
           <button class="timer-btn primary" id="timerStartBtn">Start</button>
+        </div>
+        <div class="timer-context" id="timerContext">
+          <div class="timer-context-item">
+            <i class="fa-solid fa-leaf"></i>
+            <span id="timerTeaType">Black Tea</span>
+          </div>
+          <div class="timer-context-item">
+            <i class="fa-solid fa-mug-hot"></i>
+            <span id="timerCupType">Burleigh Blue Calico</span>
+          </div>
         </div>
         <a
           href="#tab-howto"
@@ -164,8 +296,9 @@
         </div>
       </div>
 
+      <!-- Tea & Cup Selection (combined) -->
       <div class="controls-section">
-        <div class="section-title">Tea Selection</div>
+        <div class="section-title">Tea & Cup Selection</div>
         <div class="control-group">
           <div class="control-label"><label>Tea Type</label></div>
           <div class="select-wrapper">
@@ -180,8 +313,24 @@
             </select>
           </div>
         </div>
+        <div class="control-group">
+          <div class="control-label"><label>Cup Preset</label></div>
+          <div class="select-wrapper">
+            <select id="cupPreset">
+              <option value="burleigh">Burleigh Blue Calico (measured)</option>
+              <option value="preheated">Pre-heated ceramic</option>
+              <option value="thin_ceramic">Thin ceramic / porcelain</option>
+              <option value="thick_ceramic">Thick stoneware mug</option>
+              <option value="glass">Glass cup</option>
+              <option value="insulated">Insulated / double-wall</option>
+              <option value="paper">Paper cup</option>
+              <option value="custom">Custom parameters</option>
+            </select>
+          </div>
+        </div>
       </div>
 
+      <!-- Brew Parameters (including drinking zone) -->
       <div class="controls-section">
         <div class="section-title">Brew Parameters</div>
         <div class="control-group">
@@ -205,26 +354,31 @@
             step="0.5"
           />
         </div>
-      </div>
-
-      <div class="controls-section">
-        <div class="section-title">Model Parameters</div>
-
         <div class="control-group">
-          <div class="control-label"><label>Cup Preset</label></div>
-          <div class="select-wrapper">
-            <select id="cupPreset">
-              <option value="burleigh">Burleigh Blue Calico (measured)</option>
-              <option value="preheated">Pre-heated ceramic</option>
-              <option value="thin_ceramic">Thin ceramic / porcelain</option>
-              <option value="thick_ceramic">Thick stoneware mug</option>
-              <option value="glass">Glass cup</option>
-              <option value="insulated">Insulated / double-wall</option>
-              <option value="paper">Paper cup</option>
-              <option value="custom">Custom parameters</option>
-            </select>
+          <div class="control-label">
+            <label>Drinking Zone</label>
+          </div>
+          <div class="range-slider" id="drinkingZoneSlider">
+            <div class="range-slider-track" id="drinkingZoneTrack"></div>
+            <input type="range" id="coldTemp" min="42" max="75" value="50" />
+            <input
+              type="range"
+              id="drinkableTemp"
+              min="42"
+              max="75"
+              value="70"
+            />
+          </div>
+          <div class="range-values">
+            <span>Cold: <span id="coldTempValue">50°C</span></span>
+            <span>Safe: <span id="drinkableTempValue">70°C</span></span>
           </div>
         </div>
+      </div>
+
+      <!-- Model Parameters -->
+      <div class="controls-section">
+        <div class="section-title">Model Parameters</div>
 
         <div class="control-group">
           <div class="control-label">
@@ -292,24 +446,6 @@
             value="0.022"
             step="0.001"
           />
-        </div>
-      </div>
-
-      <div class="controls-section">
-        <div class="section-title">Drinking Zone</div>
-        <div class="control-group">
-          <div class="control-label">
-            <label>Safe to Drink (upper)</label>
-            <span class="control-value" id="drinkableTempValue">60°C</span>
-          </div>
-          <input type="range" id="drinkableTemp" min="50" max="70" value="60" />
-        </div>
-        <div class="control-group">
-          <div class="control-label">
-            <label>Too Cold (lower)</label>
-            <span class="control-value" id="coldTempValue">45°C</span>
-          </div>
-          <input type="range" id="coldTemp" min="35" max="55" value="45" />
         </div>
       </div>
 
@@ -557,7 +693,7 @@
         </div>
       </div>
 
-      <!-- Temperature logging section - moved down -->
+      <!-- Temperature logging section -->
       <div class="controls-section measurement-section" id="measurementSection">
         <div class="section-title">Temperature Logging</div>
         <div class="control-group">
@@ -582,30 +718,81 @@
             <i class="fa-solid fa-undo"></i> Undo
           </button>
         </div>
-      </div>
 
-      <!-- Measurement Log -->
-      <div class="controls-section log-section">
-        <div class="section-title">Measurement Log</div>
-        <p class="log-description">
-          Copy this YAML data for model calibration. Log persists across resets
-          but clears on page reload.
-        </p>
-        <textarea
-          id="measurementLog"
-          class="measurement-log"
-          readonly
-          placeholder="Start a timer session to begin logging..."
-        ></textarea>
-        <button class="timer-btn secondary copy-btn" id="copyLogBtn">
-          <i class="fa-solid fa-copy"></i> Copy to Clipboard
-        </button>
+        <!-- Live model parameters from logged data -->
+        <div class="live-params" id="liveParams">
+          <div class="live-params-title">
+            Fitted Parameters (from this session)
+          </div>
+          <div class="live-params-insufficient" id="liveParamsInsufficient">
+            Need ≥3 measurements to fit model
+          </div>
+          <div id="liveParamsContent" style="display: none">
+            <div class="live-params-row">
+              <span>T<sub>amb</sub></span>
+              <span class="live-params-value" id="liveParamTamb">--</span>
+            </div>
+            <div class="live-params-row">
+              <span>A₁</span>
+              <span class="live-params-value" id="liveParamA1">--</span>
+            </div>
+            <div class="live-params-row">
+              <span>k₁</span>
+              <span class="live-params-value" id="liveParamK1">--</span>
+            </div>
+            <div class="live-params-row">
+              <span>A₂</span>
+              <span class="live-params-value" id="liveParamA2">--</span>
+            </div>
+            <div class="live-params-row">
+              <span>k₂</span>
+              <span class="live-params-value" id="liveParamK2">--</span>
+            </div>
+            <div
+              class="live-params-row"
+              style="
+                margin-top: 0.5rem;
+                padding-top: 0.5rem;
+                border-top: 1px solid var(--accent-dim);
+              "
+            >
+              <span>RMSE</span>
+              <span class="live-params-value" id="liveParamRMSE">--</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Collapsible measurement log -->
+        <div class="log-toggle" id="logToggle">
+          <span class="log-toggle-title">Measurement Log</span>
+          <span class="log-toggle-icon" id="logToggleIcon">▼</span>
+        </div>
+        <div class="log-content" id="logContent">
+          <div class="log-inner">
+            <p class="log-description">
+              Copy this YAML data for model calibration. Log persists across
+              resets but clears on page reload.
+            </p>
+            <textarea
+              id="measurementLog"
+              class="measurement-log"
+              readonly
+              placeholder="Start a timer session to begin logging..."
+            ></textarea>
+            <button class="timer-btn secondary copy-btn" id="copyLogBtn">
+              <i class="fa-solid fa-copy"></i> Copy to Clipboard
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="signature">
         <div class="signature-text">Crafted with care by</div>
-        <div class="signature-name">goude</div>
+        <div class="signature-name">
+          <a href="https://goude.se">#doitpoorly</a> &amp; Claude AI
+        </div>
       </div>
     </div>
+    <script src="script.js"></script>
   </body>
 </html>

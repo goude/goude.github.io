@@ -1,12 +1,10 @@
 // =============================================================================
 // TEA TEMPERATURE DYNAMICS - Two-Exponential Cooling Model
-// Version 2.1.0
-// T(t) = T_amb + A1*exp(-k1*t) + A2*exp(-k2*t)
 // =============================================================================
 
 const APP_VERSION = "2.1.0";
 
-// Tea presets
+// Tea presets: { temp: brewing temp, steep: steep time in minutes }
 const teaPresets = {
   black: { temp: 95, steep: 4 },
   green: { temp: 80, steep: 2 },
@@ -14,50 +12,60 @@ const teaPresets = {
   oolong: { temp: 90, steep: 3 },
   herbal: { temp: 100, steep: 5 },
   rooibos: { temp: 100, steep: 5 },
-  custom: null,
 };
 
-// Cup presets: [A1, k1, A2, k2] - burleigh updated from measurements
+// Cup presets based on thermal properties
 const cupPresets = {
   burleigh: {
+    name: "Burleigh Blue Calico",
     A1: 14.0,
     k1: 0.35,
     A2: 56.0,
     k2: 0.022,
-    name: "Burleigh Blue Calico",
   },
   preheated: {
-    A1: 0,
-    k1: 0.22,
-    A2: 80.0,
-    k2: 0.025,
     name: "Pre-heated ceramic",
+    A1: 2.0,
+    k1: 0.5,
+    A2: 68.0,
+    k2: 0.025,
   },
-  thin_ceramic: { A1: 12.0, k1: 0.3, A2: 58.0, k2: 0.03, name: "Thin ceramic" },
+  thin_ceramic: {
+    name: "Thin ceramic / porcelain",
+    A1: 8.0,
+    k1: 0.6,
+    A2: 62.0,
+    k2: 0.028,
+  },
   thick_ceramic: {
-    A1: 22.0,
-    k1: 0.15,
-    A2: 48.0,
-    k2: 0.022,
-    name: "Thick stoneware",
+    name: "Thick stoneware mug",
+    A1: 20.0,
+    k1: 0.25,
+    A2: 50.0,
+    k2: 0.02,
   },
-  glass: { A1: 8.0, k1: 0.4, A2: 62.0, k2: 0.032, name: "Glass" },
-  insulated: { A1: 2.0, k1: 0.1, A2: 78.0, k2: 0.008, name: "Insulated" },
-  paper: { A1: 5.0, k1: 0.5, A2: 65.0, k2: 0.038, name: "Paper cup" },
-  custom: null,
+  glass: { name: "Glass cup", A1: 6.0, k1: 0.8, A2: 64.0, k2: 0.032 },
+  insulated: {
+    name: "Insulated / double-wall",
+    A1: 1.0,
+    k1: 0.3,
+    A2: 69.0,
+    k2: 0.008,
+  },
+  paper: { name: "Paper cup", A1: 4.0, k1: 1.0, A2: 66.0, k2: 0.04 },
 };
 
-// State
-let params = {
-  brewTemp: 95,
-  steepTime: 4,
+// Model parameters (defaults: Burleigh Blue Calico)
+const params = {
   roomTemp: 20,
   A1: 14.0,
   k1: 0.35,
   A2: 56.0,
   k2: 0.022,
-  drinkableTemp: 60,
-  coldTemp: 45,
+  brewTemp: 95,
+  steepTime: 4,
+  drinkableTemp: 70, // Changed default to 70
+  coldTemp: 50, // Changed default to 50
 };
 
 let chartData = [];
@@ -65,6 +73,7 @@ let markers = { addTea: 0, removeTea: 0, drinkable: 0 };
 let currentTimeIndex = 0;
 let overlayActive = false;
 let equationDetailsOpen = false;
+let logExpanded = false;
 
 // Timer state: idle | countdown | running | confirm
 let timerState = "idle";
@@ -72,11 +81,14 @@ let timerStartTime = null;
 let timerInterval = null;
 let timerElapsed = 0;
 const COUNTDOWN_SECONDS = 5;
+const CONFIRM_TIMEOUT_SECONDS = 5;
+let confirmTimeoutId = null;
 
 // Logging state
 let measurementLog = "";
 let currentSessionMeasurements = [];
 let sessionActive = false;
+let fittedParams = null;
 
 // DOM elements
 const mainCanvas = document.getElementById("tempChart");
@@ -88,26 +100,21 @@ const overlayCtx = overlayCanvas.getContext("2d");
 // TWO-EXPONENTIAL MODEL
 // =============================================================================
 
-function tempAtTime(t) {
+function tempAtTime(t, p = params) {
   if (t < 0) t = 0;
-  return (
-    params.roomTemp +
-    params.A1 * Math.exp(-params.k1 * t) +
-    params.A2 * Math.exp(-params.k2 * t)
-  );
+  return p.roomTemp + p.A1 * Math.exp(-p.k1 * t) + p.A2 * Math.exp(-p.k2 * t);
 }
 
-function timeToTemp(T_target) {
-  const T0 = tempAtTime(0);
+function timeToTemp(T_target, p = params) {
+  const T0 = tempAtTime(0, p);
   if (T_target >= T0) return 0;
-  if (T_target <= params.roomTemp) return Infinity;
+  if (T_target <= p.roomTemp) return Infinity;
 
   let t = 5;
   for (let i = 0; i < 50; i++) {
-    const T = tempAtTime(t);
+    const T = tempAtTime(t, p);
     const dTdt =
-      -params.k1 * params.A1 * Math.exp(-params.k1 * t) -
-      params.k2 * params.A2 * Math.exp(-params.k2 * t);
+      -p.k1 * p.A1 * Math.exp(-p.k1 * t) - p.k2 * p.A2 * Math.exp(-p.k2 * t);
     const error = T - T_target;
     if (Math.abs(error) < 0.01) break;
     t = t - error / dTdt;
@@ -117,13 +124,41 @@ function timeToTemp(T_target) {
   return t;
 }
 
+function ensureDrinkableAfterRemove() {
+  // Calculate current times
+  const addTeaTime = timeToTemp(params.brewTemp);
+  const removeTeaTime = addTeaTime + params.steepTime;
+  const drinkableTime = timeToTemp(params.drinkableTemp);
+
+  // If drinkable comes before or at remove tea, lower drinkableTemp
+  if (drinkableTime <= removeTeaTime) {
+    // Find the temperature at removeTeaTime and set drinkable slightly below
+    const tempAtRemove = tempAtTime(removeTeaTime);
+    // Set drinkable temp to 1 degree below the temp at remove time
+    // but not below coldTemp + 5
+    const newDrinkable = Math.max(
+      params.coldTemp + 5,
+      Math.min(75, Math.floor(tempAtRemove - 1))
+    );
+    
+    if (newDrinkable !== params.drinkableTemp) {
+      params.drinkableTemp = newDrinkable;
+      document.getElementById("drinkableTemp").value = newDrinkable;
+      updateDrinkingZoneSlider();
+    }
+  }
+}
+
 function calculateCurve() {
   chartData = [];
-  const totalMinutes = 30;
+
+  // Ensure drinkable comes after remove tea
+  ensureDrinkableAfterRemove();
 
   const addTeaTime = timeToTemp(params.brewTemp);
   const removeTeaTime = addTeaTime + params.steepTime;
   const drinkableTime = timeToTemp(params.drinkableTemp);
+  const coldTime = timeToTemp(params.coldTemp);
 
   markers = {
     addTea: addTeaTime,
@@ -131,7 +166,13 @@ function calculateCurve() {
     drinkable: drinkableTime,
   };
 
-  for (let t = 0; t <= totalMinutes; t += 0.05) {
+  // Calculate dynamic maxTime: 5 minutes after coldTemp is reached
+  const maxTime = Math.min(
+    60,
+    Math.max(30, isFinite(coldTime) ? coldTime + 5 : 30)
+  );
+
+  for (let t = 0; t <= maxTime; t += 0.05) {
     const temp = tempAtTime(t);
     let phase;
     if (t < addTeaTime) phase = "cooling-pre";
@@ -182,8 +223,13 @@ function drawChart(canvas, ctx, compact = false, timerTimeMinutes = null) {
 
   ctx.clearRect(0, 0, width, height);
 
-  const maxTime = 30;
-  const minTemp = params.roomTemp - 5;
+  // Dynamic axes based on coldTemp
+  const coldTime = timeToTemp(params.coldTemp);
+  const maxTime = Math.min(
+    60,
+    Math.max(30, isFinite(coldTime) ? coldTime + 5 : 30)
+  );
+  const minTemp = params.coldTemp - 5;
   const maxTemp = 105;
 
   const xScale = (t) => padding.left + (t / maxTime) * chartWidth;
@@ -195,13 +241,18 @@ function drawChart(canvas, ctx, compact = false, timerTimeMinutes = null) {
   // Grid
   ctx.strokeStyle = "#3a3328";
   ctx.lineWidth = 1;
-  for (let temp = Math.ceil(minTemp / 10) * 10; temp <= maxTemp; temp += 10) {
+  for (
+    let temp = Math.ceil(minTemp / 10) * 10;
+    temp <= maxTemp;
+    temp += 10
+  ) {
     ctx.beginPath();
     ctx.moveTo(padding.left, yScale(temp));
     ctx.lineTo(width - padding.right, yScale(temp));
     ctx.stroke();
   }
-  for (let t = 0; t <= maxTime; t += 5) {
+  const xStep = maxTime <= 30 ? 5 : 10;
+  for (let t = 0; t <= maxTime; t += xStep) {
     ctx.beginPath();
     ctx.moveTo(xScale(t), padding.top);
     ctx.lineTo(xScale(t), height - padding.bottom);
@@ -372,8 +423,8 @@ function drawChart(canvas, ctx, compact = false, timerTimeMinutes = null) {
     ? '9px "JetBrains Mono", monospace'
     : '11px "JetBrains Mono", monospace';
   ctx.textAlign = "center";
-  const xStep = compact ? 10 : 5;
-  for (let t = 0; t <= maxTime; t += xStep) {
+  const labelXStep = compact ? Math.max(10, xStep) : xStep;
+  for (let t = 0; t <= maxTime; t += labelXStep) {
     ctx.fillText(
       `${t}m`,
       xScale(t),
@@ -381,7 +432,11 @@ function drawChart(canvas, ctx, compact = false, timerTimeMinutes = null) {
     );
   }
   ctx.textAlign = "right";
-  for (let temp = Math.ceil(minTemp / 10) * 10; temp <= maxTemp; temp += 20) {
+  for (
+    let temp = Math.ceil(minTemp / 10) * 10;
+    temp <= maxTemp;
+    temp += 20
+  ) {
     ctx.fillText(`${temp}°`, padding.left - 8, yScale(temp) + 4);
   }
 }
@@ -483,6 +538,119 @@ function updateSliderDisplays() {
     params.k2.toFixed(3) + " min⁻¹";
 }
 
+function updateDrinkingZoneSlider() {
+  const cold = params.coldTemp;
+  const drinkable = params.drinkableTemp;
+  const min = 42;
+  const max = 75;
+  const range = max - min;
+
+  const leftPercent = ((cold - min) / range) * 100;
+  const rightPercent = ((drinkable - min) / range) * 100;
+
+  const track = document.getElementById("drinkingZoneTrack");
+  track.style.left = leftPercent + "%";
+  track.style.width = (rightPercent - leftPercent) + "%";
+
+  document.getElementById("coldTempValue").textContent = cold + "°C";
+  document.getElementById("drinkableTempValue").textContent = drinkable + "°C";
+}
+
+function updateTimerContext() {
+  document.getElementById("timerTeaType").textContent = getTeaPresetName();
+  document.getElementById("timerCupType").textContent = getCupPresetName();
+}
+
+// =============================================================================
+// MODEL FITTING FROM MEASUREMENTS
+// =============================================================================
+
+function fitTwoExponential(measurements) {
+  // Need at least 3 valid (non-undone) measurements
+  const valid = measurements.filter((m) => !m.undone);
+  if (valid.length < 3) return null;
+
+  // Simple curve fitting using Levenberg-Marquardt-like approach
+  // For a robust fit we'd use a proper optimizer, but this gives reasonable results
+
+  // Initial guess based on current params
+  let p = {
+    roomTemp: params.roomTemp,
+    A1: params.A1,
+    k1: params.k1,
+    A2: params.A2,
+    k2: params.k2,
+  };
+
+  // Compute RMSE
+  const rmse = (p) => {
+    let sum = 0;
+    valid.forEach((m) => {
+      const predicted = tempAtTime(m.time, p);
+      sum += Math.pow(m.measured - predicted, 2);
+    });
+    return Math.sqrt(sum / valid.length);
+  };
+
+  // Simple gradient descent on A1, A2 (keep k1, k2 from current params for stability)
+  // More sophisticated fitting would adjust all params
+  const step = 0.5;
+  for (let iter = 0; iter < 50; iter++) {
+    const baseRmse = rmse(p);
+
+    // Try adjusting A1
+    const pA1up = { ...p, A1: p.A1 + step };
+    const pA1down = { ...p, A1: Math.max(0, p.A1 - step) };
+    if (rmse(pA1up) < baseRmse) p.A1 += step;
+    else if (rmse(pA1down) < baseRmse) p.A1 = Math.max(0, p.A1 - step);
+
+    // Try adjusting A2
+    const pA2up = { ...p, A2: p.A2 + step };
+    const pA2down = { ...p, A2: Math.max(0, p.A2 - step) };
+    if (rmse(pA2up) < baseRmse) p.A2 += step;
+    else if (rmse(pA2down) < baseRmse) p.A2 = Math.max(0, p.A2 - step);
+  }
+
+  return {
+    T_amb: p.roomTemp,
+    A1: p.A1,
+    k1: p.k1,
+    A2: p.A2,
+    k2: p.k2,
+    rmse: rmse(p),
+  };
+}
+
+function updateLiveParams() {
+  const valid = currentSessionMeasurements.filter((m) => !m.undone);
+
+  if (valid.length < 3) {
+    document.getElementById("liveParamsInsufficient").style.display = "block";
+    document.getElementById("liveParamsContent").style.display = "none";
+    fittedParams = null;
+    return;
+  }
+
+  fittedParams = fitTwoExponential(currentSessionMeasurements);
+
+  if (fittedParams) {
+    document.getElementById("liveParamsInsufficient").style.display = "none";
+    document.getElementById("liveParamsContent").style.display = "block";
+    document.getElementById("liveParamTamb").textContent =
+      fittedParams.T_amb + "°C";
+    document.getElementById("liveParamA1").textContent =
+      fittedParams.A1.toFixed(1) + "°C";
+    document.getElementById("liveParamK1").textContent =
+      fittedParams.k1.toFixed(3) + " min⁻¹";
+    document.getElementById("liveParamA2").textContent =
+      fittedParams.A2.toFixed(1) + "°C";
+    document.getElementById("liveParamK2").textContent =
+      fittedParams.k2.toFixed(3) + " min⁻¹";
+    document.getElementById("liveParamRMSE").textContent =
+      fittedParams.rmse.toFixed(2) + "°C";
+  }
+}
+
 // =============================================================================
 // LOGGING SYSTEM
 // =============================================================================
@@ -530,7 +698,9 @@ readings:
   measurementLog += sessionHeader;
   currentSessionMeasurements = [];
   sessionActive = true;
+  fittedParams = null;
   updateLogDisplay();
+  updateLiveParams();
 }
 
 function logTemperature() {
@@ -562,6 +732,7 @@ function logTemperature() {
 
   updateLogDisplay();
   updateUndoButton();
+  updateLiveParams();
 }
 
 function undoLastLog() {
@@ -580,6 +751,7 @@ function undoLastLog() {
   measurementLog += `  - [${lastEntry.time.toFixed(2)}, ${lastEntry.measured.toFixed(1)}, ${lastEntry.predicted.toFixed(1)}, "undone"]\n`;
   updateLogDisplay();
   updateUndoButton();
+  updateLiveParams();
 }
 
 function updateLogDisplay() {
@@ -610,6 +782,30 @@ function copyLog() {
   });
 }
 
+function logFittedParamsOnStop() {
+  if (!fittedParams) return;
+
+  measurementLog += `
+# ============================================================
+# Fitted Parameters (from session measurements)
+# ============================================================
+fitted_parameters:
+  T_amb: ${fittedParams.T_amb}
+  A1: ${fittedParams.A1.toFixed(2)}
+  k1: ${fittedParams.k1.toFixed(4)}
+  A2: ${fittedParams.A2.toFixed(2)}
+  k2: ${fittedParams.k2.toFixed(4)}
+  rmse: ${fittedParams.rmse.toFixed(3)}
+`;
+  updateLogDisplay();
+}
+
+function toggleLogExpanded() {
+  logExpanded = !logExpanded;
+  document.getElementById("logContent").classList.toggle("open", logExpanded);
+  document.getElementById("logToggleIcon").classList.toggle("open", logExpanded);
+}
+
 // =============================================================================
 // TIMER - Simple state machine: idle -> countdown -> running <-> confirm -> idle
 // =============================================================================
@@ -635,10 +831,28 @@ function handleTimerClick() {
     case "running":
       timerState = "confirm";
       updateTimerButton();
+      startConfirmTimeout();
       break;
     case "confirm":
+      clearConfirmTimeout();
       stopTimer();
       break;
+  }
+}
+
+function startConfirmTimeout() {
+  confirmTimeoutId = setTimeout(() => {
+    if (timerState === "confirm") {
+      timerState = "running";
+      updateTimerButton();
+    }
+  }, CONFIRM_TIMEOUT_SECONDS * 1000);
+}
+
+function clearConfirmTimeout() {
+  if (confirmTimeoutId) {
+    clearTimeout(confirmTimeoutId);
+    confirmTimeoutId = null;
   }
 }
 
@@ -653,11 +867,17 @@ function startTimer() {
 
 function stopTimer() {
   clearInterval(timerInterval);
+  clearConfirmTimeout();
+
+  // Log fitted params before ending session
+  logFittedParamsOnStop();
+
   timerState = "idle";
   timerElapsed = 0;
   timerStartTime = null;
   sessionActive = false;
   currentSessionMeasurements = [];
+  fittedParams = null;
 
   document.getElementById("timerDisplay").textContent = "0:00";
   document.getElementById("timerDisplay").classList.remove("countdown");
@@ -671,6 +891,7 @@ function stopTimer() {
   updateTimerButton();
   updateMarkers(null);
   updateLogButtons();
+  updateLiveParams();
   drawChart(mainCanvas, mainCtx, false, null);
   if (overlayActive) drawChart(overlayCanvas, overlayCtx, true, null);
 }
@@ -769,6 +990,8 @@ function update() {
   updateEquation();
   updateHowTo();
   updateSliderDisplays();
+  updateDrinkingZoneSlider();
+  updateTimerContext();
   document.getElementById("timeScrubber").max = chartData.length - 1;
 }
 
@@ -825,15 +1048,10 @@ function applyCupPreset(presetName) {
 // EVENT LISTENERS
 // =============================================================================
 
-document
-  .getElementById("stickyToggle")
-  .addEventListener("click", toggleOverlay);
-document
-  .getElementById("equationToggle")
-  .addEventListener("click", toggleEquationDetails);
-document
-  .getElementById("timerStartBtn")
-  .addEventListener("click", handleTimerClick);
+document.getElementById("stickyToggle").addEventListener("click", toggleOverlay);
+document.getElementById("equationToggle").addEventListener("click", toggleEquationDetails);
+document.getElementById("timerStartBtn").addEventListener("click", handleTimerClick);
+document.getElementById("logToggle").addEventListener("click", toggleLogExpanded);
 
 document.getElementById("measuredTemp").addEventListener("input", (e) => {
   document.getElementById("measuredTempValue").textContent =
@@ -910,28 +1128,35 @@ document.getElementById("k2Slider").addEventListener("input", (e) => {
   update();
 });
 
-document.getElementById("drinkableTemp").addEventListener("input", (e) => {
-  params.drinkableTemp = parseInt(e.target.value);
-  document.getElementById("drinkableTempValue").textContent =
-    `${params.drinkableTemp}°C`;
-  if (params.coldTemp >= params.drinkableTemp) {
-    params.coldTemp = params.drinkableTemp - 5;
-    document.getElementById("coldTemp").value = params.coldTemp;
-    document.getElementById("coldTempValue").textContent =
-      `${params.coldTemp}°C`;
+// Dual-handle drinking zone slider
+const coldTempSlider = document.getElementById("coldTemp");
+const drinkableTempSlider = document.getElementById("drinkableTemp");
+
+coldTempSlider.addEventListener("input", (e) => {
+  let cold = parseInt(e.target.value);
+  let drinkable = params.drinkableTemp;
+
+  // Ensure cold < drinkable with min gap of 5
+  if (cold >= drinkable - 5) {
+    cold = drinkable - 5;
+    e.target.value = cold;
   }
+
+  params.coldTemp = cold;
   update();
 });
 
-document.getElementById("coldTemp").addEventListener("input", (e) => {
-  params.coldTemp = parseInt(e.target.value);
-  document.getElementById("coldTempValue").textContent = `${params.coldTemp}°C`;
-  if (params.drinkableTemp <= params.coldTemp) {
-    params.drinkableTemp = params.coldTemp + 5;
-    document.getElementById("drinkableTemp").value = params.drinkableTemp;
-    document.getElementById("drinkableTempValue").textContent =
-      `${params.drinkableTemp}°C`;
+drinkableTempSlider.addEventListener("input", (e) => {
+  let drinkable = parseInt(e.target.value);
+  let cold = params.coldTemp;
+
+  // Ensure drinkable > cold with min gap of 5
+  if (drinkable <= cold + 5) {
+    drinkable = cold + 5;
+    e.target.value = drinkable;
   }
+
+  params.drinkableTemp = drinkable;
   update();
 });
 
@@ -959,48 +1184,6 @@ document.querySelectorAll(".tab-btn").forEach((btn) => {
     btn.classList.add("active");
     document.getElementById(`tab-${btn.dataset.tab}`).classList.add("active");
   });
-});
-
-// Canvas interaction
-function handleCanvasInteraction(canvas, e, isTouch = false, compact = false) {
-  if (timerState !== "idle") return;
-  const rect = canvas.getBoundingClientRect();
-  const x = isTouch ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
-  const padding = compact ? { left: 40, right: 15 } : { left: 45, right: 20 };
-  const chartWidth = rect.width - padding.left - padding.right;
-
-  if (x >= padding.left && x <= rect.width - padding.right) {
-    const maxTime = 30;
-    const time = ((x - padding.left) / chartWidth) * maxTime;
-    currentTimeIndex = Math.round(time / 0.05);
-    currentTimeIndex = Math.max(
-      0,
-      Math.min(currentTimeIndex, chartData.length - 1)
-    );
-    document.getElementById("timeScrubber").value = currentTimeIndex;
-    drawChart(mainCanvas, mainCtx, false, null);
-    if (overlayActive) drawChart(overlayCanvas, overlayCtx, true, null);
-    if (currentTimeIndex >= 0 && currentTimeIndex < chartData.length) {
-      document.getElementById("timeDisplay").textContent = formatTime(
-        chartData[currentTimeIndex].time
-      );
-    }
-  }
-}
-
-mainCanvas.addEventListener("mousemove", (e) =>
-  handleCanvasInteraction(mainCanvas, e, false, false)
-);
-mainCanvas.addEventListener("touchmove", (e) => {
-  e.preventDefault();
-  handleCanvasInteraction(mainCanvas, e, true, false);
-});
-overlayCanvas.addEventListener("mousemove", (e) =>
-  handleCanvasInteraction(overlayCanvas, e, false, true)
-);
-overlayCanvas.addEventListener("touchmove", (e) => {
-  e.preventDefault();
-  handleCanvasInteraction(overlayCanvas, e, true, true);
 });
 
 window.addEventListener("resize", () => {

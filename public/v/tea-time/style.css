@@ -64,6 +64,13 @@ h1 {
   text-align: center;
 }
 
+.current-temp-label {
+  font-size: 0.7rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
 .timer-display {
   font-family: "JetBrains Mono", monospace;
   font-size: 2.5rem;
