@@ -19,16 +19,16 @@
   /* ---------- Named tone palette (shared names, theme-specific values) ---------- */
   /* chromatic accents */
   --tone-green: #668974;
-  --tone-blue:  #7599c0;
+  --tone-blue: #7599c0;
   --tone-purple: #787081;
   --tone-yellow: #cda77b;
-  --tone-red:    #b76243;
+  --tone-red: #b76243;
 
   /* ---------- Semantic text tones (defined, not yet used) ---------- */
   /* light defaults */
   --text-strong: #3d3d3a;
-  --text-base:   #4a4844;
-  --text-muted:  #6b6862;
+  --text-base: #4a4844;
+  --text-muted: #6b6862;
 
   /* ---------- Active palette (theme-switchable) ---------- */
   --palette-bg: var(--palette-bg-light);
@@ -43,8 +43,8 @@
   --paper: var(--palette-paper);
 
   --fg-muted: color-mix(in srgb, var(--palette-fg) 58%, var(--palette-bg));
-  --rule:     color-mix(in srgb, var(--palette-fg) 14%, var(--palette-bg));
-  --surface:  color-mix(in srgb, var(--palette-fg) 4%,  var(--palette-bg));
+  --rule: color-mix(in srgb, var(--palette-fg) 14%, var(--palette-bg));
+  --surface: color-mix(in srgb, var(--palette-fg) 4%, var(--palette-bg));
 
   /* ---------- Layout ---------- */
   --page-max: 900px;
@@ -88,8 +88,8 @@
 
     /* semantic text tones – dark */
     --text-strong: #cda77b; /* headings */
-    --text-base:   #e7e0d6; /* sub-headings */
-    --text-muted:  #989082; /* running text */
+    --text-base: #e7e0d6; /* sub-headings */
+    --text-muted: #989082; /* running text */
   }
 }
 
@@ -103,8 +103,8 @@
   --rule: var(--palette-rule-dark);
 
   --text-strong: #cda77b;
-  --text-base:   #e7e0d6;
-  --text-muted:  #989082;
+  --text-base: #e7e0d6;
+  --text-muted: #989082;
 }
 
 /* ==================== Explicit Light ==================== */
@@ -117,6 +117,6 @@
 
   /* semantic text tones – light */
   --text-strong: #3d3d3a;
-  --text-base:   #4a4844;
-  --text-muted:  #6b6862;
+  --text-base: #4a4844;
+  --text-muted: #6b6862;
 }
