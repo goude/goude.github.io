@@ -2,41 +2,55 @@
 
 /* Base + Light (default source values) */
 :root {
-  /* Light source palette (immutable) */
+  /* ---------- Light source palette (immutable) ---------- */
   --palette-bg-light: #faf9f5;
   --palette-fg-light: #3d3d3a;
   --palette-accent-light: #cc7c5e;
   --palette-paper-light: #fbf8f4;
 
-  /* Dark source palette (immutable) */
-  --palette-bg-dark: #191612;        /* page background */
-  --palette-paper-dark: #24201a;    /* paper / panels */
-  --palette-surface-dark: #2c2621;  /* option backgrounds */
-  --palette-rule-dark: #877053;     /* borders, rules */
-  --palette-fg-dark: #e7e0d6;       /* body text */
-  --palette-accent-dark: #cda77b;   /* headings, knobs */
+  /* ---------- Dark source palette (immutable) ---------- */
+  --palette-bg-dark: #191612;
+  --palette-paper-dark: #24201a;
+  --palette-surface-dark: #2c2621;
+  --palette-rule-dark: #877053;
+  --palette-fg-dark: #e7e0d6;
+  --palette-accent-dark: #cda77b;
 
-  /* Active palette (theme-switchable) */
+  /* ---------- Named tone palette (shared names, theme-specific values) ---------- */
+  /* chromatic accents */
+  --tone-green: #668974;
+  --tone-blue:  #7599c0;
+  --tone-purple: #787081;
+  --tone-yellow: #cda77b;
+  --tone-red:    #b76243;
+
+  /* ---------- Semantic text tones (defined, not yet used) ---------- */
+  /* light defaults */
+  --text-strong: #3d3d3a;
+  --text-base:   #4a4844;
+  --text-muted:  #6b6862;
+
+  /* ---------- Active palette (theme-switchable) ---------- */
   --palette-bg: var(--palette-bg-light);
   --palette-fg: var(--palette-fg-light);
   --palette-accent: var(--palette-accent-light);
   --palette-paper: var(--palette-paper-light);
 
-  /* Derived tokens */
+  /* ---------- Derived tokens ---------- */
   --bg: var(--palette-bg);
   --fg: var(--palette-fg);
   --accent: var(--palette-accent);
   --paper: var(--palette-paper);
 
   --fg-muted: color-mix(in srgb, var(--palette-fg) 58%, var(--palette-bg));
-  --rule: color-mix(in srgb, var(--palette-fg) 14%, var(--palette-bg));
-  --surface: color-mix(in srgb, var(--palette-fg) 4%, var(--palette-bg));
+  --rule:     color-mix(in srgb, var(--palette-fg) 14%, var(--palette-bg));
+  --surface:  color-mix(in srgb, var(--palette-fg) 4%,  var(--palette-bg));
 
-  /* Layout */
+  /* ---------- Layout ---------- */
   --page-max: 900px;
   --page-pad: 24px;
 
-  /* Typography */
+  /* ---------- Typography ---------- */
   --font-serif: et-book, Palatino, "Palatino Linotype", Georgia, serif;
   --font-sans:
     "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -44,7 +58,7 @@
   --font-code: "SF Mono", Monaco, "Cascadia Code", Consolas, monospace;
 
   --text-sm: 1rem;
-  --text-base: 1.125rem;
+  --text-base-size: 1.125rem;
   --text-lg: 1.25rem;
   --text-xl: 1.5rem;
   --text-2xl: 1.75rem;
@@ -69,9 +83,13 @@
     --palette-accent: var(--palette-accent-dark);
     --palette-paper: var(--palette-paper-dark);
 
-    /* Override derived neutrals explicitly for dark */
     --surface: var(--palette-surface-dark);
     --rule: var(--palette-rule-dark);
+
+    /* semantic text tones – dark */
+    --text-strong: #cda77b; /* headings */
+    --text-base:   #e7e0d6; /* sub-headings */
+    --text-muted:  #989082; /* running text */
   }
 }
 
@@ -83,6 +101,10 @@
 
   --surface: var(--palette-surface-dark);
   --rule: var(--palette-rule-dark);
+
+  --text-strong: #cda77b;
+  --text-base:   #e7e0d6;
+  --text-muted:  #989082;
 }
 
 /* ==================== Explicit Light ==================== */
@@ -92,4 +114,9 @@
   --palette-fg: var(--palette-fg-light);
   --palette-accent: var(--palette-accent-light);
   --palette-paper: var(--palette-paper-light);
+
+  /* semantic text tones – light */
+  --text-strong: #3d3d3a;
+  --text-base:   #4a4844;
+  --text-muted:  #6b6862;
 }
