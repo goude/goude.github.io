@@ -30,7 +30,7 @@ export const SITE: SiteMetadata = {
 };
 
 export const NAV_ITEMS: NavItem[] = [
-  { href: "/about", label: "About", icon: "fa fa-life-ring" },
+  { href: "/hello", label: "Hello", icon: "fa fa-hand-spock" },
   {
     href: "https://github.com/goude",
     label: "GitHub",
