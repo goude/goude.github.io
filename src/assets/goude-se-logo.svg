@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1024"
+   height="256"
+   viewBox="0 0 1024 256"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
+   sodipodi:docname="goude-se-logo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     inkscape:zoom="0.77539062"
+     inkscape:cx="512"
+     inkscape:cy="128.32242"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     showguides="true" />
+  <title
+     id="title1">goude.se logo</title>
+  <defs
+     id="defs1">
+    <linearGradient
+       id="swatch3"
+       inkscape:swatch="solid"
+       inkscape:label="tone-purple"
+       gradientTransform="matrix(1.2195122,0,0,2.0465116,-524.70103,-1044.4441)">
+      <stop
+         style="stop-color:#f40b9d;stop-opacity:1;"
+         offset="0"
+         id="stop3" />
+    </linearGradient>
+    <linearGradient
+       id="swatch2"
+       inkscape:swatch="solid"
+       inkscape:label="tone-yellow">
+      <stop
+         style="stop-color:#f5990f;stop-opacity:1;"
+         offset="0"
+         id="stop2" />
+    </linearGradient>
+    <linearGradient
+       id="swatch186"
+       inkscape:swatch="solid"
+       inkscape:label="currentColor"
+       gradientTransform="translate(1023.825,957.5)">
+      <stop
+         style="stop-color:#060608;stop-opacity:1;"
+         offset="0"
+         id="stop186" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#swatch186"
+       id="linearGradient1"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.4211352,0,0,1.4211352,-824.90386,-463.59952)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#swatch2"
+       id="linearGradient2"
+       x1="1174.5857"
+       y1="1087.757"
+       x2="1401.8301"
+       y2="1087.757"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-141.86398)" />
+  </defs>
+  <g
+     inkscape:label="logo_layer"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-1023.825,-957.5)">
+    <ellipse
+       style="fill:url(#swatch3);stroke:none;stroke-width:12.6383;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       id="path3"
+       cx="1222.4346"
+       cy="1021.9836"
+       rx="64.483627"
+       ry="56.745594"
+       inkscape:label="path3" />
+    <circle
+       style="fill:url(#linearGradient2);stroke:none;stroke-width:8;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       id="path2"
+       cx="1146.3439"
+       cy="1087.757"
+       r="109.62217" />
+    <path
+       d="m 1091.3086,1142.8449 h 89.2335 v -17.8467 h 17.8468 v -89.2336 h -89.2335 v 17.8468 h -17.8468 v 35.6934 h 17.8468 v 17.8467 h 53.54 v 17.8467 h -71.3868 z m 35.6934,-53.5401 v -35.6934 h 35.6934 v 35.6934 z m 107.6156,35.6934 h 71.3869 v -17.8467 h 17.8467 v -53.5401 h -17.8467 v -17.8468 h -71.3869 v 17.8468 h -17.8466 v 53.5401 h 17.8466 z m 17.8468,-17.8467 v -53.5401 h 35.6933 v 53.5401 z m 196.8491,-71.3869 h -35.6934 v 71.3869 h -35.6933 v -71.3869 h -35.6934 v 71.3869 h 17.8464 v 17.8467 h 89.2337 z m 89.7689,71.3869 v -35.6933 h -35.6935 v 35.6933 z m 35.6933,17.8467 h -89.2335 v -17.8467 h -17.8468 v -35.6933 h 17.8468 v -17.8468 h 53.5402 v -35.6934 h 35.6933 z m 89.769,-71.3868 v 17.8468 h -35.6934 v -17.8468 z m 17.8466,-17.8468 h -71.3868 v 17.8468 h -17.8467 v 53.5401 h 17.8467 v 17.8467 h 71.3868 v -17.8467 h -53.54 v -17.8467 h 71.3867 v -35.6934 h -17.8467 z m 36.2288,89.2336 h 35.6935 v -35.6934 h -35.6935 z m 161.1558,-89.2336 h -89.2337 v 17.8468 h -17.8464 v 17.8468 h 17.8464 v 17.8466 h 53.5403 v 17.8467 h -71.3867 v 17.8467 h 89.2335 v -17.8467 h 17.8466 v -17.8467 h -17.8466 v -17.8466 h -53.5401 v -17.8468 h 71.3867 z m 89.7688,17.8468 v 17.8468 h -35.6933 v -17.8468 z m 17.8466,-17.8468 h -71.3867 v 17.8468 h -17.8468 v 53.5401 h 17.8468 v 17.8467 h 71.3867 v -17.8467 h -53.5399 v -17.8467 h 71.3867 v -35.6934 h -17.8468 z"
+       id="text1"
+       style="font-size:280px;font-family:'C64 Pro';-inkscape-font-specification:'C64 Pro';text-align:center;letter-spacing:1.05px;text-anchor:middle;fill:url(#linearGradient1);stroke:none;stroke-width:26.3367;paint-order:stroke fill markers"
+       aria-label="goude.se"
+       inkscape:label="logo_text" />
+    <rect
+       style="display:none;vector-effect:non-scaling-stroke;fill:none;stroke:#df3e23;stroke-width:1;stroke-dasharray:none;-inkscape-stroke:hairline;paint-order:stroke fill markers"
+       id="rect1"
+       width="1024"
+       height="256"
+       x="1023.825"
+       y="957.5"
+       inkscape:label="outer_box"
+       sodipodi:insensitive="true" />
+  </g>
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>goude.se logo</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>doitpoorly</dc:title>
+          </cc:Agent>
+        </dc:creator>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>

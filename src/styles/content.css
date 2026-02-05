@@ -1,0 +1,92 @@
+/* ==================== Tables ==================== */
+
+/* Assumes body text is serif; tables deliberately use UI/sans */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-lg) 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: 1.4;
+}
+
+caption {
+  caption-side: top;
+  text-align: left;
+  margin-bottom: var(--space-sm);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+thead th {
+  text-align: left;
+  font-weight: 500;
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+
+tbody th,
+tbody td {
+  text-align: left;
+  padding: var(--space-sm) var(--space-md);
+  vertical-align: top;
+  border-bottom: 1px solid var(--rule-soft);
+}
+
+tbody th {
+  font-weight: 400;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+tbody tr:last-child th,
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Optional: subtle row hover for scannability */
+tbody tr:hover {
+  background: var(--surface-raised);
+}
+
+/* ==================== Code ==================== */
+
+/* Inline code */
+code {
+  font-family: var(--font-mono);
+  font-size: 0.95em; /* slightly smaller than surrounding text */
+  background: var(--surface-raised);
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-sm);
+}
+
+/* Block code */
+pre {
+  margin: var(--space-lg) 0;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--surface);
+  border-left: 3px solid var(--accent-dim);
+  overflow-x: auto;
+  border-radius: var(--radius);
+}
+
+pre code {
+  display: block;
+  padding: 0;
+  background: none;
+  font-size: var(--text-sm); /* same visual size as body text */
+  line-height: 1.45;
+  color: var(--text);
+}
+
+/* Avoid oversized monospace on small screens */
+@media (max-width: 600px) {
+  table {
+    font-size: var(--text-xs);
+  }
+
+  pre code {
+    font-size: var(--text-xs);
+  }
+}

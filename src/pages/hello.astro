@@ -7,108 +7,158 @@ import Layout from "@/layouts/Layout.astro";
   description="Hello from goude.se"
   current="hello"
 >
-  <section>
-    <h1 id="colophon">Hello</h1>
-    <p>
-      <a
-        href="https://www.buymeacoffee.com/goude"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="no-style-link"
-      >
-        <img
-          src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png"
-          alt="Buy Me A Coffee"
-          style="height: 60px; width: 217px;"
-          loading="lazy"
-        />
-      </a>
-    </p>
-  </section>
+  <!-- article: a self-contained, citable page-level object -->
+  <article id="hello">
+    <!-- header: title + framing for this page -->
+    <header>
+      <h1>Hello</h1>
+      <p class="subtitle">
+        A small page with some structure. Mostly placeholders for now.
+      </p>
 
-  <section>
-    <h2>Adage Experiment</h2>
-    <div class="epigraph">
-      <blockquote>
-        <p id="adage">
-          The English language . . . becomes ugly and inaccurate because our
-          thoughts are foolish, but the slovenliness of our language makes it
-          easier for us to have foolish thoughts.
+      <!-- nav: local table of contents -->
+      <nav aria-label="Hello page sections">
+        <ul>
+          <li><a href="#hello-there">Hello There</a></li>
+          <li><a href="#fun">Fun</a></li>
+          <li><a href="#work">Work</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <section id="hello-there">
+      <h2>Hello There</h2>
+
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus.
+        Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies
+        sed, dolor.
+      </p>
+
+      <p>
+        Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper
+        congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie,
+        enim est eleifend mi, non fermentum diam nisl sit amet erat.
+      </p>
+
+      <aside>
+        <p class="text-muted">
+          Placeholder note: this is where a short “how to read this site” or
+          “what I’m optimizing for” paragraph could live.
         </p>
-        <footer><span id="attribution"></span></footer>
+      </aside>
+
+      <blockquote>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec
+          odio. Praesent libero. Sed cursus ante dapibus diam.
+        </p>
+        <footer>— Lorem Ipsum</footer>
       </blockquote>
-    </div>
+    </section>
 
-    <script>
-      interface AdageFile {
-        name: string;
-      }
+    <section id="fun">
+      <h2>Fun</h2>
 
-      async function fetchRandomAdage(): Promise<void> {
-        const githubApiUrl =
-          "https://api.github.com/repos/goude/adages/contents/adages";
-        const rawContentBaseUrl =
-          "https://raw.githubusercontent.com/goude/adages/master/adages/";
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
+        nibh. Aenean quam. In scelerisque sem at dolor.
+      </p>
 
-        try {
-          const allowedFileNames = ["boot-messages", "wwdits"];
+      <h3>Some lists</h3>
 
-          const listResponse = await fetch(githubApiUrl);
-          const fileList: AdageFile[] = await listResponse.json();
-          const filteredFileList = fileList.filter((file) =>
-            allowedFileNames.includes(file.name)
-          );
+      <ul>
+        <li>Lorem ipsum: a small hobby thing</li>
+        <li>Dolor sit amet: an occasional obsession</li>
+        <li>Consectetur: a recurring theme</li>
+      </ul>
 
-          if (filteredFileList.length === 0) {
-            throw new Error("No matching adage files found");
-          }
+      <ol>
+        <li>Make a tiny thing</li>
+        <li>Make it nicer than it needs to be</li>
+        <li>Write it down so Future Me doesn’t suffer</li>
+      </ol>
 
-          const randomFile =
-            filteredFileList[
-              Math.floor(Math.random() * filteredFileList.length)
-            ];
-          if (!randomFile) {
-            throw new Error("Failed to select random file");
-          }
-          const randomFileName = randomFile.name;
+      <h3>Details component</h3>
 
-          const fileUrl = `${rawContentBaseUrl}${randomFileName}`;
-          const fileResponse = await fetch(fileUrl);
-          const fileContent = await fileResponse.text();
+      <details>
+        <summary>What counts as “fun” here?</summary>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dui mi,
+          tincidunt quis, accumsan porttitor, facilisis luctus, metus.
+        </p>
+      </details>
 
-          const adages = fileContent.split("%");
-          const randomAdageRaw =
-            adages[Math.floor(Math.random() * adages.length)];
-          if (!randomAdageRaw) {
-            throw new Error("Failed to select random adage");
-          }
-          const randomAdage = randomAdageRaw.trim();
+      <h3>A small definition list</h3>
 
-          const match = randomAdage.match(/^(.*?)(?:\s*–\s*(.*))?$/);
-          const adage = match?.[1]?.trim() ?? randomAdage;
-          const attribution = match?.[2]?.trim() ?? "";
+      <dl>
+        <dt>Play</dt>
+        <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dd>
+        <dt>Practice</dt>
+        <dd>Sed dignissim lacinia nunc. Curabitur tortor.</dd>
+      </dl>
+    </section>
 
-          const formattedAdage = adage.replace(/\n/g, "<br>");
-          const adageElement = document.getElementById("adage");
-          const attributionElement = document.getElementById("attribution");
+    <section id="work">
+      <h2>Work</h2>
 
-          if (adageElement) adageElement.innerHTML = formattedAdage;
-          if (attributionElement) attributionElement.innerHTML = attribution;
-        } catch (error) {
-          console.error("Error fetching adage:", error);
-          const adageElement = document.getElementById("adage");
-          if (adageElement) adageElement.textContent = "Failed to load adage.";
-        }
-      }
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed cursus ante
+        dapibus diam. For example, I care about <code>clarity</code>,
+        <code>automation</code>, and <code>boring reliability</code>.
+      </p>
 
-      fetchRandomAdage();
-    </script>
-  </section>
+      <h3>Snapshot table</h3>
 
-  <section>
-    <h2>Everyday Carry</h2>
-    <ul>
-      <li>A Permanent Marker</li>
-    </ul>
-  </section>
+      <table>
+        <caption>
+          Placeholder timeline (replace with real roles/projects)
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">When</th>
+            <th scope="col">Thing</th>
+            <th scope="col">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">20XX–20YY</th>
+            <td>Lorem Project</td>
+            <td>Dolor sit amet, consectetur adipiscing elit.</td>
+          </tr>
+          <tr>
+            <th scope="row">20YY–20ZZ</th>
+            <td>Ipsum Initiative</td>
+            <td>Integer nec odio. Praesent libero.</td>
+          </tr>
+          <tr>
+            <th scope="row">Now</th>
+            <td>Something Practical</td>
+            <td>Build tools, reduce friction, ship.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Code (placeholder)</h3>
+
+      <pre><code class="language-bash"># tiny ritual
+git status
+just dev
+just fmt
+</code></pre>
+
+      <p class="text-muted">
+        Placeholder note: this section can later link to a CV, a “work style”
+        page, and a list of artifacts (repos, writeups, talks).
+      </p>
+    </section>
+
+    <footer>
+      <p class="text-muted">
+        End matter placeholder. Lorem ipsum dolor sit amet, consectetur
+        adipiscing elit.
+      </p>
+    </footer>
+  </article>
 </Layout>

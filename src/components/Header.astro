@@ -1,5 +1,40 @@
 ---
 import { NAV_ITEMS, type NavItem } from "@/types/site";
+import rawLogoSvg from "@/assets/goude-se-logo.svg?raw";
+
+const SWATCH_TO_VAR = {
+  "tone-green": "var(--tone-green)",
+  "tone-blue": "var(--tone-blue)",
+  "tone-purple": "var(--tone-purple)",
+  "tone-yellow": "var(--tone-yellow)",
+  "tone-red": "var(--tone-red)",
+  currentColor: "currentColor",
+
+  bg: "var(--bg)",
+  fg: "var(--fg)",
+  accent: "var(--accent)",
+  paper: "var(--paper)",
+
+  "fg-muted": "var(--fg-muted)",
+  rule: "var(--rule)",
+  surface: "var(--surface)",
+};
+
+function mapInkscapeSwatches(svg: any) {
+  let out = svg;
+
+  for (const [label, cssVar] of Object.entries(SWATCH_TO_VAR)) {
+    const re = new RegExp(
+      `(inkscape:label="${label}"[\\s\\S]*?<stop[^>]+stop-color:)[^;"]+`,
+      "g"
+    );
+    out = out.replace(re, `$1${cssVar}`);
+  }
+
+  return out;
+}
+
+const logoSvg = mapInkscapeSwatches(rawLogoSvg);
 
 interface Props {
   current?: string | undefined;
@@ -10,17 +45,20 @@ const { current = "" } = Astro.props;
 function isSelected(item: NavItem): boolean {
   return item.href === `/${current}`;
 }
+
+const navLeft = NAV_ITEMS.filter((item) => !item.external);
+const navRight = NAV_ITEMS.filter((item) => item.external);
 ---
 
 <header class="site-header">
   <!-- Logo / Home -->
   <a
     href="/"
-    class="logo"
+    aria-label="Home"
+    class:list={["logo", "nav-action", { selected: current === "" }]}
     title="Guard what you give your attention to. It quietly becomes who you are."
   >
-    <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
-    <span class="sr-only">Home</span>
+    <span class="logo-svg" aria-hidden="true" set:html={logoSvg} />
   </a>
 
   <!-- Hamburger (mobile only) -->
@@ -35,16 +73,13 @@ function isSelected(item: NavItem): boolean {
     <i class="fa-solid fa-bars" aria-hidden="true"></i>
   </button>
 
-  <!-- Desktop nav -->
+  <!-- Desktop nav (left) -->
   <nav class="main-nav desktop-only" aria-label="Main navigation">
     {
-      NAV_ITEMS.map((item) => (
+      navLeft.map((item) => (
         <a
           href={item.href}
-          class:list={["nav-link", { selected: isSelected(item) }]}
-          {...(item.external
-            ? { rel: "noopener noreferrer", target: "_blank" }
-            : {})}
+          class:list={["nav-action", { selected: isSelected(item) }]}
         >
           <i class={item.icon} aria-hidden="true" />
           <span>{item.label}</span>
@@ -53,24 +88,36 @@ function isSelected(item: NavItem): boolean {
     }
   </nav>
 
-  <!-- Desktop toggles -->
+  <!-- Desktop right cluster -->
   <div class="toggles desktop-only" aria-label="Appearance controls">
-    <button
-      class="theme-toggle btn"
-      id="theme-toggle"
-      type="button"
-      aria-label="Toggle theme"
-    >
-      <i class="fa-regular fa-sun" id="icon-light" aria-hidden="true"></i>
-      <i class="fa-solid fa-moon" id="icon-dark" aria-hidden="true"></i>
-      <span class="sr-only">Theme</span>
-    </button>
+    <nav class="main-nav right-nav" aria-label="External links">
+      {
+        navRight.map((item) => (
+          <a
+            href={item.href}
+            class="nav-action icon-only"
+            rel="noopener noreferrer"
+            target="_blank"
+            aria-label={`${item.label} (opens in new tab)`}
+          >
+            <i class={item.icon} aria-hidden="true" />
+            <span class="tooltip">
+              {item.label}
+              <i
+                class="fa-solid fa-arrow-up-right-from-square external-icon"
+                aria-hidden="true"
+              />
+            </span>
+          </a>
+        ))
+      }
+    </nav>
 
     <button
-      class="mode-toggle btn"
+      class="mode-toggle nav-action icon-only"
       id="mode-toggle"
       type="button"
-      aria-label="Toggle content mode"
+      aria-label="Toggle content detail level"
     >
       <i class="fa-regular fa-circle" data-mode-icon="normal" aria-hidden="true"
       ></i>
@@ -80,11 +127,25 @@ function isSelected(item: NavItem): boolean {
         aria-hidden="true"></i>
       <i class="fa-solid fa-brain" data-mode-icon="thoughts" aria-hidden="true"
       ></i>
-      <span class="sr-only">Mode</span>
+      <span class="tooltip" data-mode-tooltip="normal">Basic Detail</span>
+      <span class="tooltip" data-mode-tooltip="notes">Higher Detail</span>
+      <span class="tooltip" data-mode-tooltip="thoughts">Super Detail</span>
+    </button>
+
+    <button
+      class="theme-toggle nav-action icon-only tooltip-right"
+      id="theme-toggle"
+      type="button"
+      aria-label="Toggle theme"
+    >
+      <i class="fa-regular fa-sun" id="icon-light" aria-hidden="true"></i>
+      <i class="fa-solid fa-moon" id="icon-dark" aria-hidden="true"></i>
+      <span class="tooltip" data-theme-tooltip="light">Brother Day</span>
+      <span class="tooltip" data-theme-tooltip="dark">Brother Dusk</span>
     </button>
   </div>
 
-  <!-- Mobile pancake menu (everything) -->
+  <!-- Mobile pancake menu -->
   <nav class="menu-panel" id="menu-panel" aria-label="Menu">
     <div class="menu-divider" aria-hidden="true"></div>
 
@@ -99,16 +160,15 @@ function isSelected(item: NavItem): boolean {
         >
           <i class={item.icon} aria-hidden="true" />
           <span>{item.label}</span>
+          {item.external && (
+            <i
+              class="fa-solid fa-arrow-up-right-from-square external-icon"
+              aria-hidden="true"
+            />
+          )}
         </a>
       ))
     }
-
-    <button class="menu-item menu-action" id="theme-toggle-menu" type="button">
-      <i class="fa-regular fa-sun" data-theme-icon="light" aria-hidden="true"
-      ></i>
-      <i class="fa-solid fa-moon" data-theme-icon="dark" aria-hidden="true"></i>
-      <span>Theme</span>
-    </button>
 
     <button class="menu-item menu-action" id="mode-toggle-menu" type="button">
       <i class="fa-regular fa-circle" data-mode-icon="normal" aria-hidden="true"
@@ -119,7 +179,17 @@ function isSelected(item: NavItem): boolean {
         aria-hidden="true"></i>
       <i class="fa-solid fa-brain" data-mode-icon="thoughts" aria-hidden="true"
       ></i>
-      <span>Mode</span>
+      <span data-mode-label="normal">Basic Detail</span>
+      <span data-mode-label="notes">Higher Detail</span>
+      <span data-mode-label="thoughts">Super Detail</span>
+    </button>
+
+    <button class="menu-item menu-action" id="theme-toggle-menu" type="button">
+      <i class="fa-regular fa-sun" data-theme-icon="light" aria-hidden="true"
+      ></i>
+      <i class="fa-solid fa-moon" data-theme-icon="dark" aria-hidden="true"></i>
+      <span data-theme-label="light">Brother Day</span>
+      <span data-theme-label="dark">Brother Dusk</span>
     </button>
   </nav>
 </header>
@@ -131,6 +201,7 @@ function isSelected(item: NavItem): boolean {
     align-items: center;
     justify-content: flex-start;
     gap: 0.5rem;
+    font-family: var(--font-sans);
   }
 
   .sr-only {
@@ -145,39 +216,79 @@ function isSelected(item: NavItem): boolean {
     border: 0;
   }
 
-  /* Shared button styling */
+  /* Mobile-only hamburger button */
   .btn {
     background: none;
     border: none;
-    font-size: 1.1em;
     cursor: pointer;
     padding: 0.25rem 0.6rem;
     color: inherit;
     transition: opacity 0.15s ease;
+    font-family: var(--font-sans);
+    font-size: 1.05em;
   }
-
   .btn:hover {
     opacity: 0.7;
   }
 
-  /* Logo */
-  .logo {
-    flex: 0 0 auto;
+  /* ---------- Unified nav item styling ---------- */
+  .nav-action {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    font-size: 1.1em;
     padding: 0.25rem 0.6rem;
+    border-radius: 999px;
     text-decoration: none;
     color: inherit;
-    transition: opacity 0.15s ease;
+
+    font-family: var(--font-sans);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease,
+      opacity 0.15s ease;
   }
 
-  .logo:hover {
+  .nav-action:hover {
     opacity: 0.7;
   }
 
-  /* Desktop nav */
+  .nav-action i {
+    font-size: 1.1em;
+  }
+
+  /* Shared selected style */
+  .selected {
+    background: var(--fg);
+    color: var(--bg);
+  }
+
+  /* ---------- Logo ---------- */
+  .logo {
+    flex-shrink: 0;
+  }
+
+  .logo-svg {
+    display: flex;
+    align-items: center;
+    height: 1.4em;
+    line-height: 1;
+  }
+
+  .logo-svg :global(svg) {
+    display: block;
+    height: 100%;
+    width: auto;
+  }
+
+  /* Desktop nav containers */
   .main-nav {
     display: flex;
     align-items: center;
@@ -186,37 +297,62 @@ function isSelected(item: NavItem): boolean {
     font-weight: 700;
   }
 
-  .nav-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.25rem 0.6rem;
-    border-radius: 999px;
-    text-decoration: none;
-    color: inherit;
-    letter-spacing: 0.08em;
-    white-space: nowrap;
-    transition:
-      background-color 0.15s ease,
-      color 0.15s ease;
-  }
-
-  .nav-link i {
-    font-size: 1.1em;
-  }
-
-  /* Shared selected style (desktop + mobile menu items) */
-  .selected {
-    background: var(--fg);
-    color: var(--bg);
-  }
-
-  /* Desktop toggles */
+  /* Desktop right cluster */
   .toggles {
     margin-left: auto;
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
+  }
+
+  /* ---------- Icon-only with tooltip ---------- */
+  .icon-only {
+    position: relative;
+  }
+
+  .icon-only .tooltip {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(0.25rem);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    background: var(--fg);
+    color: var(--bg);
+    font-size: 0.75em;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease;
+    z-index: 100;
+  }
+
+  .icon-only:hover .tooltip,
+  .icon-only:focus-visible .tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0.4rem);
+  }
+
+  /* Right-aligned tooltip for rightmost item to prevent cutoff */
+  .icon-only.tooltip-right .tooltip {
+    left: auto;
+    right: 0;
+    transform: translateX(0) translateY(0.25rem);
+  }
+
+  .icon-only.tooltip-right:hover .tooltip,
+  .icon-only.tooltip-right:focus-visible .tooltip {
+    transform: translateX(0) translateY(0.4rem);
+  }
+
+  .external-icon {
+    margin-left: 0.3em;
+    font-size: 0.85em;
+    opacity: 0.7;
   }
 
   /* Hamburger positioning (mobile top row) */
@@ -235,34 +371,35 @@ function isSelected(item: NavItem): boolean {
     display: inline;
   }
 
+  /* Theme tooltips (desktop) */
+  .theme-toggle [data-theme-tooltip="dark"] {
+    display: none;
+  }
+  :global([data-theme-dark]) .theme-toggle [data-theme-tooltip="light"] {
+    display: none;
+  }
+  :global([data-theme-dark]) .theme-toggle [data-theme-tooltip="dark"] {
+    display: block;
+  }
+
   /* Mode icons (desktop) */
-  .mode-toggle [data-mode-icon="normal"] {
-    display: inline;
-  }
-  .mode-toggle [data-mode-icon="notes"],
-  .mode-toggle [data-mode-icon="thoughts"] {
+  .mode-toggle [data-mode-icon] {
     display: none;
   }
-  :global([data-mode="normal"]) .mode-toggle [data-mode-icon="normal"] {
-    display: inline;
-  }
-  :global([data-mode="normal"]) .mode-toggle [data-mode-icon="notes"],
-  :global([data-mode="normal"]) .mode-toggle [data-mode-icon="thoughts"] {
-    display: none;
-  }
-  :global([data-mode="notes"]) .mode-toggle [data-mode-icon="notes"] {
-    display: inline;
-  }
-  :global([data-mode="notes"]) .mode-toggle [data-mode-icon="normal"],
-  :global([data-mode="notes"]) .mode-toggle [data-mode-icon="thoughts"] {
-    display: none;
-  }
+  :global([data-mode="normal"]) .mode-toggle [data-mode-icon="normal"],
+  :global([data-mode="notes"]) .mode-toggle [data-mode-icon="notes"],
   :global([data-mode="thoughts"]) .mode-toggle [data-mode-icon="thoughts"] {
     display: inline;
   }
-  :global([data-mode="thoughts"]) .mode-toggle [data-mode-icon="normal"],
-  :global([data-mode="thoughts"]) .mode-toggle [data-mode-icon="notes"] {
+
+  /* Mode tooltips (desktop) */
+  .mode-toggle [data-mode-tooltip] {
     display: none;
+  }
+  :global([data-mode="normal"]) .mode-toggle [data-mode-tooltip="normal"],
+  :global([data-mode="notes"]) .mode-toggle [data-mode-tooltip="notes"],
+  :global([data-mode="thoughts"]) .mode-toggle [data-mode-tooltip="thoughts"] {
+    display: block;
   }
 
   /* Mobile menu defaults */
@@ -315,15 +452,12 @@ function isSelected(item: NavItem): boolean {
       font-size: 0.98em;
       font-family: var(--font-sans);
       font-weight: 700;
-    }
-    /*
       color: inherit;
-      transition:
-        background-color 0.15s ease,
-        color 0.15s ease,
-        opacity 0.15s ease;
     }
-    */
+
+    .menu-item .external-icon {
+      margin-left: auto;
+    }
 
     .menu-item i {
       font-size: 1em;
@@ -354,34 +488,35 @@ function isSelected(item: NavItem): boolean {
       display: inline;
     }
 
+    /* Theme labels (mobile menu) */
+    .menu-panel [data-theme-label="dark"] {
+      display: none;
+    }
+    :global([data-theme-dark]) .menu-panel [data-theme-label="light"] {
+      display: none;
+    }
+    :global([data-theme-dark]) .menu-panel [data-theme-label="dark"] {
+      display: inline;
+    }
+
     /* Mode icons (mobile menu) */
-    .menu-panel [data-mode-icon="normal"] {
-      display: inline;
-    }
-    .menu-panel [data-mode-icon="notes"],
-    .menu-panel [data-mode-icon="thoughts"] {
+    .menu-panel [data-mode-icon] {
       display: none;
     }
-    :global([data-mode="normal"]) .menu-panel [data-mode-icon="normal"] {
-      display: inline;
-    }
-    :global([data-mode="normal"]) .menu-panel [data-mode-icon="notes"],
-    :global([data-mode="normal"]) .menu-panel [data-mode-icon="thoughts"] {
-      display: none;
-    }
-    :global([data-mode="notes"]) .menu-panel [data-mode-icon="notes"] {
-      display: inline;
-    }
-    :global([data-mode="notes"]) .menu-panel [data-mode-icon="normal"],
-    :global([data-mode="notes"]) .menu-panel [data-mode-icon="thoughts"] {
-      display: none;
-    }
+    :global([data-mode="normal"]) .menu-panel [data-mode-icon="normal"],
+    :global([data-mode="notes"]) .menu-panel [data-mode-icon="notes"],
     :global([data-mode="thoughts"]) .menu-panel [data-mode-icon="thoughts"] {
       display: inline;
     }
-    :global([data-mode="thoughts"]) .menu-panel [data-mode-icon="normal"],
-    :global([data-mode="thoughts"]) .menu-panel [data-mode-icon="notes"] {
+
+    /* Mode labels (mobile menu) */
+    .menu-panel [data-mode-label] {
       display: none;
+    }
+    :global([data-mode="normal"]) .menu-panel [data-mode-label="normal"],
+    :global([data-mode="notes"]) .menu-panel [data-mode-label="notes"],
+    :global([data-mode="thoughts"]) .menu-panel [data-mode-label="thoughts"] {
+      display: inline;
     }
   }
 </style>
