@@ -42,3 +42,11 @@ clean:
 # 🧹 Full reset
 reset: clean
     rm -rf node_modules/
+
+# Repomix
+repomix:
+    repomix --ignore "coverage/,node_modules/,public/fonts,src/pages/egghunt.astro"
+
+# Synchronize SVG Colors
+svg-sync THEME="light":
+    node scripts/sync-svg-swatches.mjs --verbose {{THEME}}

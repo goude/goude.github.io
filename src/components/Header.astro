@@ -1,34 +1,28 @@
 ---
 import { NAV_ITEMS, type NavItem } from "@/types/site";
 import rawLogoSvg from "@/assets/goude-se-logo.svg?raw";
+import { SWATCH_TO_CSS_VAR } from "@/styles/swatches";
 
-const SWATCH_TO_VAR = {
-  "tone-green": "var(--tone-green)",
-  "tone-blue": "var(--tone-blue)",
-  "tone-purple": "var(--tone-purple)",
-  "tone-yellow": "var(--tone-yellow)",
-  "tone-red": "var(--tone-red)",
-  currentColor: "currentColor",
-
-  bg: "var(--bg)",
-  fg: "var(--fg)",
-  accent: "var(--accent)",
-  paper: "var(--paper)",
-
-  "fg-muted": "var(--fg-muted)",
-  rule: "var(--rule)",
-  surface: "var(--surface)",
-};
-
-function mapInkscapeSwatches(svg: any) {
+function mapInkscapeSwatches(svg: string) {
   let out = svg;
 
-  for (const [label, cssVar] of Object.entries(SWATCH_TO_VAR)) {
+  // Hard override: currentColor is always literal currentColor at runtime
+  const currentColorRe = new RegExp(
+    '(inkscape:label="currentColor"[\\s\\S]*?<stop[^>]+stop-color:)[^;"]+',
+    "g"
+  );
+
+  out = out.replace(currentColorRe, "$1currentColor");
+
+  // All other swatches map to CSS vars
+  for (const [label, cssVar] of Object.entries(SWATCH_TO_CSS_VAR)) {
+    if (label === "currentColor") continue;
+
     const re = new RegExp(
       `(inkscape:label="${label}"[\\s\\S]*?<stop[^>]+stop-color:)[^;"]+`,
       "g"
     );
-    out = out.replace(re, `$1${cssVar}`);
+    out = out.replace(re, `$1var(${cssVar})`);
   }
 
   return out;
@@ -140,8 +134,12 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
     >
       <i class="fa-regular fa-sun" id="icon-light" aria-hidden="true"></i>
       <i class="fa-solid fa-moon" id="icon-dark" aria-hidden="true"></i>
-      <span class="tooltip" data-theme-tooltip="light">Brother Day</span>
-      <span class="tooltip" data-theme-tooltip="dark">Brother Dusk</span>
+      <span class="tooltip" data-theme-tooltip="light"
+        >The Cleonic Theme of Brother Day</span
+      >
+      <span class="tooltip" data-theme-tooltip="dark"
+        >The Cleonic Theme of Brother Dusk</span
+      >
     </button>
   </div>
 

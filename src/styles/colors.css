@@ -1,50 +1,49 @@
-/* ==================== Color Palettes ==================== */
+/* ==================== Color System ==================== */
 
-/* Base + Light (default source values) */
 :root {
-  /* ---------- Light source palette (immutable) ---------- */
-  --palette-bg-light: #faf9f5;
-  --palette-fg-light: #3d3d3a;
-  --palette-accent-light: #cc7c5e;
-  --palette-paper-light: #fbf8f4;
+  /* ---------- Palette tokens (immutable source colors) ---------- */
 
-  /* ---------- Dark source palette (immutable) ---------- */
-  --palette-bg-dark: #191612;
-  --palette-paper-dark: #24201a;
-  --palette-surface-dark: #2c2621;
-  --palette-rule-dark: #877053;
-  --palette-fg-dark: #e7e0d6;
-  --palette-accent-dark: #cda77b;
+  /* Light palette */
+  --palette-light-bg: #faf9f5;
+  --palette-light-fg: #3d3d3a;
+  --palette-light-accent: #cc7c5e;
 
-  /* ---------- Named tone palette (shared names, theme-specific values) ---------- */
-  /* chromatic accents */
-  --tone-green: #668974;
-  --tone-blue: #7599c0;
-  --tone-purple: #787081;
-  --tone-yellow: #cda77b;
-  --tone-red: #b76243;
+  /* Dark palette */
+  --palette-dark-bg: #191612;
+  --palette-dark-fg: #e7e0d6;
+  --palette-dark-accent: #cda77b;
 
-  /* ---------- Semantic text tones (defined, not yet used) ---------- */
-  /* light defaults */
-  --text-strong: #3d3d3a;
-  --text-base: #4a4844;
-  --text-muted: #6b6862;
+  /* ---------- Named accents (optional, theme-independent) ---------- */
+  --accent-green: #668974;
+  --accent-blue: #7599c0;
+  --accent-purple: #787081;
+  --accent-yellow: #cda77b;
+  --accent-red: #b76243;
 
-  /* ---------- Active palette (theme-switchable) ---------- */
-  --palette-bg: var(--palette-bg-light);
-  --palette-fg: var(--palette-fg-light);
-  --palette-accent: var(--palette-accent-light);
-  --palette-paper: var(--palette-paper-light);
+  /* ---------- Active palette (theme-switchable base) ---------- */
+  --bg: var(--palette-light-bg);
+  --fg: var(--palette-light-fg);
+  --accent: var(--palette-light-accent);
 
-  /* ---------- Derived tokens ---------- */
-  --bg: var(--palette-bg);
-  --fg: var(--palette-fg);
-  --accent: var(--palette-accent);
-  --paper: var(--palette-paper);
+  /* ---------- Usage tokens (derived from palette) ---------- */
 
-  --fg-muted: color-mix(in srgb, var(--palette-fg) 58%, var(--palette-bg));
-  --rule: color-mix(in srgb, var(--palette-fg) 14%, var(--palette-bg));
-  --surface: color-mix(in srgb, var(--palette-fg) 4%, var(--palette-bg));
+  /* Text */
+  --text: var(--fg);
+  --text-strong: color-mix(in srgb, var(--fg) 100%, var(--bg));
+  --text-muted: color-mix(in srgb, var(--fg) 58%, var(--bg));
+
+  /* Surfaces & Structure */
+  --surface: color-mix(in srgb, var(--fg) 4%, var(--bg));
+  --surface-raised: color-mix(in srgb, var(--fg) 8%, var(--bg));
+  --paper: color-mix(in srgb, var(--bg) 97%, var(--fg));
+  --border: color-mix(in srgb, var(--fg) 14%, var(--bg));
+  --rule: color-mix(in srgb, var(--fg) 14%, var(--bg));
+  --rule-soft: color-mix(in srgb, var(--fg) 8%, var(--bg));
+
+  /* Interactive */
+  --link: var(--accent);
+  --focus: var(--accent);
+  --accent-dim: color-mix(in srgb, var(--accent) 40%, var(--bg));
 
   /* ---------- Layout ---------- */
   --page-max: 900px;
@@ -74,49 +73,92 @@
   --lh-tight: 1.414;
 }
 
+/* ==================== Light Theme ==================== */
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme-dark]) {
+    /* palette */
+    --bg: var(--palette-light-bg);
+    --fg: var(--palette-light-fg);
+    --accent: var(--palette-light-accent);
+
+    /* usage tokens (explicit for light) */
+    --text: var(--fg);
+    --text-strong: #3d3d3a;
+    --text-muted: #6b6862;
+
+    /* typography */
+    --font-serif: et-book, Palatino, "Palatino Linotype", Georgia, serif;
+    --font-sans:
+      "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      sans-serif;
+    --font-code: "SF Mono", Monaco, "Cascadia Code", Consolas, monospace;
+  }
+}
+
 /* ==================== Dark Theme ==================== */
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme-light]) {
-    --palette-bg: var(--palette-bg-dark);
-    --palette-fg: var(--palette-fg-dark);
-    --palette-accent: var(--palette-accent-dark);
-    --palette-paper: var(--palette-paper-dark);
+    /* palette */
+    --bg: var(--palette-dark-bg);
+    --fg: var(--palette-dark-fg);
+    --accent: var(--palette-dark-accent);
 
-    --surface: var(--palette-surface-dark);
-    --rule: var(--palette-rule-dark);
+    /* usage tokens (explicit for dark) */
+    --text: var(--fg);
+    --text-strong: #cda77b;
+    --text-muted: #989082;
+    --surface: #2c2621;
+    --paper: #24201a;
+    --border: #877053;
 
-    /* semantic text tones – dark */
-    --text-strong: #cda77b; /* headings */
-    --text-base: #e7e0d6; /* sub-headings */
-    --text-muted: #989082; /* running text */
+    /* typography */
+    --font-serif: "Fraunces", Georgia, serif;
+    --font-sans:
+      "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-code: "JetBrains Mono", monospace;
   }
 }
 
-[data-theme-dark] {
-  --palette-bg: var(--palette-bg-dark);
-  --palette-fg: var(--palette-fg-dark);
-  --palette-accent: var(--palette-accent-dark);
-  --palette-paper: var(--palette-paper-dark);
-
-  --surface: var(--palette-surface-dark);
-  --rule: var(--palette-rule-dark);
-
-  --text-strong: #cda77b;
-  --text-base: #e7e0d6;
-  --text-muted: #989082;
-}
-
-/* ==================== Explicit Light ==================== */
+/* ==================== Explicit Theme Overrides ==================== */
 
 [data-theme-light] {
-  --palette-bg: var(--palette-bg-light);
-  --palette-fg: var(--palette-fg-light);
-  --palette-accent: var(--palette-accent-light);
-  --palette-paper: var(--palette-paper-light);
+  /* palette */
+  --bg: var(--palette-light-bg);
+  --fg: var(--palette-light-fg);
+  --accent: var(--palette-light-accent);
 
-  /* semantic text tones – light */
+  /* usage tokens */
+  --text: var(--fg);
   --text-strong: #3d3d3a;
-  --text-base: #4a4844;
   --text-muted: #6b6862;
+
+  /* typography */
+  --font-serif: et-book, Palatino, "Palatino Linotype", Georgia, serif;
+  --font-sans:
+    "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  --font-code: "SF Mono", Monaco, "Cascadia Code", Consolas, monospace;
+}
+
+[data-theme-dark] {
+  /* palette */
+  --bg: var(--palette-dark-bg);
+  --fg: var(--palette-dark-fg);
+  --accent: var(--palette-dark-accent);
+
+  /* usage tokens */
+  --text: var(--fg);
+  --text-strong: #cda77b;
+  --text-muted: #989082;
+  --surface: #2c2621;
+  --paper: #24201a;
+  --border: #877053;
+
+  /* typography */
+  --font-serif: "Fraunces", Georgia, serif;
+  --font-sans:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-code: "JetBrains Mono", monospace;
 }

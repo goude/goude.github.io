@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    width="1024"
    height="256"
@@ -31,38 +29,18 @@
      inkscape:cx="512"
      inkscape:cy="128.32242"
      inkscape:current-layer="layer1"
-     showgrid="false"
-     showguides="true" />
+     showgrid="false" />
   <title
      id="title1">goude.se logo</title>
   <defs
      id="defs1">
-    <linearGradient
-       id="swatch3"
-       inkscape:swatch="solid"
-       inkscape:label="tone-purple"
-       gradientTransform="matrix(1.2195122,0,0,2.0465116,-524.70103,-1044.4441)">
-      <stop
-         style="stop-color:#f40b9d;stop-opacity:1;"
-         offset="0"
-         id="stop3" />
-    </linearGradient>
-    <linearGradient
-       id="swatch2"
-       inkscape:swatch="solid"
-       inkscape:label="tone-yellow">
-      <stop
-         style="stop-color:#f5990f;stop-opacity:1;"
-         offset="0"
-         id="stop2" />
-    </linearGradient>
     <linearGradient
        id="swatch186"
        inkscape:swatch="solid"
        inkscape:label="currentColor"
        gradientTransform="translate(1023.825,957.5)">
       <stop
-         style="stop-color:#060608;stop-opacity:1;"
+         style="stop-color:#3d3d3a;stop-opacity:1;"
          offset="0"
          id="stop186" />
     </linearGradient>
@@ -73,15 +51,113 @@
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(1.4211352,0,0,1.4211352,-824.90386,-463.59952)" />
     <linearGradient
-       inkscape:collect="always"
-       xlink:href="#swatch2"
-       id="linearGradient2"
-       x1="1174.5857"
-       y1="1087.757"
-       x2="1401.8301"
-       y2="1087.757"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-141.86398)" />
+       id="swatch-fg"
+       inkscape:swatch="solid"
+       inkscape:label="fg">
+      <stop
+         offset="0"
+         style="stop-color:#3d3d3a;stop-opacity:1;"
+         id="stop7" />
+    </linearGradient>
+    <linearGradient
+       id="swatch-accent-green"
+       inkscape:swatch="solid"
+       inkscape:label="accent-green">
+      <stop
+         offset="0"
+         style="stop-color:#668974;stop-opacity:1;"
+         id="stop1" />
+    </linearGradient>
+    <linearGradient
+       id="swatch-accent-blue"
+       inkscape:swatch="solid"
+       inkscape:label="accent-blue">
+      <stop
+         offset="0"
+         style="stop-color:#7599c0;stop-opacity:1;"
+         id="stop2" />
+    </linearGradient>
+    <linearGradient
+       id="swatch-accent-purple"
+       inkscape:swatch="solid"
+       inkscape:label="accent-purple">
+      <stop
+         offset="0"
+         style="stop-color:#787081;stop-opacity:1;"
+         id="stop3" />
+    </linearGradient>
+    <linearGradient
+       id="swatch-accent-yellow"
+       inkscape:swatch="solid"
+       inkscape:label="accent-yellow">
+      <stop
+         offset="0"
+         style="stop-color:#cda77b;stop-opacity:1;"
+         id="stop4" />
+    </linearGradient>
+    <linearGradient
+       id="swatch-accent-red"
+       inkscape:swatch="solid"
+       inkscape:label="accent-red">
+      <stop
+         offset="0"
+         style="stop-color:#b76243;stop-opacity:1;"
+         id="stop5" />
+    </linearGradient>
+    <linearGradient
+       id="swatch-bg"
+       inkscape:swatch="solid"
+       inkscape:label="bg">
+      <stop
+         offset="0"
+         style="stop-color:#faf9f5;stop-opacity:1;"
+         id="stop6" />
+    </linearGradient>
+    <linearGradient
+       id="swatch-accent"
+       inkscape:swatch="solid"
+       inkscape:label="accent">
+      <stop
+         offset="0"
+         style="stop-color:#cc7c5e;stop-opacity:1;"
+         id="stop8" />
+    </linearGradient>
+    <linearGradient
+       id="swatch-paper"
+       inkscape:swatch="solid"
+       inkscape:label="paper">
+      <stop
+         offset="0"
+         style="stop-color:#f4f3ef;stop-opacity:1;"
+         id="stop9" />
+    </linearGradient>
+    <linearGradient
+       id="swatch-text-muted"
+       inkscape:swatch="solid"
+       inkscape:label="text-muted">
+      <stop
+         offset="0"
+         style="stop-color:#6b6862;stop-opacity:1;"
+         id="stop10" />
+    </linearGradient>
+    <linearGradient
+       id="swatch-rule"
+       inkscape:swatch="solid"
+       inkscape:label="rule">
+      <stop
+         offset="0"
+         style="stop-color:#e0dfdb;stop-opacity:1;"
+         id="stop11" />
+    </linearGradient>
+    <linearGradient
+       id="swatch-surface"
+       inkscape:swatch="solid"
+       inkscape:label="surface">
+      <stop
+         offset="0"
+         style="stop-color:#f2f1ee;stop-opacity:1;"
+         id="stop12" />
+    </linearGradient>
   </defs>
   <g
      inkscape:label="logo_layer"
@@ -89,7 +165,7 @@
      id="layer1"
      transform="translate(-1023.825,-957.5)">
     <ellipse
-       style="fill:url(#swatch3);stroke:none;stroke-width:12.6383;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       style="fill:url(#swatch-accent-yellow);stroke:none;stroke-width:12.6383;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
        id="path3"
        cx="1222.4346"
        cy="1021.9836"
@@ -97,7 +173,7 @@
        ry="56.745594"
        inkscape:label="path3" />
     <circle
-       style="fill:url(#linearGradient2);stroke:none;stroke-width:8;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       style="fill:url(#swatch-accent);stroke:none;stroke-width:8;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
        id="path2"
        cx="1146.3439"
        cy="1087.757"
@@ -115,8 +191,7 @@
        height="256"
        x="1023.825"
        y="957.5"
-       inkscape:label="outer_box"
-       sodipodi:insensitive="true" />
+       inkscape:label="outer_box" />
   </g>
   <metadata
      id="metadata1">

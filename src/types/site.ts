@@ -33,8 +33,14 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/hello", label: "Hello", icon: "fa fa-hand-spock" },
   {
     href: "https://github.com/goude",
-    label: "GitHub",
+    label: "GitHub (goude)",
     icon: "fa-brands fa-github",
+    external: true,
+  },
+  {
+    href: "https://www.instagram.com/doitpoorly/",
+    label: "Instagram (doitpoorly)",
+    icon: "fa-brands fa-square-instagram",
     external: true,
   },
   {
