@@ -55,7 +55,7 @@ tbody tr:hover {
 /* Inline code */
 code {
   font-family: var(--font-code);
-  font-size: 0.75em; /* slightly smaller than surrounding text */
+  font-size: 0.85em; /* slightly smaller than surrounding text */
   background: var(--surface-raised);
   padding: 0.1em 0.35em;
   border-radius: var(--radius-sm);
@@ -78,6 +78,47 @@ pre code {
   font-size: var(--text-sm); /* same visual size as body text */
   line-height: 1.45;
   color: var(--text);
+}
+
+/* ==================== KBD ==================== */
+
+kbd {
+  font-family: var(--font-code);
+  font-size: 0.85em;
+  line-height: 1;
+
+  display: inline-block;
+  vertical-align: baseline;
+  white-space: nowrap;
+  user-select: none;
+
+  padding: 0.2em 0.55em;
+
+  color: var(--text-strong);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 0.4em;
+
+  box-shadow:
+    0 1px 0 var(--rule-soft),
+    inset 0 -1px 0 color-mix(in srgb, var(--fg) 10%, var(--bg));
+}
+
+/* Nested keys: Ctrl + K */
+kbd kbd {
+  font-size: 0.9em;
+  padding: 0.15em 0.45em;
+  border-bottom-width: 1px;
+  background: var(--surface);
+  box-shadow: none;
+}
+
+/* Optional: subtle accent on focus */
+a:focus-visible kbd,
+button:focus-visible kbd {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
 
 /* Article markup */
