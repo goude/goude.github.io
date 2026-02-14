@@ -116,7 +116,8 @@
     /* typography */
     --font-serif: "Fraunces", Georgia, serif;
     --font-sans:
-      "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      sans-serif;
     --font-code: "JetBrains Mono", monospace;
   }
 }
@@ -159,6 +160,7 @@
   /* typography */
   --font-serif: "Fraunces", Georgia, serif;
   --font-sans:
-    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
   --font-code: "JetBrains Mono", monospace;
 }

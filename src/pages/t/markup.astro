@@ -1,0 +1,268 @@
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout
+  title="Markup Test – goude.se"
+  description="Comprehensive HTML rendering test page"
+  current="markup"
+>
+  <article id="markup-test">
+    <header>
+      <h1>Markup Test</h1>
+      <p class="subtitle">
+        A page for testing how raw HTML elements render in this design system.
+      </p>
+
+      <nav aria-label="Markup sections">
+        <ul>
+          <li><a href="#text">Text</a></li>
+          <li><a href="#lists">Lists</a></li>
+          <li><a href="#tables">Tables</a></li>
+          <li><a href="#media">Media</a></li>
+          <li><a href="#forms">Forms</a></li>
+          <li><a href="#interactive">Interactive</a></li>
+          <li><a href="#misc">Misc</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- TEXT -->
+
+    <section id="text">
+      <h2>Text & Typography</h2>
+
+      <p>
+        Paragraph with <strong>strong</strong>, <em>emphasis</em>,
+        <b>bold</b>, <i>italic</i>, <u>underline</u>, <mark>mark</mark>,
+        <small>small</small>, <sub>sub</sub>, <sup>sup</sup>.
+      </p>
+
+      <p>
+        Inline code: <code>const answer = 42;</code> and
+        <kbd>Ctrl</kbd> + <kbd>C</kbd>.
+      </p>
+
+      <p>
+        <abbr title="HyperText Markup Language">HTML</abbr> abbreviation,
+        <cite>Some Book</cite> citation,
+        <q>inline quote</q>.
+      </p>
+
+      <blockquote>
+        <p>
+          Blockquote. Test spacing, border, font-style, and footer handling.
+        </p>
+        <footer>— Author Name</footer>
+      </blockquote>
+
+      <hr />
+
+      <address>
+        Written by Someone<br />
+        <a href="mailto:test@example.com">test@example.com</a>
+      </address>
+
+      <pre><code class="language-js">
+// fenced code block
+function hello(name) {
+}
+</code></pre>
+    </section>
+
+    <!-- LISTS -->
+
+    <section id="lists">
+      <h2>Lists</h2>
+
+      <h3>Unordered</h3>
+      <ul>
+        <li>Item one</li>
+        <li>
+          Item two
+          <ul>
+            <li>Nested one</li>
+            <li>Nested two</li>
+          </ul>
+        </li>
+        <li>Item three</li>
+      </ul>
+
+      <h3>Ordered</h3>
+      <ol>
+        <li>First</li>
+        <li>Second</li>
+        <li>Third</li>
+      </ol>
+
+      <h3>Definition List</h3>
+      <dl>
+        <dt>Term</dt>
+        <dd>Definition text.</dd>
+        <dt>Another term</dt>
+        <dd>Another definition.</dd>
+      </dl>
+    </section>
+
+    <!-- TABLES -->
+
+    <section id="tables">
+      <h2>Tables</h2>
+
+      <table>
+        <caption>Basic Table</caption>
+        <thead>
+          <tr>
+            <th scope="col">Col A</th>
+            <th scope="col">Col B</th>
+            <th scope="col">Col C</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Row 1</th>
+            <td>Data</td>
+            <td>Data</td>
+          </tr>
+          <tr>
+            <th scope="row">Row 2</th>
+            <td colspan="2">Colspan test</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3">Footer row</td>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+
+    <!-- MEDIA -->
+
+    <section id="media">
+      <h2>Media</h2>
+
+      <figure>
+        <img
+          src="https://via.placeholder.com/400x200"
+          alt="Placeholder image"
+          width="400"
+          height="200"
+        />
+        <figcaption>Figure with caption.</figcaption>
+      </figure>
+
+      <video controls width="320">
+        <source src="" type="video/mp4" />
+      </video>
+
+      <audio controls>
+        <source src="" type="audio/mpeg" />
+      </audio>
+
+      <svg width="100" height="100" role="img" aria-label="Circle">
+        <circle cx="50" cy="50" r="40"></circle>
+      </svg>
+    </section>
+
+    <!-- FORMS -->
+
+    <section id="forms">
+      <h2>Forms</h2>
+
+      <form>
+        <fieldset>
+          <legend>Example Form</legend>
+
+          <label>
+            Text
+            <input type="text" name="text" />
+          </label>
+
+          <label>
+            Email
+            <input type="email" name="email" />
+          </label>
+
+          <label>
+            Password
+            <input type="password" name="password" />
+          </label>
+
+          <label>
+            Number
+            <input type="number" name="number" />
+          </label>
+
+          <label>
+            Select
+            <select>
+              <option>Option 1</option>
+              <option>Option 2</option>
+            </select>
+          </label>
+
+          <label>
+            Textarea
+            <textarea rows="3"></textarea>
+          </label>
+
+          <div>
+            <label><input type="checkbox" /> Checkbox</label>
+            <label><input type="radio" name="r" /> Radio 1</label>
+            <label><input type="radio" name="r" /> Radio 2</label>
+          </div>
+
+          <button type="submit">Submit</button>
+          <button type="button">Button</button>
+        </fieldset>
+      </form>
+    </section>
+
+    <!-- INTERACTIVE -->
+
+    <section id="interactive">
+      <h2>Interactive</h2>
+
+      <details>
+        <summary>Details / Summary</summary>
+        <p>Hidden content revealed on toggle.</p>
+      </details>
+
+      <dialog open>Dialog element (open state)</dialog>
+
+      <progress value="70" max="100">70%</progress>
+      <meter min="0" max="100" value="60">60</meter>
+
+      <button popovertarget="test-popover">Toggle Popover</button>
+      <div id="test-popover" popover>Native popover content</div>
+    </section>
+
+    <!-- MISC -->
+
+    <section id="misc">
+      <h2>Miscellaneous</h2>
+
+      <article>
+        <h3>Nested Article</h3>
+        <p>Test nested semantic containers.</p>
+      </article>
+
+      <aside>
+        <p>Aside content block.</p>
+      </aside>
+
+      <time datetime="2026-01-01">January 1, 2026</time>
+
+      <data value="42">Forty-two</data>
+
+      <template>
+        <p>This is a template element.</p>
+      </template>
+    </section>
+
+    <footer>
+      <p class="text-muted">End of markup test page.</p>
+    </footer>
+  </article>
+</Layout>

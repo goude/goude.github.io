@@ -30,7 +30,7 @@ function vlog(...args) {
 
 // ---------------- config ----------------
 
-const CSS_FILE = "src/styles/colors.css";
+const CSS_FILE = "src/styles/vars.css";
 const SVG_FILE = "src/assets/goude-se-logo.svg";
 
 // ---------------- helpers ----------------

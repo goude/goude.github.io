@@ -11,12 +11,19 @@ interface Props {
 }
 
 const { title, description, current } = Astro.props;
+
+const siteName = "goude.se";
+const author = "doitpoorly";
+
+const fullTitle = title
+  ? `${title} · ${siteName} · ${author}`
+  : `${siteName} · ${author}`;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead title={fullTitle} description={description} />
   </head>
   <body>
     <Header current={current} />

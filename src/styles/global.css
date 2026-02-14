@@ -2,6 +2,6 @@
 
 @import "./fonts.css";
 @import "./reset.css";
-@import "./colors.css";
+@import "./vars.css";
 @import "./base.css";
 @import "./content.css";

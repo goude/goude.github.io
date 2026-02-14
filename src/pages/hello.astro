@@ -2,11 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 ---
 
-<Layout
-  title="Hello - goude.se"
-  description="Hello from goude.se"
-  current="hello"
->
+<Layout title="Hello" description="Hello from goude.se" current="hello">
   <!-- article: a self-contained, citable page-level object -->
   <article id="hello">
     <!-- header: title + framing for this page -->
@@ -25,6 +21,39 @@ import Layout from "@/layouts/Layout.astro";
         </ul>
       </nav>
     </header>
+
+    <section id="tenets">
+      <h2>Tenets</h2>
+      <p class="subtitle">
+        Things I've learned to believe through experience. Not rules—just
+        principles that keep showing up.
+      </p>
+
+      <section id="tenet-write-it-down">
+        <h3>
+          Write things down and make them findable, so nobody has to guess, ask,
+          or know the right person.
+        </h3>
+        <p>
+          This is not about discouraging questions. If you prefer to ask someone
+          directly, that's completely fine—many people work best that way, and
+          conversation often surfaces things documentation never will.
+        </p>
+        <p>
+          The point is that asking should be a <em>choice</em>, not a
+          <em>requirement</em>. Not everyone is comfortable interrupting a
+          colleague. Not everyone is in the same timezone, on the same team, or
+          even at the company yet. When knowledge only lives in people's heads,
+          access to it depends on who you know and when you happen to be around.
+          That's not a process—it's luck.
+        </p>
+        <p>
+          Writing things down and putting them where people can find them is a
+          small act of kindness toward everyone who comes after you, including
+          future you.
+        </p>
+      </section>
+    </section>
 
     <section id="hello-there">
       <h2>Hello There</h2>

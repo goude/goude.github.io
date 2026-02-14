@@ -113,17 +113,13 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
       type="button"
       aria-label="Toggle content detail level"
     >
-      <i class="fa-regular fa-circle" data-mode-icon="normal" aria-hidden="true"
+      <i class="fa-solid fa-water" data-mode-icon="low" aria-hidden="true"></i>
+      <i class="fa-solid fa-wind" data-mode-icon="medium" aria-hidden="true"
       ></i>
-      <i
-        class="fa-regular fa-note-sticky"
-        data-mode-icon="notes"
-        aria-hidden="true"></i>
-      <i class="fa-solid fa-brain" data-mode-icon="thoughts" aria-hidden="true"
-      ></i>
-      <span class="tooltip" data-mode-tooltip="normal">Basic Detail</span>
-      <span class="tooltip" data-mode-tooltip="notes">Higher Detail</span>
-      <span class="tooltip" data-mode-tooltip="thoughts">Super Detail</span>
+      <i class="fa-solid fa-fire" data-mode-icon="high" aria-hidden="true"></i>
+      <span class="tooltip" data-mode-tooltip="low">Low Detail</span>
+      <span class="tooltip" data-mode-tooltip="medium">Medium Detail</span>
+      <span class="tooltip" data-mode-tooltip="high">High Detail</span>
     </button>
 
     <button
@@ -169,17 +165,13 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
     }
 
     <button class="menu-item menu-action" id="mode-toggle-menu" type="button">
-      <i class="fa-regular fa-circle" data-mode-icon="normal" aria-hidden="true"
+      <i class="fa-solid fa-water" data-mode-icon="low" aria-hidden="true"></i>
+      <i class="fa-solid fa-wind" data-mode-icon="medium" aria-hidden="true"
       ></i>
-      <i
-        class="fa-regular fa-note-sticky"
-        data-mode-icon="notes"
-        aria-hidden="true"></i>
-      <i class="fa-solid fa-brain" data-mode-icon="thoughts" aria-hidden="true"
-      ></i>
-      <span data-mode-label="normal">Basic Detail</span>
-      <span data-mode-label="notes">Higher Detail</span>
-      <span data-mode-label="thoughts">Super Detail</span>
+      <i class="fa-solid fa-fire" data-mode-icon="high" aria-hidden="true"></i>
+      <span data-mode-label="low">Low Detail</span>
+      <span data-mode-label="medium">Medium Detail</span>
+      <span data-mode-label="high">High Detail</span>
     </button>
 
     <button class="menu-item menu-action" id="theme-toggle-menu" type="button">
@@ -384,9 +376,9 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
   .mode-toggle [data-mode-icon] {
     display: none;
   }
-  :global([data-mode="normal"]) .mode-toggle [data-mode-icon="normal"],
-  :global([data-mode="notes"]) .mode-toggle [data-mode-icon="notes"],
-  :global([data-mode="thoughts"]) .mode-toggle [data-mode-icon="thoughts"] {
+  :global([data-mode="low"]) .mode-toggle [data-mode-icon="low"],
+  :global([data-mode="medium"]) .mode-toggle [data-mode-icon="medium"],
+  :global([data-mode="high"]) .mode-toggle [data-mode-icon="high"] {
     display: inline;
   }
 
@@ -394,9 +386,9 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
   .mode-toggle [data-mode-tooltip] {
     display: none;
   }
-  :global([data-mode="normal"]) .mode-toggle [data-mode-tooltip="normal"],
-  :global([data-mode="notes"]) .mode-toggle [data-mode-tooltip="notes"],
-  :global([data-mode="thoughts"]) .mode-toggle [data-mode-tooltip="thoughts"] {
+  :global([data-mode="low"]) .mode-toggle [data-mode-tooltip="low"],
+  :global([data-mode="medium"]) .mode-toggle [data-mode-tooltip="medium"],
+  :global([data-mode="high"]) .mode-toggle [data-mode-tooltip="high"] {
     display: block;
   }
 
@@ -501,9 +493,9 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
     .menu-panel [data-mode-icon] {
       display: none;
     }
-    :global([data-mode="normal"]) .menu-panel [data-mode-icon="normal"],
-    :global([data-mode="notes"]) .menu-panel [data-mode-icon="notes"],
-    :global([data-mode="thoughts"]) .menu-panel [data-mode-icon="thoughts"] {
+    :global([data-mode="low"]) .menu-panel [data-mode-icon="low"],
+    :global([data-mode="medium"]) .menu-panel [data-mode-icon="medium"],
+    :global([data-mode="high"]) .menu-panel [data-mode-icon="high"] {
       display: inline;
     }
 
@@ -511,9 +503,9 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
     .menu-panel [data-mode-label] {
       display: none;
     }
-    :global([data-mode="normal"]) .menu-panel [data-mode-label="normal"],
-    :global([data-mode="notes"]) .menu-panel [data-mode-label="notes"],
-    :global([data-mode="thoughts"]) .menu-panel [data-mode-label="thoughts"] {
+    :global([data-mode="low"]) .menu-panel [data-mode-label="low"],
+    :global([data-mode="medium"]) .menu-panel [data-mode-label="medium"],
+    :global([data-mode="high"]) .menu-panel [data-mode-label="high"] {
       display: inline;
     }
   }
@@ -525,7 +517,7 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
 
     const STORAGE = { theme: "theme", mode: "mode" };
     const THEMES = ["light", "dark"];
-    const MODES = ["normal", "notes", "thoughts"];
+    const MODES = ["low", "medium", "high"];
     const root = document.documentElement;
 
     const prefersDark = () =>
@@ -555,7 +547,7 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
     };
 
     const toggleMode = () => {
-      const cur = root.getAttribute("data-mode") ?? "normal";
+      const cur = root.getAttribute("data-mode") ?? "medium";
       const next = cycle(cur, MODES);
       localStorage.setItem(STORAGE.mode, next);
       applyMode(next);
@@ -564,7 +556,7 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
     applyTheme(
       readStored(STORAGE.theme, THEMES) ?? (prefersDark() ? "dark" : "light")
     );
-    applyMode(readStored(STORAGE.mode, MODES) ?? "normal");
+    applyMode(readStored(STORAGE.mode, MODES) ?? "medium");
 
     window
       .matchMedia?.("(prefers-color-scheme: dark)")

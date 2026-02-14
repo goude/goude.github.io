@@ -54,8 +54,8 @@ tbody tr:hover {
 
 /* Inline code */
 code {
-  font-family: var(--font-mono);
-  font-size: 0.95em; /* slightly smaller than surrounding text */
+  font-family: var(--font-code);
+  font-size: 0.75em; /* slightly smaller than surrounding text */
   background: var(--surface-raised);
   padding: 0.1em 0.35em;
   border-radius: var(--radius-sm);
@@ -80,6 +80,36 @@ pre code {
   color: var(--text);
 }
 
+/* Article markup */
+.provenance-note {
+  display: inline-flex;
+  gap: 0.6rem;
+  align-items: center;
+
+  margin-bottom: 1rem;
+
+  padding: 0.22rem 0.7rem;
+  border-radius: 999px;
+
+  font-size: 0.72rem;
+  line-height: 1.25;
+
+  color: var(--fg-muted);
+  background: color-mix(in srgb, var(--paper) 94%, var(--fg) 6%);
+  border: 1px solid var(--rule);
+}
+
+.provenance-label {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
+}
+
+.provenance-text {
+  opacity: 0.8;
+}
+
 /* Avoid oversized monospace on small screens */
 @media (max-width: 600px) {
   table {
@@ -89,4 +119,27 @@ pre code {
   pre code {
     font-size: var(--text-xs);
   }
+}
+
+/* Detail levels */
+[data-detail] {
+  display: none;
+}
+
+/* LOW → show only low */
+html[data-mode="low"] [data-detail="low"] {
+  display: block;
+}
+
+/* MEDIUM → show low + medium */
+html[data-mode="medium"] [data-detail="low"],
+html[data-mode="medium"] [data-detail="medium"] {
+  display: block;
+}
+
+/* HIGH → show low + medium + high */
+html[data-mode="high"] [data-detail="low"],
+html[data-mode="high"] [data-detail="medium"],
+html[data-mode="high"] [data-detail="high"] {
+  display: block;
 }
