@@ -1,5 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import noBull from "./t/no-bullshit/_files/no-bullshit.svg?url";
 ---
 
 <Layout
@@ -20,6 +21,20 @@ import Layout from "@/layouts/Layout.astro";
     </header>
 
     <!-- section: a major grouping of links/notes -->
+    <section id="no-bullshit">
+      <h2>No Bullshit</h2>
+      <a href="/t/no-bullshit">
+        <img
+          src={noBull}
+          alt="No Bullshit"
+          width="200"
+          height="200"
+          loading="lazy"
+          decoding="async"
+        />
+      </a>
+    </section>
+
     <section id="tea">
       <h2>Have a Cup of Tea</h2>
 

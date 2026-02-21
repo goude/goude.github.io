@@ -2,189 +2,52 @@
 import Layout from "@/layouts/Layout.astro";
 ---
 
-<Layout title="Hello" description="A greeting of sorts" current="hello">
-  <!-- article: a self-contained, citable page-level object -->
+<Layout title="Hello" description="Hello, there" current="hello">
   <article id="hello">
-    <!-- header: title + framing for this page -->
     <header>
       <h1>Hello</h1>
-      <p class="subtitle">
-        A small page with some structure. Mostly placeholders for now.
-      </p>
-
-      <!-- nav: local table of contents -->
-      <nav aria-label="Hello page sections">
-        <ul>
-          <li><a href="#hello-there">Hello There</a></li>
-          <li><a href="#fun">Fun</a></li>
-          <li><a href="#work">Work</a></li>
-        </ul>
-      </nav>
+      <p class="subtitle">...</p>
     </header>
 
-    <section id="tenets">
-      <h2>Tenets</h2>
-      <p class="subtitle">Principles and stuff.</p>
-
-      <section id="tenet-write-it-down">
-        <h3>
-          Write things down and make them findable, so nobody has to guess, ask,
-          or know the right person.
-        </h3>
-        <p>
-          This is not about discouraging questions. If you prefer to ask someone
-          directly, that's completely fine—many people work best that way, and
-          conversation often surfaces things documentation never will.
-        </p>
-        <p>
-          The point is that asking should be a <em>choice</em>, not a
-          <em>requirement</em>. Not everyone is comfortable interrupting a
-          colleague. Not everyone is in the same timezone, on the same team, or
-          even at the company yet. When knowledge only lives in people's heads,
-          access to it depends on who you know and when you happen to be around.
-          That's not a process—it's luck (AIAIAIAIAIAI)
-        </p>
-        <p>
-          Writing things down and putting them where people can find them is a
-          small act of kindness toward everyone who comes after you, including
-          future you.
-        </p>
-      </section>
-    </section>
-
-    <section id="hello-there">
-      <h2>Hello There</h2>
-
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus.
-        Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies
-        sed, dolor.
-      </p>
-
-      <p>
-        Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper
-        congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie,
-        enim est eleifend mi, non fermentum diam nisl sit amet erat.
-      </p>
-
-      <aside>
-        <p class="text-muted">
-          Placeholder note: this is where a short “how to read this site” or
-          “what I’m optimizing for” paragraph could live.
-        </p>
-      </aside>
-
-      <blockquote>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec
-          odio. Praesent libero. Sed cursus ante dapibus diam.
-        </p>
-        <footer>— Lorem Ipsum</footer>
-      </blockquote>
-    </section>
-
-    <section id="fun">
-      <h2>Fun</h2>
-
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
-        nibh. Aenean quam. In scelerisque sem at dolor.
-      </p>
-
-      <h3>Some lists</h3>
-
-      <ul>
-        <li>Lorem ipsum: a small hobby thing</li>
-        <li>Dolor sit amet: an occasional obsession</li>
-        <li>Consectetur: a recurring theme</li>
-      </ul>
-
-      <ol>
-        <li>Make a tiny thing</li>
-        <li>Make it nicer than it needs to be</li>
-        <li>Write it down so Future Me doesn’t suffer</li>
-      </ol>
-
-      <h3>Details component</h3>
-
-      <details>
-        <summary>What counts as “fun” here?</summary>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dui mi,
-          tincidunt quis, accumsan porttitor, facilisis luctus, metus.
-        </p>
-      </details>
-
-      <h3>A small definition list</h3>
-
-      <dl>
-        <dt>Play</dt>
-        <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dd>
-        <dt>Practice</dt>
-        <dd>Sed dignissim lacinia nunc. Curabitur tortor.</dd>
-      </dl>
-    </section>
-
-    <section id="work">
-      <h2>Work</h2>
-
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed cursus ante
-        dapibus diam. For example, I care about <code>clarity</code>,
-        <code>automation</code>, and <code>boring reliability</code>.
-      </p>
-
-      <h3>Snapshot table</h3>
+    <section aria-labelledby="tenets">
+      <h2 id="tenets">Tenets</h2>
 
       <table>
-        <caption>
-          Placeholder timeline (replace with real roles/projects)
-        </caption>
+        <caption>Core principles</caption>
         <thead>
           <tr>
-            <th scope="col">When</th>
-            <th scope="col">Thing</th>
-            <th scope="col">Notes</th>
+            <th scope="col">Tenet</th>
+            <th scope="col">Rationale</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <th scope="row">20XX–20YY</th>
-            <td>Lorem Project</td>
-            <td>Dolor sit amet, consectetur adipiscing elit.</td>
+            <th scope="row">Write things down and make them findable</th>
+            <td>
+              Knowledge should not depend on who you know, timing, or luck.
+              Writing and publishing clearly reduces friction, lowers social
+              barriers, and treats documentation as infrastructure rather than
+              folklore.
+            </td>
           </tr>
           <tr>
-            <th scope="row">20YY–20ZZ</th>
-            <td>Ipsum Initiative</td>
-            <td>Integer nec odio. Praesent libero.</td>
+            <th scope="row"> Asking is a choice, not a requirement </th>
+            <td>
+              Conversation is valuable and often irreplaceable. But people
+              should not have to interrupt, guess, or chase access to do their
+              job or understand a system.
+            </td>
           </tr>
           <tr>
-            <th scope="row">Now</th>
-            <td>Something Practical</td>
-            <td>Build tools, reduce friction, ship.</td>
+            <th scope="row"> Publish where it can be found </th>
+            <td>
+              Writing is only half the work. Information should live in a place
+              that is searchable, stable, and accessible to those who need it —
+              including future versions of ourselves.
+            </td>
           </tr>
         </tbody>
       </table>
-
-      <h3>Code (placeholder)</h3>
-
-      <pre><code class="language-bash"># tiny ritual
-git status
-just dev
-just fmt
-</code></pre>
-
-      <p class="text-muted">
-        Placeholder note: this section can later link to a CV, a “work style”
-        page, and a list of artifacts (repos, writeups, talks).
-      </p>
     </section>
-
-    <footer>
-      <p class="text-muted">
-        End matter placeholder. Lorem ipsum dolor sit amet, consectetur
-        adipiscing elit.
-      </p>
-    </footer>
   </article>
 </Layout>

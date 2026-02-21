@@ -1,7 +1,7 @@
 {
   "name": "goude-site",
   "type": "module",
-  "version": "2.2.10",
+  "version": "2.2.11",
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "astro": "^5.16.6",
-    "marked": "^17.0.1"
+    "marked": "^17.0.1",
+    "shiki": "^3.22.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",

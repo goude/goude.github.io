@@ -1,0 +1,32 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import CodeBlock from "@/components/CodeBlock.astro";
+import screenshot from "./_files/goattracker2.webp?url";
+import buildScript from "./_files/build_goattracker2_macos.sh?raw";
+---
+
+<Layout
+  title="GoatTracker2 on macOS"
+  description="Building GoatTracker2 on modern macOS with SDL12-compat."
+>
+  <article>
+    <h1>GoatTracker2 on macOS</h1>
+
+    <p>
+      <strong>GoatTracker2</strong> is a SID tracker for the Commodore 64. It compiles
+      cleanly on modern macOS with
+      <code>sdl12-compat</code> once you fix the include paths and avoid GNU strip
+      assumptions.
+    </p>
+
+    <img
+      src={screenshot}
+      alt="GoatTracker2 running on macOS"
+      loading="lazy"
+      decoding="async"
+    />
+
+    <h2>Build script</h2>
+    <CodeBlock code={buildScript} lang="bash" />
+  </article>
+</Layout>

@@ -1,0 +1,92 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { getImage } from "astro:assets";
+import noBull from "./_files/no-bullshit.svg?url";
+import noBullSource from "./_files/no-bullshit.svg";
+
+// Generate PNG at build time (not stored in repo)
+const png = await getImage({
+  src: noBullSource,
+  format: "png",
+  width: 1600, // retina-friendly
+});
+---
+
+<Layout title="No Bullshit" description="A small reminder.">
+  <article itemscope itemtype="https://schema.org/CreativeWork">
+    <header>
+      <h1 itemprop="name">No Bullshit</h1>
+      <p itemprop="abstract">
+        <!-- TODO: 1–2 sentence summary -->
+        A small reminder.
+      </p>
+    </header>
+
+    <figure
+      itemscope
+      itemtype="https://schema.org/ImageObject"
+      itemprop="image"
+    >
+      <!-- SVG is displayed -->
+      <img
+        src={noBull}
+        alt="<!-- TODO: concise visual description -->"
+        loading="eager"
+        decoding="async"
+        itemprop="contentUrl"
+      />
+
+      <figcaption>
+        <p>
+          <strong>Figure 1.</strong>
+          <span itemprop="caption">
+            <!-- TODO: plain caption -->
+            No-bullshit.svg
+          </span>
+        </p>
+
+        <p itemprop="description">
+          <!-- TODO: 2–4 sentence visual description -->
+          Description hook: what is depicted and what the viewer should notice first.
+        </p>
+
+        <p>
+          <strong>Open as bitmap:</strong>
+          <a href={png.src}> PNG version </a>
+        </p>
+
+        <p>
+          <strong>Source:</strong>
+          <a href={noBull}> SVG </a>
+        </p>
+      </figcaption>
+    </figure>
+
+    <section>
+      <h2>Intent</h2>
+      <p><!-- TODO --></p>
+    </section>
+
+    <section>
+      <h2>Process</h2>
+      <ol>
+        <li><strong>Ideation:</strong> <!-- TODO --></li>
+        <li><strong>Iteration:</strong> <!-- TODO --></li>
+        <li><strong>Vector shaping:</strong> <!-- TODO --></li>
+        <li><strong>Inkscape pass:</strong> <!-- TODO --></li>
+        <li><strong>Validation:</strong> <!-- TODO --></li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Provenance</h2>
+      <ul>
+        <li><strong>Artifact:</strong> <code>no-bullshit.svg</code></li>
+        <li>
+          <strong>Location:</strong>
+          <code>src/pages/t/no-bullshit/_files/</code>
+        </li>
+      </ul>
+    </section>
+  </article>
+</Layout>

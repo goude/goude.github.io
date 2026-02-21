@@ -9,10 +9,13 @@ import Layout from "@/layouts/Layout.astro";
     href="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.css"
   />
   <script
+    is:inline
     src="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.js"
     defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/codemirror@5/keymap/vim.js" defer
-  ></script>
+  <script
+    is:inline
+    src="https://cdn.jsdelivr.net/npm/codemirror@5/keymap/vim.js"
+    defer></script>
 
   <section class="paper-wrap">
     <textarea id="editor"></textarea>
@@ -81,7 +84,9 @@ import Layout from "@/layouts/Layout.astro";
 
       function ensureAudio() {
         if (!audioCtx) {
-          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          audioCtx = new (
+            window.AudioContext || window["webkitAudioContext"]
+          )();
         }
       }
 

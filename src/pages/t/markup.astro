@@ -10,9 +10,7 @@ import Layout from "@/layouts/Layout.astro";
   <article id="markup-test">
     <header>
       <h1>Markup Test</h1>
-      <p class="subtitle">
-        A page for testing how raw HTML elements render in this design system.
-      </p>
+      <p class="subtitle">Rendering reference for semantic HTML elements.</p>
 
       <nav aria-label="Markup sections">
         <ul>
@@ -30,44 +28,43 @@ import Layout from "@/layouts/Layout.astro";
     <!-- TEXT -->
 
     <section id="text">
-      <h2>Text & Typography</h2>
+      <h2>Text & Inline Semantics</h2>
 
       <p>
-        Paragraph with <strong>strong</strong>, <em>emphasis</em>,
-        <b>bold</b>, <i>italic</i>, <u>underline</u>, <mark>mark</mark>,
-        <small>small</small>, <sub>sub</sub>, <sup>sup</sup>.
+        <strong>strong</strong>, <em>em</em>, <b>b</b>, <i>i</i>,
+        <u>u</u>, <mark>mark</mark>, <small>small</small>,
+        <sub>sub</sub>, <sup>sup</sup>, <s>strikethrough</s>.
       </p>
 
       <p>
-        Inline code: <code>const answer = 42;</code> and
-        <kbd>Ctrl</kbd> + <kbd>C</kbd>.
+        <abbr title="HyperText Markup Language">HTML</abbr>,
+        <cite>citation</cite>, <q>inline quote</q>,
+        <bdi>مرحبا</bdi>, soft<wbr />break.
       </p>
 
       <p>
-        <abbr title="HyperText Markup Language">HTML</abbr> abbreviation,
-        <cite>Some Book</cite> citation,
-        <q>inline quote</q>.
+        Inline code <code>const x = 42;</code>,
+        <kbd>Ctrl</kbd> + <kbd>C</kbd>,
+        <samp>output</samp>,
+        <var>variable</var>.
       </p>
+
+      <p>
+        <ins>Inserted</ins> and <del>deleted</del> text.
+      </p>
+
+      <ruby>
+        漢 <rt>kan</rt>
+      </ruby>
 
       <blockquote>
-        <p>
-          Blockquote. Test spacing, border, font-style, and footer handling.
-        </p>
-        <footer>— Author Name</footer>
+        <p>Blockquote example.</p>
+        <footer>— Author</footer>
       </blockquote>
 
-      <hr />
-
       <address>
-        Written by Someone<br />
         <a href="mailto:test@example.com">test@example.com</a>
       </address>
-
-      <pre><code class="language-js">
-// fenced code block
-function hello(name) {
-}
-</code></pre>
     </section>
 
     <!-- LISTS -->
@@ -75,32 +72,24 @@ function hello(name) {
     <section id="lists">
       <h2>Lists</h2>
 
-      <h3>Unordered</h3>
       <ul>
-        <li>Item one</li>
+        <li>Unordered</li>
         <li>
-          Item two
+          Nested
           <ul>
-            <li>Nested one</li>
-            <li>Nested two</li>
+            <li>Level 2</li>
           </ul>
         </li>
-        <li>Item three</li>
       </ul>
 
-      <h3>Ordered</h3>
       <ol>
-        <li>First</li>
+        <li>Ordered</li>
         <li>Second</li>
-        <li>Third</li>
       </ol>
 
-      <h3>Definition List</h3>
       <dl>
         <dt>Term</dt>
-        <dd>Definition text.</dd>
-        <dt>Another term</dt>
-        <dd>Another definition.</dd>
+        <dd>Definition</dd>
       </dl>
     </section>
 
@@ -110,28 +99,22 @@ function hello(name) {
       <h2>Tables</h2>
 
       <table>
-        <caption>Basic Table</caption>
+        <caption>Table Example</caption>
         <thead>
           <tr>
-            <th scope="col">Col A</th>
-            <th scope="col">Col B</th>
-            <th scope="col">Col C</th>
+            <th scope="col">A</th>
+            <th scope="col">B</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <th scope="row">Row 1</th>
             <td>Data</td>
-            <td>Data</td>
-          </tr>
-          <tr>
-            <th scope="row">Row 2</th>
-            <td colspan="2">Colspan test</td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="3">Footer row</td>
+            <td colspan="2">Footer</td>
           </tr>
         </tfoot>
       </table>
@@ -143,22 +126,25 @@ function hello(name) {
       <h2>Media</h2>
 
       <figure>
-        <img
-          src="https://via.placeholder.com/400x200"
-          alt="Placeholder image"
-          width="400"
-          height="200"
-        />
-        <figcaption>Figure with caption.</figcaption>
+        <picture>
+          <source srcset="https://via.placeholder.com/400x200" />
+          <img
+            src="https://via.placeholder.com/400x200"
+            alt="Placeholder"
+            width="400"
+            height="200"
+          />
+        </picture>
+        <figcaption>Figure caption</figcaption>
       </figure>
 
-      <video controls width="320">
-        <source src="" type="video/mp4" />
-      </video>
+      <video controls width="320"></video>
+      <audio controls></audio>
 
-      <audio controls>
-        <source src="" type="audio/mpeg" />
-      </audio>
+      <iframe title="Example iframe" src="about:blank" width="300" height="150"
+      ></iframe>
+
+      <canvas width="150" height="100"></canvas>
 
       <svg width="100" height="100" role="img" aria-label="Circle">
         <circle cx="50" cy="50" r="40"></circle>
@@ -172,33 +158,63 @@ function hello(name) {
 
       <form>
         <fieldset>
-          <legend>Example Form</legend>
+          <legend>Inputs</legend>
 
           <label>
             Text
-            <input type="text" name="text" />
+            <input type="text" />
+          </label>
+
+          <label>
+            Search
+            <input type="search" />
           </label>
 
           <label>
             Email
-            <input type="email" name="email" />
+            <input type="email" />
           </label>
 
           <label>
-            Password
-            <input type="password" name="password" />
+            URL
+            <input type="url" />
           </label>
 
           <label>
             Number
-            <input type="number" name="number" />
+            <input type="number" />
+          </label>
+
+          <label>
+            Range
+            <input type="range" />
+          </label>
+
+          <label>
+            Date
+            <input type="date" />
+          </label>
+
+          <label>
+            Color
+            <input type="color" />
+          </label>
+
+          <label>
+            Datalist
+            <input list="options" />
+            <datalist id="options">
+              <option value="Option 1"></option>
+              <option value="Option 2"></option>
+            </datalist>
           </label>
 
           <label>
             Select
             <select>
-              <option>Option 1</option>
-              <option>Option 2</option>
+              <optgroup label="Group">
+                <option>Option A</option>
+              </optgroup>
             </select>
           </label>
 
@@ -207,14 +223,12 @@ function hello(name) {
             <textarea rows="3"></textarea>
           </label>
 
-          <div>
-            <label><input type="checkbox" /> Checkbox</label>
-            <label><input type="radio" name="r" /> Radio 1</label>
-            <label><input type="radio" name="r" /> Radio 2</label>
-          </div>
+          <label><input type="checkbox" /> Checkbox</label>
+          <label><input type="radio" name="r" /> Radio</label>
+
+          <output>Output</output>
 
           <button type="submit">Submit</button>
-          <button type="button">Button</button>
         </fieldset>
       </form>
     </section>
@@ -225,17 +239,17 @@ function hello(name) {
       <h2>Interactive</h2>
 
       <details>
-        <summary>Details / Summary</summary>
-        <p>Hidden content revealed on toggle.</p>
+        <summary>Toggle</summary>
+        <p>Hidden content</p>
       </details>
 
-      <dialog open>Dialog element (open state)</dialog>
+      <dialog open>Dialog (open)</dialog>
 
       <progress value="70" max="100">70%</progress>
       <meter min="0" max="100" value="60">60</meter>
 
-      <button popovertarget="test-popover">Toggle Popover</button>
-      <div id="test-popover" popover>Native popover content</div>
+      <button popovertarget="popover">Toggle Popover</button>
+      <div id="popover" popover>Popover content</div>
     </section>
 
     <!-- MISC -->
@@ -243,21 +257,13 @@ function hello(name) {
     <section id="misc">
       <h2>Miscellaneous</h2>
 
-      <article>
-        <h3>Nested Article</h3>
-        <p>Test nested semantic containers.</p>
-      </article>
-
-      <aside>
-        <p>Aside content block.</p>
-      </aside>
+      <aside>Aside block</aside>
 
       <time datetime="2026-01-01">January 1, 2026</time>
-
       <data value="42">Forty-two</data>
 
       <template>
-        <p>This is a template element.</p>
+        <p>Template content</p>
       </template>
     </section>
 
