@@ -54,6 +54,24 @@ const year = now.getFullYear();
   </div>
 </footer>
 
+<script is:inline>
+  document.querySelectorAll(".swatches span").forEach((el) => {
+    el.addEventListener("click", () => {
+      const root = document.documentElement;
+      const isDark = root.hasAttribute("data-theme-dark");
+
+      root.removeAttribute("data-theme-dark");
+      root.removeAttribute("data-theme-light");
+
+      if (!isDark) {
+        root.setAttribute("data-theme-dark", "");
+      } else {
+        root.setAttribute("data-theme-light", "");
+      }
+    });
+  });
+</script>
+
 <style>
   .site-footer {
     font-family: var(--font-sans);
@@ -91,5 +109,6 @@ const year = now.getFullYear();
     display: inline-block;
     border-radius: 2px;
     border: 1px solid var(--border);
+    cursor: pointer;
   }
 </style>
