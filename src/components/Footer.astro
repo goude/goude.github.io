@@ -26,6 +26,32 @@ const year = now.getFullYear();
   <span class="chunk">
     <a href="/">v{version}</a>
   </span>
+
+  <div class="swatches">
+    <span title="--palette-light-bg" style="background: var(--palette-light-bg)"
+    ></span>
+    <span title="--palette-light-fg" style="background: var(--palette-light-fg)"
+    ></span>
+    <span
+      title="--palette-light-accent"
+      style="background: var(--palette-light-accent)"></span>
+
+    <span title="--palette-dark-bg" style="background: var(--palette-dark-bg)"
+    ></span>
+    <span title="--palette-dark-fg" style="background: var(--palette-dark-fg)"
+    ></span>
+    <span
+      title="--palette-dark-accent"
+      style="background: var(--palette-dark-accent)"></span>
+
+    <span title="--accent-green" style="background: var(--accent-green)"></span>
+    <span title="--accent-blue" style="background: var(--accent-blue)"></span>
+    <span title="--accent-purple" style="background: var(--accent-purple)"
+    ></span>
+    <span title="--accent-yellow" style="background: var(--accent-yellow)"
+    ></span>
+    <span title="--accent-red" style="background: var(--accent-red)"></span>
+  </div>
 </footer>
 
 <style>
@@ -49,5 +75,21 @@ const year = now.getFullYear();
 
   .sep {
     opacity: 0.35;
+  }
+
+  .swatches {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 0.35rem;
+    margin-top: 0.5rem;
+  }
+
+  .swatches span {
+    width: 0.9em;
+    height: 0.9em;
+    display: inline-block;
+    border-radius: 2px;
+    border: 1px solid var(--border);
   }
 </style>
