@@ -35,7 +35,7 @@
   /* Surfaces & Structure */
   --surface: color-mix(in srgb, var(--fg) 4%, var(--bg));
   --surface-raised: color-mix(in srgb, var(--fg) 8%, var(--bg));
-  --paper: color-mix(in srgb, var(--bg) 97%, var(--fg));
+  --paper: color-mix(in srgb, var(--palette-light-bg) 97%, var(--fg));
   --border: color-mix(in srgb, var(--fg) 14%, var(--bg));
   --rule: color-mix(in srgb, var(--fg) 14%, var(--bg));
   --rule-soft: color-mix(in srgb, var(--fg) 8%, var(--bg));
@@ -110,7 +110,6 @@
     --text-strong: #cda77b;
     --text-muted: #989082;
     --surface: #2c2621;
-    --paper: #24201a;
     --border: #877053;
 
     /* typography */
@@ -154,7 +153,6 @@
   --text-strong: #cda77b;
   --text-muted: #989082;
   --surface: #2c2621;
-  --paper: #24201a;
   --border: #877053;
 
   /* typography */
