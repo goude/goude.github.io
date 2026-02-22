@@ -1,1 +1,2 @@
 Optimize for code that works and is structurally clear on the first pass. Avoid repetitive mutation patterns and incremental “drip” construction (e.g., multiple consecutive append(), print(), printf(), string concatenations, or deeply nested conditionals). When several lines form one conceptual unit, express them as a grouped construct. Code should reflect structure, not typing order.
+
