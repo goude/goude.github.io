@@ -5,7 +5,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin: var(--space-lg) 0;
-  font-family: var(--font-sans);
+  font-family: var(--font-body-sans);
   font-size: var(--text-sm);
   line-height: 1.45;
 }
@@ -102,7 +102,7 @@ tbody tr:hover {
 
 /* Inline code */
 code {
-  font-family: var(--font-code);
+  font-family: var(--font-mono);
   font-size: 0.85em; /* slightly smaller than surrounding text */
   background: var(--surface-raised);
   padding: 0.1em 0.35em;
@@ -131,7 +131,7 @@ pre code {
 /* ==================== KBD ==================== */
 
 kbd {
-  font-family: var(--font-code);
+  font-family: var(--font-mono);
   font-size: 0.85em;
   line-height: 1;
 
@@ -234,7 +234,7 @@ button:focus-visible kbd {
 .annotation-label,
 .annotation-author {
   display: block;
-  font-family: var(--font-sans);
+  font-family: var(--font-body-sans);
   font-weight: 600;
   font-size: 0.72rem;
   text-transform: uppercase;
@@ -272,7 +272,7 @@ button:focus-visible kbd {
   border-left: 2px solid var(--accent);
   border-radius: 0 var(--radius, 4px) var(--radius, 4px) 0;
   padding: var(--space-sm) var(--space-md);
-  font-family: var(--font-sans);
+  font-family: var(--font-body-sans);
   font-size: var(--text-sm);
   font-style: italic;
   color: var(--text-muted);

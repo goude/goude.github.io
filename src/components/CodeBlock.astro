@@ -54,12 +54,10 @@ const lines = inner.split("\n");
 <style>
   .code-wrapper {
     position: relative;
-    border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.1));
+    border: 1px solid var(--border);
     border-radius: 6px;
     overflow: hidden;
-
-    /* Make the “gutter” area match the code background */
-    background: var(--shiki-background);
+    background: var(--surface);
   }
 
   .copy-btn {
@@ -69,8 +67,8 @@ const lines = inner.split("\n");
     /* clear the scrollbar area (esp. non-overlay scrollbars) */
     right: 1.25rem;
 
-    background: var(--tone-blue, #334155);
-    color: white;
+    background: var(--bg);
+    color: var(--fg);
     border: none;
     padding: 0.25rem 0.5rem;
     font-size: 0.75rem;
@@ -94,10 +92,9 @@ const lines = inner.split("\n");
 
     padding: 1rem;
     font-size: 0.85rem;
-    font-family: var(--font-mono, monospace);
+    font-family: var(--font-mono);
 
-    /* Critical: make the full code area use Shiki’s background */
-    background: var(--shiki-background);
+    background: var(--surface);
   }
 
   .line {
@@ -108,7 +105,7 @@ const lines = inner.split("\n");
   }
 
   .line:hover {
-    background: rgba(0, 0, 0, 0.04);
+    background: var(--accent-dim);
   }
 
   @media (prefers-color-scheme: dark) {
@@ -125,17 +122,10 @@ const lines = inner.split("\n");
     left: 0;
 
     /* Keep gutter readable and continuous during horizontal scroll */
-    background: var(--shiki-background);
+    background: var(--surface);
   }
 
   .lc {
     white-space: pre;
-  }
-
-  /* Improve light mode readability slightly */
-  @media (prefers-color-scheme: light) {
-    .code {
-      font-weight: 500;
-    }
   }
 </style>

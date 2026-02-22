@@ -5,13 +5,13 @@ body {
   margin: 0;
   display: flex;
   flex-direction: column;
-  color: var(--text-base, var(--fg));
+  color: var(--text);
   background: var(--bg);
   max-width: var(--page-max);
   margin-inline: auto;
   padding-inline: var(--page-pad);
-  font-family: var(--font-serif);
-  font-size: var(--text-base-size, var(--text-base));
+  font-family: var(--font-body-serif);
+  font-size: var(--text-base-size);
   line-height: var(--lh-body);
 }
 
@@ -40,12 +40,12 @@ section {
 h1,
 h2,
 h3 {
-  font-family: var(--font-serif);
+  font-family: var(--font-body-serif);
   font-weight: 400;
   line-height: var(--lh-tight);
   margin-top: var(--space-xl);
   margin-bottom: var(--space-md);
-  color: var(--text-strong, var(--fg));
+  color: var(--text-strong);
 }
 
 h1 {
@@ -68,7 +68,7 @@ ol,
 ul,
 dl {
   margin-bottom: var(--space-lg);
-  color: var(--text-base, var(--fg));
+  color: var(--text-base);
 }
 
 /* ==================== Definition Lists ==================== */
@@ -81,12 +81,12 @@ dl {
 dt {
   font-weight: 600;
   margin-top: var(--space-md);
-  color: var(--text-strong, var(--fg));
+  color: var(--text-strong);
 }
 
 dd {
   margin-left: 0;
-  color: var(--text-muted, var(--fg-muted));
+  color: var(--text-muted);
 }
 
 /* ==================== Lists ==================== */
@@ -101,7 +101,7 @@ li {
 }
 
 ul li::marker {
-  color: var(--text-muted, var(--fg-muted));
+  color: var(--text-muted);
 }
 
 /* ==================== Figures ==================== */
@@ -114,7 +114,7 @@ figcaption {
   margin-top: var(--space-sm);
   font-size: var(--text-sm);
   font-style: italic;
-  color: var(--text-muted, var(--fg-muted));
+  color: var(--text-muted);
 }
 
 /* ==================== Blockquotes ==================== */
@@ -124,11 +124,15 @@ blockquote {
   padding-left: var(--space-lg);
   border-left: 3px solid var(--rule);
   font-style: italic;
-  color: var(--text-muted, var(--fg-muted));
+  color: var(--text-muted);
+}
+
+mark {
+  background-color: var(--accent-yellow);
 }
 
 /* ==================== Utilities ==================== */
 
 .text-muted {
-  color: var(--text-muted, var(--fg-muted));
+  color: var(--text-muted);
 }
