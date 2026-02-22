@@ -14,6 +14,17 @@ const rawHtml = highlighter.codeToHtml(code, {
     dark: "github-dark",
     light: "github-light",
   },
+  transformers: [
+    {
+      // Inject a zero-width space into every empty line span so the
+      // browser always sees a text node and gives all lines equal height.
+      line(node) {
+        if (node.children.length === 0) {
+          node.children.push({ type: "text", value: "\u200B" });
+        }
+      },
+    },
+  ],
 });
 ---
 
@@ -30,23 +41,12 @@ const rawHtml = highlighter.codeToHtml(code, {
   <div class="menu-panel" id="code-menu">
     <button data-action="copy">Copy</button>
     <button data-action="wrap">Toggle wrap</button>
-    <button data-action="numbers">Toggle numbers</button>
-    <button data-action="relative">Toggle relative</button>
   </div>
 
-  <div
-    class="code show-absolute"
-    style={`max-height:${maxHeight}`}
-    set:html={rawHtml}
-  />
+  <div class="code wrap" style={`max-height:${maxHeight}`} set:html={rawHtml} />
 </div>
 
 <style>
-  /*
-  Shiki emits light colors inline and dark colors as --shiki-dark* variables.
-  Astro scopes component CSS, so we must use :global() to override Shiki's
-  inline light styles when <html data-theme-dark> is active.
-  */
   :global(html[data-theme-dark] pre.shiki) {
     background-color: var(--shiki-dark-bg) !important;
     color: var(--shiki-dark) !important;
@@ -107,7 +107,6 @@ const rawHtml = highlighter.codeToHtml(code, {
     display: flex;
   }
 
-  /* .code is a scoped component element — no :global() needed */
   .code {
     overflow-x: auto;
     overflow-y: auto;
@@ -130,25 +129,23 @@ const rawHtml = highlighter.codeToHtml(code, {
     border-radius: 2px;
   }
 
-  /*
-  Everything below targets set:html injected content (pre, code, span.line).
-  Astro does NOT add scoped attributes to injected HTML, so all descendant
-  selectors into that content must use :global(). We anchor on .code (scoped)
-  to keep specificity local to this component.
-  */
-
   .code :global(pre.shiki) {
     overflow: visible;
     margin: 0;
-    padding: 1rem 1rem 1rem 4rem;
+    padding: 0.75rem 1rem 0.75rem 4rem;
     font-size: 0.85rem;
     font-family: var(--font-mono);
+    line-height: 1.6;
     counter-reset: line;
   }
 
   .code.wrap :global(pre.shiki) {
     white-space: pre-wrap;
     word-break: break-word;
+  }
+
+  .code :global(pre > code) {
+    display: block;
   }
 
   .code :global(pre > code > span.line) {
@@ -158,24 +155,13 @@ const rawHtml = highlighter.codeToHtml(code, {
   }
 
   .code :global(pre > code > span.line::before) {
+    content: counter(line);
     position: absolute;
     left: -3rem;
     width: 2rem;
     text-align: right;
     opacity: 0.4;
     user-select: none;
-  }
-
-  .code.show-absolute :global(pre > code > span.line::before) {
-    content: counter(line);
-  }
-
-  .code.show-relative :global(pre > code > span.line::before) {
-    content: attr(data-line);
-  }
-
-  .code.hide-numbers :global(pre > code > span.line::before) {
-    content: "" !important;
   }
 </style>
 
@@ -187,14 +173,6 @@ const rawHtml = highlighter.codeToHtml(code, {
       const codeEl = wrapper.querySelector(".code");
       if (!menuBtn || !menu || !codeEl) return;
 
-      console.log("[CodeBlock] init — codeEl classes:", codeEl.className);
-
-      const lines = codeEl.querySelectorAll("pre > code > span.line");
-      console.log("[CodeBlock] found", lines.length, "line spans");
-      lines.forEach((line, i) => {
-        line.setAttribute("data-line", i + 1);
-      });
-
       menuBtn.addEventListener("click", () => {
         menu.classList.toggle("open");
       });
@@ -203,38 +181,13 @@ const rawHtml = highlighter.codeToHtml(code, {
         const action = e.target.dataset.action;
         if (!action) return;
 
-        console.log(
-          "[CodeBlock] action:",
-          action,
-          "| before:",
-          codeEl.className
-        );
-
         if (action === "copy") {
           navigator.clipboard.writeText(codeEl.innerText);
         }
         if (action === "wrap") {
           codeEl.classList.toggle("wrap");
         }
-        if (action === "numbers") {
-          codeEl.classList.toggle("hide-numbers");
-        }
-        if (action === "relative") {
-          if (codeEl.classList.contains("show-relative")) {
-            codeEl.classList.remove("show-relative");
-            codeEl.classList.add("show-absolute");
-          } else {
-            codeEl.classList.remove("show-absolute");
-            codeEl.classList.add("show-relative");
-          }
-        }
 
-        console.log(
-          "[CodeBlock] action:",
-          action,
-          "| after:",
-          codeEl.className
-        );
         menu.classList.remove("open");
       });
 
