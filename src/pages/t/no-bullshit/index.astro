@@ -1,24 +1,15 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { getImage } from "astro:assets";
 import noBull from "./_files/no-bullshit.svg?url";
-import noBullSource from "./_files/no-bullshit.svg";
-
-// Generate PNG at build time (not stored in repo)
-const png = await getImage({
-  src: noBullSource,
-  format: "png",
-  width: 1600, // retina-friendly
-});
 ---
 
-<Layout title="No Bullshit" description="A small reminder.">
+<Layout title="No Bullshit" description="A small reminder about bullshit.">
   <article itemscope itemtype="https://schema.org/CreativeWork">
     <header>
       <h1 itemprop="name">No Bullshit</h1>
       <p itemprop="abstract">
-        <!-- TODO: 1–2 sentence summary -->
-        A small reminder.
+        A small reminder: you know how bullshit smells. Start saying no to
+        bullshit.
       </p>
     </header>
 
@@ -27,10 +18,9 @@ const png = await getImage({
       itemtype="https://schema.org/ImageObject"
       itemprop="image"
     >
-      <!-- SVG is displayed -->
       <img
         src={noBull}
-        alt="<!-- TODO: concise visual description -->"
+        alt="A young bull with an ashamed look, defecating. He knows he shouldn't. Not here. Superimposed on the defecee is a red prohibition diagonal."
         loading="eager"
         decoding="async"
         itemprop="contentUrl"
@@ -48,11 +38,6 @@ const png = await getImage({
         <p itemprop="description">
           <!-- TODO: 2–4 sentence visual description -->
           Description hook: what is depicted and what the viewer should notice first.
-        </p>
-
-        <p>
-          <strong>Open as bitmap:</strong>
-          <a href={png.src}> PNG version </a>
         </p>
 
         <p>
