@@ -2,6 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import noBull from "./t/no-bullshit/_files/no-bullshit.svg?url";
 import openingTheHood from "./t/opening-the-hood/_files/opening-the-hood.avif?url";
+import batteryHandSketch from "./t/energy/_files/hand-holding-battery-pencil-sketch.avif?url";
 ---
 
 <Layout
@@ -17,6 +18,18 @@ import openingTheHood from "./t/opening-the-hood/_files/opening-the-hood.avif?ur
         >
       </p>
     </header>
+
+    <section id="energy">
+      <h2>Energy</h2>
+      <a href="/t/energy">
+        <figure>
+          <div class="hero-img">
+            <img src={batteryHandSketch} alt="A hand holding a battery." />
+          </div>
+          <figcaption>They see you as a battery.</figcaption>
+        </figure>
+      </a>
+    </section>
 
     <section id="opening-the-hood">
       <h2>Opening the Hood</h2>

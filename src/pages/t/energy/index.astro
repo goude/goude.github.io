@@ -1,0 +1,38 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import batteryHandSketch from "./_files/hand-holding-battery-pencil-sketch.avif?url";
+---
+
+<Layout
+  title="Energy"
+  description="On conserving and allocating personal energy."
+  current="energy"
+>
+  <article id="energy">
+    <header>
+      <h1>Energy</h1>
+      <p class="subtitle">
+        Conserving and allocating personal energy deliberately.
+      </p>
+    </header>
+
+    <figure>
+      <img
+        src={batteryHandSketch}
+        alt="Hand holding a battery, pencil sketch style"
+      />
+      <figcaption>Are you using your energy sustainably?</figcaption>
+    </figure>
+
+    <section>
+      <h2>...</h2>
+      <p>...</p>
+    </section>
+
+    <footer>
+      <p class="text-muted">
+        Energy — draft page. Structure first, refinement later.
+      </p>
+    </footer>
+  </article>
+</Layout>
