@@ -92,6 +92,11 @@ tbody tr:hover {
     color: var(--text-muted);
   }
 
+  tbody tr > :nth-child(3) {
+    font-style: italic;
+    margin-top: var(--space-sm);
+  }
+
   /* Disable hover on mobile */
   tbody tr:hover {
     background: var(--surface-raised);
