@@ -12,16 +12,20 @@ _default:
 install:
     npm install
 
-# ✅ Full check: format → check → build
-check: format typecheck build
+# ✅ Full check: lint → format-check → typecheck → build
+check: lint format-check typecheck build
 
 # ▶️ Start dev server
 dev:
     npm run dev
 
-# 🔍 Type check
+# 🔍 Lint
+lint:
+    npm run lint
+
+# 🔍 Type check (tsc only)
 typecheck:
-    npm run check
+    npm run typecheck
 
 # 🔨 Build for production
 build:
@@ -31,9 +35,21 @@ build:
 preview:
     npm run preview
 
-# ✨ Format code
+# ✨ Format code (writes changes)
 format:
     npm run format
+
+# 🔎 Verify formatting (non-destructive)
+format-check:
+    npm run format:check
+
+# 🧪 Pre-commit hook target
+precommit:
+    npm run precommit
+
+# 🚀 Pre-push hook target
+prepush:
+    npm run prepush
 
 # 🧹 Clean build artifacts
 clean:

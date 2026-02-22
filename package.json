@@ -7,15 +7,20 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.astro --max-warnings=0",
     "format": "prettier --write .",
-    "lint": "eslint . --ext .ts,.astro"
+    "format:check": "prettier --check .",
+    "precommit": "lint-staged && astro check",
+    "prepush": "npm run lint && npm run typecheck && npm run build",
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.{ts,astro}": [
       "eslint --fix",
       "prettier --write"
     ],
-    "*.{css,md}": "prettier --write"
+    "*.{css,md,json,yaml,yml}": "prettier --write"
   },
   "engines": {
     "node": ">=22.0.0",
