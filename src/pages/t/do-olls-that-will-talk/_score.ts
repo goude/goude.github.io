@@ -1,17 +1,43 @@
 // File: _score.ts
 
-// @ts-ignore - CDN import without type declarations
+// @ts-expect-error - CDN ESM import without type declarations
 import RegionsPlugin from "https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/plugins/regions.esm.js";
 
 declare global {
   interface Window {
     onYouTubeIframeAPIReady: () => void;
-    YT: typeof YT;
+    YT: unknown;
   }
 }
 
-declare const WaveSurfer: any;
-declare const opensheetmusicdisplay: any;
+type WaveSurferInstance = {
+  registerPlugin: (plugin: unknown) => unknown;
+  on: (event: string, fn: (...args: unknown[]) => void) => void;
+  playPause: () => void;
+  seekTo: (progress: number) => void;
+  pause: () => void;
+  setTime: (seconds: number) => void;
+};
+
+type WaveSurferStatic = {
+  create: (opts: Record<string, unknown>) => WaveSurferInstance;
+};
+
+type OSMDInstance = {
+  load: (file: string) => Promise<void>;
+  render: () => Promise<void>;
+  Zoom: number;
+};
+
+type OSMDGlobal = {
+  OpenSheetMusicDisplay: new (
+    id: string,
+    opts: Record<string, unknown>
+  ) => OSMDInstance;
+};
+
+declare const WaveSurfer: WaveSurferStatic;
+declare const opensheetmusicdisplay: OSMDGlobal;
 
 interface YTPlayer {
   pauseVideo: () => void;
@@ -91,29 +117,22 @@ if (!isBrowser()) {
       e.preventDefault();
       playAt(como, 45);
     });
-
-    bind("play-como", (e) => {
-      e.preventDefault();
-      playAt(como, 114);
-    });
-
-    bind("play-nothing", (e) => {
-      e.preventDefault();
-      como?.pauseVideo();
-      buble?.pauseVideo();
-    });
   });
 
   // -------------------------
-  // WaveSurfer
+  // WaveSurfer + markers
   // -------------------------
-  type MarkerCategory = "beat" | "lyric" | "dolls";
-  type AudioMarker = { time: number; label: string; category: MarkerCategory };
+  type Category = "beat" | "dolls";
 
-  const categoryColor: Record<MarkerCategory, string> = {
-    beat: "rgba(100, 100, 255, 0.2)",
-    lyric: "rgba(255, 150, 50, 0.3)",
-    dolls: "rgba(255, 50, 50, 0.4)",
+  type AudioMarker = {
+    time: number;
+    label: string;
+    category: Category;
+  };
+
+  const categoryColor: Record<Category, string> = {
+    beat: "rgba(255, 255, 255, 0.65)",
+    dolls: "rgba(255, 0, 0, 0.55)",
   };
 
   const markers: AudioMarker[] = [
@@ -152,7 +171,10 @@ if (!isBrowser()) {
 
     ws.on("ready", () => {
       markers.forEach((m, i) => {
-        regions.addRegion({
+        // regions is untyped (CDN plugin), so we go through unknown.
+        (
+          regions as { addRegion: (cfg: Record<string, unknown>) => void }
+        ).addRegion({
           start: m.time,
           end: m.time + 0.05,
           color: categoryColor[m.category],
@@ -180,13 +202,17 @@ if (!isBrowser()) {
       if (playPause) playPause.textContent = "Play";
     });
 
-    regions.on(
-      "region-clicked",
-      (r: { start: number }, e: { stopPropagation: () => void }) => {
-        e.stopPropagation();
-        ws.setTime(r.start);
+    (
+      regions as {
+        on: (
+          evt: string,
+          fn: (r: { start: number }, e: { stopPropagation: () => void }) => void
+        ) => void;
       }
-    );
+    ).on("region-clicked", (r, e) => {
+      e.stopPropagation();
+      ws.setTime(r.start);
+    });
   });
 
   // -------------------------
@@ -261,7 +287,6 @@ if (!isBrowser()) {
     }
 
     for (const spec of scores) {
-      // eslint-disable-next-line no-await-in-loop
       await renderScore(spec);
     }
   });
