@@ -1,0 +1,1 @@
+When reviewing code, focus on structural clarity, conceptual cohesion, and failure modes. Identify unnecessary mutation patterns, hidden coupling, and implicit state transitions. Prefer early returns over nesting and declarative constructs over accumulation. Suggest improvements only if they reduce complexity or clarify intent. Avoid cosmetic style comments.
