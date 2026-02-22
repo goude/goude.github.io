@@ -1,13 +1,13 @@
 /* ==================== Tables ==================== */
 
-/* Assumes body text is serif; tables deliberately use UI/sans */
+/* Base table styling */
 table {
   width: 100%;
   border-collapse: collapse;
   margin: var(--space-lg) 0;
   font-family: var(--font-sans);
   font-size: var(--text-sm);
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 caption {
@@ -18,14 +18,18 @@ caption {
   color: var(--text-muted);
 }
 
+/* Header */
 thead th {
   text-align: left;
   font-weight: 500;
   padding: var(--space-sm) var(--space-md);
   border-bottom: 1px solid var(--rule);
-  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.85rem;
 }
 
+/* Body cells */
 tbody th,
 tbody td {
   text-align: left;
@@ -37,17 +41,61 @@ tbody td {
 tbody th {
   font-weight: 400;
   color: var(--text-muted);
-  white-space: nowrap;
 }
 
+/* Remove bottom border from last row */
 tbody tr:last-child th,
 tbody tr:last-child td {
   border-bottom: none;
 }
 
-/* Optional: subtle row hover for scannability */
+/* Subtle hover for desktop */
 tbody tr:hover {
   background: var(--surface-raised);
+}
+
+/* ==================== Mobile transformation ==================== */
+
+@media (max-width: 640px) {
+  table,
+  thead,
+  tbody,
+  tr,
+  th,
+  td {
+    display: block;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tbody tr {
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
+    border: 1px solid var(--rule-soft);
+    border-radius: 0.75rem;
+    background: var(--surface-raised);
+  }
+
+  tbody th {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    border: none;
+    padding: 0 0 0.5rem 0;
+    color: var(--fg);
+  }
+
+  tbody td {
+    border: none;
+    padding: 0;
+    color: var(--text-muted);
+  }
+
+  /* Disable hover on mobile */
+  tbody tr:hover {
+    background: var(--surface-raised);
+  }
 }
 
 /* ==================== Code ==================== */
@@ -121,36 +169,131 @@ button:focus-visible kbd {
   outline-offset: 2px;
 }
 
-/* Article markup */
+/* --------------------------------------------------
+   Provenance block – balanced editorial version
+-------------------------------------------------- */
+
 .provenance-note {
-  display: inline-flex;
-  gap: 0.6rem;
-  align-items: center;
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
 
-  margin-bottom: 1rem;
+  max-width: 60rem;
+  margin: 2rem auto 3rem auto;
 
-  padding: 0.22rem 0.7rem;
-  border-radius: 999px;
+  padding: 1.1rem 1.6rem;
+  border-radius: 1.25rem; /* toned down roundness */
 
-  font-size: 0.72rem;
-  line-height: 1.25;
+  font-size: 0.85rem;
+  line-height: 1.5;
 
   color: var(--fg-muted);
-  background: color-mix(in srgb, var(--paper) 94%, var(--fg) 6%);
+  background: color-mix(in srgb, var(--bg) 94%, var(--fg) 6%);
   border: 1px solid var(--rule);
 }
 
+/* Left column */
 .provenance-label {
+  flex: 0 0 10rem; /* slightly narrower */
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  opacity: 0.9;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
 }
 
+/* Right column */
 .provenance-text {
-  opacity: 0.8;
+  flex: 1;
+  opacity: 0.85;
 }
 
+/* ---------------- Mobile ---------------- */
+
+@media (max-width: 640px) {
+  .provenance-note {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.2rem 1.3rem;
+  }
+
+  .provenance-label {
+    flex: none;
+  }
+}
+
+/* ==================== Annotations ==================== */
+
+.annotation {
+  border-left: 2px solid var(--accent);
+  padding: var(--space-sm) var(--space-md);
+  margin: var(--space-lg) 0;
+  background: color-mix(in srgb, var(--accent) 6%, var(--bg));
+  border-radius: 0 var(--radius, 4px) var(--radius, 4px) 0;
+}
+
+.annotation-label,
+.annotation-author {
+  display: block;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  margin-bottom: var(--space-sm);
+}
+
+.annotation p {
+  font-size: var(--text-sm);
+  font-style: italic;
+  color: var(--text-muted);
+  margin-bottom: 0;
+}
+
+/* ==================== Annotation marks (inline) ==================== */
+
+.annotation-mark {
+  position: relative;
+  display: inline-block;
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  border-bottom: 1px dotted var(--accent);
+  border-radius: 2px;
+  cursor: help;
+  color: var(--text-muted);
+}
+
+.annotation-mark[data-note]:hover::after {
+  content: attr(data-note);
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+  border-left: 2px solid var(--accent);
+  border-radius: 0 var(--radius, 4px) var(--radius, 4px) 0;
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-style: italic;
+  color: var(--text-muted);
+  max-width: 280px;
+  z-index: 10;
+  /* prevent text inside tooltip inheriting mark styles */
+  border-bottom: none;
+}
+
+@media (max-width: 640px) {
+  .annotation-mark[data-note]:hover::after,
+  .annotation-mark[data-note]:focus::after {
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: min(90vw, 420px);
+    max-width: none;
+
+    white-space: normal;
+  }
+}
 /* Avoid oversized monospace on small screens */
 @media (max-width: 600px) {
   table {
@@ -183,4 +326,83 @@ html[data-mode="high"] [data-detail="low"],
 html[data-mode="high"] [data-detail="medium"],
 html[data-mode="high"] [data-detail="high"] {
   display: block;
+}
+
+/* ============================================================
+   Entry Point – Desktop Cinematic Image Treatment
+   Structure required:
+     figure
+       └─ .hero-img
+            └─ img
+       └─ figcaption
+   Mobile: normal
+   Desktop: cropped + fade + subtle motion
+   ============================================================ */
+
+/* ---------------- Mobile (default) ---------------- */
+
+#entry-point figure {
+  margin: 0 0 2rem 0;
+}
+
+#entry-point figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+#entry-point figcaption {
+  margin-top: 0.75rem;
+}
+
+/* ---------------- Desktop enhancements ---------------- */
+
+@media (min-width: 768px) {
+  #entry-point figure {
+    margin-bottom: 3rem;
+  }
+
+  /* Crop container */
+  #entry-point .hero-img {
+    position: relative;
+    overflow: hidden;
+    max-height: 420px; /* adjust to taste */
+  }
+
+  /* Animated image */
+  #entry-point .hero-img img {
+    width: 100%;
+    height: 120%; /* oversize for vertical drift */
+    object-fit: cover;
+    object-position: top center;
+    animation: entry-kenburns 30s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+
+  /* Fade into background */
+  #entry-point .hero-img::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 40%;
+    pointer-events: none;
+
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, var(--bg) 100%);
+  }
+}
+
+/* ---------------- Ken Burns animation ---------------- */
+
+@keyframes entry-kenburns {
+  0% {
+    transform: translateY(0%);
+  }
+  50% {
+    transform: translateY(-4%);
+  }
+  100% {
+    transform: translateY(-8%);
+  }
 }

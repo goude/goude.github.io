@@ -1,43 +1,61 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import noBull from "./t/no-bullshit/_files/no-bullshit.svg?url";
+import openingTheHood from "./t/opening-the-hood/_files/opening-the-hood.avif?url";
 ---
 
 <Layout
   title="Entry Point"
   description="This site is where I keep some of my notes and put stuff that I find useful."
 >
-  <!-- article: a self-contained, citable knowledge object; your homepage is an index object -->
   <article id="entry-point">
-    <!-- header: title + framing for this page -->
     <header>
-      <!-- h1: name of the page-level object -->
       <h1>Point of Entry</h1>
-
-      <!-- p.subtitle: short framing line; keep it as prose, not a heading -->
       <p class="subtitle">
-        Leave the campground a little cleaner than you found it.
+        <a href="/t/ambient-improvement-positive-residue"
+          >Leave the campground a little cleaner than you found it.</a
+        >
       </p>
     </header>
 
-    <!-- section: a major grouping of links/notes -->
+    <section id="opening-the-hood">
+      <h2>Opening the Hood</h2>
+      <a href="/t/opening-the-hood">
+        <figure>
+          <div class="hero-img">
+            <img
+              src={openingTheHood}
+              alt="A car engine bay — the hood open, the mechanism visible"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <figcaption>
+            On the gap between how things look and how things work.
+          </figcaption>
+        </figure>
+      </a>
+    </section>
+
     <section id="no-bullshit">
       <h2>No Bullshit</h2>
       <a href="/t/no-bullshit">
-        <img
-          src={noBull}
-          alt="No Bullshit"
-          width="200"
-          height="200"
-          loading="lazy"
-          decoding="async"
-        />
+        <figure>
+          <div class="hero-img">
+            <img
+              src={noBull}
+              alt="No Bullshit"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <figcaption>A working principle.</figcaption>
+        </figure>
       </a>
     </section>
 
     <section id="tea">
       <h2>Have a Cup of Tea</h2>
-
       <p>
         <a href="/v/tea-time/tea-time.html">A timer for brewing your tea.</a>
         And more. Built mostly by Claude.
@@ -46,14 +64,11 @@ import noBull from "./t/no-bullshit/_files/no-bullshit.svg?url";
 
     <section id="learning-ladders">
       <h2>Practice Ladders</h2>
-
       <p>
-        Two “nail the basics first” ladders: one for synth patches, one for
-        beats. They are written to be hand-editable, readable, and reusable
-        across devices.
+        Two "nail the basics first" ladders: one for synth patches, one for
+        beats. Written to be hand-editable, readable, and reusable across
+        devices.
       </p>
-
-      <!-- nav: conceptual neighborhood; an index to nearby knowledge objects -->
       <nav aria-label="Ladder Pages">
         <ul>
           <li>
@@ -67,16 +82,13 @@ import noBull from "./t/no-bullshit/_files/no-bullshit.svg?url";
     </section>
 
     <section id="seasonal">
-      <h2>It’s Beginning to Look a Lot Like Christmas</h2>
-
+      <h2>It's Beginning to Look a Lot Like Christmas</h2>
       <p>
         Dolls or do-olls?
-        <!-- a: links are graph edges; use meaningful link text -->
-        <a href="/t/do-olls-that-will-talk/">It’s a mystery.</a>
+        <a href="/t/do-olls-that-will-talk/">It's a mystery.</a>
       </p>
     </section>
 
-    <!-- footer: end matter for the page-level article -->
     <footer>
       <p class="text-muted">
         This is where I keep some of my notes and put stuff that I find useful.

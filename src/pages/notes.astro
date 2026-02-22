@@ -1,0 +1,55 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import CodeBlock from "@/components/CodeBlock.astro";
+import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const notesPath = join(__dirname, "NOTES.md");
+const notesContent = await readFile(notesPath, "utf-8");
+---
+
+<Layout
+  title="Notes"
+  description="Developer-facing notes for this part of the site."
+  current="notes"
+>
+  <article>
+    <header>
+      <h1>NOTES.md</h1>
+      <p class="subtitle">Local developer notes and pragmatic context.</p>
+    </header>
+
+    <section>
+      <p>
+        TODO: explain why this convention is useful. Show some real world
+        equivalents (manila tags etc)
+      </p>
+      <p>
+        A <code>NOTES.md</code> file is a lightweight, high-signal place to store
+        developer-facing context that does not belong in user-facing documentation.
+      </p>
+
+      <p>
+        It can contain architectural rationale, edge cases, deployment quirks,
+        content decisions, or “future self” reminders. The key property is
+        locality: the file lives next to the code it describes.
+      </p>
+
+      <p>
+        This allows each directory to carry its own operational memory without
+        polluting global documentation. It is pragmatic, version-controlled,
+        searchable, and visible in diffs.
+      </p>
+    </section>
+
+    <section>
+      <h2>Current NOTES.md</h2>
+
+      <CodeBlock code={notesContent} lang="markdown" maxHeight="70vh" />
+    </section>
+  </article>
+</Layout>

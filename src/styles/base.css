@@ -115,7 +115,6 @@ figcaption {
   font-size: var(--text-sm);
   font-style: italic;
   color: var(--text-muted, var(--fg-muted));
-  text-align: center;
 }
 
 /* ==================== Blockquotes ==================== */

@@ -7,6 +7,34 @@ const version = pkg.version;
 const now = new Date();
 const week = getISOWeek(now);
 const year = now.getFullYear();
+
+const weekday = now.toLocaleDateString("en-GB", { weekday: "short" });
+const day = now.getDate().toString().padStart(2, "0");
+const hours = now.getHours().toString().padStart(2, "0");
+const minutes = now.getMinutes().toString().padStart(2, "0");
+
+const stamp = `W${week} ${weekday} ${day} ${hours}:${minutes}`;
+
+/* Swatch data structure */
+const swatches = [
+  { var: "--palette-light-bg", desc: "Light background", url: "/cop" },
+  { var: "--palette-light-fg", desc: "Light foreground", url: "/t/markup" },
+  { var: "--palette-light-accent", desc: "Light accent", url: "/t/computers" },
+
+  { var: "--palette-dark-bg", desc: "Dark background", url: "/t/knowledge" },
+  {
+    var: "--palette-dark-fg",
+    desc: "Dark foreground",
+    url: "/t/toppen-fjaderhjalmar",
+  },
+  { var: "--palette-dark-accent", desc: "Dark accent", url: "/t/sheev" },
+
+  { var: "--accent-green", desc: "Accent green", url: "https://goude.se" },
+  { var: "--accent-blue", desc: "Accent blue", url: "https://goude.se" },
+  { var: "--accent-purple", desc: "Accent purple", url: "https://goude.se" },
+  { var: "--accent-yellow", desc: "Accent yellow", url: "https://goude.se" },
+  { var: "--accent-red", desc: "Accent red", url: "https://goude.se" },
+];
 ---
 
 <footer class="site-footer">
@@ -18,7 +46,7 @@ const year = now.getFullYear();
   <span class="sep" aria-hidden="true">·</span>
 
   <span class="chunk">
-    <a href="/" title="ISO week (Sweden: SS-ISO 8601-1)">Week {week}</a>
+    <a href="/" title="ISO week + current timestamp">{stamp}</a>
   </span>
 
   <span class="sep" aria-hidden="true">·</span>
@@ -28,46 +56,24 @@ const year = now.getFullYear();
   </span>
 
   <div class="swatches">
-    <span title="--palette-light-bg" style="background: var(--palette-light-bg)"
-    ></span>
-    <span title="--palette-light-fg" style="background: var(--palette-light-fg)"
-    ></span>
-    <span
-      title="--palette-light-accent"
-      style="background: var(--palette-light-accent)"></span>
-
-    <span title="--palette-dark-bg" style="background: var(--palette-dark-bg)"
-    ></span>
-    <span title="--palette-dark-fg" style="background: var(--palette-dark-fg)"
-    ></span>
-    <span
-      title="--palette-dark-accent"
-      style="background: var(--palette-dark-accent)"></span>
-
-    <span title="--accent-green" style="background: var(--accent-green)"></span>
-    <span title="--accent-blue" style="background: var(--accent-blue)"></span>
-    <span title="--accent-purple" style="background: var(--accent-purple)"
-    ></span>
-    <span title="--accent-yellow" style="background: var(--accent-yellow)"
-    ></span>
-    <span title="--accent-red" style="background: var(--accent-red)"></span>
+    {
+      swatches.map((s) => (
+        <span
+          data-url={s.url}
+          title={`${s.desc} — ${s.url} — ${s.var}`}
+          style={`background: var(${s.var})`}
+        />
+      ))
+    }
   </div>
 </footer>
 
 <script is:inline>
   document.querySelectorAll(".swatches span").forEach((el) => {
     el.addEventListener("click", () => {
-      const root = document.documentElement;
-      const isDark = root.hasAttribute("data-theme-dark");
-
-      root.removeAttribute("data-theme-dark");
-      root.removeAttribute("data-theme-light");
-
-      if (!isDark) {
-        root.setAttribute("data-theme-dark", "");
-      } else {
-        root.setAttribute("data-theme-light", "");
-      }
+      const url = el.dataset.url;
+      if (!url) return;
+      window.location.href = url;
     });
   });
 </script>
