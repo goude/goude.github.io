@@ -15,13 +15,6 @@ const rawHtml = highlighter.codeToHtml(code, {
     light: "github-light",
   },
 });
-
-// Extract inner <code> only
-const inner = rawHtml
-  .replace(/^.*?<code[^>]*>/s, "")
-  .replace(/<\/code>.*$/s, "");
-
-const lines = inner.split("\n");
 ---
 
 <div class="code-wrapper">
@@ -39,19 +32,23 @@ const lines = inner.split("\n");
     ⧉
   </button>
 
-  <pre
-    class="code"
-    style={`max-height:${maxHeight}`}>
-    {lines.map((line, i) => (
-      <div class="line">
-        <span class="ln">{i + 1}</span>
-        <span class="lc" set:html={line || " "} />
-      </div>
-    ))}
-  </pre>
+  <div class="code" style={`max-height:${maxHeight}`} set:html={rawHtml} />
 </div>
 
 <style>
+  /*
+  Shiki emits light colors inline and dark colors as --shiki-dark* variables.
+  Astro scopes component CSS, so we must use :global() to override Shiki's
+  inline light styles when <html data-theme-dark> is active.
+  */
+  :global(html[data-theme-dark] pre.shiki) {
+    background-color: var(--shiki-dark-bg) !important;
+    color: var(--shiki-dark) !important;
+  }
+
+  :global(html[data-theme-dark] pre.shiki span[style*="--shiki-dark"]) {
+    color: var(--shiki-dark) !important;
+  }
   .code-wrapper {
     position: relative;
     border: 1px solid var(--border);
@@ -63,10 +60,7 @@ const lines = inner.split("\n");
   .copy-btn {
     position: absolute;
     top: 0.5rem;
-
-    /* clear the scrollbar area (esp. non-overlay scrollbars) */
     right: 1.25rem;
-
     background: var(--bg);
     color: var(--fg);
     border: none;
@@ -83,49 +77,35 @@ const lines = inner.split("\n");
   }
 
   .code {
-    /* Vertical scroll only; you chose hidden for x for now */
     overflow-y: auto;
-    overflow-x: hidden;
-
-    /* Kill default <pre> margin and ensure background fills */
+    overflow-x: auto;
     margin: 0;
+  }
 
-    padding: 1rem;
+  /* Style Shiki output */
+  .code pre {
+    margin: 0;
+    padding: 1rem 1rem 1rem 4rem;
     font-size: 0.85rem;
     font-family: var(--font-mono);
-
-    background: var(--surface);
+    counter-reset: line;
   }
 
-  .line {
-    display: grid;
-    grid-template-columns: 3ch minmax(0, 1fr);
-    gap: 1rem;
-    align-items: start;
+  /* Each line emitted by Shiki */
+  .code pre > code > span {
+    display: block;
+    counter-increment: line;
+    position: relative;
   }
 
-  .line:hover {
-    background: var(--accent-dim);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .line:hover {
-      background: rgba(255, 255, 255, 0.05);
-    }
-  }
-
-  .ln {
-    opacity: 0.4;
+  /* Line numbers */
+  .code pre > code > span::before {
+    content: counter(line);
+    position: absolute;
+    left: -3rem;
+    width: 2rem;
     text-align: right;
+    opacity: 0.4;
     user-select: none;
-    position: sticky;
-    left: 0;
-
-    /* Keep gutter readable and continuous during horizontal scroll */
-    background: var(--surface);
-  }
-
-  .lc {
-    white-space: pre;
   }
 </style>
