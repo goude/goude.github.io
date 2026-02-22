@@ -8,3 +8,9 @@ unfortunately we had to name it \_NOTES.md to not make astro angry
 `and some code`
 
 Energy - energy balance - how to use the limited resources we have - tactical strategical
+
+And now
+for something
+completely different
+
+No.1 the larch

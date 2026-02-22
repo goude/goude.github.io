@@ -55,6 +55,16 @@ const swatches = [
     <a href="/">v{version}</a>
   </span>
 
+  <span class="sep" aria-hidden="true">·</span>
+
+  <span class="chunk">
+    <span
+      id="copy-link-snippet"
+      title="Copy link snippet for this page"
+      style="cursor:pointer;"><i class="fa-solid fa-link"></i></span
+    >
+  </span>
+
   <div class="swatches">
     {
       swatches.map((s) => (
@@ -76,6 +86,20 @@ const swatches = [
       window.location.href = url;
     });
   });
+
+  const linkBtn = document.getElementById("copy-link-snippet");
+  if (linkBtn) {
+    linkBtn.addEventListener("click", () => {
+      const path = window.location.pathname;
+      const title = document.title.replace(/\s*[-–—].*$/, "");
+      const snippet = `<a href="${path}">${title}</a>`;
+      navigator.clipboard.writeText(snippet);
+
+      linkBtn.classList.remove("pulse");
+      void linkBtn.offsetWidth;
+      linkBtn.classList.add("pulse");
+    });
+  }
 </script>
 
 <style>
@@ -116,5 +140,26 @@ const swatches = [
     border-radius: 2px;
     border: 1px solid var(--border);
     cursor: pointer;
+  }
+
+  #copy-link-snippet.pulse i {
+    animation: pulse-glow 0.8s ease-out;
+  }
+
+  @keyframes pulse-glow {
+    0% {
+      text-shadow: 0 0 0 var(--accent-blue);
+      transform: scale(1);
+    }
+    15% {
+      text-shadow:
+        0 0 6px var(--accent-blue),
+        0 0 12px var(--accent-blue);
+      transform: scale(1.2);
+    }
+    100% {
+      text-shadow: 0 0 0 var(--accent-blue);
+      transform: scale(1);
+    }
   }
 </style>
