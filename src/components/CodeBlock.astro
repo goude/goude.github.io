@@ -16,11 +16,18 @@ const rawHtml = highlighter.codeToHtml(code, {
   },
   transformers: [
     {
-      // Inject a zero-width space into every empty line span so the
-      // browser always sees a text node and gives all lines equal height.
+      // Shiki emits \n text nodes between </span><span class="line"> pairs.
+      // These render as phantom line boxes that show up as selection slivers.
+      // Strip them here at the source.
+      code(node) {
+        node.children = node.children.filter(
+          (child) => !(child.type === "text" && child.value === "\n")
+        );
+      },
+      // Mark empty lines so CSS can match their height to content lines.
       line(node) {
         if (node.children.length === 0) {
-          node.children.push({ type: "text", value: "\u200B" });
+          node.properties["data-empty"] = "";
         }
       },
     },
@@ -29,16 +36,9 @@ const rawHtml = highlighter.codeToHtml(code, {
 ---
 
 <div class="code-wrapper" data-code-block>
-  <button
-    class="menu-btn"
-    id="code-menu-btn"
-    aria-label="Code options"
-    title="Options"
-  >
-    ⋯
-  </button>
+  <button class="menu-btn" aria-label="Code options" title="Options">⋯</button>
 
-  <div class="menu-panel" id="code-menu">
+  <div class="menu-panel">
     <button data-action="copy">Copy</button>
     <button data-action="wrap">Toggle wrap</button>
   </div>
@@ -102,7 +102,6 @@ const rawHtml = highlighter.codeToHtml(code, {
   .menu-panel button:hover {
     background: var(--accent-dim);
   }
-
   .menu-panel.open {
     display: flex;
   }
@@ -119,11 +118,9 @@ const rawHtml = highlighter.codeToHtml(code, {
     height: 4px;
     width: 4px;
   }
-
   .code::-webkit-scrollbar-track {
     background: transparent;
   }
-
   .code::-webkit-scrollbar-thumb {
     background: var(--border);
     border-radius: 2px;
@@ -135,7 +132,7 @@ const rawHtml = highlighter.codeToHtml(code, {
     padding: 0.75rem 1rem 0.75rem 4rem;
     font-size: 0.85rem;
     font-family: var(--font-mono);
-    line-height: 1.6;
+    line-height: 1.35;
     counter-reset: line;
   }
 
@@ -154,6 +151,12 @@ const rawHtml = highlighter.codeToHtml(code, {
     position: relative;
   }
 
+  /* Give empty lines the same height as content lines without a DOM text node */
+  .code :global(pre > code > span.line[data-empty]::after) {
+    content: "\200B";
+    user-select: none;
+  }
+
   .code :global(pre > code > span.line::before) {
     content: counter(line);
     position: absolute;
@@ -168,33 +171,23 @@ const rawHtml = highlighter.codeToHtml(code, {
 <script is:inline>
   (function () {
     document.querySelectorAll("[data-code-block]").forEach((wrapper) => {
-      const menuBtn = wrapper.querySelector("#code-menu-btn");
-      const menu = wrapper.querySelector("#code-menu");
+      const menuBtn = wrapper.querySelector(".menu-btn");
+      const menu = wrapper.querySelector(".menu-panel");
       const codeEl = wrapper.querySelector(".code");
       if (!menuBtn || !menu || !codeEl) return;
 
-      menuBtn.addEventListener("click", () => {
-        menu.classList.toggle("open");
-      });
+      menuBtn.addEventListener("click", () => menu.classList.toggle("open"));
 
       menu.addEventListener("click", (e) => {
         const action = e.target.dataset.action;
         if (!action) return;
-
-        if (action === "copy") {
-          navigator.clipboard.writeText(codeEl.innerText);
-        }
-        if (action === "wrap") {
-          codeEl.classList.toggle("wrap");
-        }
-
+        if (action === "copy") navigator.clipboard.writeText(codeEl.innerText);
+        if (action === "wrap") codeEl.classList.toggle("wrap");
         menu.classList.remove("open");
       });
 
       document.addEventListener("click", (e) => {
-        if (!wrapper.contains(e.target)) {
-          menu.classList.remove("open");
-        }
+        if (!wrapper.contains(e.target)) menu.classList.remove("open");
       });
     });
   })();
