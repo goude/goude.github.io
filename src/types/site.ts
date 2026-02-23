@@ -33,6 +33,11 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/hello", label: "Hello", icon: "fa fa-hand-spock" },
   { href: "/notes", label: "NOTES.md", icon: "fa fa-note-sticky" },
   {
+    href: "/t/ambient-improvement-positive-residue",
+    label: "Ambient Improvement",
+    icon: "fa fa-broom",
+  },
+  {
     href: "https://github.com/goude",
     label: "GitHub (goude)",
     icon: "fa-brands fa-github",
