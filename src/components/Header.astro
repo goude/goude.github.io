@@ -269,9 +269,23 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
     font-size: 1.1em;
   }
 
-  /* Crossfade for rotating icons only (no layout changes) */
-  .nav-action i[data-icon-rotate] {
-    transition: opacity 0.25s ease;
+  /* CSS animation for rotating icons */
+  @keyframes icon-swap {
+    0% {
+      opacity: 1;
+    }
+    40% {
+      opacity: 0;
+    }
+    60% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  .nav-action i[data-icon-rotate].rotating {
+    animation: icon-swap 0.35s ease forwards;
   }
 
   /* Shared selected style */
@@ -628,34 +642,49 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
 
     const pickNextDifferent = (arr, cur) => {
       if (arr.length <= 1) return cur;
-      let next = cur;
-      let tries = 0;
+      let next = cur,
+        tries = 0;
       while (next === cur && tries < 5) {
         next = arr[Math.floor(Math.random() * arr.length)];
-        tries += 1;
+        tries++;
       }
       return next;
     };
 
-    const rotateIcons = () => {
-      document.querySelectorAll("i[data-icon-rotate]").forEach((el) => {
-        const raw = el.getAttribute("data-icons") || "";
-        const icons = raw ? raw.split("|").filter(Boolean) : [];
-        if (icons.length <= 1) return;
+    const INTERVAL = 65536; // ms
+    const rotIcons = Array.from(
+      document.querySelectorAll("i[data-icon-rotate]")
+    );
+    const perItem = rotIcons.length > 0 ? INTERVAL / rotIcons.length : INTERVAL;
 
-        const cur = el.className;
-        const next = pickNextDifferent(icons, cur);
-        if (next === cur) return;
-
-        el.style.opacity = "0";
+    rotIcons.forEach((el, i) => {
+      const scheduleNext = (delay) => {
         window.setTimeout(() => {
-          el.className = next;
-          el.style.opacity = "1";
-        }, 140);
-      });
-    };
-
-    rotateIcons();
-    window.setInterval(rotateIcons, 10000);
+          const raw = el.getAttribute("data-icons") || "";
+          const list = raw.split("|").filter(Boolean);
+          if (list.length <= 1) {
+            scheduleNext(INTERVAL);
+            return;
+          }
+          const cur = Array.from(el.classList)
+            .filter((c) => c !== "rotating")
+            .join(" ");
+          el.classList.add("rotating");
+          window.setTimeout(() => {
+            const next = pickNextDifferent(list, cur);
+            el.className = next + " rotating";
+          }, 140);
+          el.addEventListener(
+            "animationend",
+            () => {
+              el.classList.remove("rotating");
+              scheduleNext(INTERVAL);
+            },
+            { once: true }
+          );
+        }, delay);
+      };
+      scheduleNext(i * perItem);
+    });
   })();
 </script>
