@@ -75,7 +75,12 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
           href={item.href}
           class:list={["nav-action", { selected: isSelected(item) }]}
         >
-          <i class={item.icon} aria-hidden="true" />
+          <i
+            class={item.icons[0]}
+            data-icon-rotate
+            data-icons={item.icons.join("|")}
+            aria-hidden="true"
+          />
           <span>{item.label}</span>
         </a>
       ))
@@ -94,7 +99,12 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
             target="_blank"
             aria-label={`${item.label} (opens in new tab)`}
           >
-            <i class={item.icon} aria-hidden="true" />
+            <i
+              class={item.icons[0]}
+              data-icon-rotate
+              data-icons={item.icons.join("|")}
+              aria-hidden="true"
+            />
             <span class="tooltip">
               {item.label}
               <i
@@ -152,7 +162,12 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
             ? { rel: "noopener noreferrer", target: "_blank" }
             : {})}
         >
-          <i class={item.icon} aria-hidden="true" />
+          <i
+            class={item.icons[0]}
+            data-icon-rotate
+            data-icons={item.icons.join("|")}
+            aria-hidden="true"
+          />
           <span>{item.label}</span>
           {item.external && (
             <i
@@ -252,6 +267,11 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
 
   .nav-action i {
     font-size: 1.1em;
+  }
+
+  /* Crossfade for rotating icons only (no layout changes) */
+  .nav-action i[data-icon-rotate] {
+    transition: opacity 0.25s ease;
   }
 
   /* Shared selected style */
@@ -605,5 +625,37 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
     window.addEventListener("resize", () => {
       if (window.innerWidth > 480) setOpen(false);
     });
+
+    const pickNextDifferent = (arr, cur) => {
+      if (arr.length <= 1) return cur;
+      let next = cur;
+      let tries = 0;
+      while (next === cur && tries < 5) {
+        next = arr[Math.floor(Math.random() * arr.length)];
+        tries += 1;
+      }
+      return next;
+    };
+
+    const rotateIcons = () => {
+      document.querySelectorAll("i[data-icon-rotate]").forEach((el) => {
+        const raw = el.getAttribute("data-icons") || "";
+        const icons = raw ? raw.split("|").filter(Boolean) : [];
+        if (icons.length <= 1) return;
+
+        const cur = el.className;
+        const next = pickNextDifferent(icons, cur);
+        if (next === cur) return;
+
+        el.style.opacity = "0";
+        window.setTimeout(() => {
+          el.className = next;
+          el.style.opacity = "1";
+        }, 140);
+      });
+    };
+
+    rotateIcons();
+    window.setInterval(rotateIcons, 10000);
   })();
 </script>

@@ -18,7 +18,7 @@ export interface PageProps {
 export interface NavItem {
   href: string;
   label: string;
-  icon: string;
+  icons: string[]; // changed from icon: string
   external?: boolean;
 }
 
@@ -30,29 +30,34 @@ export const SITE: SiteMetadata = {
 };
 
 export const NAV_ITEMS: NavItem[] = [
-  { href: "/hello", label: "Hello", icon: "fa fa-hand-spock" },
-  { href: "/notes", label: "NOTES.md", icon: "fa fa-note-sticky" },
+  { href: "/hello", label: "Hello", icons: ["fa fa-hand-spock"] },
+  { href: "/notes", label: "NOTES.md", icons: ["fa fa-note-sticky"] },
   {
     href: "/t/ambient-improvement-positive-residue",
     label: "Ambient Improvement",
-    icon: "fa fa-broom",
+    icons: [
+      "fa-solid fa-hand-sparkles",
+      "fa-solid fa-spray-can-sparkles",
+      "fa-solid fa-broom",
+      "fa-solid fa-campground",
+    ],
   },
   {
     href: "https://github.com/goude",
     label: "GitHub (goude)",
-    icon: "fa-brands fa-github",
+    icons: ["fa-brands fa-github"],
     external: true,
   },
   {
     href: "https://www.instagram.com/doitpoorly/",
     label: "Instagram (doitpoorly)",
-    icon: "fa-brands fa-square-instagram",
+    icons: ["fa-brands fa-square-instagram"],
     external: true,
   },
   {
     href: "https://buymeacoffee.com/goude",
     label: "Coffee",
-    icon: "fa-solid fa-mug-saucer",
+    icons: ["fa-solid fa-mug-saucer"],
     external: true,
   },
 ];
