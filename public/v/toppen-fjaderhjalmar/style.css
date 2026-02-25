@@ -155,7 +155,7 @@ nav button:hover:not(.active) {
 video#commentary-video {
   display: block;
   width: 100%;
-  max-height: 30vh;
+  max-height: 40vh;
   object-fit: contain;
   background: #000;
   border-radius: 4px;
