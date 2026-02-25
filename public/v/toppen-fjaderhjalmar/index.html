@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hyaa — Þrjár tungur / Three Languages</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Spectral:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-top">
+        <div class="logo">
+          <span>Hyaa</span> — Þrjár tungur
+          <small>Gummi Ben · Iceland 2–1 Austria · Euro 2016</small>
+        </div>
+      </div>
+      <nav id="main-nav">
+        <button class="active">Poem</button>
+        <button>Real translation</button>
+        <button>Phonetic</button>
+        <button>Word graph</button>
+        <button>About</button>
+      </nav>
+    </header>
+
+    <div id="content-area">
+      <!-- ══════════════════════════════════════════════════════════
+       TAB 1 — POEM
+       IS original | SV phonetic (canonical) | EN of SV phonetic
+       ══════════════════════════════════════════════════════════ -->
+      <div id="poem" class="view active">
+        <!-- Video player -->
+        <div class="video-section">
+          <video id="commentary-video" controls preload="metadata" playsinline>
+            <!-- Drop your transcoded file here. WebM recommended:
+             ffmpeg -i input.mp4 -c:v libvpx-vp9 -crf 33 -b:v 0 -c:a libopus -b:a 96k commentary.webm
+             ffmpeg -i input.mp4 -c:v libx264 -crf 23 -preset slow -c:a aac -b:a 128k commentary.mp4 -->
+            <!--<source src="commentary.webm" type="video/webm">-->
+            <source
+              src="https://pub-297728e859704112a190147db3fefac6.r2.dev/toppen-fjaderhjalmar-web.webm"
+              type="video/webm"
+            />
+            <source
+              src="https://pub-297728e859704112a190147db3fefac6.r2.dev/toppen-fjaderhjalmar-web.mp4"
+              type="video/mp4"
+            />
+            <p class="video-missing">
+              Video file not found — drop <code>commentary.webm</code> or
+              <code>commentary.mp4</code> alongside index.html.
+            </p>
+          </video>
+
+          <div class="video-words-wrap">
+            <div class="video-words-label">
+              Click a word to seek · highlighted as commentary plays
+            </div>
+            <div id="poem-video-words" class="video-words"></div>
+          </div>
+        </div>
+
+        <!-- Three-column poem -->
+        <div class="poem-wrap">
+          <!-- Mobile: tab switcher -->
+          <div class="trilingual-mobile" data-tab-group="poem-tabs">
+            <div class="lang-tabs">
+              <button class="lang-tab active" data-lang="is">Íslenska</button>
+              <button class="lang-tab" data-lang="sv">
+                Svenska (phonetic)
+              </button>
+              <button class="lang-tab" data-lang="en">English (of SV)</button>
+            </div>
+            <div class="lang-col-mobile is active">
+              <div id="poem-is-m"></div>
+            </div>
+            <div class="lang-col-mobile sv"><div id="poem-sv-m"></div></div>
+            <div class="lang-col-mobile en"><div id="poem-en-m"></div></div>
+          </div>
+
+          <!-- Desktop: three columns -->
+          <div class="trilingual-desktop">
+            <div class="lang-col is">
+              <h2>Íslenska</h2>
+              <div class="col-note-small">reconstructed original</div>
+              <div id="poem-is"></div>
+            </div>
+            <div class="lang-col sv">
+              <h2>Svenska</h2>
+              <div class="col-note-small">
+                phonetic transcription — what was <em>heard</em>
+              </div>
+              <div id="poem-sv"></div>
+            </div>
+            <div class="lang-col en">
+              <h2>English</h2>
+              <div class="col-note-small">
+                translation of the Swedish phonetic text<br />(not of the
+                Icelandic original)
+              </div>
+              <div id="poem-en"></div>
+            </div>
+          </div>
+
+          <div class="poem-note">
+            ※ The Swedish column is a phonetic transcription by
+            <a
+              href="https://www.reddit.com/user/zimonitrome/"
+              target="_blank"
+              rel="noopener"
+              >zimonitrome</a
+            >
+            of what Guðmundur Benediktsson's Icelandic commentary sounds like to
+            a Swedish ear. The English column translates
+            <em>those Swedish words literally</em> — not what Gummi Ben actually
+            said. See the <em>Real translation</em> tab for what he actually
+            meant. Match result: <strong>Iceland 2 – Austria 1</strong>, Stade
+            de France, 22 June 2016.
+          </div>
+
+          <footer class="page-footer">
+            <p>
+              <span class="label">Transcription &amp; video</span>
+              <a
+                href="https://www.reddit.com/user/zimonitrome/"
+                target="_blank"
+                rel="noopener"
+                >zimonitrome</a
+              >
+              ·
+              <a
+                href="https://www.youtube.com/user/ZimoNitrome"
+                target="_blank"
+                rel="noopener"
+                >YouTube</a
+              >
+              <br />
+              <span class="label">Design</span> <em>Claude</em>, lightly
+              prompted by <em>doitpoorly</em>
+            </p>
+          </footer>
+        </div>
+      </div>
+      <!-- /poem -->
+
+      <!-- ══════════════════════════════════════════════════════════
+       TAB 2 — REAL TRANSLATION
+       IS original | real SV translation | real EN translation
+       ══════════════════════════════════════════════════════════ -->
+      <div id="realtranslation" class="view">
+        <div class="poem-wrap">
+          <div class="view-intro">
+            <strong>What Gummi Ben actually said</strong> — Icelandic original
+            with genuine Swedish and English translations, for comparison with
+            the phonetic mishearing above.
+          </div>
+
+          <!-- Mobile -->
+          <div class="trilingual-mobile" data-tab-group="real-tabs">
+            <div class="lang-tabs">
+              <button class="lang-tab active" data-lang="is">Íslenska</button>
+              <button class="lang-tab" data-lang="sv">Svenska (real)</button>
+              <button class="lang-tab" data-lang="en">English (real)</button>
+            </div>
+            <div class="lang-col-mobile is active">
+              <div id="real-is-m"></div>
+            </div>
+            <div class="lang-col-mobile sv"><div id="real-sv-m"></div></div>
+            <div class="lang-col-mobile en"><div id="real-en-m"></div></div>
+          </div>
+
+          <!-- Desktop -->
+          <div class="trilingual-desktop">
+            <div class="lang-col is">
+              <h2>Íslenska</h2>
+              <div class="col-note-small">original commentary</div>
+              <div id="real-is"></div>
+            </div>
+            <div class="lang-col sv">
+              <h2>Svenska</h2>
+              <div class="col-note-small">
+                genuine translation of the Icelandic
+              </div>
+              <div id="real-sv"></div>
+            </div>
+            <div class="lang-col en">
+              <h2>English</h2>
+              <div class="col-note-small">
+                genuine translation of the Icelandic
+              </div>
+              <div id="real-en"></div>
+            </div>
+          </div>
+
+          <footer class="page-footer">
+            <p>
+              <span class="label">Transcription</span>
+              <a
+                href="https://www.reddit.com/user/zimonitrome/"
+                target="_blank"
+                rel="noopener"
+                >zimonitrome</a
+              >
+              ·
+              <span class="label">Design</span> <em>Claude</em>, lightly
+              prompted by <em>doitpoorly</em>
+            </p>
+          </footer>
+        </div>
+      </div>
+      <!-- /realtranslation -->
+
+      <!-- ══════════════════════════════════════════════════════════
+       TAB 3 — PHONETIC TABLE
+       Sorted in order words are said
+       ══════════════════════════════════════════════════════════ -->
+      <div id="phonetic" class="view">
+        <div class="poem-wrap">
+          <div class="view-intro">
+            Word-by-word phonetic breakdown, sorted in the order they appear in
+            the commentary.
+            <span class="phonetic-badge">≈</span> what was heard &nbsp;·&nbsp;
+            <span class="correct-badge">✓</span> correct Swedish &nbsp;·&nbsp;
+            <span class="canonical-badge">★</span> primary meaning in context.
+            Click a row to seek the video.
+          </div>
+          <p id="scroll-hint" class="scroll-hint" style="display: none">
+            ← scroll horizontally →
+          </p>
+          <div class="phonetic-scroll">
+            <table class="phonetic-table">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th style="color: var(--is-col)">Icelandic (said)</th>
+                  <th style="color: var(--sv-col)">Swedish (heard)</th>
+                  <th style="color: var(--sv-correct-col)">Correct Swedish</th>
+                  <th style="color: var(--en-col)">English meaning</th>
+                  <th>Note</th>
+                </tr>
+              </thead>
+              <tbody id="phonetic-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- /phonetic -->
+
+      <!-- ══════════════════════════════════════════════════════════
+       TAB 4 — WORD GRAPH
+       ══════════════════════════════════════════════════════════ -->
+      <div id="graph-view" class="view">
+        <div class="graph-controls-bar">
+          <div class="graph-controls-toggle" onclick="toggleControls()">
+            <span class="graph-controls-toggle-label"
+              >Filters, layout &amp; legend</span
+            >
+            <span class="graph-controls-toggle-icon" id="controls-icon">▼</span>
+          </div>
+          <div class="graph-controls-drawer" id="controls-drawer">
+            <div class="graph-controls">
+              <!-- Layout algorithms -->
+              <div class="control-group">
+                <span class="control-label">Layout</span>
+                <button class="layout-btn active" data-layout="wordorder">
+                  Word order
+                </button>
+                <button class="layout-btn" data-layout="sequential">
+                  Timeline
+                </button>
+                <button class="layout-btn" data-layout="force">Force</button>
+                <button class="layout-btn" data-layout="radial">Radial</button>
+              </div>
+
+              <!-- Zoom controls -->
+              <div class="control-group">
+                <span class="control-label">Zoom</span>
+                <button class="zoom-btn" id="btn-zoom-in" title="Zoom in">
+                  ＋
+                </button>
+                <button class="zoom-btn" id="btn-zoom-out" title="Zoom out">
+                  －
+                </button>
+                <button class="zoom-btn" id="btn-zoom-fit" title="Fit to view">
+                  ⊡
+                </button>
+                <button class="zoom-btn" id="btn-zoom-reset" title="Reset zoom">
+                  ↺
+                </button>
+              </div>
+
+              <!-- Node type filters -->
+              <div class="control-group">
+                <span class="control-label">Nodes</span>
+                <button class="filter-btn on" data-type="sv">SV heard</button>
+                <button class="filter-btn on" data-type="is">Icelandic</button>
+                <button class="filter-btn on" data-type="sv_correct">
+                  SV correct
+                </button>
+                <button class="filter-btn on" data-type="en">English</button>
+              </div>
+
+              <!-- Edge type filters -->
+              <div class="control-group">
+                <span class="control-label">Edges</span>
+                <button class="filter-btn on" data-edge="wordorder">
+                  → Word order
+                </button>
+                <button class="filter-btn on" data-edge="phonetic">
+                  ≈ Phonetic
+                </button>
+                <button class="filter-btn on" data-edge="correct">
+                  ✓ Correct
+                </button>
+                <button class="filter-btn on" data-edge="translation">
+                  EN meaning
+                </button>
+              </div>
+
+              <!-- Search -->
+              <div class="control-group">
+                <input
+                  class="search-box"
+                  id="search-input"
+                  type="text"
+                  placeholder="Search words…"
+                  autocomplete="off"
+                  autocorrect="off"
+                  autocapitalize="off"
+                />
+              </div>
+
+              <!-- Export -->
+              <div class="control-group">
+                <span class="control-label">Export</span>
+                <button class="export-btn" onclick="exportJSON()">JSON</button>
+                <button class="export-btn" onclick="exportGraphML()">
+                  GraphML
+                </button>
+                <button class="export-btn" onclick="exportCSV()">CSV</button>
+              </div>
+
+              <!-- Legend -->
+              <div class="legend">
+                <div class="legend-item">
+                  <div
+                    class="legend-dot"
+                    style="background: var(--sv-col)"
+                  ></div>
+                  SV heard
+                </div>
+                <div class="legend-item">
+                  <div
+                    class="legend-dot"
+                    style="background: var(--is-col)"
+                  ></div>
+                  Icelandic
+                </div>
+                <div class="legend-item">
+                  <div
+                    class="legend-dot"
+                    style="background: var(--sv-correct-col)"
+                  ></div>
+                  SV correct
+                </div>
+                <div class="legend-item">
+                  <div
+                    class="legend-dot"
+                    style="background: var(--en-col)"
+                  ></div>
+                  English
+                </div>
+                <div class="legend-item">
+                  <div
+                    class="legend-line"
+                    style="background: var(--sv-col)"
+                  ></div>
+                  word order
+                </div>
+                <div class="legend-item">
+                  <div
+                    class="legend-line"
+                    style="
+                      background: var(--phonetic-col);
+                      border-top: 2px dashed var(--phonetic-col);
+                    "
+                  ></div>
+                  ≈ phonetic
+                </div>
+                <div class="legend-item">
+                  <div
+                    class="legend-line"
+                    style="background: var(--correct-col)"
+                  ></div>
+                  ✓ correct
+                </div>
+                <div class="legend-item">
+                  <div
+                    class="legend-line"
+                    style="background: var(--en-col)"
+                  ></div>
+                  EN
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="graph-canvas">
+          <svg id="graph-svg"></svg>
+          <div id="detail-panel">
+            <div class="dp-handle"></div>
+            <button class="dp-close" onclick="closePanel()">✕</button>
+            <div id="dp-content"></div>
+          </div>
+        </div>
+      </div>
+      <!-- /graph-view -->
+
+      <!-- ══════════════════════════════════════════════════════════
+       TAB 5 — ABOUT
+       ══════════════════════════════════════════════════════════ -->
+      <div id="info" class="view">
+        <div class="info-wrap">
+          <h1>The Man, The Myth, The Meltdown</h1>
+          <div class="byline">
+            On Guðmundur Benediktsson, misheard poetry, and the audacity of
+            small nations
+          </div>
+
+          <h2>The Incident</h2>
+          <p>
+            It was 22 June 2016. Stade de France. The 94th minute of a Group F
+            Euro 2016 match between Iceland — population 333,000, roughly
+            equivalent to a medium-sized English provincial town with better
+            geothermal heating — and Austria. Iceland needed a win to progress.
+            They were drawing <span class="score-bug">1–1</span>. Then Arnór
+            Ingvi Traustason scored.
+          </p>
+
+          <p>
+            What followed from the commentary box is what happens when nine
+            months of compressed national hope is released through a single
+            human larynx at approximately 94 decibels. Guðmundur Benediktsson,
+            known to Iceland and subsequently to most of the internet as "Gummi
+            Ben," managed to say what sounds like several different things at
+            once, none of which are quite the words he actually said.
+          </p>
+
+          <div class="pull-quote">
+            "Já, já, já, já, já — við erum að vinna þetta. Við erum í 16-liða
+            úrslitum. Aldrei, aldrei, aldrei hef ég liðið svona vel."
+          </div>
+
+          <p>
+            Translation: "Yes, yes, yes, yes, yes — we are winning this. We are
+            in the round of 16. Never, never, never have I felt so good." He
+            then thanked Austria for coming.
+          </p>
+
+          <h2>The Man</h2>
+          <p>
+            Guðmundur Benediktsson was born 3 September 1974 in Akureyri,
+            Iceland's second city. He was a midfielder of sufficient talent that
+            Arsenal, Everton, Tottenham, and Stuttgart all came calling when he
+            was fifteen. He ruptured his ACL shortly thereafter. He went on to
+            play professionally in Belgium, briefly trialled at Preston North
+            End, and earned 10 caps for Iceland between 1994 and 2001. He then
+            moved into coaching and commentary.
+          </p>
+
+          <p>
+            His son, Albert Guðmundsson, plays for Fiorentina. Commentating on
+            your child playing for Iceland presents a conflict of interest
+            requiring either extraordinary professionalism or no professionalism
+            whatsoever. Gummi Ben has made his position clear.
+          </p>
+
+          <h2>The Swedish Subtitles</h2>
+          <p>
+            Shortly after the clip went viral,
+            <a
+              href="https://www.reddit.com/user/zimonitrome/"
+              target="_blank"
+              rel="noopener"
+              >zimonitrome</a
+            >
+            published "Swedish subtitles" — not translations, but phonetic
+            approximations of what the Icelandic words <em>sound like</em> to a
+            Swedish ear. The result is this poem. "Já!" becomes "Hyaa."
+            "Kaflingur" (rope-coiling) becomes "kavling." The commentary has the
+            feverish quality of a man for whom facts have temporarily become
+            optional.
+          </p>
+
+          <h2>On Phonetic Poetry</h2>
+          <p>
+            What you are looking at is an accidental three-layer linguistic
+            artifact. Layer one: actual Icelandic words, chosen by emotional
+            availability. Layer two: Swedish phonetic transcription, chosen by
+            ear. Layer three: English translations of the Swedish, chosen to be
+            accurate and therefore maximally surreal.
+          </p>
+
+          <p>
+            The mishearings are phonetically plausible rather than random:
+            Icelandic and Swedish are both North Germanic, descended from Old
+            Norse. "Aldrei" becomes "aldrig." "Hesturinn" becomes "hästen." The
+            cognitive machinery almost fires correctly — then doesn't — and the
+            result is a poem about horses, urine, and Wolfram (the element). It
+            is, in its way, a small masterpiece.
+          </p>
+
+          <div class="info-links">
+            <h3>Sources</h3>
+            <a
+              class="link-item"
+              href="https://www.youtube.com/user/ZimoNitrome"
+              target="_blank"
+              rel="noopener"
+            >
+              zimonitrome on YouTube
+              <small>Creator of the Swedish phonetic subtitles.</small>
+            </a>
+            <a
+              class="link-item"
+              href="https://www.reddit.com/user/zimonitrome/"
+              target="_blank"
+              rel="noopener"
+            >
+              zimonitrome on Reddit
+              <small>Original post of the transcription.</small>
+            </a>
+            <a
+              class="link-item"
+              href="https://www.youtube.com/watch?v=xh6SGutyALU"
+              target="_blank"
+              rel="noopener"
+            >
+              Original commentary clip (YouTube)
+              <small
+                >The source audio. Listen before exploring the graph.</small
+              >
+            </a>
+            <a
+              class="link-item"
+              href="https://en.wikipedia.org/wiki/Gu%C3%B0mundur_Benediktsson"
+              target="_blank"
+              rel="noopener"
+            >
+              Wikipedia: Guðmundur Benediktsson
+              <small
+                >Career stats, biography, son Albert's Fiorentina career.</small
+              >
+            </a>
+            <a
+              class="link-item"
+              href="https://www.sportbibeln.se/fotboll/har-far-islandska-succeklippet-svensk-text-och-blir-annu-roligare/"
+              target="_blank"
+              rel="noopener"
+            >
+              Sportbibeln (2016)
+              <small
+                >Where the Swedish subtitle version first surfaced in
+                media.</small
+              >
+            </a>
+          </div>
+
+          <footer class="page-footer">
+            <p>
+              <span class="label">Transcription &amp; video</span>
+              <a
+                href="https://www.reddit.com/user/zimonitrome/"
+                target="_blank"
+                rel="noopener"
+                >zimonitrome</a
+              >
+              ·
+              <a
+                href="https://www.youtube.com/user/ZimoNitrome"
+                target="_blank"
+                rel="noopener"
+                >YouTube</a
+              >
+              <br />
+              <span class="label">Design &amp; implementation</span>
+              <em>Claude</em>, lightly prompted by <em>doitpoorly</em>
+              <br />
+              <span class="label">Commentary</span>
+              Guðmundur Benediktsson · Iceland 2–1 Austria · Euro 2016
+            </p>
+          </footer>
+        </div>
+      </div>
+      <!-- /info -->
+    </div>
+    <!-- /content-area -->
+
+    <div id="graph-tooltip"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
