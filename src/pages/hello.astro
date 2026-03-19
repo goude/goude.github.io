@@ -9,13 +9,14 @@ import Layout from "@/layouts/Layout.astro";
 
       <p class="subtitle">I tend to ask questions.</p>
 
-      <ul>
+      <ul aria-label="Communication preferences">
+        <li>Do not assume. Ask instead.</li>
+        <li>If something matters, please say it directly.</li>
         <li>Questions are how I understand things.</li>
         <li>
           Clear answers are always welcome, including "no" or "I don't know".
         </li>
-        <li>If something matters, please say it directly.</li>
-        <li>Do not assume. Ask instead.</li>
+        <li>Do not assume. Ask instead. (Yes, again.)</li>
       </ul>
 
       <p>
@@ -96,10 +97,16 @@ import Layout from "@/layouts/Layout.astro";
         <p>
           When information is written clearly, named sensibly, and placed where
           a simple search can find it, people do not have to rely on luck,
-          timing, or personal networks to get their work done. A searchable
-          starting page that actually leads somewhere useful can save thousands
-          of hours across an organization.
+          timing, or personal networks to get their work done.
         </p>
+
+        <aside aria-label="Site note">
+          <p>
+            A searchable starting page that actually leads somewhere useful can
+            save thousands of hours across an organization. (This site could use
+            better search — noted.)
+          </p>
+        </aside>
 
         <p>
           This is not about everyone liking documentation. It is about
@@ -164,3 +171,18 @@ import Layout from "@/layouts/Layout.astro";
     </section>
   </article>
 </Layout>
+
+<style>
+  aside {
+    border-inline-start: 3px solid currentColor;
+    padding-inline-start: 1rem;
+    opacity: 0.75;
+    margin-block: 1rem;
+  }
+
+  @media (forced-colors: active) {
+    aside {
+      border-inline-start-color: ButtonText;
+    }
+  }
+</style>

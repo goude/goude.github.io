@@ -31,17 +31,16 @@ export const SITE: SiteMetadata = {
 
 export const NAV_ITEMS: NavItem[] = [
   { href: "/hello", label: "Hello", icons: ["fa fa-hand-spock"] },
-  { href: "/notes", label: "NOTES.md", icons: ["fa fa-note-sticky"] },
   {
     href: "/t/ambient-improvement-positive-residue",
     label: "Ambient Improvement",
     icons: [
-      "fa-solid fa-hand-sparkles",
       "fa-solid fa-spray-can-sparkles",
       "fa-solid fa-broom",
       "fa-solid fa-campground",
     ],
   },
+  { href: "/notes", label: "NOTES.md", icons: ["fa fa-note-sticky"] },
   {
     href: "https://github.com/goude",
     label: "GitHub (goude)",

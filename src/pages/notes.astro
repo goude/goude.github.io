@@ -9,42 +9,73 @@ const notesContent = await readFile(notesPath, "utf-8");
 ---
 
 <Layout
-  title="Notes"
-  description="Developer-facing notes for this part of the site."
+  title="NOTES.md"
+  description="What a NOTES.md file is, why it exists, and this directory's own notes."
   current="notes"
 >
   <article>
     <header>
       <h1>NOTES.md</h1>
-      <p class="subtitle">Local developer notes and pragmatic context.</p>
+      <p class="subtitle">
+        Leave notes next to the thing you're taking notes about.
+      </p>
     </header>
 
-    <section>
+    <section aria-labelledby="what">
+      <h2 id="what">What is a NOTES.md?</h2>
+
       <p>
-        TODO: explain why this convention is useful. Show some real world
-        equivalents (manila tags etc)
-      </p>
-      <p>
-        A <code>NOTES.md</code> file is a lightweight, high-signal place to store
-        developer-facing context that does not belong in user-facing documentation.
+        A <code>NOTES.md</code> is a plain Markdown file that lives in the directory
+        it describes. That's the whole idea. It holds developer-facing context that
+        doesn't belong in user documentation: gotchas, architectural decisions, deployment
+        quirks, half-finished thoughts, reminders for future-you.
       </p>
 
       <p>
-        It can contain architectural rationale, edge cases, deployment quirks,
-        content decisions, or “future self” reminders. The key property is
-        locality: the file lives next to the code it describes.
+        The key property is <em>locality</em>. The file sits next to the code,
+        so it's there when you need it — visible in diffs, version-controlled,
+        searchable, and zero infrastructure required.
       </p>
 
+      <CodeBlock
+        code={`my-project/
+├── src/
+├── docker-compose.yml
+└── NOTES.md        ← "port 5432 is hardcoded in legacy.py, fix before prod"`}
+        lang="text"
+      />
+
       <p>
-        This allows each directory to carry its own operational memory without
-        polluting global documentation. It is pragmatic, version-controlled,
-        searchable, and visible in diffs.
+        Think of it as the sticky note on the manila folder — except it travels
+        with the folder, survives a git clone, and shows up in <code>grep</code
+        >.
       </p>
     </section>
 
-    <section>
-      <h2>Current NOTES.md</h2>
+    <section aria-labelledby="standard">
+      <h2 id="standard">The convention</h2>
 
+      <p>
+        This page follows the informal standard described at{" "}
+        <a href="https://github.com/goude/NOTES.md" rel="external noopener">
+          github.com/goude/NOTES.md
+        </a>. That repository is the canonical reference: a single-page spec, a
+        worked example, and its own <code>NOTES.md</code> in the same repo.
+      </p>
+
+      <p>
+        The spec is deliberately minimal. A <code>NOTES.md</code> is not a wiki, not
+        a changelog, not a runbook. It is whatever helps the next person — or the
+        next version of you — understand the thing they're looking at right now.
+      </p>
+    </section>
+
+    <section aria-labelledby="local">
+      <h2 id="local">This directory's NOTES.md</h2>
+      <p>
+        What follows is the actual <code>NOTES.md</code> for this part of the site,
+        rendered in place.
+      </p>
       <CodeBlock code={notesContent} lang="markdown" maxHeight="70vh" />
     </section>
   </article>
