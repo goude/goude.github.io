@@ -113,3 +113,37 @@ the other. Entry point for everything above without a single clinical word.
 
 **Format instinct** — short, visual, experience-first. Something you can
 remember after one encounter.
+**The three layers — working notes**
+
+A useful model for understanding social performance in organizations, or anywhere social norms are strong.
+
+**Layer 1 — Genuine**
+People who actually thrive through social connection and do real work through relationships. The vibe is not performance, it's their medium. Collaboration, trust-building, informal information flow — these are real organizational infrastructure, often invisible to output-focused minds. Not hollow. Don't mistake it for the other layers.
+
+**Layer 2 — Captured**
+People who began masking social norms and over time internalized them as genuinely valuable. The mask became load-bearing for identity. They perform the vibe sincerely and can no longer see it as performance. This is the most common and most tragic layer. They can't see the matrix — not from stupidity or bad faith but because the simulation became the self. Many neurodivergent people spend years here. You can be very intelligent and completely captured.
+
+**Layer 3 — Gaming**
+People who understand the performance and use it instrumentally. Aware, strategic, self-serving.
+
+---
+
+**The double empathy dimension**
+
+Layer 2 people look at the output-focused person and read: doesn't collaborate, doesn't invest in relationships, doesn't understand how things work. That reading is not entirely wrong — their matrix is real even if it has lower resolution on certain things. The mismatch runs both ways. The attribution error runs both ways.
+
+---
+
+**The trap**
+
+Frustration with layer 2 and 3 cultures can collapse into "they don't value getting things done" — which is the same attribution error in reverse. The move from _this specific culture is optimizing for social legibility over output_ to _neurotypicals don't value delivery_ is where legitimate structural critique becomes stereotype.
+
+The structural critique is often valid. The generalization isn't.
+
+---
+
+**The useful distinction**
+
+Kitchen-level disagreements are consequence-neutral — different internal experiences, no external measure, neither is wrong. Open-office disagreements are not consequence-neutral — there are real outputs, deadlines, quality measures. That changes the ethics. "Different but equal" applies to preferences. It applies less cleanly when there are external stakes.
+
+Hold both: genuinely different internal experiences with no hierarchy — _and_ — specific systems that produce bad outcomes regardless of neurotype. These are separate claims. Conflating them undermines the first one.
