@@ -2,6 +2,10 @@
 
 Use `uv` for everything. No pip, no virtualenv, no poetry, no pipx.
 
+## Python version
+
+Use the current stable release. At time of writing that's 3.13; 3.12 remains a solid choice. `uv` will pin the version in `.python-version` — commit that file and keep the team in sync. Mirror this version in `pyproject.toml`, ruff, and mypy config.
+
 ## Project setup
 
 ```bash
@@ -78,7 +82,7 @@ Starter config in `pyproject.toml`:
 
 ```toml
 [tool.ruff]
-target-version = "py312"
+target-version = "py312"     # keep in sync with .python-version
 line-length = 88
 
 [tool.ruff.lint]
@@ -107,7 +111,7 @@ uv run mypy src/
 
 ```toml
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.12"      # keep in sync with .python-version
 check_untyped_defs = true
 warn_return_any = true
 ```
@@ -155,21 +159,21 @@ Use `src/` layout. It prevents accidental imports from the project root and make
 [project]
 name = "myproject"
 version = "0.1.0"
-requires-python = ">=3.12"
+requires-python = ">=3.12"   # pin to current stable; update when you start the project
 dependencies = []
 
 [dependency-groups]
 dev = ["ruff", "pytest", "pytest-cov", "mypy"]
 
 [tool.ruff]
-target-version = "py312"
+target-version = "py312"     # keep in sync with .python-version
 line-length = 88
 
 [tool.ruff.lint]
 select = ["E", "W", "F", "I", "UP", "B", "SIM", "RUF"]
 
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.12"      # keep in sync with .python-version
 check_untyped_defs = true
 warn_return_any = true
 
