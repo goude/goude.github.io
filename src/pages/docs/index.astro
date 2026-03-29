@@ -1,0 +1,42 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { getDocsDir, getDocsFiles } from "@/utils/docs";
+import path from "node:path";
+
+const docs = getDocsFiles(getDocsDir()).sort((a, b) =>
+  a.slug.localeCompare(b.slug)
+);
+
+// Group by directory
+const grouped = new Map<string, typeof docs>();
+for (const doc of docs) {
+  const dir = path.dirname(doc.slug);
+  const key = dir === "." ? "" : dir;
+  if (!grouped.has(key)) grouped.set(key, []);
+  grouped.get(key)!.push(doc);
+}
+---
+
+<Layout title="Docs" description="Project documentation and standards.">
+  <article>
+    <header>
+      <h1>Docs</h1>
+      <p class="subtitle">Project documentation and standards.</p>
+    </header>
+
+    {
+      [...grouped.entries()].map(([group, items]) => (
+        <section>
+          {group && <h2>{group}</h2>}
+          <ul>
+            {items.map((doc) => (
+              <li>
+                <a href={`/docs/${doc.slug}`}>{doc.title}</a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </article>
+</Layout>

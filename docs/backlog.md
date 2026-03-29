@@ -74,3 +74,40 @@ Blog-like content would benefit from `@astrojs/rss`.
 No performance budget exists. Lighthouse CI in the workflow would catch regressions.
 
 - File: `.github/workflows/astro.yml`
+
+## Refactoring
+
+Prioritized structural improvements. Address top-down.
+
+### Extract shared markdown rendering utility
+
+`Md.astro` and `docs/[...slug].astro` duplicate the marked + Shiki dual-theme rendering pipeline. Extract to a shared `renderMarkdown()` function in `src/utils/`.
+
+- File: `src/components/Md.astro`
+- File: `src/pages/docs/[...slug].astro`
+
+### Consolidate layout usage
+
+`src/layouts/Layout.astro` and `src/components/Layout.astro` — unclear which is canonical. Audit and collapse to one.
+
+- File: `src/layouts/Layout.astro`
+
+### Extract Header.astro sub-components
+
+Header.astro at 690 lines mixes SVG logo, theme toggle, and navigation. Extract each into its own component.
+
+- File: `src/components/Header.astro`
+
+### Break up opening-the-hood page
+
+At 1,551 lines this is the largest file. Extract sections into components or partial Astro files.
+
+- File: `src/pages/t/opening-the-hood/index.astro`
+
+### Add CLAUDE.md
+
+Create a project-root LLM instructions file following `docs/standards/llm-instructions-file.md`. Keep under 200 lines.
+
+### Align justfile with conventions
+
+Apply `docs/standards/justfile.md` patterns: rename `install` to `setup`, add `_default` printf hint, ensure `check` ordering is fmt -> lint -> typecheck -> build.

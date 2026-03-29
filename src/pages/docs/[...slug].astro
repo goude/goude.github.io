@@ -1,0 +1,80 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { getDocsDir, getDocsFiles } from "@/utils/docs";
+import { marked, type Tokens } from "marked";
+import { codeToHtml } from "shiki";
+import fs from "node:fs";
+
+export function getStaticPaths() {
+  return getDocsFiles(getDocsDir()).map((doc) => ({
+    params: { slug: doc.slug },
+    props: { filePath: doc.filePath, title: doc.title },
+  }));
+}
+
+const { filePath, title } = Astro.props;
+const raw = fs.readFileSync(filePath, "utf-8");
+
+// Render markdown with Shiki syntax highlighting (same approach as Md.astro)
+const renderer = new marked.Renderer();
+
+renderer.code = function ({ text, lang }: Tokens.Code) {
+  return `<!--SHIKI:${lang || "text"}:${Buffer.from(text).toString("base64")}-->`;
+};
+
+let html = await marked.parse(raw, { gfm: true, renderer });
+
+// Process Shiki placeholders with dual themes
+const shikiRegex = /<!--SHIKI:([^:]*):([^-]+)-->/g;
+const matches = [...html.matchAll(shikiRegex)];
+
+for (const match of matches) {
+  const lang = match[1] || "text";
+  const code = Buffer.from(match[2]!, "base64").toString("utf-8");
+
+  let lightHtml: string;
+  let darkHtml: string;
+  try {
+    [lightHtml, darkHtml] = await Promise.all([
+      codeToHtml(code, { lang, theme: "github-light-default" }),
+      codeToHtml(code, { lang, theme: "github-dark-default" }),
+    ]);
+  } catch {
+    // Fall back to plain text for unknown languages
+    [lightHtml, darkHtml] = await Promise.all([
+      codeToHtml(code, { lang: "text", theme: "github-light-default" }),
+      codeToHtml(code, { lang: "text", theme: "github-dark-default" }),
+    ]);
+  }
+
+  const dual = `<div class="shiki-light">${lightHtml}</div><div class="shiki-dark">${darkHtml}</div>`;
+  html = html.replace(match[0], dual);
+}
+---
+
+<Layout title={title} description={title}>
+  <article>
+    <nav class="docs-breadcrumb">
+      <a href="/docs">&larr; Docs</a>
+    </nav>
+    <Fragment set:html={html} />
+  </article>
+</Layout>
+
+<style>
+  .docs-breadcrumb {
+    margin-bottom: 1.5rem;
+  }
+</style>
+
+<style is:global>
+  .shiki-dark {
+    display: none;
+  }
+  :root[data-theme-dark] .shiki-light {
+    display: none;
+  }
+  :root[data-theme-dark] .shiki-dark {
+    display: block;
+  }
+</style>
