@@ -11,6 +11,7 @@ import Layout from "@/layouts/Layout.astro";
         type="text"
         id="answer"
         placeholder="Enter answer..."
+        aria-label="Puzzle answer"
         autocomplete="off"
       />
       <button id="submit">Submit</button>
@@ -660,7 +661,9 @@ import Layout from "@/layouts/Layout.astro";
 
       const [_, { ok, html }] = await Promise.all([minDelay, decryption]);
 
-      result.innerHTML = html;
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      doc.querySelectorAll("script,[on*]").forEach((el) => el.remove());
+      result.replaceChildren(...doc.body.childNodes);
       result.className = `result ${ok ? "success" : "error"}`;
       input.disabled = false;
       button.disabled = false;

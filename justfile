@@ -13,8 +13,8 @@ _default:
 setup:
     npm install
 
-# ✅ Full check: fmt → lint → typecheck → build
-check: format-check lint typecheck build
+# ✅ Full check: fmt → lint → typecheck → test → build
+check: format-check lint typecheck test build
 
 # ▶️ Start dev server
 dev:
@@ -43,6 +43,10 @@ format:
 # 🔎 Verify formatting (non-destructive)
 format-check:
     npm run format:check
+
+# 🧪 Run unit tests
+test:
+    npm test
 
 # 🧪 Pre-commit hook target
 precommit:

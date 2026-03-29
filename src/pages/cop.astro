@@ -161,8 +161,7 @@ import Layout from "@/layouts/Layout.astro";
               "Loaded " +
               inputEl.value.length +
               " characters from cloud clipboard.";
-          } catch (e) {
-            console.error(e);
+          } catch {
             statusEl.textContent = "Failed to fetch from cloud clipboard.";
             inputEl.placeholder = "(error fetching value)";
           }
@@ -212,8 +211,7 @@ import Layout from "@/layouts/Layout.astro";
                 "Updated cloud clipboard with " + txt.length + " characters.";
 
               await refreshFromServer();
-            } catch (e) {
-              console.error(e);
+            } catch {
               statusEl.textContent = "Failed to update cloud clipboard.";
             } finally {
               updateBtn.disabled = false;
