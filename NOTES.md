@@ -1,5 +1,7 @@
 # NOTES.md
 
+TODO: extract usefulness from below, writeup
+
 This file is an ad-hoc, lightweight companion to `README.md`.
 
 Its purpose is to help a future reader (often future-you) quickly understand
