@@ -2,18 +2,19 @@ set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
 set dotenv-load := true
 
 _default:
+    @printf "After cloning: run just setup\n\n"
     @just --list
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Core workflow
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# 📦 Install dependencies
-install:
+# 📦 Install dependencies (first thing after cloning)
+setup:
     npm install
 
-# ✅ Full check: lint → format-check → typecheck → build
-check: lint format-check typecheck build
+# ✅ Full check: fmt → lint → typecheck → build
+check: format-check lint typecheck build
 
 # ▶️ Start dev server
 dev:
