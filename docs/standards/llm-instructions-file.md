@@ -1,129 +1,149 @@
-# What Makes a Good CLAUDE.md
+# LLM Instructions File
 
-A `CLAUDE.md` file is the contract between you and the AI working in your codebase. It is not documentation. It is operational policy: hard rules, boundaries, and orientation that apply every session without re-stating them.
+A project-root file (`CLAUDE.md`, `.cursorrules`, `AGENTS.md`, etc.) that gives an LLM
+working in the codebase its operational policy. Not documentation. Not style guide. Policy.
 
-Keep it under ~200 lines. If it grows beyond that, it has become documentation and nobody will read it — including the AI.
+**Target: under 200 lines.** If it's longer, it has become documentation and the LLM will
+discount it. Link to deeper docs; don't inline them.
 
----
+## Skeleton
 
-## The Four Things It Must Contain
+A good instructions file has five sections in this order. Not every project needs all five.
+The first two are near-universal.
 
-### 1. Lockup Prevention
+### 1. Session discipline (required)
 
-This is the highest-ROI section. Without it, sessions burn context retrying the same failed operation.
+Prevents the most expensive failure mode: the LLM writing a 400-line file, timing out,
+and retrying identically until context is exhausted.
 
-```
+```markdown
 ## Session Discipline
-- Never write >150 lines or edit >50 lines in a single call
-- Skeleton first, then append sections via separate edits
-- Never retry a timed-out operation identically — restructure instead
-- Commit partial work before regenerating
-- Respond to interrupts immediately; don't finish buffered work first
+
+- Never write >150 lines in a single tool call
+- For files >100 lines: create skeleton first, fill sections in subsequent edits
+- Never retry a timed-out operation identically — break it smaller
+- On interrupt: stop immediately, commit partial work, then reassess
+- After any file edit, re-read before editing again (stale context kills diffs)
 ```
 
-The skeleton-first rule deserves emphasis: for any file longer than ~100 lines, create the structure (stubs, section headers, empty impls) in one call, then fill each section in subsequent calls. This makes partial failures recoverable.
+Adapt the line limits to your tooling. The principle is: **small writes, frequent reads,
+no blind retries.**
 
-### 2. Module Boundary Rules
+### 2. Module boundaries
 
-Prose descriptions of architecture drift. A table doesn't.
+A table. Not prose. Prose drifts; tables get checked.
 
+```markdown
+## Boundaries
+
+| Module | May import from | Must NOT import from |
+| ------ | --------------- | -------------------- |
+| core/  | (stdlib only)   | ui/, cli/, io/       |
+| io/    | core/           | ui/, cli/            |
+| ui/    | core/, io/      | cli/                 |
+| cli/   | core/, ui/, io/ |                      |
 ```
-## Import Boundaries
 
-| Module     | Must NOT import from   |
-|------------|------------------------|
-| renderer   | editor, commands       |
-| ui/        | main, renderer         |
-| commands   | ui/                    |
-```
+If enforced by tooling (lint rule, CI check), say so. If not, mark it as a soft rule so
+the LLM knows violation is possible but undesirable.
 
-One table. Enforced by CI if possible (`cargo deny`, custom lint, or a grep in pre-commit). If not enforced by tooling, state that explicitly so the AI knows it's a soft rule vs. a hard one.
+### 3. Ownership map
 
-### 3. Ownership Map
+One line per module or file. Prevents duplicate logic and tells the LLM where new code
+belongs.
 
-Not architecture documentation — just a one-liner per file or module saying what it owns. Prevents duplicate logic appearing in two places and tells the AI where new features belong.
-
-```
+```markdown
 ## Ownership
 
-- `src/renderer.rs`  — pixel buffer → screen; owns no input state
-- `src/editor.rs`    — canvas model, tool state, undo stack
-- `src/commands.rs`  — discrete undoable operations; no rendering
-- `src/ui/`          — menu, cursor, overlays; reads editor, emits commands
+- `src/core/` — domain model, pure logic, no side effects
+- `src/io/` — file and network I/O; adapters over core types
+- `src/ui/` — display layer; reads core state, emits commands
+- `src/cli/` — argument parsing, entry point; wires everything together
 ```
 
-If a file is an exception to the normal architecture (legacy, transitional, load-bearing hack), say so here.
+Flag exceptions: legacy files, transitional hacks, load-bearing oddities.
 
-### 4. File Size Discipline
+### 4. Quality gate
 
-```
-## File Size
+What must pass before the LLM considers itself done. Keep it to one command if possible.
 
-Keep files under 1,000 lines. Backlog of current offenders: docs/backlog.md
-
-| File              | Lines | Target | Strategy              |
-|-------------------|-------|--------|-----------------------|
-| src/editor.rs     | 1,840 | 3 files| Split by concern      |
-| src/renderer.rs   | 1,100 | 800    | Extract shader module |
-```
-
-A concrete table makes refactoring pickable without research. "Keep files short" is aspirational. "editor.rs is 1,840 lines, split strategy is X" is actionable.
-
----
-
-## Useful Additions
-
-### Before-Finishing Checklist
-
-Short, enforceable, session-closing ritual:
-
-```
+```markdown
 ## Before Finishing
-- `cargo fmt && cargo check` — zero warnings
-- `git fetch origin main && git merge origin/main`
-- Resolve conflicts, re-check
-- Verify docs still match code
+
+Run `just check` (which runs fmt → lint → test). Zero warnings.
+If `just check` doesn't exist yet, run the equivalent steps manually.
 ```
 
-### Warning Policy
+If warnings require suppression, require a comment explaining why. Without this rule,
+dead code accumulates across sessions.
 
+### 5. File-size discipline
+
+Only needed when the codebase has files that are already too large. A concrete table
+makes splitting pickable without research.
+
+```markdown
+## Large Files
+
+Target: <500 lines per file.
+
+| File            | Lines | Strategy                    |
+| --------------- | ----- | --------------------------- |
+| src/editor.rs   | 1840  | Split: model / tools / undo |
+| src/renderer.rs | 1100  | Extract shader module       |
 ```
-## Warnings
-Zero. Fix or suppress with a comment explaining why.
-Enforce: `RUSTFLAGS="-D warnings" cargo check`
+
+## Optional sections
+
+Add only if they earn their lines.
+
+**Diff discipline.** Useful when the LLM over-refactors:
+
+```markdown
+## Diffs
+
+Minimal diffs. Refactor only for: correctness, safety, performance cliffs,
+or structural breakage risk. Do not rename, reformat, or reorganise code
+outside the current task.
 ```
 
-Without this, dead code accumulates silently across sessions.
+**Commit conventions.** If you care about history shape:
 
-### Link to Deeper Docs
+```markdown
+## Commits
 
-If architecture, design decisions, or ADRs live elsewhere, link them:
-
+Conventional commits. Scope required. Example: `feat(ui): add layer panel`
 ```
+
+**Test expectations:**
+
+```markdown
+## Tests
+
+New public functions get a test. Bug fixes get a regression test.
+Don't mock what you own — use real instances or in-memory fakes.
+```
+
+**Links to deeper docs:**
+
+```markdown
 ## Reference
-- Architecture overview: docs/architecture.md
-- Current backlog / split plans: docs/backlog.md
-- Design decisions: docs/decisions/
+
+- Architecture: docs/architecture.md
+- Decisions: docs/decisions/
+- Backlog: docs/backlog.md
 ```
 
-`CLAUDE.md` is the index. Not the content.
+## What to leave out
 
----
+- **Coding style.** The LLM already writes idiomatic code for the language. Specifying
+  brace placement wastes budget and patronises the reader.
+- **Duplicated docs.** Link, don't copy. Copies drift within a session.
+- **Aspirational rules you won't enforce.** Every unenforced rule teaches the LLM to
+  discount the whole file.
+- **Exhaustive file listings.** State principles and exceptions, not a manifest.
 
-## What Not to Include
+## Litmus test
 
-**Coding style.** The AI already writes idiomatic code. Specifying brace style or naming conventions wastes space and patronises the reader.
-
-**Duplicated architecture docs.** Link, don't copy. Copies drift.
-
-**Aspirational rules.** Only include things you will actually enforce. Every rule you add but don't enforce teaches the AI to discount the whole file.
-
-**Exhaustive file lists.** Ownership principles and exceptions, not a manifest.
-
----
-
-## Meta-Rule
-
-If you find yourself writing a second paragraph to justify a rule, that rule belongs in `docs/architecture.md`, not here. `CLAUDE.md` states policy. It does not argue for it.
-
-The test: can a new session read this file in under two minutes and know exactly what it must not do? If yes, it's working.
+Can a fresh session read this file in under two minutes and know exactly what it must and
+must not do? If yes, it's working.
