@@ -1,0 +1,80 @@
+---
+interface Props {
+  variant: "desktop" | "menu";
+}
+
+const { variant } = Astro.props;
+---
+
+{
+  variant === "desktop" ? (
+    <button
+      class="theme-toggle nav-action icon-only tooltip-right"
+      id="theme-toggle"
+      type="button"
+      aria-label="Toggle theme"
+    >
+      <i class="fa-regular fa-sun" id="icon-light" aria-hidden="true" />
+      <i class="fa-solid fa-moon" id="icon-dark" aria-hidden="true" />
+      <span class="tooltip" data-theme-tooltip="light">
+        The Cleonic Theme of Brother Day
+      </span>
+      <span class="tooltip" data-theme-tooltip="dark">
+        The Cleonic Theme of Brother Dusk
+      </span>
+    </button>
+  ) : (
+    <button class="menu-item menu-action" id="theme-toggle-menu" type="button">
+      <i class="fa-regular fa-sun" data-theme-icon="light" aria-hidden="true" />
+      <i class="fa-solid fa-moon" data-theme-icon="dark" aria-hidden="true" />
+      <span data-theme-label="light">Brother Day</span>
+      <span data-theme-label="dark">Brother Dusk</span>
+    </button>
+  )
+}
+
+<style>
+  /* Desktop theme icons */
+  #icon-dark {
+    display: none;
+  }
+  :global([data-theme-dark]) #icon-light {
+    display: none;
+  }
+  :global([data-theme-dark]) #icon-dark {
+    display: inline;
+  }
+
+  /* Desktop theme tooltips */
+  .theme-toggle [data-theme-tooltip="dark"] {
+    display: none;
+  }
+  :global([data-theme-dark]) .theme-toggle [data-theme-tooltip="light"] {
+    display: none;
+  }
+  :global([data-theme-dark]) .theme-toggle [data-theme-tooltip="dark"] {
+    display: block;
+  }
+
+  /* Mobile menu theme icons */
+  [data-theme-icon="dark"] {
+    display: none;
+  }
+  :global([data-theme-dark]) [data-theme-icon="light"] {
+    display: none;
+  }
+  :global([data-theme-dark]) [data-theme-icon="dark"] {
+    display: inline;
+  }
+
+  /* Mobile menu theme labels */
+  [data-theme-label="dark"] {
+    display: none;
+  }
+  :global([data-theme-dark]) [data-theme-label="light"] {
+    display: none;
+  }
+  :global([data-theme-dark]) [data-theme-label="dark"] {
+    display: inline;
+  }
+</style>

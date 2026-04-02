@@ -1,0 +1,82 @@
+---
+interface Props {
+  variant: "desktop" | "menu";
+}
+
+const { variant } = Astro.props;
+---
+
+{
+  variant === "desktop" ? (
+    <button
+      class="mode-toggle nav-action icon-only"
+      id="mode-toggle"
+      type="button"
+      aria-label="Toggle content detail level"
+    >
+      <i class="fa-solid fa-water" data-mode-icon="low" aria-hidden="true" />
+      <i class="fa-solid fa-wind" data-mode-icon="medium" aria-hidden="true" />
+      <i class="fa-solid fa-fire" data-mode-icon="high" aria-hidden="true" />
+      <span class="tooltip" data-mode-tooltip="low">
+        Low Detail
+      </span>
+      <span class="tooltip" data-mode-tooltip="medium">
+        Medium Detail
+      </span>
+      <span class="tooltip" data-mode-tooltip="high">
+        High Detail
+      </span>
+    </button>
+  ) : (
+    <button class="menu-item menu-action" id="mode-toggle-menu" type="button">
+      <i class="fa-solid fa-water" data-mode-icon="low" aria-hidden="true" />
+      <i class="fa-solid fa-wind" data-mode-icon="medium" aria-hidden="true" />
+      <i class="fa-solid fa-fire" data-mode-icon="high" aria-hidden="true" />
+      <span data-mode-label="low">Low Detail</span>
+      <span data-mode-label="medium">Medium Detail</span>
+      <span data-mode-label="high">High Detail</span>
+    </button>
+  )
+}
+
+<style>
+  /* Desktop mode icons */
+  .mode-toggle [data-mode-icon] {
+    display: none;
+  }
+  :global([data-mode="low"]) .mode-toggle [data-mode-icon="low"],
+  :global([data-mode="medium"]) .mode-toggle [data-mode-icon="medium"],
+  :global([data-mode="high"]) .mode-toggle [data-mode-icon="high"] {
+    display: inline;
+  }
+
+  /* Desktop mode tooltips */
+  .mode-toggle [data-mode-tooltip] {
+    display: none;
+  }
+  :global([data-mode="low"]) .mode-toggle [data-mode-tooltip="low"],
+  :global([data-mode="medium"]) .mode-toggle [data-mode-tooltip="medium"],
+  :global([data-mode="high"]) .mode-toggle [data-mode-tooltip="high"] {
+    display: block;
+  }
+
+  /* Mobile menu mode icons */
+  [data-mode-icon] {
+    display: none;
+  }
+  :global([data-mode="low"]) [data-mode-icon="low"],
+  :global([data-mode="medium"]) [data-mode-icon="medium"],
+  :global([data-mode="high"]) [data-mode-icon="high"] {
+    display: inline;
+  }
+
+  /* Mobile menu mode labels */
+  [data-mode-label] {
+    display: none;
+  }
+  :global([data-mode="low"]) [data-mode-label="low"],
+  :global([data-mode="medium"]) [data-mode-label="medium"],
+  :global([data-mode="high"]) [data-mode-label="high"] {
+    display: inline;
+  }
+</style>
