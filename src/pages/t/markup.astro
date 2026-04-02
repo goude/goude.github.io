@@ -44,10 +44,14 @@ import Layout from "@/layouts/Layout.astro";
 
       <p>
         Inline code <code>const x = 42;</code>,
-        <kbd>Ctrl</kbd> + <kbd>C</kbd>,
+        <kbd><kbd>Ctrl</kbd> + <kbd>C</kbd></kbd>,
         <samp>output</samp>,
         <var>variable</var>.
       </p>
+
+      <pre><code>function greet(name: string): string &#123;
+  return `Hello, $&#123;name&#125;!`;
+&#125;</code></pre>
 
       <p>
         <ins>Inserted</ins> and <del>deleted</del> text.
@@ -58,9 +62,14 @@ import Layout from "@/layouts/Layout.astro";
       </ruby>
 
       <blockquote>
-        <p>Blockquote example.</p>
+        <p>
+          Blockquote example with enough text to show how longer quotations wrap
+          and display within the left-bordered container.
+        </p>
         <footer>— Author</footer>
       </blockquote>
+
+      <hr />
 
       <address>
         <a href="mailto:test@example.com">test@example.com</a>
@@ -158,36 +167,50 @@ import Layout from "@/layouts/Layout.astro";
 
       <form>
         <fieldset>
-          <legend>Inputs</legend>
+          <legend>Text Inputs</legend>
 
           <label>
             Text
-            <input type="text" />
+            <input type="text" placeholder="Enter text…" />
           </label>
 
           <label>
             Search
-            <input type="search" />
+            <input type="search" placeholder="Search…" />
           </label>
 
           <label>
             Email
-            <input type="email" />
+            <input type="email" placeholder="you@example.com" />
           </label>
 
           <label>
             URL
-            <input type="url" />
+            <input type="url" placeholder="https://…" />
           </label>
 
           <label>
+            Password
+            <input type="password" placeholder="••••••••" />
+          </label>
+
+          <label>
+            Textarea
+            <textarea rows="3" placeholder="Write something…"></textarea>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Other Inputs</legend>
+
+          <label>
             Number
-            <input type="number" />
+            <input type="number" placeholder="0" />
           </label>
 
           <label>
             Range
-            <input type="range" />
+            <input type="range" min="0" max="100" value="50" />
           </label>
 
           <label>
@@ -197,39 +220,64 @@ import Layout from "@/layouts/Layout.astro";
 
           <label>
             Color
-            <input type="color" />
+            <input type="color" value="#cc7c5e" />
           </label>
 
           <label>
             Datalist
-            <input list="options" />
+            <input list="options" placeholder="Type to search…" />
             <datalist id="options">
               <option value="Option 1"></option>
               <option value="Option 2"></option>
+              <option value="Option 3"></option>
             </datalist>
           </label>
 
           <label>
             Select
             <select>
-              <optgroup label="Group">
+              <option value="" disabled selected>Choose…</option>
+              <optgroup label="Group A">
                 <option>Option A</option>
+                <option>Option B</option>
+              </optgroup>
+              <optgroup label="Group B">
+                <option>Option C</option>
               </optgroup>
             </select>
           </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Choices</legend>
+
+          <label><input type="checkbox" /> Unchecked</label>
+          <label><input type="checkbox" checked /> Checked</label>
+          <label><input type="checkbox" disabled /> Disabled</label>
+
+          <label><input type="radio" name="r" /> Option A</label>
+          <label><input type="radio" name="r" checked /> Option B</label>
+          <label><input type="radio" name="r" disabled /> Disabled</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>States</legend>
 
           <label>
-            Textarea
-            <textarea rows="3"></textarea>
+            Disabled
+            <input type="text" disabled value="Cannot edit" />
           </label>
 
-          <label><input type="checkbox" /> Checkbox</label>
-          <label><input type="radio" name="r" /> Radio</label>
+          <label>
+            Read-only
+            <input type="text" readonly value="Read only value" />
+          </label>
 
-          <output>Output</output>
-
-          <button type="submit">Submit</button>
+          <output>Computed: 42</output>
         </fieldset>
+
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
       </form>
     </section>
 
@@ -239,15 +287,28 @@ import Layout from "@/layouts/Layout.astro";
       <h2>Interactive</h2>
 
       <details>
-        <summary>Toggle</summary>
-        <p>Hidden content</p>
+        <summary>Toggle details</summary>
+        <p>
+          This content is revealed when the details element is open. It can
+          contain any block-level content.
+        </p>
       </details>
 
+      <details open>
+        <summary>Open by default</summary>
+        <p>This details element starts in the open state.</p>
+      </details>
+
+      <h3>Progress &amp; Meter</h3>
+      <progress value="70" max="100">70%</progress>
+      <meter min="0" max="100" low="25" high="75" optimum="80" value="60"
+        >60</meter
+      >
+
+      <h3>Dialog</h3>
       <dialog open>Dialog (open)</dialog>
 
-      <progress value="70" max="100">70%</progress>
-      <meter min="0" max="100" value="60">60</meter>
-
+      <h3>Popover</h3>
       <button popovertarget="popover">Toggle Popover</button>
       <div id="popover" popover>Popover content</div>
     </section>
@@ -257,13 +318,21 @@ import Layout from "@/layouts/Layout.astro";
     <section id="misc">
       <h2>Miscellaneous</h2>
 
-      <aside>Aside block</aside>
+      <aside>
+        <p>
+          This is an aside — supplementary content tangentially related to the
+          surrounding material.
+        </p>
+      </aside>
 
-      <time datetime="2026-01-01">January 1, 2026</time>
-      <data value="42">Forty-two</data>
+      <p>
+        Published <time datetime="2026-01-01">January 1, 2026</time>. Value: <data
+          value="42">Forty-two</data
+        >.
+      </p>
 
       <template>
-        <p>Template content</p>
+        <p>Template content (not rendered)</p>
       </template>
     </section>
 
