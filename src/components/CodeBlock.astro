@@ -1,6 +1,12 @@
 ---
 import { createHighlighter } from "shiki";
 
+interface Props {
+  code: string;
+  lang?: string;
+  maxHeight?: string;
+}
+
 const { code, lang = "bash", maxHeight = "60vh" } = Astro.props;
 
 const highlighter = await createHighlighter({
