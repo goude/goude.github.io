@@ -15,7 +15,7 @@ Code review improvements identified 2026-03-28.
 Font Awesome, YouTube IFrame API, and WaveSurfer are loaded without `integrity` attributes. A compromised CDN could inject malicious code.
 
 - File: `src/components/BaseHead.astro`
-- File: `src/pages/t/do-olls-that-will-talk/index.astro`
+- File: `src/pages/ai-generated/do-olls-that-will-talk/index.astro`
 
 ### Add test coverage
 
@@ -31,14 +31,14 @@ Date utilities and the color-mix resolver are testable pure functions with no te
 Header.astro is 690 lines. Extract SVG logo, theme toggle, and nav into sub-components.
 
 - File: `src/components/Header.astro`
-- File: `src/pages/t/opening-the-hood/index.astro` (1,551 lines)
+- File: `src/pages/ai-generated/opening-the-hood/index.astro` (1,551 lines)
 
 ### Replace magic numbers with named constants
 
 Animation durations (30s), max-heights (420px), WaveSurfer width thresholds should be CSS custom properties or named constants.
 
 - File: `src/styles/content.css`
-- File: `src/pages/t/do-olls-that-will-talk/_score.ts`
+- File: `src/pages/ai-generated/do-olls-that-will-talk/_score.ts`
 
 ### Add sitemap, robots.txt, and 404 page
 
@@ -63,7 +63,7 @@ Some images are missing `alt` text. The egghunt password input has a placeholder
 
 `_score.ts` uses `@ts-expect-error` for CDN ESM imports. Consider bundling these dependencies or adding typed wrappers.
 
-- File: `src/pages/t/do-olls-that-will-talk/_score.ts`
+- File: `src/pages/ai-generated/do-olls-that-will-talk/_score.ts`
 
 ### Add RSS feed
 
@@ -102,7 +102,7 @@ Header.astro at 690 lines mixes SVG logo, theme toggle, and navigation. Extract 
 
 At 1,551 lines this is the largest file. Extract sections into components or partial Astro files.
 
-- File: `src/pages/t/opening-the-hood/index.astro`
+- File: `src/pages/ai-generated/opening-the-hood/index.astro`
 
 ### Add CLAUDE.md
 

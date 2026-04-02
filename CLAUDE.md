@@ -40,10 +40,10 @@ Run `just check` (which runs lint → format-check → typecheck → build). Zer
 
 Target: <500 lines per file.
 
-| File                                     | Lines | Strategy                             |
-| ---------------------------------------- | ----- | ------------------------------------ |
-| src/components/Header.astro              | 690   | Extract SVG logo, theme toggle, nav  |
-| src/pages/t/opening-the-hood/index.astro | 1551  | Extract sections into sub-components |
+| File                                                | Lines | Strategy                             |
+| --------------------------------------------------- | ----- | ------------------------------------ |
+| src/components/Header.astro                         | 690   | Extract SVG logo, theme toggle, nav  |
+| src/pages/ai-generated/opening-the-hood/index.astro | 1551  | Extract sections into sub-components |
 
 ## Diffs
 
