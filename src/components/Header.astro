@@ -258,146 +258,147 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
   }
 </style>
 
+<!-- Critical: apply persisted theme/mode before first paint to prevent FOUC -->
 <script is:inline>
   (function () {
-    "use strict";
-
-    const STORAGE = { theme: "theme", mode: "mode" };
     const THEMES = ["light", "dark"];
     const MODES = ["low", "medium", "high"];
     const root = document.documentElement;
-
     const prefersDark = () =>
       window.matchMedia?.("(prefers-color-scheme: dark)").matches;
-
     const readStored = (key, allowed) => {
       const v = localStorage.getItem(key);
       return allowed.includes(v) ? v : null;
     };
-
-    const cycle = (cur, list) => list[(list.indexOf(cur) + 1) % list.length];
-
     const applyTheme = (t) => {
       root.toggleAttribute("data-theme-dark", t === "dark");
       root.toggleAttribute("data-theme-light", t === "light");
     };
-
-    const applyMode = (m) => {
-      root.setAttribute("data-mode", m);
-    };
-
-    const toggleTheme = () => {
-      const cur = root.hasAttribute("data-theme-dark") ? "dark" : "light";
-      const next = cycle(cur, THEMES);
-      localStorage.setItem(STORAGE.theme, next);
-      applyTheme(next);
-    };
-
-    const toggleMode = () => {
-      const cur = root.getAttribute("data-mode") ?? "medium";
-      const next = cycle(cur, MODES);
-      localStorage.setItem(STORAGE.mode, next);
-      applyMode(next);
-    };
+    const applyMode = (m) => root.setAttribute("data-mode", m);
 
     applyTheme(
-      readStored(STORAGE.theme, THEMES) ?? (prefersDark() ? "dark" : "light")
+      readStored("theme", THEMES) ?? (prefersDark() ? "dark" : "light")
     );
-    applyMode(readStored(STORAGE.mode, MODES) ?? "medium");
+    applyMode(readStored("mode", MODES) ?? "medium");
 
     window
       .matchMedia?.("(prefers-color-scheme: dark)")
       .addEventListener("change", () => {
-        if (!readStored(STORAGE.theme, THEMES)) {
+        if (!readStored("theme", THEMES)) {
           applyTheme(prefersDark() ? "dark" : "light");
         }
       });
-
-    document
-      .getElementById("theme-toggle")
-      ?.addEventListener("click", toggleTheme);
-    document
-      .getElementById("theme-toggle-menu")
-      ?.addEventListener("click", toggleTheme);
-
-    document
-      .getElementById("mode-toggle")
-      ?.addEventListener("click", toggleMode);
-    document
-      .getElementById("mode-toggle-menu")
-      ?.addEventListener("click", toggleMode);
-
-    const menuBtn = document.getElementById("menu-toggle");
-    const panel = document.getElementById("menu-panel");
-
-    const setOpen = (open) => {
-      root.setAttribute("data-nav-open", open ? "true" : "false");
-      menuBtn?.setAttribute("aria-expanded", open ? "true" : "false");
-    };
-
-    const isOpen = () => root.getAttribute("data-nav-open") === "true";
-
-    setOpen(false);
-
-    menuBtn?.addEventListener("click", () => setOpen(!isOpen()));
-
-    panel?.addEventListener("click", (e) => {
-      if (e.target?.closest?.("a")) setOpen(false);
-    });
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") setOpen(false);
-    });
-
-    window.addEventListener("resize", () => {
-      if (window.innerWidth > 480) setOpen(false);
-    });
-
-    const pickNextDifferent = (arr, cur) => {
-      if (arr.length <= 1) return cur;
-      let next = cur,
-        tries = 0;
-      while (next === cur && tries < 5) {
-        next = arr[Math.floor(Math.random() * arr.length)];
-        tries++;
-      }
-      return next;
-    };
-
-    const INTERVAL = 65536; // ms
-    const rotIcons = Array.from(
-      document.querySelectorAll("i[data-icon-rotate]")
-    );
-    const perItem = rotIcons.length > 0 ? INTERVAL / rotIcons.length : INTERVAL;
-
-    rotIcons.forEach((el, i) => {
-      const scheduleNext = (delay) => {
-        window.setTimeout(() => {
-          const raw = el.getAttribute("data-icons") || "";
-          const list = raw.split("|").filter(Boolean);
-          if (list.length <= 1) {
-            scheduleNext(INTERVAL);
-            return;
-          }
-          const cur = Array.from(el.classList)
-            .filter((c) => c !== "rotating")
-            .join(" ");
-          el.classList.add("rotating");
-          window.setTimeout(() => {
-            const next = pickNextDifferent(list, cur);
-            el.className = next + " rotating";
-          }, 140);
-          el.addEventListener(
-            "animationend",
-            () => {
-              el.classList.remove("rotating");
-              scheduleNext(INTERVAL);
-            },
-            { once: true }
-          );
-        }, delay);
-      };
-      scheduleNext(i * perItem);
-    });
   })();
+</script>
+
+<!-- Interactive: toggle handlers and icon rotation (deferred, bundled by Astro) -->
+<script>
+  const THEMES = ["light", "dark"];
+  const MODES = ["low", "medium", "high"];
+  const root = document.documentElement;
+
+  const cycle = (cur: string, list: string[]): string =>
+    list[(list.indexOf(cur) + 1) % list.length]!;
+
+  const applyTheme = (t: string) => {
+    root.toggleAttribute("data-theme-dark", t === "dark");
+    root.toggleAttribute("data-theme-light", t === "light");
+  };
+
+  const applyMode = (m: string) => root.setAttribute("data-mode", m);
+
+  const toggleTheme = () => {
+    const cur = root.hasAttribute("data-theme-dark") ? "dark" : "light";
+    const next = cycle(cur, THEMES);
+    localStorage.setItem("theme", next);
+    applyTheme(next);
+  };
+
+  const toggleMode = () => {
+    const cur = root.getAttribute("data-mode") ?? "medium";
+    const next = cycle(cur, MODES);
+    localStorage.setItem("mode", next);
+    applyMode(next);
+  };
+
+  document
+    .getElementById("theme-toggle")
+    ?.addEventListener("click", toggleTheme);
+  document
+    .getElementById("theme-toggle-menu")
+    ?.addEventListener("click", toggleTheme);
+  document.getElementById("mode-toggle")?.addEventListener("click", toggleMode);
+  document
+    .getElementById("mode-toggle-menu")
+    ?.addEventListener("click", toggleMode);
+
+  const menuBtn = document.getElementById("menu-toggle");
+  const panel = document.getElementById("menu-panel");
+
+  const setOpen = (open: boolean) => {
+    root.setAttribute("data-nav-open", open ? "true" : "false");
+    menuBtn?.setAttribute("aria-expanded", open ? "true" : "false");
+  };
+
+  const isOpen = () => root.getAttribute("data-nav-open") === "true";
+
+  setOpen(false);
+
+  menuBtn?.addEventListener("click", () => setOpen(!isOpen()));
+  panel?.addEventListener("click", (e) => {
+    if ((e.target as Element)?.closest?.("a")) setOpen(false);
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setOpen(false);
+  });
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 480) setOpen(false);
+  });
+
+  const pickNextDifferent = (arr: string[], cur: string): string => {
+    if (arr.length <= 1) return cur;
+    let next = cur,
+      tries = 0;
+    while (next === cur && tries < 5) {
+      next = arr[Math.floor(Math.random() * arr.length)]!;
+      tries++;
+    }
+    return next;
+  };
+
+  const INTERVAL = 65536; // ms
+  const rotIcons = Array.from(
+    document.querySelectorAll<HTMLElement>("i[data-icon-rotate]")
+  );
+  const perItem = rotIcons.length > 0 ? INTERVAL / rotIcons.length : INTERVAL;
+
+  rotIcons.forEach((el, i) => {
+    const scheduleNext = (delay: number) => {
+      window.setTimeout(() => {
+        const raw = el.getAttribute("data-icons") ?? "";
+        const list = raw.split("|").filter(Boolean);
+        if (list.length <= 1) {
+          scheduleNext(INTERVAL);
+          return;
+        }
+        const cur = Array.from(el.classList)
+          .filter((c) => c !== "rotating")
+          .join(" ");
+        el.classList.add("rotating");
+        window.setTimeout(() => {
+          const next = pickNextDifferent(list, cur);
+          el.className = next + " rotating";
+        }, 140);
+        el.addEventListener(
+          "animationend",
+          () => {
+            el.classList.remove("rotating");
+            scheduleNext(INTERVAL);
+          },
+          { once: true }
+        );
+      }, delay);
+    };
+    scheduleNext(i * perItem);
+  });
 </script>

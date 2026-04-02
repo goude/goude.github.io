@@ -293,7 +293,7 @@ button:focus-visible kbd {
     left: 50%;
     transform: translateX(-50%);
 
-    width: min(90vw, 420px);
+    width: min(90vw, var(--tooltip-max-width));
     max-width: none;
 
     white-space: normal;
