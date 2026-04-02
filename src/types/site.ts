@@ -32,7 +32,7 @@ export const SITE: SiteMetadata = {
 export const NAV_ITEMS: NavItem[] = [
   { href: "/hello", label: "Hello", icons: ["fa fa-hand-spock"] },
   {
-    href: "/t/ambient-improvement-positive-residue",
+    href: "/ai-generated/ambient-improvement-positive-residue",
     label: "Ambient Improvement",
     icons: [
       "fa-solid fa-spray-can-sparkles",
