@@ -48,6 +48,7 @@
   /* ---------- Layout ---------- */
   --page-max: 900px;
   --page-pad: 24px;
+  --tooltip-max-width: 420px;
 
   /* ---------- Hero image ---------- */
   --hero-max-height: 420px;

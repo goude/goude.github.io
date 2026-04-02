@@ -6,24 +6,16 @@ Last reviewed 2026-04-02.
 
 ### Split large components
 
-Header.astro is 690 lines. Extract SVG logo, theme toggle, and nav into sub-components.
+`opening-the-hood/index.astro` is 1,551 lines. Extract sections into components or partial Astro files.
 
-- File: `src/components/Header.astro`
-- File: `src/pages/ai-generated/opening-the-hood/index.astro` (1,551 lines)
+- File: `src/pages/ai-generated/opening-the-hood/index.astro`
 
 ### Extract large inline scripts
 
 Several pages have 100-260 line inline `<script>` blocks that could live in separate files.
 
-- File: `src/components/Header.astro` (lines 548-690 — theme/mode toggle, menu, icon rotation)
 - File: `src/pages/cop.astro` (lines 53-313 — QR generation, clipboard, encryption)
 - File: `src/pages/egghunt.astro` (lines 580-700+ — decryption, puzzle UI)
-
-### Replace magic numbers with named constants
-
-Animation durations (30s) and max-heights (420px) in content.css should be CSS custom properties.
-
-- File: `src/styles/content.css`
 
 ## Low Priority
 
@@ -52,35 +44,6 @@ Blog-like content would benefit from `@astrojs/rss`.
 No performance budget exists. Lighthouse CI in the workflow would catch regressions.
 
 - File: `.github/workflows/astro.yml`
-
-## Refactoring
-
-Prioritized structural improvements. Address top-down.
-
-### Extract shared markdown rendering utility
-
-`Md.astro` and `docs/[...slug].astro` duplicate the marked + Shiki dual-theme rendering pipeline. Extract to a shared `renderMarkdown()` function in `src/utils/`.
-
-- File: `src/components/Md.astro`
-- File: `src/pages/docs/[...slug].astro`
-
-### Consolidate layout usage
-
-`src/layouts/Layout.astro` and `src/components/Layout.astro` — unclear which is canonical. Audit and collapse to one.
-
-- File: `src/layouts/Layout.astro`
-
-### Extract Header.astro sub-components
-
-Header.astro at 690 lines mixes SVG logo, theme toggle, and navigation. Extract each into its own component.
-
-- File: `src/components/Header.astro`
-
-### Break up opening-the-hood page
-
-At 1,551 lines this is the largest file. Extract sections into components or partial Astro files.
-
-- File: `src/pages/ai-generated/opening-the-hood/index.astro`
 
 ## Simplifications
 
