@@ -1,6 +1,6 @@
 # Backlog
 
-Code review improvements identified 2026-03-28.
+Last reviewed 2026-04-02.
 
 ## High Priority
 
@@ -19,9 +19,11 @@ Font Awesome, YouTube IFrame API, and WaveSurfer are loaded without `integrity` 
 
 ### Add test coverage
 
-Date utilities and the color-mix resolver are testable pure functions with no tests. Add vitest.
+Date utilities and the color-mix resolver are testable pure functions. `utils/docs.ts` (`getDocsFiles`, `getDocsDir`) is also untested.
 
-- File: `src/utils/date.ts`
+- File: `src/utils/date.ts` (has tests, expand coverage)
+- File: `src/utils/docs.ts`
+- File: `scripts/color-utils.mjs`
 - File: `scripts/sync-svg-swatches.mjs`
 
 ## Medium Priority
@@ -33,12 +35,27 @@ Header.astro is 690 lines. Extract SVG logo, theme toggle, and nav into sub-comp
 - File: `src/components/Header.astro`
 - File: `src/pages/ai-generated/opening-the-hood/index.astro` (1,551 lines)
 
+### Extract large inline scripts
+
+Several pages have 100-260 line inline `<script>` blocks that could live in separate files.
+
+- File: `src/components/Header.astro` (lines 548-690 — theme/mode toggle, menu, icon rotation)
+- File: `src/pages/cop.astro` (lines 53-313 — QR generation, clipboard, encryption)
+- File: `src/pages/egghunt.astro` (lines 580-700+ — decryption, puzzle UI)
+
 ### Replace magic numbers with named constants
 
 Animation durations (30s), max-heights (420px), WaveSurfer width thresholds should be CSS custom properties or named constants.
 
 - File: `src/styles/content.css`
-- File: `src/pages/ai-generated/do-olls-that-will-talk/_score.ts`
+- File: `src/pages/ai-generated/do-olls-that-will-talk/_score.ts` (zoomFor breakpoints)
+
+### Define missing CSS variable `--text-xs`
+
+`content.css` references `--text-xs` three times but it is not defined in `vars.css`. Either add the token or replace with `--text-sm`.
+
+- File: `src/styles/vars.css`
+- File: `src/styles/content.css`
 
 ### Add sitemap, robots.txt, and 404 page
 
@@ -46,18 +63,21 @@ No `sitemap.xml` (use `@astrojs/sitemap`), no `robots.txt`, no custom 404 page.
 
 ### Audit image accessibility
 
-Some images are missing `alt` text. The egghunt password input has a placeholder but no `<label>` or `aria-label`.
+Some images are missing `alt` text. The egghunt password input has a placeholder but no `<label>`.
 
 - File: `src/pages/egghunt.astro`
 
 ## Low Priority
 
-### Remove console.error in production pages
+### Resolve TODO comments
 
-`console.error()` calls in cop.astro and egghunt.astro should be removed or gated behind a debug flag.
+Several pages contain `TODO: rewrite the ai slop` comments. `no-bullshit/index.astro` has multiple `<!-- TODO -->` placeholders for visual descriptions and process steps.
 
-- File: `src/pages/cop.astro`
-- File: `src/pages/egghunt.astro`
+- File: `src/pages/index.astro`
+- File: `src/pages/hello.astro`
+- File: `src/pages/notes.astro`
+- File: `src/pages/ai-generated/ambient-improvement-positive-residue.astro`
+- File: `src/pages/ai-generated/no-bullshit/index.astro`
 
 ### Type external CDN scripts
 
@@ -104,10 +124,42 @@ At 1,551 lines this is the largest file. Extract sections into components or par
 
 - File: `src/pages/ai-generated/opening-the-hood/index.astro`
 
-### Add CLAUDE.md
-
-Create a project-root LLM instructions file following `docs/standards/llm-instructions-file.md`. Keep under 200 lines.
-
 ### Align justfile with conventions
 
-Apply `docs/standards/justfile.md` patterns: rename `install` to `setup`, add `_default` printf hint, ensure `check` ordering is fmt -> lint -> typecheck -> build.
+Apply `docs/standards/justfile.md` patterns: docstrings on all recipes including `repomix` and `svg-sync`.
+
+## Simplifications
+
+Opportunities to reduce complexity without changing behavior.
+
+### Inline trivial npm script wrappers
+
+The justfile delegates to `npm run` for most recipes. Where the npm script is a single command (e.g. `"lint": "eslint ."`), the justfile recipe could call the tool directly, removing a layer of indirection.
+
+### Remove unused re-exports or dead code
+
+Audit `src/types/` and `src/utils/` for any exports that are no longer imported anywhere. Delete rather than comment out.
+
+### Simplify cop.astro inline script
+
+The 260-line inline script handles QR generation, clipboard, and encryption. Breaking it into smaller functions or a separate module would improve readability.
+
+- File: `src/pages/cop.astro`
+
+## Improvements
+
+### Add TypeScript interfaces for component props
+
+Components like Header, Footer, and CodeBlock accept props but lack explicit interface definitions. Adding `Props` interfaces improves editor support and catches errors at build time.
+
+### Add `<label>` elements for form inputs
+
+The egghunt password input relies on `aria-label` alone. Adding a visible or visually-hidden `<label>` improves accessibility.
+
+- File: `src/pages/egghunt.astro`
+
+### Consider bundling WaveSurfer and YouTube API
+
+Loading these from CDN introduces external dependencies without SRI. Bundling via npm would give type safety, version pinning, and tree-shaking.
+
+- File: `src/pages/ai-generated/do-olls-that-will-talk/_score.ts`
