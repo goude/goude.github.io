@@ -371,7 +371,7 @@ html[data-mode="high"] [data-detail="high"] {
   #entry-point .hero-img {
     position: relative;
     overflow: hidden;
-    max-height: 420px; /* adjust to taste */
+    max-height: var(--hero-max-height);
   }
 
   /* Animated image */
@@ -380,7 +380,8 @@ html[data-mode="high"] [data-detail="high"] {
     height: 120%; /* oversize for vertical drift */
     object-fit: cover;
     object-position: top center;
-    animation: entry-kenburns 30s ease-in-out infinite alternate;
+    animation: entry-kenburns var(--hero-anim-duration) ease-in-out infinite
+      alternate;
     will-change: transform;
   }
 

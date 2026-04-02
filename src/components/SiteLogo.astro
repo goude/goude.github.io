@@ -1,0 +1,63 @@
+---
+import rawLogoSvg from "@/assets/goude-se-logo.svg?raw";
+import { SWATCH_TO_CSS_VAR } from "@/styles/swatches";
+
+function mapInkscapeSwatches(svg: string): string {
+  let out = svg;
+
+  // Hard override: currentColor is always literal currentColor at runtime
+  const currentColorRe = new RegExp(
+    '(inkscape:label="currentColor"[\\s\\S]*?<stop[^>]+stop-color:)[^;"]+',
+    "g"
+  );
+  out = out.replace(currentColorRe, "$1currentColor");
+
+  // All other swatches map to CSS vars
+  for (const [label, cssVar] of Object.entries(SWATCH_TO_CSS_VAR)) {
+    if (label === "currentColor") continue;
+    const re = new RegExp(
+      `(inkscape:label="${label}"[\\s\\S]*?<stop[^>]+stop-color:)[^;"]+`,
+      "g"
+    );
+    out = out.replace(re, `$1var(${cssVar})`);
+  }
+
+  return out;
+}
+
+const logoSvg = mapInkscapeSwatches(rawLogoSvg);
+
+interface Props {
+  isSelected?: boolean;
+}
+
+const { isSelected = false } = Astro.props;
+---
+
+<a
+  href="/"
+  aria-label="Home"
+  class:list={["logo", "nav-action", { selected: isSelected }]}
+  title="Guard what you give your attention to. It quietly becomes who you are."
+>
+  <span class="logo-svg" aria-hidden="true" set:html={logoSvg} />
+</a>
+
+<style>
+  .logo {
+    flex-shrink: 0;
+  }
+
+  .logo-svg {
+    display: flex;
+    align-items: center;
+    height: 1.4em;
+    line-height: 1;
+  }
+
+  .logo-svg :global(svg) {
+    display: block;
+    height: 100%;
+    width: auto;
+  }
+</style>

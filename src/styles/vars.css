@@ -49,6 +49,10 @@
   --page-max: 900px;
   --page-pad: 24px;
 
+  /* ---------- Hero image ---------- */
+  --hero-max-height: 420px;
+  --hero-anim-duration: 30s;
+
   /* ---------- Typography ---------- */
   --font-body-serif: et-book, serif;
   --font-ui: "Staatliches", sans-serif;

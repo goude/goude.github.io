@@ -1,34 +1,8 @@
 ---
 import { NAV_ITEMS, type NavItem } from "@/types/site";
-import rawLogoSvg from "@/assets/goude-se-logo.svg?raw";
-import { SWATCH_TO_CSS_VAR } from "@/styles/swatches";
-
-function mapInkscapeSwatches(svg: string) {
-  let out = svg;
-
-  // Hard override: currentColor is always literal currentColor at runtime
-  const currentColorRe = new RegExp(
-    '(inkscape:label="currentColor"[\\s\\S]*?<stop[^>]+stop-color:)[^;"]+',
-    "g"
-  );
-
-  out = out.replace(currentColorRe, "$1currentColor");
-
-  // All other swatches map to CSS vars
-  for (const [label, cssVar] of Object.entries(SWATCH_TO_CSS_VAR)) {
-    if (label === "currentColor") continue;
-
-    const re = new RegExp(
-      `(inkscape:label="${label}"[\\s\\S]*?<stop[^>]+stop-color:)[^;"]+`,
-      "g"
-    );
-    out = out.replace(re, `$1var(${cssVar})`);
-  }
-
-  return out;
-}
-
-const logoSvg = mapInkscapeSwatches(rawLogoSvg);
+import SiteLogo from "@/components/SiteLogo.astro";
+import ThemeToggle from "@/components/ThemeToggle.astro";
+import ModeToggle from "@/components/ModeToggle.astro";
 
 interface Props {
   current?: string | undefined;
@@ -45,15 +19,7 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
 ---
 
 <header class="site-header">
-  <!-- Logo / Home -->
-  <a
-    href="/"
-    aria-label="Home"
-    class:list={["logo", "nav-action", { selected: current === "" }]}
-    title="Guard what you give your attention to. It quietly becomes who you are."
-  >
-    <span class="logo-svg" aria-hidden="true" set:html={logoSvg} />
-  </a>
+  <SiteLogo isSelected={current === ""} />
 
   <!-- Hamburger (mobile only) -->
   <button
@@ -117,36 +83,8 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
       }
     </nav>
 
-    <button
-      class="mode-toggle nav-action icon-only"
-      id="mode-toggle"
-      type="button"
-      aria-label="Toggle content detail level"
-    >
-      <i class="fa-solid fa-water" data-mode-icon="low" aria-hidden="true"></i>
-      <i class="fa-solid fa-wind" data-mode-icon="medium" aria-hidden="true"
-      ></i>
-      <i class="fa-solid fa-fire" data-mode-icon="high" aria-hidden="true"></i>
-      <span class="tooltip" data-mode-tooltip="low">Low Detail</span>
-      <span class="tooltip" data-mode-tooltip="medium">Medium Detail</span>
-      <span class="tooltip" data-mode-tooltip="high">High Detail</span>
-    </button>
-
-    <button
-      class="theme-toggle nav-action icon-only tooltip-right"
-      id="theme-toggle"
-      type="button"
-      aria-label="Toggle theme"
-    >
-      <i class="fa-regular fa-sun" id="icon-light" aria-hidden="true"></i>
-      <i class="fa-solid fa-moon" id="icon-dark" aria-hidden="true"></i>
-      <span class="tooltip" data-theme-tooltip="light"
-        >The Cleonic Theme of Brother Day</span
-      >
-      <span class="tooltip" data-theme-tooltip="dark"
-        >The Cleonic Theme of Brother Dusk</span
-      >
-    </button>
+    <ModeToggle variant="desktop" />
+    <ThemeToggle variant="desktop" />
   </div>
 
   <!-- Mobile pancake menu -->
@@ -179,23 +117,8 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
       ))
     }
 
-    <button class="menu-item menu-action" id="mode-toggle-menu" type="button">
-      <i class="fa-solid fa-water" data-mode-icon="low" aria-hidden="true"></i>
-      <i class="fa-solid fa-wind" data-mode-icon="medium" aria-hidden="true"
-      ></i>
-      <i class="fa-solid fa-fire" data-mode-icon="high" aria-hidden="true"></i>
-      <span data-mode-label="low">Low Detail</span>
-      <span data-mode-label="medium">Medium Detail</span>
-      <span data-mode-label="high">High Detail</span>
-    </button>
-
-    <button class="menu-item menu-action" id="theme-toggle-menu" type="button">
-      <i class="fa-regular fa-sun" data-theme-icon="light" aria-hidden="true"
-      ></i>
-      <i class="fa-solid fa-moon" data-theme-icon="dark" aria-hidden="true"></i>
-      <span data-theme-label="light">Brother Day</span>
-      <span data-theme-label="dark">Brother Dusk</span>
-    </button>
+    <ModeToggle variant="menu" />
+    <ThemeToggle variant="menu" />
   </nav>
 </header>
 
@@ -236,82 +159,6 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
     opacity: 0.7;
   }
 
-  /* ---------- Unified nav item styling ---------- */
-  .nav-action {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.25rem 0.6rem;
-    border-radius: 999px;
-    text-decoration: none;
-    color: inherit;
-
-    font-family: var(--font-ui);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    white-space: nowrap;
-
-    background: none;
-    border: none;
-    cursor: pointer;
-
-    transition:
-      background-color 0.15s ease,
-      color 0.15s ease,
-      opacity 0.15s ease;
-  }
-
-  .nav-action:hover {
-    opacity: 0.7;
-  }
-
-  .nav-action i {
-    font-size: 1.1em;
-  }
-
-  /* CSS animation for rotating icons */
-  @keyframes icon-swap {
-    0% {
-      opacity: 1;
-    }
-    40% {
-      opacity: 0;
-    }
-    60% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-  .nav-action i[data-icon-rotate].rotating {
-    animation: icon-swap 0.35s ease forwards;
-  }
-
-  /* Shared selected style */
-  .selected {
-    background: var(--fg);
-    color: var(--bg);
-  }
-
-  /* ---------- Logo ---------- */
-  .logo {
-    flex-shrink: 0;
-  }
-
-  .logo-svg {
-    display: flex;
-    align-items: center;
-    height: 1.4em;
-    line-height: 1;
-  }
-
-  .logo-svg :global(svg) {
-    display: block;
-    height: 100%;
-    width: auto;
-  }
-
   /* Desktop nav containers */
   .main-nav {
     display: flex;
@@ -329,101 +176,9 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
     gap: 0.25rem;
   }
 
-  /* ---------- Icon-only with tooltip ---------- */
-  .icon-only {
-    position: relative;
-  }
-
-  .icon-only .tooltip {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%) translateY(0.25rem);
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    background: var(--fg);
-    color: var(--bg);
-    font-size: 0.75em;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition:
-      opacity 0.15s ease,
-      transform 0.15s ease;
-    z-index: 100;
-  }
-
-  .icon-only:hover .tooltip,
-  .icon-only:focus-visible .tooltip {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0.4rem);
-  }
-
-  /* Right-aligned tooltip for rightmost item to prevent cutoff */
-  .icon-only.tooltip-right .tooltip {
-    left: auto;
-    right: 0;
-    transform: translateX(0) translateY(0.25rem);
-  }
-
-  .icon-only.tooltip-right:hover .tooltip,
-  .icon-only.tooltip-right:focus-visible .tooltip {
-    transform: translateX(0) translateY(0.4rem);
-  }
-
-  .external-icon {
-    margin-left: 0.3em;
-    font-size: 0.85em;
-    opacity: 0.7;
-  }
-
   /* Hamburger positioning (mobile top row) */
   .menu-toggle {
     margin-left: auto;
-  }
-
-  /* Theme icons (desktop) */
-  #icon-dark {
-    display: none;
-  }
-  :global([data-theme-dark]) #icon-light {
-    display: none;
-  }
-  :global([data-theme-dark]) #icon-dark {
-    display: inline;
-  }
-
-  /* Theme tooltips (desktop) */
-  .theme-toggle [data-theme-tooltip="dark"] {
-    display: none;
-  }
-  :global([data-theme-dark]) .theme-toggle [data-theme-tooltip="light"] {
-    display: none;
-  }
-  :global([data-theme-dark]) .theme-toggle [data-theme-tooltip="dark"] {
-    display: block;
-  }
-
-  /* Mode icons (desktop) */
-  .mode-toggle [data-mode-icon] {
-    display: none;
-  }
-  :global([data-mode="low"]) .mode-toggle [data-mode-icon="low"],
-  :global([data-mode="medium"]) .mode-toggle [data-mode-icon="medium"],
-  :global([data-mode="high"]) .mode-toggle [data-mode-icon="high"] {
-    display: inline;
-  }
-
-  /* Mode tooltips (desktop) */
-  .mode-toggle [data-mode-tooltip] {
-    display: none;
-  }
-  :global([data-mode="low"]) .mode-toggle [data-mode-tooltip="low"],
-  :global([data-mode="medium"]) .mode-toggle [data-mode-tooltip="medium"],
-  :global([data-mode="high"]) .mode-toggle [data-mode-tooltip="high"] {
-    display: block;
   }
 
   /* Mobile menu defaults */
@@ -499,48 +254,6 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
       opacity: 0.15;
       background: currentColor;
       margin: 0.15rem 0.6rem;
-    }
-
-    /* Theme icons (mobile menu) */
-    .menu-panel [data-theme-icon="dark"] {
-      display: none;
-    }
-    :global([data-theme-dark]) .menu-panel [data-theme-icon="light"] {
-      display: none;
-    }
-    :global([data-theme-dark]) .menu-panel [data-theme-icon="dark"] {
-      display: inline;
-    }
-
-    /* Theme labels (mobile menu) */
-    .menu-panel [data-theme-label="dark"] {
-      display: none;
-    }
-    :global([data-theme-dark]) .menu-panel [data-theme-label="light"] {
-      display: none;
-    }
-    :global([data-theme-dark]) .menu-panel [data-theme-label="dark"] {
-      display: inline;
-    }
-
-    /* Mode icons (mobile menu) */
-    .menu-panel [data-mode-icon] {
-      display: none;
-    }
-    :global([data-mode="low"]) .menu-panel [data-mode-icon="low"],
-    :global([data-mode="medium"]) .menu-panel [data-mode-icon="medium"],
-    :global([data-mode="high"]) .menu-panel [data-mode-icon="high"] {
-      display: inline;
-    }
-
-    /* Mode labels (mobile menu) */
-    .menu-panel [data-mode-label] {
-      display: none;
-    }
-    :global([data-mode="low"]) .menu-panel [data-mode-label="low"],
-    :global([data-mode="medium"]) .menu-panel [data-mode-label="medium"],
-    :global([data-mode="high"]) .menu-panel [data-mode-label="high"] {
-      display: inline;
     }
   }
 </style>

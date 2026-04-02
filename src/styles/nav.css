@@ -1,0 +1,112 @@
+/* ==================== Shared navigation primitives ==================== */
+/* Used by Header.astro and its sub-components: SiteLogo, ThemeToggle, ModeToggle */
+
+/* Unified nav item / action button */
+.nav-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  text-decoration: none;
+  color: inherit;
+
+  font-family: var(--font-ui);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.nav-action:hover {
+  opacity: 0.7;
+}
+
+.nav-action i {
+  font-size: 1.1em;
+}
+
+/* CSS animation for rotating icons */
+@keyframes icon-swap {
+  0% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.nav-action i[data-icon-rotate].rotating {
+  animation: icon-swap 0.35s ease forwards;
+}
+
+/* Selected state */
+.nav-action.selected,
+.menu-item.selected {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+/* Icon-only with tooltip */
+.icon-only {
+  position: relative;
+}
+
+.icon-only .tooltip {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(0.25rem);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 0.75em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+  z-index: 100;
+}
+
+.icon-only:hover .tooltip,
+.icon-only:focus-visible .tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0.4rem);
+}
+
+/* Right-aligned tooltip for rightmost item to prevent cutoff */
+.icon-only.tooltip-right .tooltip {
+  left: auto;
+  right: 0;
+  transform: translateX(0) translateY(0.25rem);
+}
+
+.icon-only.tooltip-right:hover .tooltip,
+.icon-only.tooltip-right:focus-visible .tooltip {
+  transform: translateX(0) translateY(0.4rem);
+}
+
+.external-icon {
+  margin-left: 0.3em;
+  font-size: 0.85em;
+  opacity: 0.7;
+}
