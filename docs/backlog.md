@@ -2,30 +2,6 @@
 
 Last reviewed 2026-04-02.
 
-## High Priority
-
-### Sanitize innerHTML in egghunt.astro
-
-`result.innerHTML = html` injects decrypted content without sanitization. Use DOMPurify or `textContent` where possible to prevent XSS.
-
-- File: `src/pages/egghunt.astro`
-
-### Add Subresource Integrity (SRI) to CDN resources
-
-Font Awesome, YouTube IFrame API, and WaveSurfer are loaded without `integrity` attributes. A compromised CDN could inject malicious code.
-
-- File: `src/components/BaseHead.astro`
-- File: `src/pages/ai-generated/do-olls-that-will-talk/index.astro`
-
-### Add test coverage
-
-Date utilities and the color-mix resolver are testable pure functions. `utils/docs.ts` (`getDocsFiles`, `getDocsDir`) is also untested.
-
-- File: `src/utils/date.ts` (has tests, expand coverage)
-- File: `src/utils/docs.ts`
-- File: `scripts/color-utils.mjs`
-- File: `scripts/sync-svg-swatches.mjs`
-
 ## Medium Priority
 
 ### Split large components
@@ -45,27 +21,9 @@ Several pages have 100-260 line inline `<script>` blocks that could live in sepa
 
 ### Replace magic numbers with named constants
 
-Animation durations (30s), max-heights (420px), WaveSurfer width thresholds should be CSS custom properties or named constants.
+Animation durations (30s) and max-heights (420px) in content.css should be CSS custom properties.
 
 - File: `src/styles/content.css`
-- File: `src/pages/ai-generated/do-olls-that-will-talk/_score.ts` (zoomFor breakpoints)
-
-### Define missing CSS variable `--text-xs`
-
-`content.css` references `--text-xs` three times but it is not defined in `vars.css`. Either add the token or replace with `--text-sm`.
-
-- File: `src/styles/vars.css`
-- File: `src/styles/content.css`
-
-### Add sitemap, robots.txt, and 404 page
-
-No `sitemap.xml` (use `@astrojs/sitemap`), no `robots.txt`, no custom 404 page.
-
-### Audit image accessibility
-
-Some images are missing `alt` text. The egghunt password input has a placeholder but no `<label>`.
-
-- File: `src/pages/egghunt.astro`
 
 ## Low Priority
 
@@ -124,10 +82,6 @@ At 1,551 lines this is the largest file. Extract sections into components or par
 
 - File: `src/pages/ai-generated/opening-the-hood/index.astro`
 
-### Align justfile with conventions
-
-Apply `docs/standards/justfile.md` patterns: docstrings on all recipes including `repomix` and `svg-sync`.
-
 ## Simplifications
 
 Opportunities to reduce complexity without changing behavior.
@@ -135,10 +89,6 @@ Opportunities to reduce complexity without changing behavior.
 ### Inline trivial npm script wrappers
 
 The justfile delegates to `npm run` for most recipes. Where the npm script is a single command (e.g. `"lint": "eslint ."`), the justfile recipe could call the tool directly, removing a layer of indirection.
-
-### Remove unused re-exports or dead code
-
-Audit `src/types/` and `src/utils/` for any exports that are no longer imported anywhere. Delete rather than comment out.
 
 ### Simplify cop.astro inline script
 
@@ -148,18 +98,8 @@ The 260-line inline script handles QR generation, clipboard, and encryption. Bre
 
 ## Improvements
 
-### Add TypeScript interfaces for component props
-
-Components like Header, Footer, and CodeBlock accept props but lack explicit interface definitions. Adding `Props` interfaces improves editor support and catches errors at build time.
-
-### Add `<label>` elements for form inputs
-
-The egghunt password input relies on `aria-label` alone. Adding a visible or visually-hidden `<label>` improves accessibility.
-
-- File: `src/pages/egghunt.astro`
-
 ### Consider bundling WaveSurfer and YouTube API
 
-Loading these from CDN introduces external dependencies without SRI. Bundling via npm would give type safety, version pinning, and tree-shaking.
+Loading these from CDN introduces external dependencies. Bundling via npm would give type safety, version pinning, and tree-shaking.
 
 - File: `src/pages/ai-generated/do-olls-that-will-talk/_score.ts`
