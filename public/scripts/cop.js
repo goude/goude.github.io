@@ -105,9 +105,7 @@
       }
 
       statusEl.textContent =
-        "Loaded " +
-        inputEl.value.length +
-        " characters from cloud clipboard.";
+        "Loaded " + inputEl.value.length + " characters from cloud clipboard.";
     } catch {
       statusEl.textContent = "Failed to fetch from cloud clipboard.";
       inputEl.placeholder = "(error fetching value)";
