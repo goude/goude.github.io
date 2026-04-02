@@ -9,12 +9,6 @@ export interface SiteMetadata {
   url: string;
 }
 
-export interface PageProps {
-  title?: string;
-  description?: string;
-  current?: string;
-}
-
 export interface NavItem {
   href: string;
   label: string;

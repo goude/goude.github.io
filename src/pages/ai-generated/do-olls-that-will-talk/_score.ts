@@ -239,11 +239,18 @@ if (!isBrowser()) {
     },
   ];
 
+  const ZOOM_BREAKPOINTS: [number, number][] = [
+    [420, 0.45],
+    [480, 0.55],
+    [768, 0.7],
+  ];
+  const ZOOM_DEFAULT = 0.85;
+
   const zoomFor = (w: number) => {
-    if (w < 420) return 0.45;
-    if (w < 480) return 0.55;
-    if (w < 768) return 0.7;
-    return 0.85;
+    for (const [bp, zoom] of ZOOM_BREAKPOINTS) {
+      if (w < bp) return zoom;
+    }
+    return ZOOM_DEFAULT;
   };
 
   const applySvgFont = (container: HTMLElement) => {
