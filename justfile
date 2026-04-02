@@ -1,6 +1,8 @@
 set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
 set dotenv-load := true
 
+export PATH := "./node_modules/.bin:" + env("PATH")
+
 _default:
     @printf "After cloning: run just setup\n\n"
     @just --list
@@ -18,35 +20,35 @@ check: format-check lint typecheck test build
 
 # ▶️ Start dev server
 dev:
-    npm run dev
+    astro dev
 
 # 🔍 Lint
 lint:
-    npm run lint
+    eslint . --ext .ts,.astro --max-warnings=0
 
 # 🔍 Type check (tsc only)
 typecheck:
-    npm run typecheck
+    tsc --noEmit
 
 # 🔨 Build for production
 build:
-    npm run build
+    astro check && astro build
 
 # 👁️ Preview production build
 preview:
-    npm run preview
+    astro preview
 
 # ✨ Format code (writes changes)
 format:
-    npm run format
+    prettier --write .
 
 # 🔎 Verify formatting (non-destructive)
 format-check:
-    npm run format:check
+    prettier --check .
 
 # 🧪 Run unit tests
 test:
-    npm test
+    vitest run
 
 # 🧪 Pre-commit hook target
 precommit:
