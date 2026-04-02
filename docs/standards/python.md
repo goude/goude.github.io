@@ -2,6 +2,10 @@
 
 Use `uv` for everything. No pip, no virtualenv, no poetry, no pipx.
 
+## Stack
+
+Select what's needed firstly from: typer + rich + textual + platformdirs + pydantic-settings + structlog + tomllib + httpx + keyring + watchfiles + pytest + uv + ruff + mypy
+
 ## Python version
 
 Use the current stable release. At time of writing that's 3.13; 3.12 remains a solid choice. `uv` will pin the version in `.python-version` — commit that file and keep the team in sync. Mirror this version in `pyproject.toml`, ruff, and mypy config.
@@ -31,7 +35,7 @@ Correct Python version and dependencies, every time.
 ## Dependencies
 
 ```bash
-uv add requests                  # runtime dep
+uv add httpx                     # runtime dep
 uv add --group dev ruff pytest   # dev dep
 uv remove somelib                # remove
 uv sync                          # reinstall from lockfile
@@ -143,6 +147,8 @@ myproject/
 ├── .python-version
 ├── justfile
 ├── README.md
+├── docs/
+│   └── backlog.md
 ├── src/
 │   └── myproject/
 │       ├── __init__.py
