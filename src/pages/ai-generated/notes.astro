@@ -13,6 +13,17 @@ import Layout from "@/layouts/Layout.astro";
         A prose-first, semantically grounded notebook that happens to be a
         website.
       </p>
+
+      <aside
+        class="provenance-note"
+        role="note"
+        aria-label="Authorship and provenance note"
+      >
+        <span class="provenance-label">AI-generated text</span>
+        <span class="provenance-text"
+          >Drafted with an AI system. Reviewed and edited by a human.</span
+        >
+      </aside>
     </header>
 
     <!-- p: the default unit of explanation; keep one main idea per paragraph -->
@@ -279,6 +290,21 @@ dev:
         legible to humans, accessible to assistive tech, and easy to transform
         later.
       </p>
+
+      <nav aria-label="Related pages">
+        <p class="text-muted">See also:</p>
+        <ul>
+          <li>
+            <a href="/ai-generated/markup">Markup Test</a> — a rendered reference
+            for all the semantic elements described here
+          </li>
+          <li>
+            <a href="/ai-generated/ambient-improvement-positive-residue"
+              >Ambient Improvement</a
+            > — the same ethos applied to code
+          </li>
+        </ul>
+      </nav>
     </footer>
   </article>
 </Layout>

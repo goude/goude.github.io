@@ -14,6 +14,17 @@ import Layout from "@/layouts/Layout.astro";
         Finish the job. Then, if it costs you only a minute, leave one thing
         clearer than you found it.
       </p>
+
+      <aside
+        class="provenance-note"
+        role="note"
+        aria-label="Authorship and provenance note"
+      >
+        <span class="provenance-label">AI-generated text</span>
+        <span class="provenance-text"
+          >Drafted with an AI system. Reviewed and edited by a human.</span
+        >
+      </aside>
     </header>
 
     <section>
@@ -101,5 +112,21 @@ import Layout from "@/layouts/Layout.astro";
 
       <p>The goal is not heroics. The goal is positive residue.</p>
     </section>
+
+    <footer>
+      <nav aria-label="Related pages">
+        <p class="text-muted">See also:</p>
+        <ul>
+          <li>
+            <a href="/ai-generated/notes">Notes</a> — the same restraint applied to
+            prose and structure
+          </li>
+          <li>
+            <a href="/ai-generated/thread-taxonomy">Thread Taxonomy</a> — the same
+            quiet discipline applied to communication
+          </li>
+        </ul>
+      </nav>
+    </footer>
   </article>
 </Layout>
