@@ -2,7 +2,6 @@
 import { NAV_ITEMS, type NavItem } from "@/types/site";
 import SiteLogo from "@/components/SiteLogo.astro";
 import ThemeToggle from "@/components/ThemeToggle.astro";
-import ModeToggle from "@/components/ModeToggle.astro";
 
 interface Props {
   current?: string | undefined;
@@ -83,7 +82,6 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
       }
     </nav>
 
-    <ModeToggle variant="desktop" />
     <ThemeToggle variant="desktop" />
   </div>
 
@@ -117,7 +115,6 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
       ))
     }
 
-    <ModeToggle variant="menu" />
     <ThemeToggle variant="menu" />
   </nav>
 </header>
@@ -262,7 +259,6 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
 <script is:inline>
   (function () {
     const THEMES = ["light", "dark"];
-    const MODES = ["low", "medium", "high"];
     const root = document.documentElement;
     const prefersDark = () =>
       window.matchMedia?.("(prefers-color-scheme: dark)").matches;
@@ -274,12 +270,10 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
       root.toggleAttribute("data-theme-dark", t === "dark");
       root.toggleAttribute("data-theme-light", t === "light");
     };
-    const applyMode = (m) => root.setAttribute("data-mode", m);
 
     applyTheme(
       readStored("theme", THEMES) ?? (prefersDark() ? "dark" : "light")
     );
-    applyMode(readStored("mode", MODES) ?? "medium");
 
     window
       .matchMedia?.("(prefers-color-scheme: dark)")
@@ -294,7 +288,6 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
 <!-- Interactive: toggle handlers and icon rotation (deferred, bundled by Astro) -->
 <script>
   const THEMES = ["light", "dark"];
-  const MODES = ["low", "medium", "high"];
   const root = document.documentElement;
 
   const cycle = (cur: string, list: string[]): string =>
@@ -305,20 +298,11 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
     root.toggleAttribute("data-theme-light", t === "light");
   };
 
-  const applyMode = (m: string) => root.setAttribute("data-mode", m);
-
   const toggleTheme = () => {
     const cur = root.hasAttribute("data-theme-dark") ? "dark" : "light";
     const next = cycle(cur, THEMES);
     localStorage.setItem("theme", next);
     applyTheme(next);
-  };
-
-  const toggleMode = () => {
-    const cur = root.getAttribute("data-mode") ?? "medium";
-    const next = cycle(cur, MODES);
-    localStorage.setItem("mode", next);
-    applyMode(next);
   };
 
   document
@@ -327,10 +311,6 @@ const navRight = NAV_ITEMS.filter((item) => item.external);
   document
     .getElementById("theme-toggle-menu")
     ?.addEventListener("click", toggleTheme);
-  document.getElementById("mode-toggle")?.addEventListener("click", toggleMode);
-  document
-    .getElementById("mode-toggle-menu")
-    ?.addEventListener("click", toggleMode);
 
   const menuBtn = document.getElementById("menu-toggle");
   const panel = document.getElementById("menu-panel");
