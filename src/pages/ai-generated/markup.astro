@@ -12,6 +12,17 @@ import Layout from "@/layouts/Layout.astro";
       <h1>Markup Test</h1>
       <p class="subtitle">Rendering reference for semantic HTML elements.</p>
 
+      <aside
+        class="provenance-note"
+        role="note"
+        aria-label="Authorship and provenance note"
+      >
+        <span class="provenance-label">AI-generated text</span>
+        <span class="provenance-text"
+          >Drafted with an AI system. Reviewed and edited by a human.</span
+        >
+      </aside>
+
       <nav aria-label="Markup sections">
         <ul>
           <li><a href="#text">Text</a></li>
@@ -338,6 +349,16 @@ import Layout from "@/layouts/Layout.astro";
 
     <footer>
       <p class="text-muted">End of markup test page.</p>
+
+      <nav aria-label="Related pages">
+        <p class="text-muted">See also:</p>
+        <ul>
+          <li>
+            <a href="/ai-generated/notes">Notes</a> — the philosophy behind choosing
+            these semantic elements
+          </li>
+        </ul>
+      </nav>
     </footer>
   </article>
 </Layout>

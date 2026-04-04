@@ -17,6 +17,17 @@ import Layout from "@/layouts/Layout.astro";
     src="https://cdn.jsdelivr.net/npm/codemirror@5/keymap/vim.js"
     defer></script>
 
+  <aside
+    class="provenance-note"
+    role="note"
+    aria-label="Authorship and provenance note"
+  >
+    <span class="provenance-label">AI-generated tool</span>
+    <span class="provenance-text"
+      >Built with an AI system. Use it to write something of your own.</span
+    >
+  </aside>
+
   <section class="paper-wrap">
     <textarea id="editor"></textarea>
     <div id="status">loading…</div>
