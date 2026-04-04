@@ -412,3 +412,37 @@ html[data-mode="high"] [data-detail="high"] {
     transform: translateY(-8%);
   }
 }
+
+/* ==================== Article Figures ==================== */
+
+.article-figure {
+  margin: var(--space-xl) 0;
+}
+
+.article-figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius, 4px);
+}
+
+.article-figure figcaption {
+  margin-top: var(--space-sm);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* SVG diagrams in articles */
+.article-svg {
+  width: 100%;
+  height: auto;
+  max-width: 800px;
+  color: var(--text);
+}
+
+@media (max-width: 640px) {
+  .article-svg {
+    min-height: 280px;
+  }
+}

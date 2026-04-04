@@ -1,0 +1,73 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Origins from "./_Origins.astro";
+import Technique from "./_Technique.astro";
+import Canon from "./_Canon.astro";
+import Hidden from "./_Hidden.astro";
+import Legacy from "./_Legacy.astro";
+---
+
+<Layout
+  title="The Wall of Sound"
+  description="How Phil Spector built a cathedral out of tape hiss and tremolo, and why its echoes still shape the music you hear today."
+>
+  <article id="wall-of-sound">
+    <header>
+      <h1>The Wall of Sound</h1>
+      <p class="subtitle">
+        A cathedral built from tape hiss, tremolo, and the sheer nerve to put
+        four guitars where one would do.
+      </p>
+    </header>
+
+    <aside
+      class="provenance-note"
+      role="note"
+      aria-label="Authorship and provenance note"
+    >
+      <span class="provenance-label">AI-generated text</span>
+      <span class="provenance-text">
+        This article was drafted in conversation with an AI system (Claude, by
+        Anthropic). It has not been independently fact-checked. Follow the
+        links, check the sources, listen to the records. That last part is the
+        real point.
+      </span>
+    </aside>
+
+    <section id="intro">
+      <p>
+        There is a moment on the Ronettes' "Be My Baby" where the drums hit and
+        the room opens up. Not a room, exactly. Something larger. A space that
+        doesn't exist in any building you could walk into, a sonic architecture
+        that feels both impossibly vast and strangely intimate, as though
+        someone had found a way to record the inside of a feeling.
+      </p>
+      <p>
+        That sound had a name before most people heard it. Phil Spector called
+        it his Wall of Sound. The phrase stuck, the way good metaphors do,
+        because it described something real: a production method so dense, so
+        layered, so wilfully excessive that the individual instruments dissolved
+        into a single overwhelming force. It was not a wall in the sense of a
+        barrier. It was a wall in the sense of a wave.
+      </p>
+      <p>
+        This is the story of how it was built, what it did, and where it went
+        after the man who named it could no longer control it.
+      </p>
+    </section>
+
+    <Origins />
+    <Technique />
+    <Canon />
+    <Hidden />
+    <Legacy />
+
+    <footer>
+      <p class="text-muted">
+        The best way to understand the Wall of Sound is to turn the lights down,
+        put on a good pair of headphones, and press play. Start with "Be My
+        Baby." You will know within four bars.
+      </p>
+    </footer>
+  </article>
+</Layout>
