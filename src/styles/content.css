@@ -310,29 +310,6 @@ button:focus-visible kbd {
   }
 }
 
-/* Detail levels */
-[data-detail] {
-  display: none;
-}
-
-/* LOW → show only low */
-html[data-mode="low"] [data-detail="low"] {
-  display: block;
-}
-
-/* MEDIUM → show low + medium */
-html[data-mode="medium"] [data-detail="low"],
-html[data-mode="medium"] [data-detail="medium"] {
-  display: block;
-}
-
-/* HIGH → show low + medium + high */
-html[data-mode="high"] [data-detail="low"],
-html[data-mode="high"] [data-detail="medium"],
-html[data-mode="high"] [data-detail="high"] {
-  display: block;
-}
-
 /* ============================================================
    Entry Point – Desktop Cinematic Image Treatment
    Structure required:

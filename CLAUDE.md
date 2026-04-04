@@ -45,6 +45,18 @@ Target: <500 lines per file.
 | src/components/Header.astro                         | 690   | Extract SVG logo, theme toggle, nav  |
 | src/pages/ai-generated/opening-the-hood/index.astro | 1551  | Extract sections into sub-components |
 
+## Content Authorship Zones
+
+The human author writes without AI assistance in most of the site. AI-generated or
+AI-assisted long-form text is only permitted in:
+
+- `src/pages/ai-generated/` — Astro pages explicitly marked as AI-generated
+- `public/ai-generated/` — static files (HTML, audio, visuals) produced by AI tools
+
+**Do not generate or place longer narrative/prose text anywhere else** (e.g.
+`src/pages/index.astro`, `src/pages/hello.astro`, or other top-level pages).
+Short labels, titles, aria-labels, and structural copy are fine everywhere.
+
 ## Diffs
 
 Minimal diffs. Refactor only for: correctness, safety, performance cliffs,
