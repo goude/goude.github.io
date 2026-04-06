@@ -31,10 +31,15 @@ describe("external image references in source files", () => {
       const matches = [...content.matchAll(IMG_EXTERNAL_SRC)];
       for (const m of matches) {
         const lineNumber = content.slice(0, m.index).split("\n").length;
-        violations.push(`${path.relative(SRC_DIR, file)}:${lineNumber}: ${m[0].slice(0, 80)}…`);
+        violations.push(
+          `${path.relative(SRC_DIR, file)}:${lineNumber}: ${m[0].slice(0, 80)}…`
+        );
       }
     }
 
-    expect(violations, `External <img src> URLs found:\n${violations.join("\n")}`).toEqual([]);
+    expect(
+      violations,
+      `External <img src> URLs found:\n${violations.join("\n")}`
+    ).toEqual([]);
   });
 });

@@ -1,0 +1,101 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Synth1 from "./_Synth1.astro";
+import Synth2 from "./_Synth2.astro";
+import Synth3 from "./_Synth3.astro";
+import Synth4 from "./_Synth4.astro";
+import Synth5 from "./_Synth5.astro";
+---
+
+<Layout
+  title="Notes – Novation Peak Sound Design Practice Ladder"
+  description="Grounded sound-design exercises using classic synth archetypes"
+>
+  <!-- article: a self-contained knowledge object (a page you could cite or export as-is) -->
+  <article id="practice-ladder">
+    <!-- header: the introduction block for the page (title + framing) -->
+    <header>
+      <!-- h1: name of the page-level object; treat as a title, not a sentence -->
+      <h1>Novation Peak – Sound Design Practice Ladder</h1>
+
+      <!-- p: the default unit of explanation; keep one idea per paragraph -->
+      <p class="subtitle">
+        A sequence of "patch archetypes" designed to build control before
+        complexity. Each patch is a small study: do it fast once, then repeat
+        until it becomes boringly dependable.
+      </p>
+
+      <aside
+        class="provenance-note"
+        role="note"
+        aria-label="Authorship and provenance note"
+      >
+        <span class="provenance-label">AI-generated text</span>
+        <span class="provenance-text"
+          >Drafted with an AI system. Reviewed and edited by a human.</span
+        >
+      </aside>
+    </header>
+
+    <p>
+      The intent is not to collect presets, but to build a mental model: how
+      oscillators, envelopes, filters, and modulation interact, and how little
+      you can use while still making something expressive. If you want a
+      constraint: avoid effects until the patch itself feels alive.
+    </p>
+
+    <!-- nav: conceptual navigation; here it's an index into the ladder -->
+    <nav aria-label="Practice Ladder Index">
+      <!-- ol: use when order matters (a ladder has a recommended sequence) -->
+      <ol>
+        <li>
+          <a href="#single-oscillator-saw-lead">Single-Oscillator Saw Lead</a>
+        </li>
+        <li><a href="#square-bass-with-snap">Square Bass With Snap</a></li>
+        <li><a href="#two-saw-poly-pad">Two-Saw Poly Pad</a></li>
+        <li><a href="#pwm-pad-strings">PWM Pad / Strings</a></li>
+        <li><a href="#hard-sync-lead">Hard-Sync Lead</a></li>
+        <li><a href="#poly-brass-stab">Poly Brass Stab</a></li>
+        <li><a href="#fm-bell-electric-piano">FM Bell / Electric Piano</a></li>
+        <li><a href="#acid-bassline">Acid Bassline</a></li>
+        <li><a href="#string-ensemble">String Ensemble</a></li>
+        <li><a href="#evolving-cinematic-pad">Evolving Cinematic Pad</a></li>
+      </ol>
+    </nav>
+
+    <!-- section: a major thematic grouping; keep headings shallow (h1–h3) -->
+    <section id="synthesis">
+      <!-- h2: stable category label -->
+      <h2>Synthesis</h2>
+
+      <Synth1 />
+      <Synth2 />
+      <Synth3 />
+      <Synth4 />
+      <Synth5 />
+    </section>
+
+    <!-- footer: closing material for the article -->
+    <footer>
+      <p class="text-muted">
+        This ladder is meant to stay editable. Add variants freely, but try to
+        preserve the basic format: a clear goal, a small set of controls, and a
+        few tests for whether it worked.
+      </p>
+
+      <nav aria-label="Related pages">
+        <p class="text-muted">See also:</p>
+        <ul>
+          <li>
+            <a href="/ai-generated/beat-learn">Beat Practice Ladder</a> — the rhythm
+            counterpart to this synth ladder
+          </li>
+          <li>
+            <a href="/ai-generated/sheev/">GoatTracker2 on macOS</a> — another angle
+            on music tools
+          </li>
+        </ul>
+      </nav>
+    </footer>
+  </article>
+</Layout>
