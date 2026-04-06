@@ -1,5 +1,5 @@
 /* ==================== Shared navigation primitives ==================== */
-/* Used by Header.astro and its sub-components: SiteLogo, ThemeToggle, ModeToggle */
+/* Used by Header.astro and its sub-components: SiteLogo, ThemeToggle */
 
 /* Unified nav item / action button */
 .nav-action {
