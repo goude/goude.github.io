@@ -1,15 +1,28 @@
 # Backlog
 
-Last reviewed 2026-04-04.
+Last reviewed 2026-04-06.
 
-## Medium Priority
+## High Priority
 
 ### Remove ModeToggle component
 
 `ModeToggle.astro` is no longer used — the detail-levels toggle was removed from
-the header. The component file and its `data-mode-*` CSS can be deleted.
+the header. The component file and its `data-mode-*` CSS can be deleted. Also
+update the `nav.css` comment that still references it.
 
 - File: `src/components/ModeToggle.astro`
+- File: `src/styles/nav.css` (line 2 comment)
+
+### Clean up entry-point hero image CSS
+
+`content.css` contains cinematic hero-image rules for `#entry-point figure`.
+The current `index.astro` is a minimal placeholder with no figures — these rules
+only serve the archived `old-entry-point.astro`. Remove them once the archived
+page is deleted or the new index page is finalized.
+
+- File: `src/styles/content.css` (lines 318-390)
+
+## Medium Priority
 
 ### Write human-authored content for index and hello pages
 
@@ -18,36 +31,21 @@ construction" placeholders. The old AI-generated versions have been archived at
 `src/pages/ai-generated/old-entry-point.astro` and
 `src/pages/ai-generated/old-hello.astro`.
 
-### Clean up entry-point hero image CSS
+### Reduce large content pages
 
-`content.css` still contains the cinematic hero-image treatment for `#entry-point`
-figures. Now that `index.astro` is a minimal placeholder, these rules are dead.
-Remove or repurpose them when the new index page is written.
+Several AI-generated content pages exceed the 500-line target:
 
-- File: `src/styles/content.css` (search for `#entry-point figure`)
+| File                                           | Lines |
+| ---------------------------------------------- | ----- |
+| `src/pages/ai-generated/patch-learn.astro`     | 771   |
+| `src/pages/ai-generated/beat-learn.astro`      | 735   |
+| `src/pages/ai-generated/thread-taxonomy.astro` | 532   |
 
-### Split large components
-
-`opening-the-hood/index.astro` is 1,551 lines. Extract sections into components or partial Astro files.
-
-- File: `src/pages/ai-generated/opening-the-hood/index.astro`
-
-### Extract large inline scripts
-
-Several pages have 100-260 line inline `<script>` blocks that could live in separate files.
-
-- File: `src/pages/cop.astro` (lines 53-313 — QR generation, clipboard, encryption)
-- File: `src/pages/egghunt.astro` (lines 580-700+ — decryption, puzzle UI)
+These could be split into sub-components following the pattern used by
+`opening-the-hood/` (which was successfully split from 1,551 into a 143-line
+index plus partial components).
 
 ## Low Priority
-
-### Resolve TODO comments
-
-Several pages contain `TODO: rewrite the ai slop` comments. `no-bullshit/index.astro` has multiple `<!-- TODO -->` placeholders for visual descriptions and process steps.
-
-- File: `src/pages/notes.astro`
-- File: `src/pages/ai-generated/ambient-improvement-positive-residue.astro`
-- File: `src/pages/ai-generated/no-bullshit/index.astro`
 
 ### Type external CDN scripts
 
@@ -72,12 +70,6 @@ Opportunities to reduce complexity without changing behavior.
 ### Inline trivial npm script wrappers
 
 The justfile delegates to `npm run` for most recipes. Where the npm script is a single command (e.g. `"lint": "eslint ."`), the justfile recipe could call the tool directly, removing a layer of indirection.
-
-### Simplify cop.astro inline script
-
-The 260-line inline script handles QR generation, clipboard, and encryption. Breaking it into smaller functions or a separate module would improve readability.
-
-- File: `src/pages/cop.astro`
 
 ## Improvements
 
