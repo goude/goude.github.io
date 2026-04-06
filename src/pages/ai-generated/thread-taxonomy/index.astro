@@ -1,0 +1,57 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Unanswered from "./_Unanswered.astro";
+import Ownership from "./_Ownership.astro";
+import Signal from "./_Signal.astro";
+import Behavior from "./_Behavior.astro";
+import Decision from "./_Decision.astro";
+---
+
+<Layout
+  title="Thread Taxonomy"
+  description="Failure modes in email and Teams threads — and how to counteract them quietly."
+>
+  <article id="thread-taxonomy">
+    <header>
+      <h1>Thread Taxonomy</h1>
+      <p class="subtitle">
+        How to reduce entropy in corporate communication without being appointed
+        manager.
+      </p>
+
+      <aside
+        class="provenance-note"
+        role="note"
+        aria-label="Authorship and provenance note"
+      >
+        <span class="provenance-label">AI-generated text</span>
+        <span class="provenance-text"
+          >Drafted with an AI system. Reviewed and edited by a human.</span
+        >
+      </aside>
+    </header>
+
+    <Unanswered />
+    <Ownership />
+    <Signal />
+    <Behavior />
+    <Decision />
+
+    <footer>
+      <p class="text-muted">
+        Leadership without title is mostly about reducing ambiguity.
+      </p>
+
+      <nav aria-label="Related pages">
+        <p class="text-muted">See also:</p>
+        <ul>
+          <li>
+            <a href="/ai-generated/ambient-improvement-positive-residue"
+              >Ambient Improvement</a
+            > — the same quiet discipline applied to code
+          </li>
+        </ul>
+      </nav>
+    </footer>
+  </article>
+</Layout>

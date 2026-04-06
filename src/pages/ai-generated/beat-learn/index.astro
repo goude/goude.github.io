@@ -1,0 +1,117 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Beats1 from "./_Beats1.astro";
+import Beats2 from "./_Beats2.astro";
+import Beats3 from "./_Beats3.astro";
+import Beats4 from "./_Beats4.astro";
+import Beats5 from "./_Beats5.astro";
+---
+
+<Layout
+  title="Notes – Digitakt Beat Practice Ladder"
+  description="Grounded drum-machine exercises: nail timing, density, and intention before complexity"
+>
+  <!-- article: a self-contained knowledge object; a page you could cite or export as-is -->
+  <article id="beat-practice-ladder">
+    <!-- header: introduction block for the page (title + framing) -->
+    <header>
+      <!-- h1: name of the page-level object; treat as a title, not a sentence -->
+      <h1>Digitakt – Beat Practice Ladder</h1>
+
+      <aside
+        class="provenance-note"
+        role="note"
+        aria-label="Authorship and provenance note"
+      >
+        <span class="provenance-label">AI-generated text</span>
+        <span class="provenance-text">
+          Drafted with an AI system. Reviewed and edited by a human.
+        </span>
+      </aside>
+
+      <p class="subtitle">
+        A sequence of beat archetypes designed to build timing, pocket, and
+        arrangement discipline before adding sound design, tricks, or "clever"
+        modulation. Tailored to Digitakt MKI, but written to generalize to any
+        groovebox.
+      </p>
+    </header>
+
+    <!-- p: default unit of explanation; keep one idea per paragraph -->
+    <p>
+      The goal is not to collect patterns. The goal is to acquire a small set of
+      reliable beat "moves" that you can execute cleanly at will. If a beat only
+      works with heavy effects, complex probability, or happy accidents, it is
+      not yet a skill. Start dry. Make it groove with velocity, microtiming, and
+      restraint.
+    </p>
+
+    <p>
+      Constraint for the whole ladder: keep the kit simple. One kick, one
+      snare/clap, one closed hat, one open hat (optional), one percussion voice.
+      If you want flavor, use sample choice and tuning first, then envelopes,
+      then filters. Effects last.
+    </p>
+
+    <!-- nav: conceptual navigation; an index into the ladder -->
+    <nav aria-label="Beat Ladder Index">
+      <!-- ol: use when order matters (a ladder has a recommended sequence) -->
+      <ol>
+        <li><a href="#four-on-the-floor">Four-on-the-Floor Foundation</a></li>
+        <li><a href="#backbeat">Backbeat and Pocket</a></li>
+        <li><a href="#eighth-hats">Eighth-Note Hats and Dynamics</a></li>
+        <li>
+          <a href="#sixteenth-hats">Sixteenth Hats: Swing Without Slop</a>
+        </li>
+        <li><a href="#kick-variants">Kick Variants and Negative Space</a></li>
+        <li><a href="#ghost-notes">Ghost Notes and Accents</a></li>
+        <li><a href="#syncopation">Syncopation: Off-Grid Energy</a></li>
+        <li><a href="#fills">Fills That Respect the Groove</a></li>
+        <li><a href="#transition-bars">Transition Bars and Arrangement</a></li>
+        <li>
+          <a href="#performance">Performance: One Pattern, Many Moments</a>
+        </li>
+      </ol>
+    </nav>
+
+    <!-- section: major thematic grouping; keep headings shallow (h1–h3) -->
+    <section id="beats">
+      <!-- h2: stable category label -->
+      <h2>Beats</h2>
+
+      <Beats1 />
+      <Beats2 />
+      <Beats3 />
+      <Beats4 />
+      <Beats5 />
+    </section>
+
+    <!-- footer: closing material for the article -->
+    <footer>
+      <p class="text-muted">
+        Keep this ladder editable. Add variations, but preserve the discipline:
+        simplest viable kit, dry first, groove before tricks. When you add
+        complexity, be able to explain what it buys you.
+      </p>
+
+      <nav aria-label="Related pages">
+        <p class="text-muted">See also:</p>
+        <ul>
+          <li>
+            <a href="/ai-generated/patch-learn">Sound Design Practice Ladder</a> —
+            the synth counterpart to this drum ladder
+          </li>
+          <li>
+            <a href="/ai-generated/do-olls-that-will-talk/"
+              >The Do-olls That Will Talk</a
+            > — rhythmic timing analysis of a classic recording
+          </li>
+          <li>
+            <a href="/ai-generated/sheev/">GoatTracker2 on macOS</a> — another angle
+            on music tools
+          </li>
+        </ul>
+      </nav>
+    </footer>
+  </article>
+</Layout>
