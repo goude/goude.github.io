@@ -20,10 +20,6 @@ regions plugin. Consider bundling these dependencies or adding typed wrappers.
 
 - File: `src/pages/ai-generated/do-olls-that-will-talk/_score.ts`
 
-### Add RSS feed
-
-Blog-like content would benefit from `@astrojs/rss`.
-
 ### Add Lighthouse CI to GitHub Actions
 
 No performance budget exists. Lighthouse CI in the workflow would catch regressions.
