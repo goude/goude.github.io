@@ -1,7 +1,7 @@
 // File: _score.ts
 
-// @ts-expect-error - CDN ESM import without type declarations
 import RegionsPlugin from "https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/plugins/regions.esm.js";
+import type { RegionsPluginInstance } from "https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/plugins/regions.esm.js";
 
 declare global {
   interface Window {
@@ -167,14 +167,13 @@ if (!isBrowser()) {
       url: "/audio/do-olls-clip.mp4",
     });
 
-    const regions = ws.registerPlugin(RegionsPlugin.create());
+    const regions = ws.registerPlugin(
+      RegionsPlugin.create()
+    ) as RegionsPluginInstance;
 
     ws.on("ready", () => {
       markers.forEach((m, i) => {
-        // regions is untyped (CDN plugin), so we go through unknown.
-        (
-          regions as { addRegion: (cfg: Record<string, unknown>) => void }
-        ).addRegion({
+        regions.addRegion({
           start: m.time,
           end: m.time + 0.05,
           color: categoryColor[m.category],
@@ -202,14 +201,7 @@ if (!isBrowser()) {
       if (playPause) playPause.textContent = "Play";
     });
 
-    (
-      regions as {
-        on: (
-          evt: string,
-          fn: (r: { start: number }, e: { stopPropagation: () => void }) => void
-        ) => void;
-      }
-    ).on("region-clicked", (r, e) => {
+    regions.on("region-clicked", (r, e) => {
       e.stopPropagation();
       ws.setTime(r.start);
     });

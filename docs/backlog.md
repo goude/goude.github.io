@@ -11,21 +11,6 @@ construction" placeholders. The old AI-generated versions have been archived at
 `src/pages/ai-generated/old-entry-point.astro` and
 `src/pages/ai-generated/old-hello.astro`.
 
-## Low Priority
-
-### Type external CDN scripts
-
-`_score.ts` uses `@ts-expect-error` for a CDN ESM import of the WaveSurfer
-regions plugin. Consider bundling these dependencies or adding typed wrappers.
-
-- File: `src/pages/ai-generated/do-olls-that-will-talk/_score.ts`
-
-### Add Lighthouse CI to GitHub Actions
-
-No performance budget exists. Lighthouse CI in the workflow would catch regressions.
-
-- File: `.github/workflows/astro.yml`
-
 ## Improvements
 
 ### Consider bundling WaveSurfer and YouTube API
@@ -46,3 +31,9 @@ Loading these from CDN introduces external dependencies. Bundling via npm would 
 - **Inline trivial npm script wrappers** — justfile recipes already call tools
   directly (`eslint`, `tsc`, `astro`, `prettier`, `vitest`); only `precommit`
   and `prepush` delegate to npm because they run multi-step pipelines.
+- **Type external CDN scripts** — added ambient module declaration
+  `_regions.d.ts` for the WaveSurfer RegionsPlugin CDN URL; removed
+  `@ts-expect-error` and inline casts from `_score.ts`.
+- **Add Lighthouse CI to GitHub Actions** — added `lighthouse` job to
+  `astro.yml` (runs after build, uses `@lhci/cli`); added `.lighthouserc.json`
+  with accessibility error threshold and performance/SEO/best-practices warnings.
