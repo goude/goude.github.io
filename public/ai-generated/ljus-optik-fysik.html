@@ -518,6 +518,16 @@ canvas { display: block; width: 100%; height: 100%; }
       <p>När ljus träffar ett material och <span class="hl3">tas upp</span> av det (omvandlas till värme) kallas det absorbering. En svart tröja absorberar det mesta av ljuset → den blir varm i solen. En vit tröja reflekterar det mesta → den håller dig svalare.</p>
     </div>
     <div class="card">
+      <h2>Dispersion — varför Snells lag skapar regnbågar</h2>
+      <p>Snells lag säger <span class="info-tag">n₁ sin θ₁ = n₂ sin θ₂</span>, men det finns en viktig detalj: <span class="hl">brytningsindex (n) beror på våglängden!</span></p>
+      <br>
+      <p>I glas och vatten har <span style="color:#8b00ff">violett ljus</span> (kort våglängd) ett <em>högre</em> brytningsindex än <span style="color:#ff0000">rött ljus</span> (lång våglängd). Det betyder att violett ljus bryts <em>mer</em> — det svänger mer mot normalen.</p>
+      <br>
+      <p>Detta fenomen kallas <span class="hl2">dispersion</span> och är anledningen till att ett prisma eller en vattendroppe kan dela upp vitt ljus i regnbågens alla färger. Varje våglängd tar sin egen väg genom materialet!</p>
+      <br>
+      <p><span class="hl3">Exempel:</span> I glas är n ≈ 1.53 för violett men n ≈ 1.51 för rött. Liten skillnad — men tillräcklig för att separera färgerna över ett avstånd.</p>
+    </div>
+    <div class="card">
       <h2>Föremål under vatten — varför ser det "fel" ut?</h2>
       <div class="cols">
         <div>
@@ -613,6 +623,11 @@ canvas { display: block; width: 100%; height: 100%; }
           <div class="canvas-wrap" style="height:220px;">
             <canvas id="concaveLensCanvas"></canvas>
           </div>
+          <div class="slider-group">
+            <label>Föremål avstånd:</label>
+            <input type="range" id="concaveObjDist" min="40" max="250" value="150">
+            <span class="slider-value" id="concaveObjVal">150</span>
+          </div>
         </div>
       </div>
       <div>
@@ -643,6 +658,11 @@ canvas { display: block; width: 100%; height: 100%; }
           <div class="canvas-wrap" style="height:220px;">
             <canvas id="convexMirrorCanvas"></canvas>
           </div>
+          <div class="slider-group">
+            <label>Föremål avstånd:</label>
+            <input type="range" id="convexMirrorObjDist" min="40" max="250" value="140">
+            <span class="slider-value" id="convexMirrorObjVal">140</span>
+          </div>
         </div>
       </div>
     </div>
@@ -659,32 +679,30 @@ canvas { display: block; width: 100%; height: 100%; }
           <p>Ögats lins kan ändra form (ackommodera) för att fokusera på föremål på olika avstånd.</p>
         </div>
         <div class="card">
-          <h2>Närsynthet (myopi)</h2>
-          <p>Ögat är för <span class="hl">långt</span> eller linsen för stark → bilden fokuseras <em>framför</em> näthinnan. Personen ser bra på nära håll men suddigt på långt avstånd.</p>
-          <br>
-          <p><strong>Korrigeras med:</strong> <span class="hl2">Konkav lins</span> (spridningslins) — sprider ljuset lite innan det går in i ögat.</p>
-          <div class="canvas-wrap" style="height:160px; margin-top:12px;">
-            <canvas id="myopiaCanvas"></canvas>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="card" style="height:76px; display:flex; align-items:center;">
-          <p style="font-size:1rem; font-weight:600; color:var(--accent2);">👁️ Ögats delar: hornhinna → pupill → lins → glaskropp → näthinna → synnerv</p>
-        </div>
-        <div class="card">
-          <h2>Översynthet (hyperopi)</h2>
-          <p>Ögat är för <span class="hl">kort</span> eller linsen för svag → bilden fokuseras <em>bakom</em> näthinnan. Personen ser bra på långt håll men suddigt på nära håll.</p>
-          <br>
-          <p><strong>Korrigeras med:</strong> <span class="hl2">Konvex lins</span> (samlingslins) — samlar ljuset lite extra innan det går in i ögat.</p>
-          <div class="canvas-wrap" style="height:160px; margin-top:12px;">
-            <canvas id="hyperopiaCanvas"></canvas>
-          </div>
-        </div>
-        <div class="card">
           <h3>Minnesregel</h3>
           <p><span class="hl">Närsynthet</span> → ser nära bra → behöver ko<strong>N</strong>kav lins (<strong>N</strong> som i <strong>N</strong>ärsynthet → mi<strong>N</strong>us-lins)</p>
           <p><span class="hl2">Översynthet</span> → ser långt bra → behöver konvex lins (plus-lins, samlar)</p>
+          <br>
+          <p style="font-size:0.8rem; color:var(--text-dim);">Dioptri (D) mäter linsens styrka. Minus = sprider (konkav). Plus = samlar (konvex). Ju högre tal, desto starkare korrektion.</p>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h2>Interaktiv: Ögat med glasögonlins</h2>
+          <div class="canvas-wrap" style="height:300px;">
+            <canvas id="eyeCanvas"></canvas>
+          </div>
+          <div class="slider-group">
+            <label>Synfel (ögat):</label>
+            <input type="range" id="eyeDefect" min="-5" max="5" value="0" step="0.5">
+            <span class="slider-value" id="eyeDefectVal">0 (normalt)</span>
+          </div>
+          <div class="slider-group">
+            <label>Glasögon (D):</label>
+            <input type="range" id="lensCorrection" min="-5" max="5" value="0" step="0.5">
+            <span class="slider-value" id="lensCorrVal">0 (inga)</span>
+          </div>
+          <p style="font-size:0.75rem; color:var(--text-dim); margin-top:4px">Dra "Synfel" för att simulera närsynthet (−) eller översynthet (+). Korrigera sedan med glasögon!</p>
         </div>
       </div>
     </div>
@@ -930,23 +948,33 @@ tabInits['tab-what2'] = function() {
         wlVal.textContent = wl + ' nm';
         fqVal.textContent = (3e8/(wl*1e-9)/1e12).toFixed(0) + ' THz';
         const color = wavelengthToColor(wl);
-        const period = (wl-380)/(700-380)*40+15;
+        // Map slider range to a visual wavelength in pixels (40px for violet, 120px for red)
+        const wavePx = ((wl-380)/(700-380))*80 + 40;
         const cy = h/2;
         ctx.strokeStyle = color; ctx.lineWidth = 3;
         ctx.shadowColor = color; ctx.shadowBlur = 8;
         ctx.beginPath();
         for (let x = 0; x < w; x++) {
-          const y = cy + Math.sin((x/period)-t*3)*(h*0.3);
+          const y = cy + Math.sin((2*Math.PI*x/wavePx)-t*3)*(h*0.3);
           x===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
         }
         ctx.stroke(); ctx.shadowBlur = 0;
-        const px1 = w*0.35, px2 = px1+period;
+        // wavelength markers: find a peak to anchor from
+        const anchor = ((t*3) % (2*Math.PI)) * wavePx / (2*Math.PI);
+        let px1 = w*0.2 + (anchor % wavePx);
+        if (px1 + wavePx > w - 20) px1 -= wavePx;
+        const px2 = px1 + wavePx;
         ctx.strokeStyle = '#ffffff55'; ctx.lineWidth = 1; ctx.setLineDash([3,3]);
         ctx.beginPath(); ctx.moveTo(px1,15); ctx.lineTo(px1,h-15); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(px2,15); ctx.lineTo(px2,h-15); ctx.stroke();
         ctx.setLineDash([]);
+        // arrow between markers
+        ctx.strokeStyle = '#ffffff88'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(px1,22); ctx.lineTo(px2,22); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(px1,22); ctx.lineTo(px1+6,18); ctx.moveTo(px1,22); ctx.lineTo(px1+6,26); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(px2,22); ctx.lineTo(px2-6,18); ctx.moveTo(px2,22); ctx.lineTo(px2-6,26); ctx.stroke();
         ctx.fillStyle = '#fff'; ctx.font = '11px "Space Mono"';
-        ctx.fillText('← λ →', (px1+px2)/2-20, 20);
+        ctx.fillText('λ = '+wl+' nm', (px1+px2)/2-35, 16);
         ctx.strokeStyle = '#333'; ctx.beginPath(); ctx.moveTo(0,cy); ctx.lineTo(w,cy); ctx.stroke();
         t += 0.016;
         requestAnimationFrame(draw);
@@ -1282,44 +1310,68 @@ tabInits['tab-lenses'] = function() {
       draw(); slider.addEventListener('input', draw);
     }
   }
-  // Concave lens (static)
+  // Concave lens (interactive)
   {
     const s = setupCanvas('concaveLensCanvas');
     if (s) {
       const {ctx, w, h} = s;
-      const cy = h/2, lensX = w*0.45, f = 80, objDist = 150, objH = 45;
-      const objX = lensX-objDist;
-      ctx.strokeStyle = '#333'; ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(0,cy); ctx.lineTo(w,cy); ctx.stroke();
-      ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 3;
-      ctx.beginPath(); ctx.moveTo(lensX,cy-75); ctx.lineTo(lensX,cy+75); ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(lensX-6,cy-75); ctx.quadraticCurveTo(lensX+4,cy,lensX-6,cy+75);
-      ctx.moveTo(lensX+6,cy-75); ctx.quadraticCurveTo(lensX-4,cy,lensX+6,cy+75);
-      ctx.strokeStyle = '#a855f766'; ctx.lineWidth = 1; ctx.stroke();
-      ctx.fillStyle = '#ff6b35';
-      ctx.beginPath(); ctx.arc(lensX-f,cy,4,0,Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.arc(lensX+f,cy,4,0,Math.PI*2); ctx.fill();
-      ctx.strokeStyle = '#22cc55'; ctx.lineWidth = 2.5;
-      ctx.beginPath(); ctx.moveTo(objX,cy); ctx.lineTo(objX,cy-objH); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(objX-5,cy-objH+10); ctx.lineTo(objX,cy-objH); ctx.lineTo(objX+5,cy-objH+10); ctx.stroke();
-      const imgDist = -(f*objDist)/(objDist+f);
-      const mag = -imgDist/objDist;
-      const imgH = objH*mag;
-      const imgX = lensX+imgDist;
-      ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 2; ctx.setLineDash([4,4]);
-      ctx.beginPath(); ctx.moveTo(imgX,cy); ctx.lineTo(imgX,cy-imgH); ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.strokeStyle = '#ffdd4466'; ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(objX,cy-objH); ctx.lineTo(lensX,cy-objH); ctx.stroke();
-      ctx.strokeStyle = '#ffdd44';
-      const rayEndX = lensX+130;
-      ctx.beginPath(); ctx.moveTo(lensX,cy-objH);
-      ctx.lineTo(rayEndX, cy-objH+(rayEndX-lensX)*(objH/f)); ctx.stroke();
-      ctx.fillStyle = '#888'; ctx.font = '10px "Space Mono"';
-      ctx.fillText('Alltid förminskad, upprätt, virtuell bild', 10, 18);
-      ctx.fillStyle = '#22cc55'; ctx.font = '9px "Space Mono"'; ctx.fillText('Föremål', objX-15, cy+15);
-      ctx.fillStyle = '#a855f7'; ctx.fillText('Bild (virtuell)', imgX-20, cy+15);
+      const slider = document.getElementById('concaveObjDist');
+      const valEl = document.getElementById('concaveObjVal');
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        const cy = h/2, lensX = w*0.45, f = 80;
+        const objDist = parseInt(slider.value);
+        valEl.textContent = objDist;
+        const objX = lensX - objDist, objH = 45;
+        ctx.strokeStyle = '#333'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(0,cy); ctx.lineTo(w,cy); ctx.stroke();
+        // lens
+        ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(lensX,cy-75); ctx.lineTo(lensX,cy+75); ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(lensX-6,cy-75); ctx.quadraticCurveTo(lensX+4,cy,lensX-6,cy+75);
+        ctx.moveTo(lensX+6,cy-75); ctx.quadraticCurveTo(lensX-4,cy,lensX+6,cy+75);
+        ctx.strokeStyle = '#a855f766'; ctx.lineWidth = 1; ctx.stroke();
+        // focal points
+        ctx.fillStyle = '#ff6b35';
+        ctx.beginPath(); ctx.arc(lensX-f,cy,4,0,Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(lensX+f,cy,4,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#666'; ctx.font = '9px "Space Mono"';
+        ctx.fillText('F',lensX-f-3,cy+16); ctx.fillText('F',lensX+f-3,cy+16);
+        // object
+        ctx.strokeStyle = '#22cc55'; ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.moveTo(objX,cy); ctx.lineTo(objX,cy-objH); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(objX-5,cy-objH+10); ctx.lineTo(objX,cy-objH); ctx.lineTo(objX+5,cy-objH+10); ctx.stroke();
+        // concave: di = -(f*do)/(do+f), virtual image on same side
+        const imgDist = -(f*objDist)/(objDist+f);
+        const mag = -imgDist/objDist;
+        const imgH = objH*mag;
+        const imgX = lensX+imgDist;
+        // virtual image (dashed)
+        ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 2; ctx.setLineDash([4,4]);
+        ctx.beginPath(); ctx.moveTo(imgX,cy); ctx.lineTo(imgX,cy-imgH); ctx.stroke();
+        ctx.setLineDash([]);
+        // ray 1: parallel → diverge as if from F on same side
+        ctx.strokeStyle = '#ffdd4466'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(objX,cy-objH); ctx.lineTo(lensX,cy-objH); ctx.stroke();
+        ctx.strokeStyle = '#ffdd44';
+        const rayEndX = lensX+130;
+        const slope1 = (cy-objH - cy)/(lensX - (lensX-f));
+        ctx.beginPath(); ctx.moveTo(lensX,cy-objH);
+        ctx.lineTo(rayEndX, cy-objH + (rayEndX-lensX)*slope1); ctx.stroke();
+        // virtual extension (dashed back to F)
+        ctx.setLineDash([3,3]); ctx.strokeStyle = '#ffdd4444';
+        ctx.beginPath(); ctx.moveTo(lensX,cy-objH); ctx.lineTo(lensX-f, cy); ctx.stroke();
+        ctx.setLineDash([]);
+        // ray 2: through center (straight)
+        ctx.strokeStyle = '#44ff4466'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(objX,cy-objH); ctx.lineTo(lensX+(lensX-objX)*0.5, cy+(cy-(cy-objH))*0.5); ctx.stroke();
+        ctx.fillStyle = '#888'; ctx.font = '10px "Space Mono"';
+        ctx.fillText('Förminskad, upprätt, virtuell ('+(mag).toFixed(2)+'x)', 10, 18);
+        ctx.fillStyle = '#22cc55'; ctx.font = '9px "Space Mono"'; ctx.fillText('Föremål', objX-15, cy+15);
+        ctx.fillStyle = '#a855f7'; ctx.fillText('Bild', imgX-10, cy+15);
+      }
+      draw(); slider.addEventListener('input', draw);
     }
   }
   // Concave mirror
@@ -1364,90 +1416,226 @@ tabInits['tab-lenses'] = function() {
       draw(); slider.addEventListener('input', draw);
     }
   }
-  // Convex mirror (static)
+  // Convex mirror (interactive)
   {
     const s = setupCanvas('convexMirrorCanvas');
     if (s) {
       const {ctx, w, h} = s;
-      const cy = h/2, mirrorX = w*0.8, f = 70, objDist = 140, objH = 40;
-      const objX = mirrorX-objDist;
-      ctx.strokeStyle = '#333'; ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(0,cy); ctx.lineTo(w,cy); ctx.stroke();
-      ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 3;
-      ctx.beginPath(); ctx.arc(mirrorX-80,cy,120,-Math.PI*0.25,Math.PI*0.25); ctx.stroke();
-      ctx.strokeStyle = '#22cc55'; ctx.lineWidth = 2.5;
-      ctx.beginPath(); ctx.moveTo(objX,cy); ctx.lineTo(objX,cy-objH); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(objX-5,cy-objH+10); ctx.lineTo(objX,cy-objH); ctx.lineTo(objX+5,cy-objH+10); ctx.stroke();
-      const imgDist = (f*objDist)/(objDist+f);
-      const mag = imgDist/objDist;
-      const imgH = objH*mag;
-      const imgX = mirrorX+imgDist*0.3;
-      ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 2; ctx.setLineDash([4,4]);
-      ctx.beginPath(); ctx.moveTo(imgX,cy); ctx.lineTo(imgX,cy-imgH); ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.fillStyle = '#888'; ctx.font = '10px "Space Mono"';
-      ctx.fillText('Alltid förminskad, upprätt, virtuell bild', 10, 18);
-      ctx.fillText('(Backspegel, trafikspegel)', 10, 32);
-      ctx.fillStyle = '#22cc55'; ctx.font = '9px "Space Mono"'; ctx.fillText('Föremål', objX-15, cy+15);
+      const slider = document.getElementById('convexMirrorObjDist');
+      const valEl = document.getElementById('convexMirrorObjVal');
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        const cy = h/2, mirrorX = w*0.8, f = 70;
+        const objDist = parseInt(slider.value);
+        valEl.textContent = objDist;
+        const objX = mirrorX - objDist, objH = 40;
+        ctx.strokeStyle = '#333'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(0,cy); ctx.lineTo(w,cy); ctx.stroke();
+        // convex curve
+        ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.arc(mirrorX-80,cy,120,-Math.PI*0.25,Math.PI*0.25); ctx.stroke();
+        // F behind mirror
+        ctx.fillStyle = '#ff6b3566';
+        ctx.beginPath(); ctx.arc(mirrorX+f*0.5,cy,4,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#666'; ctx.font = '9px "Space Mono"'; ctx.fillText('F',mirrorX+f*0.5-3,cy+16);
+        // object
+        ctx.strokeStyle = '#22cc55'; ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.moveTo(objX,cy); ctx.lineTo(objX,cy-objH); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(objX-5,cy-objH+10); ctx.lineTo(objX,cy-objH); ctx.lineTo(objX+5,cy-objH+10); ctx.stroke();
+        // virtual image behind mirror
+        const imgDist = (f*objDist)/(objDist+f);
+        const mag = imgDist/objDist;
+        const imgH = objH*mag;
+        const imgX = mirrorX + imgDist*0.3;
+        ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 2; ctx.setLineDash([4,4]);
+        ctx.beginPath(); ctx.moveTo(imgX,cy); ctx.lineTo(imgX,cy-imgH); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#888'; ctx.font = '10px "Space Mono"';
+        ctx.fillText('Förminskad, upprätt, virtuell ('+mag.toFixed(2)+'x)', 10, 18);
+        ctx.fillStyle = '#22cc55'; ctx.font = '9px "Space Mono"'; ctx.fillText('Föremål', objX-15, cy+15);
+        ctx.fillStyle = '#a855f7'; ctx.fillText('Bild', imgX-10, cy+15);
+      }
+      draw(); slider.addEventListener('input', draw);
     }
   }
 };
 
 // ============================================================
-// TAB 6: EYES & VISION DEFECTS
+// TAB 6: EYES — interactive lens correction
 // ============================================================
 tabInits['tab-eyes'] = function() {
-  // Myopia
-  {
-    const s = setupCanvas('myopiaCanvas');
-    if (s) {
-      const {ctx, w, h} = s;
-      const cy = h/2, eyeX = w*0.55, eyeR = 45;
-      ctx.beginPath(); ctx.ellipse(eyeX,cy,eyeR*1.3,eyeR,0,0,Math.PI*2);
-      ctx.fillStyle = 'rgba(200,200,220,0.1)'; ctx.fill();
-      ctx.strokeStyle = '#555'; ctx.lineWidth = 1.5; ctx.stroke();
-      ctx.beginPath(); ctx.ellipse(eyeX-eyeR*0.9,cy,5,eyeR*0.7,0,0,Math.PI*2);
-      ctx.fillStyle = 'rgba(100,180,255,0.2)'; ctx.fill();
-      ctx.strokeStyle = '#88aacc'; ctx.lineWidth = 1; ctx.stroke();
-      const focusX = eyeX+eyeR*0.4;
-      ctx.strokeStyle = '#ff444488'; ctx.lineWidth = 1.5;
-      ctx.beginPath(); ctx.moveTo(10,cy-20); ctx.lineTo(focusX,cy); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(10,cy+20); ctx.lineTo(focusX,cy); ctx.stroke();
-      const retinaX = eyeX+eyeR*1.1;
-      ctx.strokeStyle = '#ff444444';
-      ctx.beginPath(); ctx.moveTo(focusX,cy); ctx.lineTo(retinaX,cy-15); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(focusX,cy); ctx.lineTo(retinaX,cy+15); ctx.stroke();
-      ctx.strokeStyle = '#44ff44'; ctx.lineWidth = 2; ctx.setLineDash([4,3]);
-      ctx.beginPath(); ctx.moveTo(eyeX-eyeR*1.7,cy-30); ctx.lineTo(eyeX-eyeR*1.7,cy+30); ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.fillStyle = '#888'; ctx.font = '9px "Space Mono"'; ctx.fillText('Fokus före näthinnan', focusX-5, cy-25);
-      ctx.fillStyle = '#44ff44'; ctx.fillText('Konkav lins korrigerar', eyeX-eyeR*1.7-10, cy+45);
+  const s = setupCanvas('eyeCanvas');
+  if (!s) return;
+  const {ctx, w, h} = s;
+  const defectSlider = document.getElementById('eyeDefect');
+  const corrSlider = document.getElementById('lensCorrection');
+  const defectVal = document.getElementById('eyeDefectVal');
+  const corrVal = document.getElementById('lensCorrVal');
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    const defect = parseFloat(defectSlider.value); // negative = myopia, positive = hyperopia
+    const corr = parseFloat(corrSlider.value);
+    const net = defect + corr; // residual error
+
+    // Labels
+    if (defect < 0) defectVal.textContent = defect.toFixed(1) + ' (närsynt)';
+    else if (defect > 0) defectVal.textContent = '+' + defect.toFixed(1) + ' (översynt)';
+    else defectVal.textContent = '0 (normalt)';
+
+    if (corr < 0) corrVal.textContent = corr.toFixed(1) + ' (konkav)';
+    else if (corr > 0) corrVal.textContent = '+' + corr.toFixed(1) + ' (konvex)';
+    else corrVal.textContent = '0 (inga)';
+
+    const cy = h * 0.5;
+    const eyeX = w * 0.6, eyeRx = 65, eyeRy = 55;
+
+    // === Correction lens (if any) ===
+    const glassX = eyeX - eyeRx - 40;
+    if (Math.abs(corr) > 0.1) {
+      const thick = Math.abs(corr) * 3;
+      ctx.strokeStyle = corr < 0 ? '#ff6b35' : '#00d4ff';
+      ctx.lineWidth = 2;
+      ctx.globalAlpha = 0.6;
+      if (corr > 0) {
+        // convex lens shape
+        ctx.beginPath();
+        ctx.ellipse(glassX, cy, thick, 40, 0, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(0,212,255,0.1)'; ctx.fill(); ctx.stroke();
+      } else {
+        // concave lens shape
+        ctx.beginPath();
+        ctx.moveTo(glassX - 3, cy - 40);
+        ctx.quadraticCurveTo(glassX + thick, cy, glassX - 3, cy + 40);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(glassX + 3, cy - 40);
+        ctx.quadraticCurveTo(glassX - thick, cy, glassX + 3, cy + 40);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = corr < 0 ? '#ff6b35' : '#00d4ff';
+      ctx.font = '9px "Space Mono"';
+      ctx.textAlign = 'center';
+      ctx.fillText((corr > 0 ? '+' : '') + corr.toFixed(1) + ' D', glassX, cy + 52);
+      ctx.textAlign = 'left';
     }
-  }
-  // Hyperopia
-  {
-    const s = setupCanvas('hyperopiaCanvas');
-    if (s) {
-      const {ctx, w, h} = s;
-      const cy = h/2, eyeX = w*0.55, eyeR = 40;
-      ctx.beginPath(); ctx.ellipse(eyeX,cy,eyeR*1.1,eyeR,0,0,Math.PI*2);
-      ctx.fillStyle = 'rgba(200,200,220,0.1)'; ctx.fill();
-      ctx.strokeStyle = '#555'; ctx.lineWidth = 1.5; ctx.stroke();
-      ctx.beginPath(); ctx.ellipse(eyeX-eyeR*0.8,cy,5,eyeR*0.65,0,0,Math.PI*2);
-      ctx.fillStyle = 'rgba(100,180,255,0.2)'; ctx.fill();
-      ctx.strokeStyle = '#88aacc'; ctx.lineWidth = 1; ctx.stroke();
-      const focusX = eyeX+eyeR*1.6;
-      ctx.strokeStyle = '#4488ff88'; ctx.lineWidth = 1.5;
-      ctx.beginPath(); ctx.moveTo(10,cy-20); ctx.lineTo(focusX,cy); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(10,cy+20); ctx.lineTo(focusX,cy); ctx.stroke();
-      ctx.strokeStyle = '#ffaa44'; ctx.lineWidth = 2; ctx.setLineDash([4,3]);
-      ctx.beginPath(); ctx.moveTo(eyeX-eyeR*1.5,cy-30); ctx.lineTo(eyeX-eyeR*1.5,cy+30); ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.fillStyle = '#888'; ctx.font = '9px "Space Mono"';
-      ctx.fillText('Fokus efter näthinnan', eyeX+eyeR*0.95+10, cy-20);
-      ctx.fillStyle = '#ffaa44'; ctx.fillText('Konvex lins korrigerar', eyeX-eyeR*1.5-10, cy+45);
+
+    // === Eye ===
+    // eyeball
+    ctx.beginPath(); ctx.ellipse(eyeX, cy, eyeRx, eyeRy, 0, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(220,220,235,0.08)'; ctx.fill();
+    ctx.strokeStyle = '#556'; ctx.lineWidth = 2; ctx.stroke();
+
+    // cornea
+    ctx.beginPath();
+    ctx.arc(eyeX - eyeRx - 2, cy, eyeRy * 0.8, -0.5, 0.5);
+    ctx.strokeStyle = '#7799bb'; ctx.lineWidth = 2; ctx.stroke();
+
+    // eye lens
+    const lensX = eyeX - eyeRx * 0.55;
+    ctx.beginPath(); ctx.ellipse(lensX, cy, 6, eyeRy * 0.5, 0, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(100,180,255,0.15)'; ctx.fill();
+    ctx.strokeStyle = '#88aacc'; ctx.lineWidth = 1.5; ctx.stroke();
+
+    // pupil
+    ctx.beginPath(); ctx.arc(eyeX - eyeRx * 0.75, cy, 4, 0, Math.PI*2);
+    ctx.fillStyle = '#222'; ctx.fill();
+
+    // retina (back of eye)
+    const retinaX = eyeX + eyeRx * 0.85;
+    ctx.strokeStyle = '#aa6655'; ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(eyeX + eyeRx * 0.2, cy, eyeRx * 0.7, -0.7, 0.7);
+    ctx.stroke();
+
+    // optic nerve
+    ctx.strokeStyle = '#887766'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(eyeX + eyeRx - 5, cy);
+    ctx.quadraticCurveTo(eyeX + eyeRx + 20, cy + 15, eyeX + eyeRx + 35, cy + 30);
+    ctx.stroke();
+
+    // === Light rays ===
+    const rayStartX = 10;
+    const raySpread = 25;
+    // focal shift due to net error: positive net = focus behind retina, negative = in front
+    const focusShift = net * 8; // pixels of shift
+    const focusX = retinaX + focusShift;
+    const rayColor = Math.abs(net) < 0.5 ? '#22cc55' : (Math.abs(net) < 2 ? '#eab308' : '#ef4444');
+
+    // top ray
+    ctx.strokeStyle = rayColor; ctx.lineWidth = 2; ctx.globalAlpha = 0.7;
+    ctx.beginPath(); ctx.moveTo(rayStartX, cy - raySpread);
+    if (Math.abs(corr) > 0.1) {
+      ctx.lineTo(glassX, cy - raySpread * 0.9);
+      ctx.lineTo(focusX, cy);
+    } else {
+      ctx.lineTo(focusX, cy);
     }
+    ctx.stroke();
+
+    // bottom ray
+    ctx.beginPath(); ctx.moveTo(rayStartX, cy + raySpread);
+    if (Math.abs(corr) > 0.1) {
+      ctx.lineTo(glassX, cy + raySpread * 0.9);
+      ctx.lineTo(focusX, cy);
+    } else {
+      ctx.lineTo(focusX, cy);
+    }
+    ctx.stroke();
+
+    // center ray
+    ctx.globalAlpha = 0.4;
+    ctx.beginPath(); ctx.moveTo(rayStartX, cy); ctx.lineTo(focusX, cy); ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // focus point marker
+    ctx.beginPath(); ctx.arc(focusX, cy, 4, 0, Math.PI*2);
+    ctx.fillStyle = rayColor; ctx.fill();
+    ctx.shadowColor = rayColor; ctx.shadowBlur = 8; ctx.fill(); ctx.shadowBlur = 0;
+
+    // If focus is not on retina, show spread on retina
+    if (Math.abs(net) > 0.5) {
+      const spread = Math.abs(focusShift) * 0.4;
+      ctx.strokeStyle = rayColor + '66'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(focusX, cy);
+      ctx.lineTo(retinaX, cy - spread); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(focusX, cy);
+      ctx.lineTo(retinaX, cy + spread); ctx.stroke();
+    }
+
+    // === Labels ===
+    ctx.font = '10px "Space Mono"';
+    ctx.fillStyle = '#888';
+    ctx.fillText('Hornhinna', eyeX - eyeRx - 30, cy - eyeRy - 8);
+    ctx.fillText('Lins', lensX - 10, cy - eyeRy * 0.5 - 12);
+    ctx.fillText('Näthinna', retinaX - 20, cy + eyeRy + 15);
+    ctx.fillText('Synnerv', eyeX + eyeRx + 10, cy + 40);
+
+    // Status
+    ctx.font = 'bold 12px "Outfit"';
+    if (Math.abs(net) < 0.5) {
+      ctx.fillStyle = '#22cc55';
+      ctx.fillText('✓ Skarp bild på näthinnan!', 10, 22);
+    } else if (net < -0.5) {
+      ctx.fillStyle = '#ef4444';
+      ctx.fillText('Fokus FÖRE näthinnan (närsynt)', 10, 22);
+      ctx.font = '10px "Space Mono"'; ctx.fillStyle = '#888';
+      ctx.fillText('Behöver minus-lins (konkav) för att korrigera', 10, 38);
+    } else {
+      ctx.fillStyle = '#ef4444';
+      ctx.fillText('Fokus EFTER näthinnan (översynt)', 10, 22);
+      ctx.font = '10px "Space Mono"'; ctx.fillStyle = '#888';
+      ctx.fillText('Behöver plus-lins (konvex) för att korrigera', 10, 38);
+    }
+
+    // Diagram label
+    ctx.fillStyle = '#555'; ctx.font = '9px "Space Mono"';
+    ctx.fillText('Ljusstrålar →', rayStartX, cy - raySpread - 8);
   }
+  draw();
+  defectSlider.addEventListener('input', draw);
+  corrSlider.addEventListener('input', draw);
 };
 
 // ============================================================
