@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ljus & Optik — Fysik Åk 8</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a12;
+  --surface: #12121f;
+  --surface2: #1a1a2e;
+  --border: #2a2a44;
+  --text: #e8e8f0;
+  --text-dim: #8888aa;
+  --accent: #ff6b35;
+  --accent2: #00d4ff;
+  --accent3: #a855f7;
+  --green: #22c55e;
+  --red: #ef4444;
+  --yellow: #eab308;
+  --spectrum-red: #ff0000;
+  --spectrum-orange: #ff7700;
+  --spectrum-yellow: #ffff00;
+  --spectrum-green: #00ff00;
+  --spectrum-blue: #0000ff;
+  --spectrum-violet: #8b00ff;
+  --radius: 12px;
+  --font-display: 'Outfit', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-display);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background glow */
+body::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at 30% 20%, rgba(255,107,53,0.06) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 80%, rgba(0,212,255,0.04) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app { position: relative; z-index: 1; }
+
+/* Header */
+.header {
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,10,18,0.8);
+  backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 1.6rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+
+.logo-sub {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Tab navigation */
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+  background: var(--surface);
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.tab-btn:hover { color: var(--text); background: var(--surface2); }
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--accent), #ff8855);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(255,107,53,0.3);
+}
+
+/* Tab content */
+.tab-content { display: none; padding: 32px; max-width: 1400px; margin: 0 auto; }
+.tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Section cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.card h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--accent2);
+}
+
+.card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--accent);
+}
+
+.card p, .card li {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text);
+  font-weight: 300;
+}
+
+.card ul { list-style: none; padding-left: 0; }
+.card li::before { content: '▸ '; color: var(--accent); font-weight: 700; }
+
+/* Two-column layout */
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.cols-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+
+/* Canvas containers */
+.canvas-wrap {
+  background: #050510;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+canvas { display: block; width: 100%; height: 100%; }
+
+/* Sliders */
+.slider-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.slider-group label {
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  min-width: 120px;
+}
+
+.slider-group input[type="range"] {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  outline: none;
+}
+
+.slider-group input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(255,107,53,0.4);
+}
+
+.slider-value {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent2);
+  min-width: 60px;
+  text-align: right;
+}
+
+/* Quiz styles */
+.quiz-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.quiz-card .question {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.quiz-options { display: flex; flex-direction: column; gap: 8px; }
+
+.quiz-opt {
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.quiz-opt:hover { border-color: var(--accent); background: rgba(255,107,53,0.05); }
+.quiz-opt.correct { border-color: var(--green); background: rgba(34,197,94,0.1); color: var(--green); }
+.quiz-opt.wrong { border-color: var(--red); background: rgba(239,68,68,0.1); color: var(--red); }
+.quiz-opt.disabled { pointer-events: none; opacity: 0.5; }
+.quiz-opt.correct.disabled { opacity: 1; }
+
+.quiz-feedback {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  display: none;
+}
+
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct-fb { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); color: var(--green); }
+.quiz-feedback.wrong-fb { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: var(--red); }
+
+/* Score tracker */
+.score-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.score-bar .score-num { color: var(--accent); font-weight: 700; font-size: 1.1rem; }
+
+/* Tooltip */
+.info-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  background: rgba(0,212,255,0.1);
+  border: 1px solid rgba(0,212,255,0.2);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent2);
+  margin: 2px;
+}
+
+/* Spectrum bar */
+.spectrum-bar {
+  height: 30px;
+  border-radius: 6px;
+  background: linear-gradient(to right,
+    #ff0000, #ff7700, #ffff00, #00ff00, #0088ff, #0000ff, #8b00ff);
+  margin: 12px 0;
+  position: relative;
+}
+
+.spectrum-label {
+  position: absolute;
+  bottom: -20px;
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  transform: translateX(-50%);
+}
+
+/* Button */
+.btn {
+  padding: 8px 20px;
+  border: 1px solid var(--accent);
+  background: rgba(255,107,53,0.1);
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn:hover { background: var(--accent); color: #fff; }
+
+/* Highlight text */
+.hl { color: var(--accent); font-weight: 600; }
+.hl2 { color: var(--accent2); font-weight: 600; }
+.hl3 { color: var(--accent3); font-weight: 600; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .cols, .cols-3 { grid-template-columns: 1fr; }
+  .tabs { flex-wrap: wrap; }
+  .header { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div>
+      <div class="logo">Ljus & Optik</div>
+      <div class="logo-sub">Fysik Åk 8 — Provförberedelse</div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="tab-what1">Vad är ljus?</button>
+      <button class="tab-btn" data-tab="tab-what2">Vågor & Spektrum</button>
+      <button class="tab-btn" data-tab="tab-reflect">Reflektion & Brytning</button>
+      <button class="tab-btn" data-tab="tab-colors">Färger</button>
+      <button class="tab-btn" data-tab="tab-lenses">Linser & Speglar</button>
+      <button class="tab-btn" data-tab="tab-eyes">Ögat & Synfel</button>
+      <button class="tab-btn" data-tab="tab-advanced">Fördjupning</button>
+      <button class="tab-btn" data-tab="tab-quiz">Quiz</button>
+    </div>
+  </div>
+
+  <!-- TAB 1: What is light (basics) -->
+  <div id="tab-what1" class="tab-content active">
+    <div class="cols">
+      <div>
+        <div class="card">
+          <h2>Vad är ljus?</h2>
+          <p>Ljus är <span class="hl">elektromagnetisk strålning</span> — en form av energi som rör sig genom rymden som vågor. Det speciella med ljus är att det inte behöver något medium (som luft eller vatten) för att färdas — det kan röra sig genom vakuum!</p>
+          <br>
+          <p>Ljus har en <span class="hl2">dubbelnatur</span>: det beter sig både som en <strong>våg</strong> och som en ström av små energipaket som kallas <strong>fotoner</strong>.</p>
+          <br>
+          <h3>Viktiga fakta</h3>
+          <ul>
+            <li>Ljusets hastighet i vakuum: <span class="info-tag">c = 300 000 km/s</span></li>
+            <li>Ljus färdas i raka linjer (ljusstrålar)</li>
+            <li>Ljus kan <span class="hl">reflekteras</span>, <span class="hl2">brytas</span> och <span class="hl3">absorberas</span></li>
+            <li>Vitt ljus är en blandning av alla färger i det synliga spektrumet</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Laser vs vanligt ljus</h3>
+          <p><strong>Vanligt ljus</strong> (t.ex. solen, en lampa) skickar ut ljus i <em>alla riktningar</em> med <em>många våglängder</em> (färger) samtidigt. Vågorna är "oordnade".</p>
+          <br>
+          <p><strong>Laserljus</strong> är speciellt på tre sätt:</p>
+          <ul>
+            <li><span class="hl">Monokromatiskt</span> — en enda våglängd (en färg)</li>
+            <li><span class="hl2">Koherent</span> — alla vågor svänger i takt</li>
+            <li><span class="hl3">Kollimerat</span> — strålen sprids inte utan hålls ihop</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h2>Ljusets hastighet — en känsla för skalan</h2>
+          <div class="canvas-wrap" style="height: 200px;">
+            <canvas id="speedCanvas"></canvas>
+          </div>
+          <p style="margin-top:8px; font-size:0.8rem; color:var(--text-dim)">Animering: en foton reser runt jorden 7.5 gånger per sekund!</p>
+        </div>
+        <div class="card">
+          <h2>Vanligt ljus vs laser</h2>
+          <div class="canvas-wrap" style="height: 280px;">
+            <canvas id="laserCanvas"></canvas>
+          </div>
+          <p style="margin-top:8px; font-size:0.8rem; color:var(--text-dim)">Vänster: vanligt ljus sprids i alla riktningar. Höger: laserljus — en fokuserad stråle.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Waves & spectrum -->
+  <div id="tab-what2" class="tab-content">
+    <div class="cols">
+      <div>
+        <div class="card">
+          <h2>Våglängd & Frekvens</h2>
+          <p>Ljus är en <span class="hl">transversell våg</span> — den svänger vinkelrätt mot sin rörelseriktning.</p>
+          <br>
+          <p><span class="hl">Våglängd (λ)</span> = avståndet mellan två vågtoppar, mäts i nanometer (nm).</p>
+          <p><span class="hl2">Frekvens (f)</span> = antal svängningar per sekund, mäts i Hertz (Hz).</p>
+          <br>
+          <p>Sambandet: <span class="info-tag">c = λ × f</span></p>
+          <p style="margin-top:8px">Kort våglängd → hög frekvens → mer energi (violett)<br>
+          Lång våglängd → låg frekvens → mindre energi (rött)</p>
+        </div>
+        <div class="card">
+          <h2>Det synliga spektrumet</h2>
+          <div class="spectrum-bar">
+            <span class="spectrum-label" style="left:8%">380 nm</span>
+            <span class="spectrum-label" style="left:25%">450</span>
+            <span class="spectrum-label" style="left:42%">500</span>
+            <span class="spectrum-label" style="left:55%">550</span>
+            <span class="spectrum-label" style="left:70%">600</span>
+            <span class="spectrum-label" style="left:85%">650</span>
+            <span class="spectrum-label" style="left:95%">700 nm</span>
+          </div>
+          <br><br>
+          <p>Det synliga ljuset är bara en <em>liten del</em> av det elektromagnetiska spektrumet!</p>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h2>Interaktiv våganimering</h2>
+          <div class="canvas-wrap" style="height: 200px;">
+            <canvas id="waveCanvas"></canvas>
+          </div>
+          <div class="slider-group">
+            <label>Våglängd:</label>
+            <input type="range" id="wavelengthSlider" min="380" max="700" value="550">
+            <span class="slider-value" id="wavelengthVal">550 nm</span>
+          </div>
+          <div class="slider-group">
+            <label>Frekvens:</label>
+            <span class="slider-value" id="freqVal" style="min-width:140px">545 THz</span>
+          </div>
+          <p style="font-size:0.75rem; color:var(--text-dim); margin-top:8px">Dra i reglaget — se hur våglängd och frekvens hänger ihop! Färgen ändras med våglängden.</p>
+        </div>
+        <div class="card">
+          <h2>Elektromagnetiska spektrumet</h2>
+          <div class="canvas-wrap" style="height: 160px;">
+            <canvas id="emSpecCanvas"></canvas>
+          </div>
+          <p style="margin-top:8px; font-size:0.8rem; color:var(--text-dim)">Från radiovågor till gammastrålar — samma fenomen, olika våglängder.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Reflection & refraction -->
+  <div id="tab-reflect" class="tab-content">
+    <div class="cols">
+      <div>
+        <div class="card">
+          <h2>Reflektion</h2>
+          <p>När ljus träffar en yta och <span class="hl">studsar tillbaka</span> kallas det reflektion.</p>
+          <br>
+          <p><strong>Reflektionslagen:</strong> Infallsvinkel = reflektionsvinkel</p>
+          <p>Vinklarna mäts alltid från <em>normalen</em> (den tänkta linjen vinkelrätt mot ytan).</p>
+          <br>
+          <div class="canvas-wrap" style="height:260px;">
+            <canvas id="reflectCanvas"></canvas>
+          </div>
+          <div class="slider-group">
+            <label>Infallsvinkel:</label>
+            <input type="range" id="reflectAngle" min="10" max="80" value="45">
+            <span class="slider-value" id="reflectAngleVal">45°</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h2>Brytning (Refraktion)</h2>
+          <p>När ljus passerar från ett <span class="hl2">medium</span> till ett annat (t.ex. luft → vatten) ändrar det riktning. Detta beror på att ljusets hastighet ändras.</p>
+          <br>
+          <p><strong>Snells lag:</strong> <span class="info-tag">n₁ sin θ₁ = n₂ sin θ₂</span></p>
+          <p style="margin-top:6px">Från glest → tätt medium: strålen bryts <em>mot</em> normalen.<br>
+          Från tätt → glest medium: strålen bryts <em>från</em> normalen.</p>
+          <br>
+          <div class="canvas-wrap" style="height:280px;">
+            <canvas id="refractCanvas"></canvas>
+          </div>
+          <div class="slider-group">
+            <label>Infallsvinkel:</label>
+            <input type="range" id="refractAngle" min="5" max="85" value="40">
+            <span class="slider-value" id="refractAngleVal">40°</span>
+          </div>
+          <div class="slider-group">
+            <label>Medium 2 (n):</label>
+            <input type="range" id="refractN" min="100" max="250" value="150">
+            <span class="slider-value" id="refractNVal">1.50 (glas)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:0">
+      <h2>Absorbering</h2>
+      <p>När ljus träffar ett material och <span class="hl3">tas upp</span> av det (omvandlas till värme) kallas det absorbering. En svart tröja absorberar det mesta av ljuset → den blir varm i solen. En vit tröja reflekterar det mesta → den håller dig svalare.</p>
+    </div>
+    <div class="card">
+      <h2>Föremål under vatten — varför ser det "fel" ut?</h2>
+      <div class="cols">
+        <div>
+          <p>När vi tittar ner i vattnet ser föremål ut att vara <span class="hl">grundare</span> än de egentligen är. Det beror på att ljusstrålar bryts när de passerar från vatten (tätare medium) till luft (glesare medium).</p>
+          <br>
+          <p>Från under vattnet ser saker ovanför ut att vara <em>förskjutna</em> på liknande sätt. Det är därför det är svårt att plocka upp saker från botten av en pool!</p>
+        </div>
+        <div>
+          <div class="canvas-wrap" style="height:220px;">
+            <canvas id="underwaterCanvas"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: Colors -->
+  <div id="tab-colors" class="tab-content">
+    <div class="cols">
+      <div>
+        <div class="card">
+          <h2>Hur ser vi färger?</h2>
+          <p>Föremål har <em>inte</em> en inbyggd färg. Det vi ser som "färg" beror på vilka våglängder av ljus som <span class="hl">reflekteras</span> tillbaka till våra ögon.</p>
+          <br>
+          <p>En <span style="color:#ff3333">röd</span> tröja absorberar alla våglängder utom rött ljus, som reflekteras till våra ögon.</p>
+          <p>Ett <span style="color:#3333ff">blått</span> objekt reflekterar blått ljus och absorberar resten.</p>
+          <p>Ett <strong>svart</strong> objekt absorberar (nästan) allt ljus.</p>
+          <p>Ett <strong style="color:#eee; text-shadow:0 0 2px #000">vitt</strong> objekt reflekterar (nästan) allt ljus.</p>
+        </div>
+        <div class="card">
+          <h2>Interaktiv: Belysa ett objekt</h2>
+          <div class="canvas-wrap" style="height:200px;">
+            <canvas id="colorCanvas"></canvas>
+          </div>
+          <div class="slider-group">
+            <label>Ljusets färg:</label>
+            <input type="range" id="lightColorSlider" min="0" max="5" value="0" step="1">
+            <span class="slider-value" id="lightColorVal">Vitt</span>
+          </div>
+          <p style="font-size:0.75rem; color:var(--text-dim); margin-top:4px">Se vad som händer med tröjans färg beroende på vilken belysning den får!</p>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h2>Hur bildas regnbågen?</h2>
+          <p>Solljus är <span class="hl2">vitt ljus</span> — en blandning av alla färger. När solljus träffar regndroppar händer tre saker:</p>
+          <br>
+          <ol style="padding-left:20px; font-size:0.9rem; line-height:1.8">
+            <li><strong>Brytning</strong> — ljuset böjs när det går in i droppen</li>
+            <li><strong>Reflektion</strong> — ljuset studsar mot droppens baksida</li>
+            <li><strong>Brytning igen</strong> — ljuset böjs när det lämnar droppen</li>
+          </ol>
+          <br>
+          <p>Olika våglängder bryts <em>olika mycket</em>. Rött ljus bryts minst (hamnar högst upp) och violett ljus bryts mest (hamnar längst ner).</p>
+        </div>
+        <div class="card">
+          <h2>Regnbågsanimering</h2>
+          <div class="canvas-wrap" style="height:260px;">
+            <canvas id="rainbowCanvas"></canvas>
+          </div>
+          <p style="font-size:0.75rem; color:var(--text-dim); margin-top:4px">En vit stråle delas upp i regnbågens färger av en vattendroppe.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: Lenses & mirrors -->
+  <div id="tab-lenses" class="tab-content">
+    <div class="cols">
+      <div>
+        <div class="card">
+          <h2>Linser</h2>
+          <h3>Konvex lins (samlingslins)</h3>
+          <p>Tjockare i mitten. Samlar ljusstrålar till en <span class="hl">fokuspunkt</span>. Ger en förstorad eller förminskad bild beroende på var föremålet är.</p>
+          <br>
+          <h3>Konkav lins (spridningslins)</h3>
+          <p>Tunnare i mitten. Sprider ljusstrålar så de verkar komma från en virtuell fokuspunkt bakom linsen. Ger alltid en <span class="hl2">förminskad</span>, upprätt bild.</p>
+        </div>
+        <div class="card">
+          <h2>Interaktiv: Konvex lins</h2>
+          <div class="canvas-wrap" style="height:220px;">
+            <canvas id="convexLensCanvas"></canvas>
+          </div>
+          <div class="slider-group">
+            <label>Föremål avstånd:</label>
+            <input type="range" id="convexObjDist" min="30" max="250" value="160">
+            <span class="slider-value" id="convexObjVal">160</span>
+          </div>
+          <p style="font-size:0.75rem; color:var(--text-dim); margin-top:4px">Flytta föremålet — se hur bilden ändras!</p>
+        </div>
+        <div class="card">
+          <h2>Interaktiv: Konkav lins</h2>
+          <div class="canvas-wrap" style="height:220px;">
+            <canvas id="concaveLensCanvas"></canvas>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h2>Speglar</h2>
+          <h3>Plan spegel</h3>
+          <p>En flat spegel. Bilden är lika stor som föremålet, upprätt och <em>spegelvand</em>.</p>
+          <br>
+          <h3>Konkav spegel (samlingsspegel)</h3>
+          <p>Kurvar inåt (som insidan av en sked). Samlar ljus till en fokuspunkt. Kan ge en <span class="hl">förstorad</span> bild (sminkspegel).</p>
+          <br>
+          <h3>Konvex spegel (spridningsspegel)</h3>
+          <p>Kurvar utåt. Sprider ljuset. Ger alltid en <span class="hl2">förminskad</span> bild men med brett synfält (backspeglar).</p>
+        </div>
+        <div class="card">
+          <h2>Interaktiv: Konkav spegel</h2>
+          <div class="canvas-wrap" style="height:220px;">
+            <canvas id="concaveMirrorCanvas"></canvas>
+          </div>
+          <div class="slider-group">
+            <label>Föremål avstånd:</label>
+            <input type="range" id="mirrorObjDist" min="30" max="250" value="160">
+            <span class="slider-value" id="mirrorObjVal">160</span>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Interaktiv: Konvex spegel</h2>
+          <div class="canvas-wrap" style="height:220px;">
+            <canvas id="convexMirrorCanvas"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: Eye & vision defects -->
+  <div id="tab-eyes" class="tab-content">
+    <div class="cols">
+      <div>
+        <div class="card">
+          <h2>Hur ögat fungerar</h2>
+          <p>Ögat är som en kamera. Ljus passerar genom <span class="hl">hornhinnan</span> och <span class="hl">linsen</span> som bryter ljuset så att en bild fokuseras på <span class="hl2">näthinnan</span> längst bak i ögat. Näthinnan innehåller ljuskänsliga celler (tappar och stavar) som skickar signaler via synnerven till hjärnan.</p>
+          <br>
+          <p>Ögats lins kan ändra form (ackommodera) för att fokusera på föremål på olika avstånd.</p>
+        </div>
+        <div class="card">
+          <h2>Närsynthet (myopi)</h2>
+          <p>Ögat är för <span class="hl">långt</span> eller linsen för stark → bilden fokuseras <em>framför</em> näthinnan. Personen ser bra på nära håll men suddigt på långt avstånd.</p>
+          <br>
+          <p><strong>Korrigeras med:</strong> <span class="hl2">Konkav lins</span> (spridningslins) — sprider ljuset lite innan det går in i ögat.</p>
+          <div class="canvas-wrap" style="height:160px; margin-top:12px;">
+            <canvas id="myopiaCanvas"></canvas>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="height:76px; display:flex; align-items:center;">
+          <p style="font-size:1rem; font-weight:600; color:var(--accent2);">👁️ Ögats delar: hornhinna → pupill → lins → glaskropp → näthinna → synnerv</p>
+        </div>
+        <div class="card">
+          <h2>Översynthet (hyperopi)</h2>
+          <p>Ögat är för <span class="hl">kort</span> eller linsen för svag → bilden fokuseras <em>bakom</em> näthinnan. Personen ser bra på långt håll men suddigt på nära håll.</p>
+          <br>
+          <p><strong>Korrigeras med:</strong> <span class="hl2">Konvex lins</span> (samlingslins) — samlar ljuset lite extra innan det går in i ögat.</p>
+          <div class="canvas-wrap" style="height:160px; margin-top:12px;">
+            <canvas id="hyperopiaCanvas"></canvas>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Minnesregel</h3>
+          <p><span class="hl">Närsynthet</span> → ser nära bra → behöver ko<strong>N</strong>kav lins (<strong>N</strong> som i <strong>N</strong>ärsynthet → mi<strong>N</strong>us-lins)</p>
+          <p><span class="hl2">Översynthet</span> → ser långt bra → behöver konvex lins (plus-lins, samlar)</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 7: Advanced -->
+  <div id="tab-advanced" class="tab-content">
+    <div class="cols">
+      <div>
+        <div class="card">
+          <h2>Elektromagnetiska spektrumet</h2>
+          <p>Ljus är bara en liten del av det <span class="hl">elektromagnetiska spektrumet</span>. Alla EM-vågor färdas med ljusets hastighet men har olika våglängder:</p>
+          <br>
+          <ul>
+            <li><span class="info-tag">Radiovågor</span> — radio, TV, mobiltelefoner (km–m)</li>
+            <li><span class="info-tag">Mikrovågor</span> — mikrovågsugnar, WiFi, radar (cm–mm)</li>
+            <li><span class="info-tag">Infraröd</span> — värmestrålning, fjärrkontroller (μm)</li>
+            <li><span class="info-tag">Synligt ljus</span> — det vi kan se! (380–700 nm)</li>
+            <li><span class="info-tag">Ultraviolett</span> — solbränna, svartljus (nm)</li>
+            <li><span class="info-tag">Röntgen</span> — medicinska bilder, skelettfotografering</li>
+            <li><span class="info-tag">Gammastrålar</span> — cancerbehandling, kärnreaktioner</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2>Polariserat ljus</h2>
+          <p>Vanligt ljus svänger i <em>alla</em> riktningar vinkelrätt mot rörelseriktningen. <span class="hl2">Polariserat ljus</span> svänger bara i <em>en</em> riktning.</p>
+          <br>
+          <p><strong>Polariserade glasögon</strong> har ett filter som bara släpper igenom ljus som svänger i en viss riktning. Detta blockerar reflexer (bländning) från horisontella ytor som vatten, vägar och snö — eftersom sådant reflekterat ljus oftast är horisontellt polariserat.</p>
+          <br>
+          <div class="canvas-wrap" style="height:200px;">
+            <canvas id="polarCanvas"></canvas>
+          </div>
+          <div class="slider-group">
+            <label>Filtrets vinkel:</label>
+            <input type="range" id="polarAngle" min="0" max="180" value="0">
+            <span class="slider-value" id="polarAngleVal">0°</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h2>Fiberoptik</h2>
+          <p>Fiberoptiska kablar transporterar data som <span class="hl">ljuspulser</span> genom en tunn glastråd. Principen bygger på <span class="hl2">totalreflektion</span>:</p>
+          <br>
+          <p>När ljus träffar gränsen mellan glas och luft med en vinkel som är tillräckligt "grund" (större än den kritiska vinkeln), reflekteras <em>allt</em> ljus tillbaka in i glaset — inget ljus läcker ut. Ljuset studsar fram och tillbaka inuti fibern hela vägen till mottagaren.</p>
+          <br>
+          <div class="canvas-wrap" style="height:140px;">
+            <canvas id="fiberCanvas"></canvas>
+          </div>
+          <p style="font-size:0.75rem; color:var(--text-dim); margin-top:4px">Ljus studsar genom fibern via totalreflektion.</p>
+          <br>
+          <p><strong>Användning:</strong> internet (mycket snabbt!), medicinsk teknik (endoskop), belysning.</p>
+        </div>
+        <div class="card">
+          <h2>3D-bilder med ljus</h2>
+          <p>3D-filmer använder <span class="hl2">polariserat ljus</span>! Två bilder projiceras samtidigt med olika polariseringsriktningar. 3D-glasögonen har ett filter för varje öga som bara släpper igenom en av de två bilderna.</p>
+          <br>
+          <p>Varje öga ser alltså en lite annorlunda bild (precis som i verkligheten!) och hjärnan kombinerar dem till en tredimensionell upplevelse.</p>
+          <br>
+          <p><strong>Hologram</strong> skapas genom att laserljus delas i två strålar: en referensstråle och en som reflekteras av föremålet. Interferensmönstret lagras och kan sedan "spelas upp" med ljus för att visa en äkta 3D-bild.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 8: Quiz -->
+  <div id="tab-quiz" class="tab-content">
+    <div class="score-bar">
+      <span>Poäng:</span>
+      <span class="score-num" id="scoreDisplay">0 / 0</span>
+      <span style="margin-left:auto">
+        <button class="btn" id="resetQuiz">Börja om</button>
+      </span>
+    </div>
+    <div id="quizContainer"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// TAB SYSTEM
+// ============================================================
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ============================================================
+// UTILITY
+// ============================================================
+function setupCanvas(id) {
+  const c = document.getElementById(id);
+  if (!c) return null;
+  const r = c.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  c.width = r.width * dpr;
+  c.height = r.height * dpr;
+  const ctx = c.getContext('2d');
+  ctx.scale(dpr, dpr);
+  return { c, ctx, w: r.width, h: r.height };
+}
+
+function wavelengthToColor(wl) {
+  let r, g, b;
+  if (wl >= 380 && wl < 440) { r = -(wl - 440) / 60; g = 0; b = 1; }
+  else if (wl >= 440 && wl < 490) { r = 0; g = (wl - 440) / 50; b = 1; }
+  else if (wl >= 490 && wl < 510) { r = 0; g = 1; b = -(wl - 510) / 20; }
+  else if (wl >= 510 && wl < 580) { r = (wl - 510) / 70; g = 1; b = 0; }
+  else if (wl >= 580 && wl < 645) { r = 1; g = -(wl - 645) / 65; b = 0; }
+  else if (wl >= 645 && wl <= 700) { r = 1; g = 0; b = 0; }
+  else { r = 0; g = 0; b = 0; }
+  let f = 1;
+  if (wl >= 380 && wl < 420) f = 0.3 + 0.7 * (wl - 380) / 40;
+  else if (wl > 700 && wl <= 780) f = 0.3 + 0.7 * (780 - wl) / 80;
+  return `rgb(${Math.round(r*f*255)},${Math.round(g*f*255)},${Math.round(b*f*255)})`;
+}
+
+// ============================================================
+// TAB 1: SPEED OF LIGHT ANIMATION
+// ============================================================
+(function initSpeedCanvas() {
+  const s = setupCanvas('speedCanvas');
+  if (!s) return;
+  const {ctx, w, h} = s;
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    // Earth
+    const cx = w/2, cy = h/2, er = Math.min(w,h)*0.25;
+    ctx.beginPath();
+    ctx.arc(cx, cy, er, 0, Math.PI*2);
+    const grd = ctx.createRadialGradient(cx-er*0.3, cy-er*0.3, 0, cx, cy, er);
+    grd.addColorStop(0, '#4488cc');
+    grd.addColorStop(1, '#224466');
+    ctx.fillStyle = grd;
+    ctx.fill();
+    // continents hint
+    ctx.fillStyle = '#33aa55';
+    ctx.beginPath(); ctx.arc(cx-er*0.2, cy-er*0.1, er*0.15, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx+er*0.3, cy-er*0.3, er*0.12, 0, Math.PI*2); ctx.fill();
+    // Photon orbiting
+    const angle = t * 3;
+    const px = cx + (er + 12) * Math.cos(angle);
+    const py = cy + (er + 12) * Math.sin(angle);
+    ctx.beginPath();
+    ctx.arc(px, py, 4, 0, Math.PI*2);
+    ctx.fillStyle = '#ffdd44';
+    ctx.fill();
+    ctx.shadowColor = '#ffdd44'; ctx.shadowBlur = 15;
+    ctx.beginPath(); ctx.arc(px, py, 3, 0, Math.PI*2); ctx.fill();
+    ctx.shadowBlur = 0;
+    // trail
+    for (let i = 1; i < 20; i++) {
+      const a2 = angle - i * 0.08;
+      const px2 = cx + (er + 12) * Math.cos(a2);
+      const py2 = cy + (er + 12) * Math.sin(a2);
+      ctx.beginPath();
+      ctx.arc(px2, py2, 2, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(255,221,68,${1 - i/20})`;
+      ctx.fill();
+    }
+    // text
+    ctx.fillStyle = '#8888aa';
+    ctx.font = '12px "Space Mono"';
+    ctx.fillText('c = 300 000 km/s', 10, h - 10);
+    ctx.fillText('7.5 varv/sek', w - 130, h - 10);
+    t += 0.016;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ============================================================
+// TAB 1: LASER VS NORMAL LIGHT
+// ============================================================
+(function initLaserCanvas() {
+  const s = setupCanvas('laserCanvas');
+  if (!s) return;
+  const {ctx, w, h} = s;
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    const mid = w / 2;
+    // Labels
+    ctx.fillStyle = '#8888aa';
+    ctx.font = '11px "Space Mono"';
+    ctx.fillText('Vanligt ljus', 20, 20);
+    ctx.fillText('Laserljus', mid + 20, 20);
+    // divider
+    ctx.strokeStyle = '#2a2a44';
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(mid, 0); ctx.lineTo(mid, h); ctx.stroke();
+    ctx.setLineDash([]);
+    // Normal light: rays in many directions, many colors
+    const bulbX = mid * 0.4, bulbY = h * 0.45;
+    ctx.beginPath(); ctx.arc(bulbX, bulbY, 8, 0, Math.PI*2);
+    ctx.fillStyle = '#ffee88'; ctx.fill();
+    const colors = ['#ff4444','#44ff44','#4444ff','#ffff44','#ff44ff','#44ffff','#ff8844','#ff4488'];
+    for (let i = 0; i < 16; i++) {
+      const angle = (i / 16) * Math.PI * 2 + Math.sin(t + i) * 0.1;
+      const len = 40 + Math.sin(t * 2 + i * 0.7) * 15 + 30;
+      ctx.strokeStyle = colors[i % colors.length];
+      ctx.globalAlpha = 0.6;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(bulbX, bulbY);
+      // wavy line
+      const steps = 20;
+      for (let j = 1; j <= steps; j++) {
+        const frac = j / steps;
+        const x = bulbX + Math.cos(angle) * len * frac + Math.sin(t*3+j+i)*2;
+        const y = bulbY + Math.sin(angle) * len * frac + Math.cos(t*3+j+i)*2;
+        ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    // Laser: one coherent beam
+    const laserX = mid + mid * 0.15, laserY = h * 0.45;
+    ctx.fillStyle = '#444'; ctx.fillRect(laserX - 8, laserY - 12, 16, 24);
+    ctx.fillStyle = '#ff3333'; ctx.fillRect(laserX - 4, laserY - 8, 8, 16);
+    // coherent waves
+    ctx.strokeStyle = '#ff3333';
+    ctx.lineWidth = 2;
+    for (let b = -1; b <= 1; b++) {
+      ctx.beginPath();
+      for (let x = 0; x < mid * 0.6; x++) {
+        const px = laserX + 12 + x;
+        const py = laserY + b * 3 + Math.sin((x * 0.08) - t * 4) * 4;
+        x === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+      }
+      ctx.globalAlpha = b === 0 ? 0.9 : 0.3;
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    ctx.lineWidth = 1;
+    // labels underneath
+    ctx.fillStyle = '#666';
+    ctx.font = '10px "Space Mono"';
+    ctx.fillText('Många våglängder', 10, h - 30);
+    ctx.fillText('Sprids åt alla håll', 10, h - 15);
+    ctx.fillText('En våglängd', mid + 10, h - 30);
+    ctx.fillText('Koherent, fokuserad', mid + 10, h - 15);
+    t += 0.016;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ============================================================
+// TAB 2: INTERACTIVE WAVE
+// ============================================================
+(function initWaveCanvas() {
+  const s = setupCanvas('waveCanvas');
+  if (!s) return;
+  const {ctx, w, h} = s;
+  const slider = document.getElementById('wavelengthSlider');
+  const wlVal = document.getElementById('wavelengthVal');
+  const fqVal = document.getElementById('freqVal');
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    const wl = parseInt(slider.value);
+    wlVal.textContent = wl + ' nm';
+    const freq = (3e8 / (wl * 1e-9) / 1e12).toFixed(0);
+    fqVal.textContent = freq + ' THz';
+    const color = wavelengthToColor(wl);
+    const period = (wl - 380) / (700 - 380) * 40 + 15;
+    const cy = h / 2;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    for (let x = 0; x < w; x++) {
+      const y = cy + Math.sin((x / period) - t * 3) * (h * 0.3);
+      x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    const px1 = w * 0.35;
+    const px2 = px1 + period;
+    ctx.strokeStyle = '#ffffff55';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(px1, 15); ctx.lineTo(px1, h-15); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(px2, 15); ctx.lineTo(px2, h-15); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#fff';
+    ctx.font = '11px "Space Mono"';
+    ctx.fillText('← λ →', (px1+px2)/2 - 20, 20);
+    ctx.strokeStyle = '#333';
+    ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.stroke();
+    t += 0.016;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ============================================================
+// TAB 2: EM SPECTRUM
+// ============================================================
+(function initEMSpec() {
+  const s = setupCanvas('emSpecCanvas');
+  if (!s) return;
+  const {ctx, w, h} = s;
+  const bands = [
+    { name: 'Radio', color: '#884444', frac: 0.18 },
+    { name: 'Mikro', color: '#aa6633', frac: 0.12 },
+    { name: 'IR', color: '#cc4444', frac: 0.12 },
+    { name: 'Synligt', color: null, frac: 0.12 },
+    { name: 'UV', color: '#8833cc', frac: 0.12 },
+    { name: 'Röntgen', color: '#3355cc', frac: 0.17 },
+    { name: 'Gamma', color: '#333399', frac: 0.17 },
+  ];
+  const margin = 20, barH = 40, barY = h/2 - barH/2;
+  let x = margin;
+  const totalW = w - margin * 2;
+  bands.forEach(b => {
+    const bw = totalW * b.frac;
+    if (b.name === 'Synligt') {
+      const grad = ctx.createLinearGradient(x, 0, x + bw, 0);
+      grad.addColorStop(0, '#8b00ff'); grad.addColorStop(0.17, '#0000ff');
+      grad.addColorStop(0.33, '#00ff00'); grad.addColorStop(0.5, '#ffff00');
+      grad.addColorStop(0.67, '#ff7700'); grad.addColorStop(1, '#ff0000');
+      ctx.fillStyle = grad;
+    } else { ctx.fillStyle = b.color; }
+    ctx.fillRect(x, barY, bw, barH);
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 10px "Space Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText(b.name, x + bw/2, barY + barH/2 + 4);
+    x += bw;
+  });
+  ctx.textAlign = 'left'; ctx.fillStyle = '#666'; ctx.font = '10px "Space Mono"';
+  ctx.fillText('← Lång våglängd', margin, h - 8);
+  ctx.textAlign = 'right'; ctx.fillText('Kort våglängd →', w - margin, h - 8);
+  ctx.textAlign = 'left';
+})();
+
+// ============================================================
+// TAB 3: REFLECTION
+// ============================================================
+(function initReflect() {
+  const s = setupCanvas('reflectCanvas');
+  if (!s) return;
+  const {ctx, w, h} = s;
+  const slider = document.getElementById('reflectAngle');
+  const valEl = document.getElementById('reflectAngleVal');
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    const angle = parseInt(slider.value);
+    valEl.textContent = angle + '°';
+    const surfaceY = h * 0.65;
+    const hitX = w * 0.5;
+    // surface
+    ctx.fillStyle = '#2a2a44';
+    ctx.fillRect(0, surfaceY, w, h - surfaceY);
+    ctx.strokeStyle = '#4455aa';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(0, surfaceY); ctx.lineTo(w, surfaceY); ctx.stroke();
+    // normal (dashed)
+    ctx.strokeStyle = '#555';
+    ctx.setLineDash([5, 5]);
+    ctx.beginPath(); ctx.moveTo(hitX, surfaceY - 120); ctx.lineTo(hitX, surfaceY + 40); ctx.stroke();
+    ctx.setLineDash([]);
+    // incoming ray
+    const rad = angle * Math.PI / 180;
+    const rayLen = 130;
+    const inX = hitX - Math.sin(rad) * rayLen;
+    const inY = surfaceY - Math.cos(rad) * rayLen;
+    // animated photon position
+    const frac = (t * 0.8) % 2;
+    ctx.strokeStyle = '#ffdd44'; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(inX, inY); ctx.lineTo(hitX, surfaceY); ctx.stroke();
+    // reflected ray
+    const outX = hitX + Math.sin(rad) * rayLen;
+    const outY = surfaceY - Math.cos(rad) * rayLen;
+    ctx.strokeStyle = '#ff6644'; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(hitX, surfaceY); ctx.lineTo(outX, outY); ctx.stroke();
+    // angle arcs
+    ctx.strokeStyle = '#ffdd4488'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(hitX, surfaceY, 30, -Math.PI/2 - rad, -Math.PI/2); ctx.stroke();
+    ctx.strokeStyle = '#ff664488';
+    ctx.beginPath(); ctx.arc(hitX, surfaceY, 35, -Math.PI/2, -Math.PI/2 + rad); ctx.stroke();
+    // labels
+    ctx.fillStyle = '#ffdd44'; ctx.font = '11px "Space Mono"';
+    ctx.fillText('θᵢ = ' + angle + '°', hitX - 70, surfaceY - 30);
+    ctx.fillStyle = '#ff6644';
+    ctx.fillText('θᵣ = ' + angle + '°', hitX + 15, surfaceY - 30);
+    ctx.fillStyle = '#555'; ctx.font = '10px "Space Mono"';
+    ctx.fillText('Normal', hitX + 5, surfaceY - 115);
+    // photon dot
+    if (frac < 1) {
+      const px = inX + (hitX - inX) * frac;
+      const py = inY + (surfaceY - inY) * frac;
+      ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI*2);
+      ctx.fillStyle = '#ffdd44'; ctx.fill();
+      ctx.shadowColor = '#ffdd44'; ctx.shadowBlur = 10;
+      ctx.fill(); ctx.shadowBlur = 0;
+    } else {
+      const f2 = frac - 1;
+      const px = hitX + (outX - hitX) * f2;
+      const py = surfaceY + (outY - surfaceY) * f2;
+      ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI*2);
+      ctx.fillStyle = '#ff6644'; ctx.fill();
+      ctx.shadowColor = '#ff6644'; ctx.shadowBlur = 10;
+      ctx.fill(); ctx.shadowBlur = 0;
+    }
+    t += 0.016;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ============================================================
+// TAB 3: REFRACTION
+// ============================================================
+(function initRefract() {
+  const s = setupCanvas('refractCanvas');
+  if (!s) return;
+  const {ctx, w, h} = s;
+  const angleSlider = document.getElementById('refractAngle');
+  const nSlider = document.getElementById('refractN');
+  const angleVal = document.getElementById('refractAngleVal');
+  const nVal = document.getElementById('refractNVal');
+  let t = 0;
+  const mediaNames = {100:'luft',133:'vatten',150:'glas',180:'diamant-ish',200:'tungt glas',250:'diamant'};
+  function closestMedia(n) {
+    let best = '', bestD = 999;
+    for (const [k,v] of Object.entries(mediaNames)) {
+      const d = Math.abs(n*100 - parseInt(k));
+      if (d < bestD) { bestD = d; best = v; }
+    }
+    return best;
+  }
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    const theta1 = parseInt(angleSlider.value);
+    const n2 = parseInt(nSlider.value) / 100;
+    angleVal.textContent = theta1 + '°';
+    nVal.textContent = n2.toFixed(2) + ' (' + closestMedia(n2) + ')';
+    const surfaceY = h * 0.45;
+    const hitX = w * 0.5;
+    // media
+    ctx.fillStyle = 'rgba(30,30,60,0.3)';
+    ctx.fillRect(0, 0, w, surfaceY);
+    ctx.fillStyle = 'rgba(40,80,120,0.3)';
+    ctx.fillRect(0, surfaceY, w, h - surfaceY);
+    // surface
+    ctx.strokeStyle = '#4488aa'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(0, surfaceY); ctx.lineTo(w, surfaceY); ctx.stroke();
+    // normal
+    ctx.strokeStyle = '#555'; ctx.setLineDash([5,5]);
+    ctx.beginPath(); ctx.moveTo(hitX, 10); ctx.lineTo(hitX, h-10); ctx.stroke();
+    ctx.setLineDash([]);
+    // Snell's law
+    const rad1 = theta1 * Math.PI / 180;
+    const sinTheta2 = Math.sin(rad1) / n2;
+    const totalReflection = sinTheta2 > 1;
+    const rayLen = 120;
+    // incoming
+    const inX = hitX - Math.sin(rad1) * rayLen;
+    const inY = surfaceY - Math.cos(rad1) * rayLen;
+    ctx.strokeStyle = '#ffdd44'; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(inX, inY); ctx.lineTo(hitX, surfaceY); ctx.stroke();
+    if (totalReflection) {
+      // total internal reflection
+      const outX = hitX + Math.sin(rad1) * rayLen;
+      const outY = surfaceY - Math.cos(rad1) * rayLen;
+      ctx.strokeStyle = '#ff4444'; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(hitX, surfaceY); ctx.lineTo(outX, outY); ctx.stroke();
+      ctx.fillStyle = '#ff4444'; ctx.font = '12px "Space Mono"';
+      ctx.fillText('Totalreflektion!', 10, 25);
+    } else {
+      const theta2 = Math.asin(sinTheta2);
+      const outX = hitX + Math.sin(theta2) * rayLen;
+      const outY = surfaceY + Math.cos(theta2) * rayLen;
+      ctx.strokeStyle = '#44aaff'; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(hitX, surfaceY); ctx.lineTo(outX, outY); ctx.stroke();
+      // angle arcs
+      ctx.strokeStyle = '#ffdd4466'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(hitX, surfaceY, 25, -Math.PI/2-rad1, -Math.PI/2); ctx.stroke();
+      ctx.strokeStyle = '#44aaff66';
+      ctx.beginPath(); ctx.arc(hitX, surfaceY, 30, Math.PI/2-theta2, Math.PI/2); ctx.stroke();
+      const t2deg = (theta2 * 180 / Math.PI).toFixed(1);
+      ctx.fillStyle = '#44aaff'; ctx.font = '11px "Space Mono"';
+      ctx.fillText('θ₂ = ' + t2deg + '°', hitX + 10, surfaceY + 50);
+    }
+    ctx.fillStyle = '#ffdd44'; ctx.font = '11px "Space Mono"';
+    ctx.fillText('θ₁ = ' + theta1 + '°', hitX - 80, surfaceY - 15);
+    // media labels
+    ctx.fillStyle = '#888'; ctx.font = '10px "Space Mono"';
+    ctx.fillText('n₁ = 1.00 (luft)', 8, surfaceY - 8);
+    ctx.fillText('n₂ = ' + n2.toFixed(2), 8, surfaceY + 18);
+    t += 0.016;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ============================================================
+// TAB 3: UNDERWATER OBJECT
+// ============================================================
+(function initUnderwater() {
+  const s = setupCanvas('underwaterCanvas');
+  if (!s) return;
+  const {ctx, w, h} = s;
+  const waterY = h * 0.4;
+  // real fish position
+  const fishX = w * 0.5, fishY = h * 0.75;
+  // apparent position (shallower)
+  const appY = waterY + (fishY - waterY) * 0.75;
+  // water
+  ctx.fillStyle = 'rgba(20,60,100,0.4)';
+  ctx.fillRect(0, waterY, w, h - waterY);
+  ctx.strokeStyle = '#4488cc'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(0, waterY); ctx.lineTo(w, waterY); ctx.stroke();
+  // eye
+  const eyeX = w * 0.35, eyeY = waterY - 30;
+  ctx.fillStyle = '#fff'; ctx.font = '20px serif'; ctx.fillText('👁️', eyeX - 10, eyeY + 7);
+  // real fish
+  ctx.fillStyle = '#ff884488'; ctx.font = '24px serif'; ctx.fillText('🐟', fishX - 12, fishY + 8);
+  ctx.fillStyle = '#888'; ctx.font = '9px "Space Mono"';
+  ctx.fillText('Verklig position', fishX + 18, fishY + 5);
+  // apparent fish
+  ctx.fillStyle = '#ff8844'; ctx.font = '24px serif'; ctx.fillText('🐟', fishX - 12, appY + 8);
+  ctx.fillStyle = '#ff8844'; ctx.font = '9px "Space Mono"';
+  ctx.fillText('Uppfattad position', fishX + 18, appY + 5);
+  // light rays from real fish, bending at surface
+  ctx.setLineDash([4, 3]);
+  ctx.strokeStyle = '#ffdd4466'; ctx.lineWidth = 1;
+  // ray from real fish to surface point, then to eye
+  const surfX1 = fishX - 10;
+  ctx.beginPath(); ctx.moveTo(fishX, fishY); ctx.lineTo(surfX1, waterY); ctx.stroke();
+  ctx.strokeStyle = '#ffdd44';
+  ctx.beginPath(); ctx.moveTo(surfX1, waterY); ctx.lineTo(eyeX, eyeY); ctx.stroke();
+  // extended line from eye through surface to apparent position (dashed)
+  ctx.strokeStyle = '#ff664466';
+  ctx.beginPath(); ctx.moveTo(eyeX, eyeY); ctx.lineTo(fishX, appY); ctx.stroke();
+  ctx.setLineDash([]);
+  // labels
+  ctx.fillStyle = '#8888aa'; ctx.font = '10px "Space Mono"';
+  ctx.fillText('Luft', 10, waterY - 10);
+  ctx.fillText('Vatten (n ≈ 1.33)', 10, waterY + 18);
+})();
+
+// ============================================================
+// TAB 4: COLOR INTERACTION
+// ============================================================
+(function initColorCanvas() {
+  const s = setupCanvas('colorCanvas');
+  if (!s) return;
+  const {ctx, w, h} = s;
+  const slider = document.getElementById('lightColorSlider');
+  const valEl = document.getElementById('lightColorVal');
+  const lightColors = [
+    { name: 'Vitt', rgb: [255,255,255] },
+    { name: 'Rött', rgb: [255,50,50] },
+    { name: 'Grönt', rgb: [50,255,50] },
+    { name: 'Blått', rgb: [50,50,255] },
+    { name: 'Gult', rgb: [255,255,50] },
+    { name: 'Magenta', rgb: [255,50,255] },
+  ];
+  // The shirt is "red" — reflects red, absorbs green and blue
+  const shirtReflects = [0.9, 0.05, 0.05]; // R,G,B reflectance
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    const idx = parseInt(slider.value);
+    const lc = lightColors[idx];
+    valEl.textContent = lc.name;
+    // light source
+    ctx.fillStyle = `rgb(${lc.rgb.join(',')})`;
+    ctx.shadowColor = `rgb(${lc.rgb.join(',')})`;
+    ctx.shadowBlur = 20;
+    ctx.beginPath(); ctx.arc(w*0.5, 25, 15, 0, Math.PI*2); ctx.fill();
+    ctx.shadowBlur = 0;
+    // rays down
+    ctx.strokeStyle = `rgba(${lc.rgb.join(',')},0.4)`;
+    ctx.lineWidth = 1.5;
+    for (let i = -2; i <= 2; i++) {
+      ctx.beginPath();
+      ctx.moveTo(w*0.5 + i*15, 40);
+      ctx.lineTo(w*0.5 + i*25, h*0.45);
+      ctx.stroke();
+    }
+    // shirt
+    const reflected = [
+      Math.round(lc.rgb[0] * shirtReflects[0]),
+      Math.round(lc.rgb[1] * shirtReflects[1]),
+      Math.round(lc.rgb[2] * shirtReflects[2])
+    ];
+    const shirtColor = `rgb(${reflected.join(',')})`;
+    // draw t-shirt shape
+    ctx.fillStyle = shirtColor;
+    ctx.beginPath();
+    ctx.moveTo(w*0.3, h*0.45); ctx.lineTo(w*0.2, h*0.55);
+    ctx.lineTo(w*0.25, h*0.55); ctx.lineTo(w*0.3, h*0.5);
+    ctx.lineTo(w*0.3, h*0.85); ctx.lineTo(w*0.7, h*0.85);
+    ctx.lineTo(w*0.7, h*0.5); ctx.lineTo(w*0.75, h*0.55);
+    ctx.lineTo(w*0.8, h*0.55); ctx.lineTo(w*0.7, h*0.45);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#ffffff33'; ctx.lineWidth = 1; ctx.stroke();
+    // label
+    ctx.fillStyle = '#aaa'; ctx.font = '10px "Space Mono"';
+    ctx.textAlign = 'center';
+    ctx.fillText(`Tröjan reflekterar: ${reflected[0]>20?'R':''}${reflected[1]>20?'G':''}${reflected[2]>20?'B':''}${reflected[0]<=20&&reflected[1]<=20&&reflected[2]<=20?'Nästan inget!':''}`, w*0.5, h - 8);
+    ctx.textAlign = 'left';
+  }
+  draw();
+  slider.addEventListener('input', draw);
+})();
+
+// ============================================================
+// TAB 4: RAINBOW
+// ============================================================
+(function initRainbow() {
+  const s = setupCanvas('rainbowCanvas');
+  if (!s) return;
+  const {ctx, w, h} = s;
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    // water droplet
+    const cx = w * 0.45, cy = h * 0.5, r = 50;
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(100,180,255,0.15)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(100,180,255,0.4)'; ctx.lineWidth = 1.5; ctx.stroke();
+    // incoming white ray
+    const startX = 20, startY = cy - 15;
+    const hitX = cx - r * 0.85, hitY = cy - r * 0.4;
+    // animated photon
+    const frac = (t * 0.4) % 1;
+    // white ray
+    ctx.strokeStyle = '#ffffffaa'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(hitX, hitY); ctx.stroke();
+    // dispersion rays coming out
+    const colors = ['#ff0000','#ff7700','#ffff00','#00ff00','#0088ff','#0000ff','#8b00ff'];
+    const labels = ['Röd','Orange','Gul','Grön','Blå','Indigo','Violett'];
+    const exitX = cx + r * 0.7;
+    const baseAngle = -0.35;
+    colors.forEach((c, i) => {
+      const angle = baseAngle + i * 0.09;
+      const endX = exitX + 160;
+      const endY = cy + angle * 200;
+      ctx.strokeStyle = c;
+      ctx.lineWidth = 2;
+      ctx.globalAlpha = 0.8;
+      ctx.beginPath(); ctx.moveTo(exitX, cy + angle * 30); ctx.lineTo(endX, endY); ctx.stroke();
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = c; ctx.font = '9px "Space Mono"';
+      ctx.fillText(labels[i], endX + 5, endY + 3);
+    });
+    // label
+    ctx.fillStyle = '#888'; ctx.font = '10px "Space Mono"';
+    ctx.fillText('Vitt ljus', 5, startY - 10);
+    ctx.fillText('Vattendroppe', cx - 30, cy + r + 18);
+    t += 0.016;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ============================================================
+// TAB 5: CONVEX LENS
+// ============================================================
+(function initConvexLens() {
+  const s = setupCanvas('convexLensCanvas');
+  if (!s) return;
+  const {ctx, w, h} = s;
+  const slider = document.getElementById('convexObjDist');
+  const valEl = document.getElementById('convexObjVal');
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    const cy = h / 2, lensX = w * 0.45;
+    const f = 80; // focal length in px
+    const objDist = parseInt(slider.value);
+    valEl.textContent = objDist;
+    // axis
+    ctx.strokeStyle = '#333'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.stroke();
+    // lens
+    ctx.strokeStyle = '#44aaff'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(lensX, cy - 80); ctx.lineTo(lensX, cy + 80); ctx.stroke();
+    // lens shape hint
+    ctx.beginPath();
+    ctx.ellipse(lensX, cy, 8, 80, 0, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(68,170,255,0.1)'; ctx.fill();
+    ctx.strokeStyle = '#44aaff66'; ctx.lineWidth = 1; ctx.stroke();
+    // focal points
+    ctx.fillStyle = '#ff6b35';
+    ctx.beginPath(); ctx.arc(lensX - f, cy, 4, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(lensX + f, cy, 4, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#666'; ctx.font = '9px "Space Mono"';
+    ctx.fillText('F', lensX - f - 3, cy + 16);
+    ctx.fillText('F', lensX + f - 3, cy + 16);
+    // object (arrow)
+    const objX = lensX - objDist;
+    const objH = 50;
+    ctx.strokeStyle = '#22cc55'; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(objX, cy); ctx.lineTo(objX, cy - objH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(objX - 5, cy - objH + 10); ctx.lineTo(objX, cy - objH); ctx.lineTo(objX + 5, cy - objH + 10); ctx.stroke();
+    // thin lens equation: 1/f = 1/do + 1/di => di = f*do/(do-f)
+    if (objDist > f + 5) {
+      const imgDist = (f * objDist) / (objDist - f);
+      const mag = -imgDist / objDist;
+      const imgH = objH * mag;
+      const imgX = lensX + imgDist;
+      if (imgX < w - 10 && imgX > lensX) {
+        // image arrow
+        ctx.strokeStyle = '#ff6b35'; ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.moveTo(imgX, cy); ctx.lineTo(imgX, cy - imgH); ctx.stroke();
+        ctx.beginPath();
+        const tip = cy - imgH;
+        const dir = imgH > 0 ? -1 : 1;
+        ctx.moveTo(imgX - 5, tip + dir * 10); ctx.lineTo(imgX, tip); ctx.lineTo(imgX + 5, tip + dir * 10); ctx.stroke();
+        // rays
+        ctx.strokeStyle = '#ffdd4466'; ctx.lineWidth = 1;
+        // ray 1: parallel to axis, then through F
+        ctx.beginPath(); ctx.moveTo(objX, cy - objH); ctx.lineTo(lensX, cy - objH); ctx.stroke();
+        ctx.strokeStyle = '#ffdd44'; ctx.beginPath(); ctx.moveTo(lensX, cy - objH); ctx.lineTo(imgX, tip); ctx.stroke();
+        // ray 2: through center
+        ctx.strokeStyle = '#44ff4466';
+        ctx.beginPath(); ctx.moveTo(objX, cy - objH); ctx.lineTo(imgX, tip); ctx.stroke();
+        // labels
+        ctx.fillStyle = '#888'; ctx.font = '9px "Space Mono"';
+        const magStr = Math.abs(mag).toFixed(1) + 'x';
+        ctx.fillText(mag < 0 ? 'Inverterad ' + magStr : 'Upprätt ' + magStr, imgX + 8, cy - 10);
+      }
+    } else if (objDist < f - 5) {
+      // virtual image
+      ctx.fillStyle = '#888'; ctx.font = '10px "Space Mono"';
+      ctx.fillText('Förstorad virtuell bild (samma sida)', 10, 18);
+    }
+    ctx.fillStyle = '#22cc55'; ctx.font = '9px "Space Mono"';
+    ctx.fillText('Föremål', objX - 15, cy + 15);
+  }
+  draw();
+  slider.addEventListener('input', draw);
+})();
+
+// ============================================================
+// TAB 5: CONCAVE LENS
+// ============================================================
+(function initConcaveLens() {
+  const s = setupCanvas('concaveLensCanvas');
+  if (!s) return;
+  const {ctx, w, h} = s;
+  const cy = h/2, lensX = w*0.45, f = 80;
+  const objDist = 150, objH = 45;
+  const objX = lensX - objDist;
+  // axis
+  ctx.strokeStyle = '#333'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.stroke();
+  // lens
+  ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(lensX, cy-75); ctx.lineTo(lensX, cy+75); ctx.stroke();
+  // concave shape hint
+  ctx.beginPath();
+  ctx.moveTo(lensX-6, cy-75); ctx.quadraticCurveTo(lensX+4, cy, lensX-6, cy+75);
+  ctx.moveTo(lensX+6, cy-75); ctx.quadraticCurveTo(lensX-4, cy, lensX+6, cy+75);
+  ctx.strokeStyle = '#a855f766'; ctx.lineWidth = 1; ctx.stroke();
+  // focal points
+  ctx.fillStyle = '#ff6b35';
+  ctx.beginPath(); ctx.arc(lensX - f, cy, 4, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(lensX + f, cy, 4, 0, Math.PI*2); ctx.fill();
+  // object
+  ctx.strokeStyle = '#22cc55'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(objX, cy); ctx.lineTo(objX, cy - objH); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(objX-5, cy-objH+10); ctx.lineTo(objX, cy-objH); ctx.lineTo(objX+5, cy-objH+10); ctx.stroke();
+  // concave lens: di = f*do/(do+f) (virtual, same side, negative f)
+  const imgDist = -(f * objDist) / (objDist + f);
+  const mag = -imgDist / objDist;
+  const imgH = objH * mag;
+  const imgX = lensX + imgDist; // will be negative of lensX = left side
+  // virtual image
+  ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 2;
+  ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(imgX, cy); ctx.lineTo(imgX, cy - imgH); ctx.stroke();
+  ctx.setLineDash([]);
+  // rays
+  ctx.strokeStyle = '#ffdd4466'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(objX, cy-objH); ctx.lineTo(lensX, cy-objH); ctx.stroke();
+  // diverges away from focal point
+  const rayEndX = lensX + 130;
+  const slope = (cy - objH - (cy)) / (lensX - (lensX-f)); // toward F on same side
+  ctx.strokeStyle = '#ffdd44';
+  ctx.beginPath(); ctx.moveTo(lensX, cy-objH);
+  ctx.lineTo(rayEndX, cy-objH + (rayEndX-lensX)*((objH)/(f)));
+  ctx.stroke();
+  ctx.fillStyle = '#888'; ctx.font = '10px "Space Mono"';
+  ctx.fillText('Alltid förminskad, upprätt, virtuell bild', 10, 18);
+  ctx.fillStyle = '#22cc55'; ctx.font = '9px "Space Mono"';
+  ctx.fillText('Föremål', objX-15, cy+15);
+  ctx.fillStyle = '#a855f7';
+  ctx.fillText('Bild (virtuell)', imgX-20, cy+15);
+})();
+
+// ============================================================
+// TAB 5: CONCAVE MIRROR
+// ============================================================
+(function initConcaveMirror() {
+  const s = setupCanvas('concaveMirrorCanvas');
+  if (!s) return;
+  const {ctx, w, h} = s;
+  const slider = document.getElementById('mirrorObjDist');
+  const valEl = document.getElementById('mirrorObjVal');
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    const cy = h/2, mirrorX = w*0.8, f = 70;
+    const objDist = parseInt(slider.value);
+    valEl.textContent = objDist;
+    // axis
+    ctx.strokeStyle = '#333'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.stroke();
+    // mirror (concave curve)
+    ctx.strokeStyle = '#44aaff'; ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(mirrorX + 80, cy, 120, Math.PI*0.75, Math.PI*1.25);
+    ctx.stroke();
+    // F and C
+    ctx.fillStyle = '#ff6b35';
+    ctx.beginPath(); ctx.arc(mirrorX - f, cy, 4, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(mirrorX - f*2, cy, 4, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#666'; ctx.font = '9px "Space Mono"';
+    ctx.fillText('F', mirrorX - f - 3, cy + 16);
+    ctx.fillText('C', mirrorX - f*2 - 3, cy + 16);
+    // object
+    const objX = mirrorX - objDist, objH = 40;
+    ctx.strokeStyle = '#22cc55'; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(objX, cy); ctx.lineTo(objX, cy-objH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(objX-5, cy-objH+10); ctx.lineTo(objX, cy-objH); ctx.lineTo(objX+5, cy-objH+10); ctx.stroke();
+    // mirror equation: 1/f = 1/do + 1/di
+    if (objDist > f + 5) {
+      const imgDist = (f * objDist) / (objDist - f);
+      const mag = -imgDist / objDist;
+      const imgH = objH * mag;
+      const imgX = mirrorX - imgDist;
+      if (imgX > 10) {
+        ctx.strokeStyle = '#ff6b35'; ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.moveTo(imgX, cy); ctx.lineTo(imgX, cy-imgH); ctx.stroke();
+        ctx.fillStyle = '#888'; ctx.font = '9px "Space Mono"';
+        ctx.fillText(Math.abs(mag).toFixed(1) + 'x', imgX+8, cy-10);
+      }
+    }
+    ctx.fillStyle = '#22cc55'; ctx.font = '9px "Space Mono"';
+    ctx.fillText('Föremål', objX-15, cy+15);
+  }
+  draw();
+  slider.addEventListener('input', draw);
+})();
+
+// ============================================================
+// TAB 5: CONVEX MIRROR
+// ============================================================
+(function initConvexMirror() {
+  const s = setupCanvas('convexMirrorCanvas');
+  if (!s) return;
+  const {ctx, w, h} = s;
+  const cy = h/2, mirrorX = w*0.8, f = 70;
+  const objDist = 140, objH = 40;
+  const objX = mirrorX - objDist;
+  // axis
+  ctx.strokeStyle = '#333'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.stroke();
+  // mirror (convex curve)
+  ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(mirrorX - 80, cy, 120, -Math.PI*0.25, Math.PI*0.25);
+  ctx.stroke();
+  // object
+  ctx.strokeStyle = '#22cc55'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(objX, cy); ctx.lineTo(objX, cy-objH); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(objX-5, cy-objH+10); ctx.lineTo(objX, cy-objH); ctx.lineTo(objX+5, cy-objH+10); ctx.stroke();
+  // virtual image (behind mirror, smaller, upright)
+  const imgDist = (f * objDist) / (objDist + f);
+  const mag = imgDist / objDist;
+  const imgH = objH * mag;
+  const imgX = mirrorX + imgDist * 0.3;
+  ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 2;
+  ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(imgX, cy); ctx.lineTo(imgX, cy-imgH); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#888'; ctx.font = '10px "Space Mono"';
+  ctx.fillText('Alltid förminskad, upprätt, virtuell bild', 10, 18);
+  ctx.fillText('(Backspegel, trafikspegel)', 10, 32);
+  ctx.fillStyle = '#22cc55'; ctx.font = '9px "Space Mono"';
+  ctx.fillText('Föremål', objX-15, cy+15);
+})();
+
+// ============================================================
+// TAB 6: MYOPIA
+// ============================================================
+(function initMyopia() {
+  const s = setupCanvas('myopiaCanvas');
+  if (!s) return;
+  const {ctx, w, h} = s;
+  const cy = h/2;
+  // eye outline
+  const eyeX = w*0.55, eyeR = 45;
+  ctx.beginPath(); ctx.ellipse(eyeX, cy, eyeR*1.3, eyeR, 0, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(200,200,220,0.1)'; ctx.fill();
+  ctx.strokeStyle = '#555'; ctx.lineWidth = 1.5; ctx.stroke();
+  // lens
+  ctx.beginPath(); ctx.ellipse(eyeX-eyeR*0.9, cy, 5, eyeR*0.7, 0, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(100,180,255,0.2)'; ctx.fill();
+  ctx.strokeStyle = '#88aacc'; ctx.lineWidth = 1; ctx.stroke();
+  // retina line
+  const retinaX = eyeX + eyeR*1.1;
+  // rays converge BEFORE retina
+  const focusX = eyeX + eyeR * 0.4;
+  ctx.strokeStyle = '#ff444488'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(10, cy-20); ctx.lineTo(focusX, cy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(10, cy+20); ctx.lineTo(focusX, cy); ctx.stroke();
+  // continue past focus
+  ctx.strokeStyle = '#ff444444';
+  ctx.beginPath(); ctx.moveTo(focusX, cy); ctx.lineTo(retinaX, cy-15); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(focusX, cy); ctx.lineTo(retinaX, cy+15); ctx.stroke();
+  // correction lens
+  ctx.strokeStyle = '#44ff44'; ctx.lineWidth = 2;
+  ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(eyeX - eyeR*1.7, cy-30); ctx.lineTo(eyeX - eyeR*1.7, cy+30); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#888'; ctx.font = '9px "Space Mono"';
+  ctx.fillText('Fokus före näthinnan', focusX - 5, cy - 25);
+  ctx.fillStyle = '#44ff44'; ctx.font = '9px "Space Mono"';
+  ctx.fillText('Konkav lins korrigerar', eyeX - eyeR*1.7 - 10, cy + 45);
+})();
+
+// ============================================================
+// TAB 6: HYPEROPIA
+// ============================================================
+(function initHyperopia() {
+  const s = setupCanvas('hyperopiaCanvas');
+  if (!s) return;
+  const {ctx, w, h} = s;
+  const cy = h/2;
+  const eyeX = w*0.55, eyeR = 40;
+  ctx.beginPath(); ctx.ellipse(eyeX, cy, eyeR*1.1, eyeR, 0, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(200,200,220,0.1)'; ctx.fill();
+  ctx.strokeStyle = '#555'; ctx.lineWidth = 1.5; ctx.stroke();
+  // lens
+  ctx.beginPath(); ctx.ellipse(eyeX-eyeR*0.8, cy, 5, eyeR*0.65, 0, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(100,180,255,0.2)'; ctx.fill();
+  ctx.strokeStyle = '#88aacc'; ctx.lineWidth = 1; ctx.stroke();
+  const retinaX = eyeX + eyeR*0.95;
+  // rays converge AFTER retina
+  const focusX = eyeX + eyeR * 1.6;
+  ctx.strokeStyle = '#4488ff88'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(10, cy-20); ctx.lineTo(focusX, cy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(10, cy+20); ctx.lineTo(focusX, cy); ctx.stroke();
+  // correction lens
+  ctx.strokeStyle = '#ffaa44'; ctx.lineWidth = 2;
+  ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(eyeX - eyeR*1.5, cy-30); ctx.lineTo(eyeX - eyeR*1.5, cy+30); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#888'; ctx.font = '9px "Space Mono"';
+  ctx.fillText('Fokus efter näthinnan', retinaX + 10, cy - 20);
+  ctx.fillStyle = '#ffaa44'; ctx.font = '9px "Space Mono"';
+  ctx.fillText('Konvex lins korrigerar', eyeX - eyeR*1.5 - 10, cy + 45);
+})();
+
+// ============================================================
+// TAB 7: POLARIZATION
+// ============================================================
+(function initPolar() {
+  const s = setupCanvas('polarCanvas');
+  if (!s) return;
+  const {ctx, w, h} = s;
+  const slider = document.getElementById('polarAngle');
+  const valEl = document.getElementById('polarAngleVal');
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    const filterAngle = parseInt(slider.value);
+    valEl.textContent = filterAngle + '°';
+    const cy = h/2;
+    // unpolarized waves on left
+    ctx.fillStyle = '#888'; ctx.font = '10px "Space Mono"';
+    ctx.fillText('Opolariserat', 5, 15);
+    for (let i = 0; i < 6; i++) {
+      const angle = (i / 6) * Math.PI;
+      const len = 25;
+      const cx1 = 60;
+      ctx.strokeStyle = `hsla(${i*60},70%,60%,0.5)`;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(cx1 - Math.cos(angle)*len, cy - Math.sin(angle)*len);
+      ctx.lineTo(cx1 + Math.cos(angle)*len, cy + Math.sin(angle)*len);
+      ctx.stroke();
+    }
+    // filter
+    const filterX = w * 0.4;
+    ctx.strokeStyle = '#ffdd44'; ctx.lineWidth = 2;
+    const fRad = filterAngle * Math.PI / 180;
+    const fLen = 45;
+    // filter lines
+    for (let i = -3; i <= 3; i++) {
+      const offX = Math.cos(fRad + Math.PI/2) * i * 8;
+      const offY = Math.sin(fRad + Math.PI/2) * i * 8;
+      ctx.strokeStyle = '#ffdd4444'; ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(filterX + offX - Math.cos(fRad)*fLen, cy + offY - Math.sin(fRad)*fLen);
+      ctx.lineTo(filterX + offX + Math.cos(fRad)*fLen, cy + offY + Math.sin(fRad)*fLen);
+      ctx.stroke();
+    }
+    ctx.strokeStyle = '#ffdd44'; ctx.lineWidth = 2;
+    ctx.strokeRect(filterX - 25, cy - 50, 50, 100);
+    ctx.fillStyle = '#ffdd44'; ctx.font = '10px "Space Mono"';
+    ctx.fillText('Filter', filterX - 15, cy - 55);
+    // output: polarized wave
+    const outX = w * 0.65;
+    // only the component along filter angle passes
+    const intensity = Math.pow(Math.cos((filterAngle) * Math.PI / 180), 2);
+    const alpha = Math.max(0.1, intensity);
+    ctx.strokeStyle = `rgba(255,221,68,${alpha})`;
+    ctx.lineWidth = 2;
+    const waveLen = 30;
+    ctx.beginPath();
+    for (let x = 0; x < w * 0.3; x++) {
+      const px = outX + x;
+      const amp = 20 * alpha;
+      const perpX = Math.sin(fRad) * Math.sin(x/8 - t*3) * amp;
+      const perpY = -Math.cos(fRad) * Math.sin(x/8 - t*3) * amp;
+      x === 0 ? ctx.moveTo(px + perpX, cy + perpY) : ctx.lineTo(px + perpX, cy + perpY);
+    }
+    ctx.stroke();
+    ctx.fillStyle = '#aaa'; ctx.font = '10px "Space Mono"';
+    ctx.fillText('Polariserat', outX, 15);
+    ctx.fillText('Intensitet: ' + (intensity * 100).toFixed(0) + '%', outX, h - 10);
+    t += 0.016;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ============================================================
+// TAB 7: FIBER OPTICS
+// ============================================================
+(function initFiber() {
+  const s = setupCanvas('fiberCanvas');
+  if (!s) return;
+  const {ctx, w, h} = s;
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    const cy = h/2, fiberTop = cy - 25, fiberBot = cy + 25;
+    const startX = 40, endX = w - 40;
+    // fiber cable
+    ctx.fillStyle = 'rgba(60,60,100,0.4)';
+    ctx.fillRect(startX, fiberTop, endX - startX, fiberBot - fiberTop);
+    ctx.strokeStyle = '#4488aa'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(startX, fiberTop); ctx.lineTo(endX, fiberTop); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(startX, fiberBot); ctx.lineTo(endX, fiberBot); ctx.stroke();
+    // bouncing light ray
+    const bounceH = fiberBot - fiberTop;
+    const bounceW = 60;
+    const numBounces = Math.floor((endX - startX) / bounceW);
+    ctx.strokeStyle = '#ff4444'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(startX, cy);
+    for (let i = 0; i < numBounces; i++) {
+      const x1 = startX + i * bounceW + bounceW/2;
+      const y1 = i % 2 === 0 ? fiberTop + 3 : fiberBot - 3;
+      ctx.lineTo(x1, y1);
+    }
+    ctx.lineTo(endX, cy);
+    ctx.stroke();
+    // animated photon
+    const totalLen = numBounces * bounceW;
+    const pos = ((t * 80) % totalLen);
+    const segIdx = Math.floor(pos / bounceW);
+    const segFrac = (pos % bounceW) / bounceW;
+    let px, py;
+    if (segIdx < numBounces) {
+      const sx = startX + segIdx * bounceW + (segIdx > 0 ? bounceW/2 : 0);
+      const sy = segIdx === 0 ? cy : (segIdx % 2 !== 0 ? fiberTop + 3 : fiberBot - 3);
+      const ex = startX + segIdx * bounceW + bounceW/2 + (segIdx === 0 ? 0 : 0);
+      const ey = segIdx % 2 === 0 ? fiberTop + 3 : fiberBot - 3;
+      px = sx + (ex - sx) * segFrac;
+      py = sy + (ey - sy) * segFrac;
+    } else {
+      px = endX; py = cy;
+    }
+    ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI*2);
+    ctx.fillStyle = '#ff4444'; ctx.fill();
+    ctx.shadowColor = '#ff4444'; ctx.shadowBlur = 12; ctx.fill(); ctx.shadowBlur = 0;
+    // labels
+    ctx.fillStyle = '#666'; ctx.font = '9px "Space Mono"';
+    ctx.fillText('Kärna (glas)', startX + 5, cy + 4);
+    ctx.fillText('Totalreflektion vid varje studs', w/2 - 80, fiberBot + 18);
+    t += 0.016;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ============================================================
+// TAB 8: QUIZ
+// ============================================================
+(function initQuiz() {
+  const questions = [
+    { q: 'Vad är ljusets hastighet i vakuum?', opts: ['300 000 km/s','150 000 km/s','1 000 000 km/s','3 000 km/s'], correct: 0, explain: 'Ljusets hastighet i vakuum är cirka 300 000 km/s (3 × 10⁸ m/s).' },
+    { q: 'Vad händer med ljus som träffar en svart yta?', opts: ['Det reflekteras','Det absorberas','Det bryts','Det polariseras'], correct: 1, explain: 'Svarta ytor absorberar nästan allt ljus och omvandlar det till värme.' },
+    { q: 'Vilken lins korrigerar närsynthet?', opts: ['Konvex lins','Plan lins','Konkav lins','Cylindrisk lins'], correct: 2, explain: 'Närsynthet korrigeras med en konkav (spridnings-) lins som sprider ljuset lite innan det når ögat.' },
+    { q: 'Vad är sambandet mellan våglängd (λ) och frekvens (f)?', opts: ['c = λ × f','c = λ / f','c = λ + f','c = f / λ'], correct: 0, explain: 'Ljusets hastighet = våglängd × frekvens. Kort våglängd = hög frekvens.' },
+    { q: 'Vilken färg bryts MEST i en regnbåge?', opts: ['Röd','Grön','Gul','Violett'], correct: 3, explain: 'Violett ljus har kortast våglängd och bryts mest, därför hamnar det längst ner i regnbågen.' },
+    { q: 'Hur skiljer sig laserljus från vanligt ljus?', opts: ['Det är varmare','Det är monokromatiskt och koherent','Det har längre våglängd','Det är snabbare'], correct: 1, explain: 'Laserljus har en enda våglängd (monokromatiskt) och vågorna svänger i takt (koherent).' },
+    { q: 'Vad händer när ljus går från luft till vatten?', opts: ['Det böjs från normalen','Det böjs mot normalen','Det reflekteras helt','Ingenting'], correct: 1, explain: 'Vatten är tätare (högre brytningsindex) så ljuset böjs MOT normalen.' },
+    { q: 'Vad använder fiberoptik för att hålla ljuset inuti?', opts: ['Absorbering','Brytning','Totalreflektion','Polarisering'], correct: 2, explain: 'Fiberoptik bygger på totalreflektion — ljuset studsar inuti glasfibern utan att läcka ut.' },
+    { q: 'En konvex spegel ger alltid en bild som är…', opts: ['Förstorad och inverterad','Förminskad och upprätt','Lika stor','Osynlig'], correct: 1, explain: 'En konvex spegel (spridningsspegel) ger alltid en förminskad, upprätt, virtuell bild.' },
+    { q: 'Vad gör polariserade glasögon?', opts: ['Förstärker allt ljus','Blockerar UV-ljus','Filtrerar ljus till en svängriktning','Ändrar ljusets färg'], correct: 2, explain: 'Polariserade glasögon släpper bara igenom ljus som svänger i en viss riktning, vilket minskar bländning.' },
+    { q: 'Varför ser vi en röd tröja som röd?', opts: ['Tröjan sänder ut rött ljus','Tröjan absorberar rött och reflekterar resten','Tröjan reflekterar rött och absorberar resten','Våra ögon lägger till färgen'], correct: 2, explain: 'En röd tröja reflekterar rött ljus och absorberar alla andra våglängder.' },
+    { q: 'Vilken typ av våg är ljus?', opts: ['Longitudinell våg','Transversell våg','Stående våg','Mekanisk våg'], correct: 1, explain: 'Ljus är en transversell elektromagnetisk våg — svängningen är vinkelrät mot rörelseriktningen.' },
+    { q: 'Vilken del av EM-spektrumet har MEST energi?', opts: ['Radiovågor','Mikrovågor','Synligt ljus','Gammastrålar'], correct: 3, explain: 'Gammastrålar har kortast våglängd och högst frekvens = mest energi.' },
+    { q: 'Vad innebär "reflektionslagen"?', opts: ['Ljus reflekteras alltid helt','Infallsvinkel = reflektionsvinkel','Ljus bryts vid reflektion','Reflekterat ljus byter färg'], correct: 1, explain: 'Reflektionslagen säger att infallsvinkeln alltid är lika med reflektionsvinkeln (mätt från normalen).' },
+    { q: 'Hur skapas 3D-filmer?', opts: ['Med speciella färger','Med laserljus','Med polariserat ljus (olika för varje öga)','Med ultraviolett ljus'], correct: 2, explain: '3D-film projicerar två bilder med olika polarisering. Glasögonen filtrerar så varje öga ser en bild.' },
+  ];
+
+  let score = 0, answered = 0;
+  const container = document.getElementById('quizContainer');
+  const scoreEl = document.getElementById('scoreDisplay');
+
+  function render() {
+    container.innerHTML = '';
+    questions.forEach((q, qi) => {
+      const div = document.createElement('div');
+      div.className = 'quiz-card';
+      div.innerHTML = `
+        <div class="question">${qi + 1}. ${q.q}</div>
+        <div class="quiz-options" id="qopts${qi}">
+          ${q.opts.map((o, oi) => `<button class="quiz-opt" data-q="${qi}" data-o="${oi}">${o}</button>`).join('')}
+        </div>
+        <div class="quiz-feedback" id="qfb${qi}"></div>
+      `;
+      container.appendChild(div);
+    });
+    // attach handlers
+    container.querySelectorAll('.quiz-opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const qi = parseInt(btn.dataset.q);
+        const oi = parseInt(btn.dataset.o);
+        const opts = container.querySelectorAll(`#qopts${qi} .quiz-opt`);
+        if (btn.classList.contains('disabled')) return;
+        answered++;
+        opts.forEach((o, idx) => {
+          o.classList.add('disabled');
+          if (idx === questions[qi].correct) o.classList.add('correct');
+          if (idx === oi && idx !== questions[qi].correct) o.classList.add('wrong');
+        });
+        const fb = document.getElementById(`qfb${qi}`);
+        if (oi === questions[qi].correct) {
+          score++;
+          fb.className = 'quiz-feedback show correct-fb';
+          fb.textContent = '✓ Rätt! ' + questions[qi].explain;
+        } else {
+          fb.className = 'quiz-feedback show wrong-fb';
+          fb.textContent = '✗ Fel. ' + questions[qi].explain;
+        }
+        scoreEl.textContent = score + ' / ' + answered;
+      });
+    });
+  }
+  render();
+  document.getElementById('resetQuiz').addEventListener('click', () => {
+    score = 0; answered = 0;
+    scoreEl.textContent = '0 / 0';
+    render();
+  });
+})();
+</script>
+</body>
+</html>
