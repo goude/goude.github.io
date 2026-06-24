@@ -11,7 +11,8 @@
 
 import fs from "fs";
 import postcss from "postcss";
-import { XMLParser, XMLBuilder } from "fast-xml-parser";
+import { XMLParser } from "fast-xml-parser";
+import XMLBuilder from "fast-xml-builder";
 import { SWATCH_TO_CSS_VAR } from "../src/styles/swatches.js";
 import { isHexColor, evalColorMix } from "./color-utils.mjs";
 
