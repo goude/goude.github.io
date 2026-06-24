@@ -11,22 +11,27 @@ Personal site built with Astro 5 and TypeScript.
 
 ## Development
 
+This project uses [`just`](https://github.com/casey/just) as its task runner;
+recipes are defined in the `justfile`.
+
 ```bash
-# Install dependencies
-npm install
+# Install dependencies (first thing after cloning)
+just setup
 
 # Start dev server
-npm run dev
+just dev
 
-# Type check
-npm run check
+# Full check: format → lint → typecheck → test → build
+just check
 
 # Build for production
-npm run build
+just build
 
 # Preview production build
-npm run preview
+just preview
 ```
+
+Run `just` with no arguments to list all available recipes.
 
 ## Project Structure
 
