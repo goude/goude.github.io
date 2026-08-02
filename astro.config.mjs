@@ -13,5 +13,8 @@ export default defineConfig({
     build: {
       cssMinify: true,
     },
+    preview: {
+      allowedHosts: ["zelda.lan", "zelda"],
+    },
   },
 });
