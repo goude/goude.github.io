@@ -16,5 +16,8 @@ export default defineConfig({
     preview: {
       allowedHosts: ["zelda.lan", "zelda"],
     },
+    server: {
+      allowedHosts: ["zelda.lan", "zelda"],
+    },
   },
 });
