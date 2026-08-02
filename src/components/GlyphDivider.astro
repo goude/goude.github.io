@@ -1,0 +1,33 @@
+---
+/* Rule - glyph - rule divider. Reused mid-page (between lede paragraphs)
+   and above the footer. Font Awesome glyph, not custom art -- a compass
+   already exists in the free set and reads fine at this size. */
+interface Props {
+  icon?: string;
+}
+const { icon = "fa-solid fa-compass" } = Astro.props;
+---
+
+<div class="glyph-divider" aria-hidden="true">
+  <span class="line"></span>
+  <i class={icon}></i>
+  <span class="line"></span>
+</div>
+
+<style>
+  .glyph-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin: var(--space-lg) 0;
+    color: var(--accent);
+  }
+  .line {
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+  .glyph-divider i {
+    font-size: 0.9rem;
+  }
+</style>

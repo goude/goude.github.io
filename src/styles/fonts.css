@@ -1,5 +1,42 @@
 /* ==================== Fonts ==================== */
-@import url("https://fonts.googleapis.com/css2?family=Special+Elite&family=Story+Script&family=Source+Sans+Pro:wght@400&family=Fraunces:wght@400&family=JetBrains+Mono:wght@400&family=Staatliches&family=Outfit:wght@400&display=swap");
+/* Special Elite: used by src/pages/ai-generated/typewriter.astro.
+   Story Script, Source Sans Pro, Fraunces, JetBrains Mono, Staatliches,
+   Outfit: dropped, no longer referenced (superseded by the self-hosted
+   families below). */
+@import url("https://fonts.googleapis.com/css2?family=Special+Elite&display=swap");
+
+@font-face {
+  font-family: "EB Garamond";
+  src: url("/fonts/eb-garamond/EBGaramond-Variable.woff2") format("woff2");
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  src: url("/fonts/eb-garamond/EBGaramond-Italic-Variable.woff2")
+    format("woff2");
+  font-weight: 400 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Sans 3";
+  src: url("/fonts/source-sans-3/SourceSans3-Variable.woff2") format("woff2");
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fira Code";
+  src: url("/fonts/fira-code/FiraCode-Variable.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 @font-face {
   font-family: "et-book";

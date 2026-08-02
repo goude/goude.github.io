@@ -3,6 +3,7 @@ import "@/styles/global.css";
 import BaseHead from "@/components/BaseHead.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+import RidgeDivider from "@/components/RidgeDivider.astro";
 
 interface Props {
   title?: string | undefined;
@@ -27,6 +28,7 @@ const fullTitle = title
   </head>
   <body>
     <Header current={current} />
+    <RidgeDivider />
     <main>
       <slot />
     </main>

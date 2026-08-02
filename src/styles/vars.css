@@ -55,10 +55,10 @@
   --hero-anim-duration: 30s;
 
   /* ---------- Typography ---------- */
-  --font-body-serif: et-book, serif;
-  --font-ui: "Staatliches", sans-serif;
-  --font-body-sans: "Outfit", sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+  --font-body-serif: "EB Garamond", serif;
+  --font-ui: "Source Sans 3", sans-serif;
+  --font-body-sans: "Source Sans 3", sans-serif;
+  --font-mono: "Fira Code", monospace;
 
   --text-xs: 0.875rem;
   --text-sm: 1rem;
@@ -80,14 +80,14 @@
 
 /* ==================== Dark Theme ==================== */
 /* Only the three palette vars need switching — all usage tokens cascade. */
-/* Serif changes too since Fraunces reads better than et-book on dark backgrounds. */
+/* EB Garamond is a variable font (weight 400-800) and reads fine on dark
+   without a separate face, unlike the old et-book/Fraunces split. */
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme-light]) {
     --bg: var(--palette-dark-bg);
     --fg: var(--palette-dark-fg);
     --accent: var(--palette-dark-accent);
-    --font-body-serif: "Fraunces", serif;
     --text-strong: var(--accent);
   }
 }
@@ -96,7 +96,6 @@
   --bg: var(--palette-dark-bg);
   --fg: var(--palette-dark-fg);
   --accent: var(--palette-dark-accent);
-  --font-body-serif: "Fraunces", serif;
   --text-strong: var(--accent);
 }
 
@@ -108,7 +107,6 @@
     --bg: var(--palette-light-bg);
     --fg: var(--palette-light-fg);
     --accent: var(--palette-light-accent);
-    --font-body-serif: et-book, serif;
   }
 }
 
@@ -116,5 +114,4 @@
   --bg: var(--palette-light-bg);
   --fg: var(--palette-light-fg);
   --accent: var(--palette-light-accent);
-  --font-body-serif: et-book, serif;
 }

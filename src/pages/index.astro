@@ -1,5 +1,16 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import HeroIllustration from "@/components/HeroIllustration.astro";
+import TreeCluster from "@/components/TreeCluster.astro";
+import GlyphDivider from "@/components/GlyphDivider.astro";
+
+const ICON_BY_KIND: Record<string, string> = {
+  Note: "fa-solid fa-file-lines",
+  Essay: "fa-solid fa-mountain",
+  Tool: "fa-solid fa-wrench",
+  Play: "fa-solid fa-egg",
+  Page: "fa-solid fa-hand",
+};
 
 /* Short structural copy only — no long-form prose on this human-authored page.
    Titles and descriptions below are reused from each page's own metadata. */
@@ -60,12 +71,21 @@ const entries = [
 >
   <article id="entry-point">
     <section class="intro">
-      <p class="eyebrow">Notes · Tools · Things worth keeping</p>
-      <h1 class="hero">Point of Entry</h1>
-      <p class="lede">
-        This site is where I keep some of my notes and put stuff that I find
-        useful.
-      </p>
+      <div class="intro-text">
+        <p class="eyebrow">Notes · Tools · Things worth keeping</p>
+        <h1 class="hero">Point of Entry</h1>
+        <p class="lede">
+          This site is where I keep some of my notes and put stuff that I find
+          useful.
+        </p>
+        <GlyphDivider />
+        <!-- TODO(daniel): second lede paragraph -- this page is
+             human-authored prose (see CLAUDE.md Content Authorship Zones),
+             left blank rather than filled with placeholder narrative. -->
+      </div>
+      <div class="intro-art" aria-hidden="true">
+        <HeroIllustration />
+      </div>
     </section>
 
     <section class="featured">
@@ -97,6 +117,9 @@ const entries = [
             <li>
               <a href={entry.href}>
                 <span class="num">{String(i + 1).padStart(2, "0")}</span>
+                <span class="icon-box">
+                  <i class={ICON_BY_KIND[entry.kind]} />
+                </span>
                 <span class="body">
                   <span class="title">{entry.title}</span>
                   <span class="desc">{entry.description}</span>
@@ -111,13 +134,37 @@ const entries = [
         }
       </ul>
     </section>
+
+    <section class="closing">
+      <div class="closing-text">
+        <!-- TODO(daniel): closing paragraph -- same authorship-zone note
+             as the intro; left blank for real prose. -->
+      </div>
+      <div class="closing-art" aria-hidden="true">
+        <TreeCluster />
+      </div>
+    </section>
+
+    <GlyphDivider />
   </article>
 </Layout>
 
 <style>
   /* ---------- intro ---------- */
   .intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: center;
     padding: clamp(2rem, 7vw, 5rem) 0 clamp(1.5rem, 4vw, 2.5rem);
+  }
+  @media (max-width: 700px) {
+    .intro {
+      grid-template-columns: 1fr;
+    }
+    .intro-art {
+      display: none;
+    }
   }
   .eyebrow {
     margin: 0 0 1.25rem;
@@ -247,7 +294,7 @@ const entries = [
   }
   .entries a {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto auto 1fr auto;
     gap: 1.2rem;
     align-items: baseline;
     padding: 1.1rem 0.6rem;
@@ -268,6 +315,18 @@ const entries = [
     font-size: var(--text-xs);
     color: var(--text-muted);
     min-width: 1.6rem;
+  }
+  .entries .icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--accent);
+    font-size: 0.9rem;
   }
   .entries .body {
     min-width: 0;
@@ -315,6 +374,33 @@ const entries = [
       aspect-ratio: 16 / 7;
     }
     .entries .tag {
+      display: none;
+    }
+    .entries .icon-box {
+      display: none;
+    }
+  }
+
+  /* ---------- closing ---------- */
+  .closing {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: end;
+  }
+  .closing-text {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    min-height: 1px;
+  }
+  .closing-art {
+    width: clamp(120px, 18vw, 180px);
+  }
+  @media (max-width: 560px) {
+    .closing {
+      grid-template-columns: 1fr;
+    }
+    .closing-art {
       display: none;
     }
   }

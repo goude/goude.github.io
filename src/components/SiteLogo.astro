@@ -44,8 +44,14 @@ const { isSelected = false } = Astro.props;
 </a>
 
 <style>
-  .logo {
+  /* The logo is a permanent brand badge, not a current-page indicator --
+     override .nav-action.selected's shared dark pill (nav.css) so it
+     always reads as the terracotta mark regardless of route. */
+  .logo,
+  .logo.selected {
     flex-shrink: 0;
+    background: var(--accent);
+    color: var(--palette-light-bg);
   }
 
   .logo-svg {
