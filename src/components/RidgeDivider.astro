@@ -1,32 +1,25 @@
 ---
-/* Thin line-art mountain ridge, echoing the hero illustration's silhouette.
-   Sits between the header and the page body. */
+/* Mountain ridge divider, sits between the header and the page body.
+   Codex-generated line art (see docs/backlog.md or commit message for
+   provenance) -- replaces an earlier hand-rolled SVG placeholder. */
 ---
 
-<svg
+<img
   class="ridge-divider"
-  viewBox="0 0 1200 90"
-  preserveAspectRatio="xMidYMax slice"
+  src="/images/illustrations/ridge-divider.png"
+  alt=""
   aria-hidden="true"
->
-  <path
-    d="M0 80 L120 40 L180 62 L260 20 L340 68 L420 34 L520 74 L620 26 L700 60 L790 14 L880 66 L960 38 L1040 70 L1120 46 L1200 78"
-    fill="none"
-    stroke="var(--rule)"
-    stroke-width="1.5"
-    stroke-linejoin="round"></path>
-  <g stroke="var(--rule)" stroke-width="1.5" opacity="0.7">
-    <path d="M790 14 L775 40 L805 40 Z" fill="var(--surface)"></path>
-    <path d="M260 20 L248 42 L272 42 Z" fill="var(--surface)"></path>
-    <path d="M620 26 L607 48 L633 48 Z" fill="var(--surface)"></path>
-  </g>
-</svg>
+  width="1200"
+  height="90"
+/>
 
 <style>
   .ridge-divider {
     display: block;
     width: 100%;
     height: 28px;
+    object-fit: cover;
+    object-position: center top;
     margin-bottom: var(--space-lg);
   }
 </style>

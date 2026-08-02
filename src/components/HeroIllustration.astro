@@ -1,60 +1,16 @@
 ---
-/* Placeholder line-art scene for the homepage hero: sun, distant peaks,
-   a near ridge, and a couple of birds. Deliberately loose sketch-style,
-   not a pixel-perfect reproduction -- swap for real art whenever. */
+/* Homepage hero scene: sun, mountains, pines, birds. Codex-generated line
+   art -- replaces an earlier hand-rolled SVG placeholder. */
 ---
 
-<svg
+<img
   class="hero-illustration"
-  viewBox="0 0 420 260"
+  src="/images/illustrations/hero-illustration.png"
+  alt=""
   aria-hidden="true"
-  focusable="false"
->
-  <circle
-    cx="330"
-    cy="70"
-    r="26"
-    fill="none"
-    stroke="var(--accent)"
-    stroke-width="2"></circle>
-  <g stroke="var(--accent)" stroke-width="2">
-    <path d="M330 24v14M330 102v14M284 70h14M362 70h14"></path>
-    <path d="M298 38l10 10M352 92l10 10M362 38l-10 10M308 92l-10 10"></path>
-  </g>
-  <path
-    d="M250 60l8 12M262 58l6 14"
-    stroke="var(--text-muted)"
-    stroke-width="1.5"
-    fill="none"
-    stroke-linecap="round"></path>
-  <path
-    d="M270 66l8 10M282 64l6 12"
-    stroke="var(--text-muted)"
-    stroke-width="1.5"
-    fill="none"
-    stroke-linecap="round"></path>
-
-  <path
-    d="M10 170 L90 100 L150 150 L210 90 L260 150 L320 110 L410 175"
-    fill="none"
-    stroke="var(--text-muted)"
-    stroke-width="1.5"
-    opacity="0.6"></path>
-
-  <path
-    d="M0 230 L60 150 L120 200 L170 130 L230 205 L300 145 L360 200 L420 160 L420 260 L0 260 Z"
-    fill="var(--surface)"
-    stroke="var(--rule)"
-    stroke-width="1.5"></path>
-
-  <g stroke="var(--text-muted)" stroke-width="1.5" fill="none">
-    <path d="M70 225 v-38 M70 210 l-14 -14 M70 198 l14 -14 M70 186 l-12 -12"
-    ></path>
-    <path d="M110 232 v-30 M110 220 l-11 -11 M110 210 l11 -11"></path>
-    <path d="M330 225 v-34 M330 212 l-13 -13 M330 200 l13 -13 M330 189 l-11 -11"
-    ></path>
-  </g>
-</svg>
+  width="420"
+  height="260"
+/>
 
 <style>
   .hero-illustration {
@@ -62,5 +18,6 @@
     width: 100%;
     height: auto;
     max-height: var(--hero-max-height);
+    object-fit: contain;
   }
 </style>
