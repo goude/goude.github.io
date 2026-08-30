@@ -181,7 +181,7 @@ body[data-paper] a:hover {
   border-bottom: 1px solid rgba(231, 214, 186, 0.22);
 }
 
-.paper-nav a {
+body[data-paper] .paper-nav a {
   position: relative;
   padding: 5px 0 8px;
   color: var(--paper-leather-fg);
@@ -193,7 +193,7 @@ body[data-paper] a:hover {
   border-bottom: none;
 }
 
-.paper-nav a:hover {
+body[data-paper] .paper-nav a:hover {
   color: var(--paper-leather-fg);
   opacity: 1;
 }
