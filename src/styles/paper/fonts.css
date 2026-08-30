@@ -1,0 +1,43 @@
+/* ==================== Paper Theme Fonts ==================== */
+/* Self-hosted (OFL) — see public/fonts/<family>/README.md for source. */
+
+@font-face {
+  font-family: "Special Elite";
+  src: url("/fonts/special-elite/SpecialElite-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IM Fell English";
+  src: url("/fonts/im-fell-english/IMFellEnglish-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IM Fell English";
+  src: url("/fonts/im-fell-english/IMFellEnglish-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IM Fell English SC";
+  src: url("/fonts/im-fell-english-sc/IMFellEnglishSC-Regular.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Caveat";
+  src: url("/fonts/caveat/Caveat-Variable.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}

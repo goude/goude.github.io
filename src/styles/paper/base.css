@@ -1,0 +1,213 @@
+/* ==================== Paper Theme Base ==================== */
+
+body[data-paper] {
+  background-color: var(--paper-leather);
+  background-image:
+    radial-gradient(
+      140% 100% at 50% -20%,
+      rgba(103, 74, 44, 0.55),
+      rgba(36, 26, 18, 0) 55%
+    ),
+    radial-gradient(
+      120% 120% at 50% 120%,
+      rgba(0, 0, 0, 0.5),
+      rgba(36, 26, 18, 0) 60%
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  color: var(--paper-ink);
+  font-family: var(--paper-font-serif);
+  font-size: 19px;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body[data-paper] a {
+  color: var(--paper-seal);
+  text-decoration: none;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--paper-seal) 30%, transparent);
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+
+body[data-paper] a:hover {
+  color: var(--paper-seal-dark);
+  border-bottom-color: color-mix(in srgb, var(--paper-seal) 65%, transparent);
+}
+
+/* ---------- Page shell ---------- */
+
+.paper-shell {
+  min-height: 100vh;
+  padding: 26px 18px 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.paper-width {
+  width: 100%;
+  max-width: var(--paper-page-max);
+}
+
+/* ---------- Panel / card surfaces ---------- */
+
+.paper-panel {
+  background: var(--paper-card-index);
+  background-image: radial-gradient(
+    120% 80% at 50% 0%,
+    rgba(255, 255, 255, 0.5),
+    rgba(0, 0, 0, 0) 60%
+  );
+  border-radius: 3px;
+  padding: 56px clamp(26px, 6vw, 68px);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.45);
+}
+
+.note-card {
+  position: relative;
+  background: var(--paper-card-a);
+  padding: 36px clamp(24px, 5vw, 48px) 34px;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.4);
+}
+
+.note-card--alt {
+  background: var(--paper-card-b);
+}
+
+.note-card.is-tilted {
+  transform: rotate(var(--tilt, -1deg));
+}
+
+.note-card .tape {
+  position: absolute;
+  top: -13px;
+  left: 38px;
+  width: 96px;
+  height: 28px;
+  background: rgba(210, 190, 150, 0.55);
+  border: 1px solid rgba(150, 125, 85, 0.3);
+  transform: rotate(-4deg);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+/* ---------- Headings ---------- */
+
+.paper-h {
+  font-family: var(--paper-font-serif-sc);
+  font-weight: 400;
+  color: var(--paper-ink-strong);
+  margin: 0;
+}
+
+.paper-eyebrow {
+  font-family: var(--paper-font-type);
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--paper-ink-label);
+  margin: 0 0 6px;
+}
+
+/* ---------- Typewriter type (Notes, labels, meta) ---------- */
+
+.paper-label {
+  font-family: var(--paper-font-type);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--paper-ink-label-dim);
+  margin: 0 0 14px;
+}
+
+.paper-typewriter {
+  font-family: var(--paper-font-type);
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--paper-ink-body);
+}
+
+/* ---------- Serif type (Essays) ---------- */
+
+.paper-essay {
+  font-family: var(--paper-font-serif);
+  font-size: 20px;
+  line-height: 1.7;
+  color: var(--paper-ink-body);
+  text-align: justify;
+  hyphens: auto;
+}
+
+.paper-dropcap::first-letter {
+  font-family: var(--paper-font-serif-sc);
+  font-size: 76px;
+  line-height: 0.72;
+  float: left;
+  padding: 6px 12px 0 0;
+  color: var(--paper-seal);
+}
+
+.paper-pullquote {
+  font-family: var(--paper-font-serif);
+  font-style: italic;
+  font-size: 24px;
+  line-height: 1.5;
+  color: var(--paper-ink-muted);
+  text-align: center;
+  margin: 36px 8px;
+  padding: 0 12px;
+}
+
+.paper-hand {
+  font-family: var(--paper-font-hand);
+  color: var(--paper-ink-muted);
+}
+
+/* ---------- Nav ---------- */
+
+.paper-nav {
+  width: 100%;
+  max-width: var(--paper-page-max);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 26px;
+  align-items: center;
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  background: rgba(20, 14, 9, 0.28);
+  border-top: 1px solid rgba(231, 214, 186, 0.22);
+  border-bottom: 1px solid rgba(231, 214, 186, 0.22);
+}
+
+.paper-nav a {
+  position: relative;
+  padding: 5px 0 8px;
+  color: var(--paper-leather-fg);
+  font-family: var(--paper-font-type);
+  font-size: 12px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  opacity: 0.85;
+  border-bottom: none;
+}
+
+.paper-nav a:hover {
+  color: var(--paper-leather-fg);
+  opacity: 1;
+}
+
+.paper-nav a[aria-current="page"] {
+  opacity: 1;
+}
+
+.paper-nav a[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--paper-gold);
+}

@@ -1,0 +1,44 @@
+/* ==================== Paper Theme Tokens ==================== */
+/* A single fixed aesthetic (no light/dark switching — the "light" element
+   is the parchment card itself, not a site-wide mode). Used only by
+   PaperLayout and the pages under it; archived pages never see this file. */
+
+:root {
+  /* ---------- Surround (the dark leather-brown frame) ---------- */
+  --paper-leather: #241a12;
+  --paper-leather-fg: #e7d6ba;
+  --paper-leather-fg-muted: color-mix(
+    in srgb,
+    var(--paper-leather-fg) 72%,
+    transparent
+  );
+
+  /* ---------- Parchment card surfaces ---------- */
+  --paper-card-a: #f3ead6;
+  --paper-card-b: #efe6d0;
+  --paper-card-index: #f1e8d3;
+
+  /* ---------- Ink ---------- */
+  --paper-ink: #2b2620;
+  --paper-ink-strong: #241d15;
+  --paper-ink-body: #33291f;
+  --paper-ink-muted: #6b5236;
+  --paper-ink-label: #8a6d47;
+  --paper-ink-label-dim: #9c7c52;
+
+  /* ---------- Accents ---------- */
+  --paper-seal: #7c2b21;
+  --paper-seal-dark: #571b15;
+  --paper-gold: #c98a2f;
+
+  /* ---------- Fonts ---------- */
+  --paper-font-type: "Special Elite", "Courier New", monospace;
+  --paper-font-serif: "IM Fell English", Georgia, serif;
+  --paper-font-serif-sc: "IM Fell English SC", Georgia, serif;
+  --paper-font-hand: "Caveat", cursive;
+
+  /* ---------- Layout ---------- */
+  --paper-page-max: 900px;
+  --paper-index-max: 820px;
+  --paper-essay-max: 720px;
+}
