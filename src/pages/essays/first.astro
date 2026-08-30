@@ -1,0 +1,29 @@
+---
+import PaperLayout from "@/layouts/PaperLayout.astro";
+---
+
+<PaperLayout
+  title="First entry"
+  description="Placeholder — the first real essay goes here."
+  current="essays"
+>
+  <p style="margin:0 0 20px;">
+    <a href="/essays">← Essays</a>
+  </p>
+  <article
+    class="paper-panel"
+    style="max-width:var(--paper-essay-max);margin:0 auto;"
+  >
+    <p class="paper-eyebrow" style="text-align:center;">Set in type</p>
+    <h2
+      class="paper-h"
+      style="font-size:clamp(28px,5vw,40px);text-align:center;margin-bottom:20px;"
+    >
+      First entry
+    </h2>
+    <p class="paper-essay">
+      Placeholder entry — nothing written yet. This page exists to prove the
+      Essays template works before any real content is added.
+    </p>
+  </article>
+</PaperLayout>

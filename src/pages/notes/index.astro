@@ -1,0 +1,29 @@
+---
+import PaperLayout from "@/layouts/PaperLayout.astro";
+import NoteCard from "@/components/NoteCard.astro";
+---
+
+<PaperLayout
+  title="Notes"
+  description="Field notes — typed entries, longer than a jotting."
+  current="notes"
+>
+  <header
+    style="text-align:center;color:var(--paper-leather-fg);margin-bottom:26px;"
+  >
+    <p class="paper-eyebrow" style="opacity:.7;">Section I</p>
+    <h2 class="paper-h" style="font-size:clamp(30px,6vw,46px);">Notes</h2>
+  </header>
+
+  <div style="display:flex;flex-direction:column;gap:34px;">
+    <NoteCard title="First entry" date="—" tilt={-1.2}>
+      <p style="margin:0;">
+        Nothing here yet. This is a placeholder proving the Notes template — the
+        first real entry replaces it.
+      </p>
+      <p style="margin:14px 0 0;">
+        <a href="/notes/first">Open →</a>
+      </p>
+    </NoteCard>
+  </div>
+</PaperLayout>

@@ -1,0 +1,20 @@
+---
+import PaperLayout from "@/layouts/PaperLayout.astro";
+import NoteCard from "@/components/NoteCard.astro";
+---
+
+<PaperLayout
+  title="First entry"
+  description="Placeholder — the first real note goes here."
+  current="notes"
+>
+  <p style="margin:0 0 20px;">
+    <a href="/notes">← Notes</a>
+  </p>
+  <NoteCard title="First entry" date="—" tilt={0}>
+    <p style="margin:0;">
+      Placeholder entry — nothing written yet. This page exists to prove the
+      Notes template works before any real content is added.
+    </p>
+  </NoteCard>
+</PaperLayout>
