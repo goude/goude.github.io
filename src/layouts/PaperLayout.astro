@@ -1,0 +1,37 @@
+---
+import "@/styles/paper.css";
+import BaseHead from "@/components/BaseHead.astro";
+import PaperHeader from "@/components/PaperHeader.astro";
+import PaperFooter from "@/components/PaperFooter.astro";
+
+interface Props {
+  title?: string | undefined;
+  description?: string | undefined;
+  current?: string | undefined;
+}
+
+const { title, description, current } = Astro.props;
+
+const siteName = "goude.se";
+const author = "doitpoorly";
+
+const fullTitle = title
+  ? `${title} · ${siteName} · ${author}`
+  : `${siteName} · ${author}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={fullTitle} description={description} />
+  </head>
+  <body data-paper>
+    <div class="paper-shell">
+      <PaperHeader current={current} />
+      <main class="paper-width">
+        <slot />
+      </main>
+      <PaperFooter />
+    </div>
+  </body>
+</html>

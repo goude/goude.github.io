@@ -54,3 +54,12 @@ export const NAV_ITEMS: NavItem[] = [
     external: true,
   },
 ];
+
+/** Nav for pages under PaperLayout — the new site going forward. Icons unused (no icon column in the paper nav), kept only to satisfy NavItem. */
+export const PAPER_NAV: NavItem[] = [
+  { href: "/", label: "Index", icons: [] },
+  { href: "/notes", label: "Notes", icons: [] },
+  { href: "/essays", label: "Essays", icons: [] },
+  { href: "/archive", label: "Archive", icons: [] },
+  ...NAV_ITEMS.filter((item) => item.external),
+];

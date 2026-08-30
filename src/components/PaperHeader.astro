@@ -1,0 +1,36 @@
+---
+import { PAPER_NAV } from "@/types/site";
+
+interface Props {
+  current?: string | undefined;
+}
+
+const { current = "" } = Astro.props;
+const currentHref = `/${current}`;
+---
+
+<div
+  class="paper-width"
+  style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:14px;"
+>
+  <span
+    class="paper-eyebrow"
+    style="margin:0;color:var(--paper-leather-fg);opacity:.72;"
+    >Field Notes &amp; Findings</span
+  >
+</div>
+
+<nav class="paper-nav" aria-label="Main navigation">
+  {
+    PAPER_NAV.map((item) => (
+      <a
+        href={item.href}
+        aria-current={item.href === currentHref ? "page" : undefined}
+        rel={item.external ? "noopener noreferrer" : undefined}
+        target={item.external ? "_blank" : undefined}
+      >
+        {item.label}
+      </a>
+    ))
+  }
+</nav>
