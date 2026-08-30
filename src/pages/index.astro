@@ -1,321 +1,70 @@
 ---
-import Layout from "@/layouts/Layout.astro";
+import PaperLayout from "@/layouts/PaperLayout.astro";
 
-/* Short structural copy only — no long-form prose on this human-authored page.
-   Titles and descriptions below are reused from each page's own metadata. */
+interface TocEntry {
+  n: string;
+  label: string;
+  sub: string;
+  href: string;
+}
 
-const featured = {
-  href: "/ai-generated/ambient-improvement-positive-residue",
-  kind: "Essay",
-  year: "2025",
-  title: "Ambient Improvement",
-  description:
-    "A craft habit: finish the job, then leave one thing clearer than you found it.",
-};
-
-const entries = [
+const toc: TocEntry[] = [
   {
+    n: "I",
+    label: "Notes",
+    sub: "typed entries, longer than a jotting",
     href: "/notes",
-    title: "NOTES.md",
-    kind: "Note",
-    year: "2025",
-    description:
-      "What a NOTES.md file is, why it exists, and this directory's own notes.",
   },
   {
-    href: "/ai-generated/ambient-improvement-positive-residue",
-    title: "Ambient Improvement",
-    kind: "Essay",
-    year: "2025",
-    description:
-      "Finish the job, then leave one thing clearer than you found it.",
+    n: "II",
+    label: "Essays",
+    sub: "writeups, set in type",
+    href: "/essays",
   },
   {
-    href: "/cop",
-    title: "cop",
-    kind: "Tool",
-    year: "2025",
-    description: "View and update whatever cop -n last pushed.",
-  },
-  {
-    href: "/egghunt",
-    title: "egghunt",
-    kind: "Play",
-    year: "2024",
-    description: "A hidden easter-egg hunt threaded through the site.",
-  },
-  {
-    href: "/hello",
-    title: "Hello",
-    kind: "Page",
-    year: "2025",
-    description: "A short introduction.",
+    n: "—",
+    label: "Archive",
+    sub: "everything from before this reorg",
+    href: "/archive",
   },
 ];
 ---
 
-<Layout
-  title="Entry Point"
-  description="This site is where I keep some of my notes and put stuff that I find useful."
+<PaperLayout
+  title="Index"
+  description="goude.se — reorg in progress. Notes and essays, gathered as they're found."
+  current=""
 >
-  <article id="entry-point">
-    <section class="intro">
-      <p class="eyebrow">Notes · Tools · Things worth keeping</p>
-      <h1 class="hero">Point of Entry</h1>
-      <p class="lede">
-        This site is where I keep some of my notes and put stuff that I find
-        useful.
-      </p>
-    </section>
-
-    <section class="featured">
-      <div class="rail">
-        <span class="rail-label">Featured</span>
-        <span class="rail-line" aria-hidden="true"></span>
-      </div>
-      <a class="feature-card" href={featured.href}>
-        <span class="feature-art" aria-hidden="true"></span>
-        <span class="feature-body">
-          <span class="meta">{featured.kind} · {featured.year}</span>
-          <span class="feature-title">{featured.title}</span>
-          <span class="feature-desc">{featured.description}</span>
-          <span class="feature-cta">Read the essay →</span>
-        </span>
-      </a>
-    </section>
-
-    <section class="index">
-      <div class="rail">
-        <span class="rail-label">Index</span>
-        <span class="rail-count">{String(entries.length).padStart(2, "0")}</span
+  <article class="paper-panel">
+    <p class="paper-eyebrow">Table of contents</p>
+    <h2 class="paper-h" style="font-size:clamp(34px,6vw,52px);margin:0 0 34px;">
+      Index
+    </h2>
+    {
+      toc.map((e) => (
+        <a
+          href={e.href}
+          style="display:flex;width:100%;align-items:baseline;gap:12px;padding:14px 0;text-align:left;border-top:1px solid rgba(80,60,40,.18);border-bottom:none;"
         >
-        <span class="rail-line" aria-hidden="true"></span>
-      </div>
-      <ul class="entries">
-        {
-          entries.map((entry, i) => (
-            <li>
-              <a href={entry.href}>
-                <span class="num">{String(i + 1).padStart(2, "0")}</span>
-                <span class="body">
-                  <span class="title">{entry.title}</span>
-                  <span class="desc">{entry.description}</span>
-                </span>
-                <span class="tag">
-                  <span class="kind">{entry.kind}</span>
-                  <span class="year">{entry.year}</span>
-                </span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
+          <span style="font-family:var(--paper-font-type);font-size:12px;color:var(--paper-ink-label-dim);width:34px;flex:none;">
+            {e.n}
+          </span>
+          <span style="display:flex;flex-direction:column;gap:2px;flex:none;max-width:70%;">
+            <span style="font-family:var(--paper-font-serif);font-size:23px;color:var(--paper-ink-strong);">
+              {e.label}
+            </span>
+            <span style="font-family:var(--paper-font-type);font-size:11px;letter-spacing:1px;color:var(--paper-ink-label);">
+              {e.sub}
+            </span>
+          </span>
+          <span style="flex:1;border-bottom:1.5px dotted rgba(80,60,40,.4);transform:translateY(-5px);" />
+        </a>
+      ))
+    }
+    <p
+      style="font-family:var(--paper-font-serif);font-style:italic;color:var(--paper-ink-muted);margin:34px 0 0;font-size:17px;"
+    >
+      Reorg in progress. Entries are added as they are found.
+    </p>
   </article>
-</Layout>
-
-<style>
-  /* ---------- intro ---------- */
-  .intro {
-    padding: clamp(2rem, 7vw, 5rem) 0 clamp(1.5rem, 4vw, 2.5rem);
-  }
-  .eyebrow {
-    margin: 0 0 1.25rem;
-    font-family: var(--font-ui);
-    font-size: var(--text-xs);
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-  .hero {
-    margin: 0;
-    font-size: clamp(2.2rem, 5.4vw, 3.6rem);
-    line-height: 1.07;
-    letter-spacing: -0.01em;
-    max-width: 19ch;
-  }
-  .lede {
-    margin: 1.6rem 0 0;
-    font-size: var(--text-lg);
-    color: var(--text-muted);
-    max-width: 58ch;
-  }
-
-  /* ---------- shared section rail ---------- */
-  .rail {
-    display: flex;
-    align-items: baseline;
-    gap: 0.9rem;
-    margin-bottom: 1.4rem;
-  }
-  .rail-label {
-    font-family: var(--font-ui);
-    font-size: var(--text-xs);
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-  .index .rail-label {
-    color: var(--text-muted);
-  }
-  .rail-count {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-  }
-  .rail-line {
-    flex: 1;
-    height: 1px;
-    background: var(--rule);
-  }
-
-  /* ---------- featured ---------- */
-  .feature-card {
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-    gap: clamp(1.4rem, 4vw, 3rem);
-    align-items: center;
-    text-decoration: none;
-    color: var(--text-strong);
-  }
-  .feature-art {
-    aspect-ratio: 4 / 3;
-    border-radius: 6px;
-    border: 1px solid var(--rule);
-    background:
-      radial-gradient(
-        circle at 38% 58%,
-        var(--accent) 0 18%,
-        transparent 18.5%
-      ),
-      radial-gradient(
-        ellipse 22% 26% at 64% 36%,
-        var(--accent-yellow) 0 92%,
-        transparent 93%
-      ),
-      var(--surface);
-  }
-  .feature-body {
-    display: flex;
-    flex-direction: column;
-  }
-  .meta {
-    font-family: var(--font-ui);
-    font-size: var(--text-xs);
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 0.8rem;
-  }
-  .feature-title {
-    font-size: clamp(1.7rem, 3.6vw, 2.4rem);
-    line-height: 1.1;
-  }
-  .feature-desc {
-    margin-top: 1rem;
-    font-family: var(--font-body-sans);
-    font-size: var(--text-sm);
-    line-height: 1.55;
-    color: var(--text-muted);
-    max-width: 44ch;
-  }
-  .feature-cta {
-    margin-top: 1.3rem;
-    font-family: var(--font-ui);
-    font-size: var(--text-xs);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-  .feature-card:hover .feature-title,
-  .feature-card:hover .feature-cta {
-    color: var(--accent);
-  }
-
-  /* ---------- index list ---------- */
-  .entries {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .entries li {
-    margin: 0;
-    border-bottom: 1px solid var(--rule-soft);
-  }
-  .entries li:last-child {
-    border-bottom: none;
-  }
-  .entries a {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 1.2rem;
-    align-items: baseline;
-    padding: 1.1rem 0.6rem;
-    margin: 0 -0.6rem;
-    border-radius: 8px;
-    text-decoration: none;
-    color: var(--text-strong);
-    transition:
-      background-color 0.15s ease,
-      color 0.15s ease;
-  }
-  .entries a:hover {
-    background: var(--surface-raised);
-    color: var(--accent);
-  }
-  .entries .num {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-    min-width: 1.6rem;
-  }
-  .entries .body {
-    min-width: 0;
-  }
-  .entries .title {
-    display: block;
-    font-size: var(--text-lg);
-    line-height: 1.2;
-    color: inherit;
-  }
-  .entries .desc {
-    display: block;
-    margin-top: 0.35rem;
-    font-family: var(--font-body-sans);
-    font-size: var(--text-xs);
-    line-height: 1.5;
-    color: var(--text-muted);
-  }
-  .entries .tag {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.3rem;
-    white-space: nowrap;
-  }
-  .entries .kind {
-    font-family: var(--font-ui);
-    font-size: var(--text-xs);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-  .entries .year {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-  }
-
-  /* ---------- responsive ---------- */
-  @media (max-width: 560px) {
-    .feature-card {
-      grid-template-columns: 1fr;
-    }
-    .feature-art {
-      aspect-ratio: 16 / 7;
-    }
-    .entries .tag {
-      display: none;
-    }
-  }
-</style>
+</PaperLayout>

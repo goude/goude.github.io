@@ -34,7 +34,11 @@ export const NAV_ITEMS: NavItem[] = [
       "fa-solid fa-campground",
     ],
   },
-  { href: "/notes", label: "NOTES.md", icons: ["fa fa-note-sticky"] },
+  {
+    href: "/archive/notes-md",
+    label: "NOTES.md",
+    icons: ["fa fa-note-sticky"],
+  },
   {
     href: "https://github.com/goude",
     label: "GitHub (goude)",
