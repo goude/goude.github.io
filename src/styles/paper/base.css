@@ -211,3 +211,40 @@ body[data-paper] .paper-nav a:hover {
   height: 2px;
   background: var(--paper-gold);
 }
+
+.paper-nav-toggle {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .paper-nav-toggle {
+    display: block;
+    background: none;
+    border: 1px solid rgba(231, 214, 186, 0.4);
+    color: var(--paper-leather-fg);
+    font-size: 18px;
+    line-height: 1;
+    padding: 4px 10px;
+    cursor: pointer;
+  }
+
+  .paper-nav {
+    flex-wrap: nowrap;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    max-height: 0;
+    overflow: hidden;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    transition: max-height 0.2s ease;
+  }
+
+  .paper-nav.is-open {
+    max-height: 300px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(231, 214, 186, 0.22);
+  }
+}

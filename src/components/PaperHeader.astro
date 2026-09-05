@@ -18,9 +18,18 @@ const currentHref = `/${current}`;
     style="margin:0;color:var(--paper-leather-fg);opacity:.72;"
     >Field Notes &amp; Findings</span
   >
+  <button
+    type="button"
+    class="paper-nav-toggle"
+    aria-expanded="false"
+    aria-controls="paper-nav"
+    aria-label="Toggle navigation"
+  >
+    &#9776;
+  </button>
 </div>
 
-<nav class="paper-nav" aria-label="Main navigation">
+<nav id="paper-nav" class="paper-nav" aria-label="Main navigation">
   {
     PAPER_NAV.map((item) => (
       <a
@@ -34,3 +43,12 @@ const currentHref = `/${current}`;
     ))
   }
 </nav>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>(".paper-nav-toggle");
+  const nav = document.getElementById("paper-nav");
+  toggle?.addEventListener("click", () => {
+    const open = nav?.classList.toggle("is-open") ?? false;
+    toggle.setAttribute("aria-expanded", String(open));
+  });
+</script>
