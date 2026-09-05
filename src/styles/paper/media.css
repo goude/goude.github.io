@@ -1,12 +1,13 @@
 /* ==================== Paper Theme — Media & Lightbox ==================== */
 /* Figure framing for the three media kinds notes/essays can carry (scanned
-   sketch, inline SVG, photograph), plus the click-to-enlarge overlay. These
-   placeholder boxes are the deliverable, not a stand-in — they stay until
-   Daniel drops in real art. */
+   sketch, inline SVG, photograph), plus the click-to-enlarge overlay. Each
+   box holds a hand-authored placeholder illustration (inline SVG in the .md)
+   until Daniel drops in real art — a doodle over the sketch paper, a
+   schematic/chart over the graph grid, an abstract scene on the plate. */
 
-/* A conflicting aria-label on these buttons fails the WCAG "label in name"
-   check against their long placeholder text, so the hint is appended as
-   visible-to-screen-readers-only text inside the accessible name instead. */
+/* The illustrations are aria-hidden="true" (decorative), so the button
+   carries no visible text and its only accessible name is the .sr-only span
+   inside it — no aria-label needed, no WCAG "label in name" conflict. */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -81,15 +82,6 @@
       transparent 1px
     );
   background-size: 22px 22px;
-}
-
-.paper-media__label {
-  font-family: var(--paper-font-type);
-  font-size: 12px;
-  line-height: 1.75;
-  letter-spacing: 0.5px;
-  color: var(--paper-ink-muted);
-  text-align: center;
 }
 
 /* ---------- Tape (figure variant — centred, unlike .note-card .tape) ---------- */

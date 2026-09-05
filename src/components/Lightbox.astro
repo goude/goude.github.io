@@ -50,11 +50,14 @@
       const media = mediaFor(trigger);
       const clone = media.cloneNode(true) as HTMLElement;
       // Strip the tape and neutralise the trigger — it stays in the clone
-      // (it carries the figure's own content) but shouldn't re-open itself.
+      // (it carries the figure's own content) but shouldn't re-open itself,
+      // and tabindex=-1 keeps it out of the dialog's tab order so it isn't a
+      // dead focus stop that does nothing when activated.
       clone.querySelectorAll(".paper-tape").forEach((el) => el.remove());
-      clone
-        .querySelectorAll("[data-lb]")
-        .forEach((el) => el.removeAttribute("data-lb"));
+      clone.querySelectorAll("[data-lb]").forEach((el) => {
+        el.removeAttribute("data-lb");
+        el.setAttribute("tabindex", "-1");
+      });
       clone.classList.remove("is-tilted");
       clone.style.transform = "none";
 

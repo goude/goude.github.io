@@ -13,10 +13,10 @@ rhythm.</p>
 <figure class="paper-figure">
 <div class="paper-plate paper-plate--wide">
 <button type="button" class="paper-plate__inner" data-lb>
-<span class="paper-media__label">[ plate photograph ]<br>full-width figure &middot; drop a jpg / webp here</span>
-<span class="sr-only">&mdash; click to enlarge</span>
+<svg viewBox="0 0 480 270" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style="display:block"><defs><linearGradient id="mt-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4ecd9"/><stop offset="1" stop-color="#e6cfa6"/></linearGradient></defs><rect width="480" height="270" fill="url(#mt-sky)"/><circle cx="360" cy="80" r="34" fill="#f0dcac"/><path d="M0 150 L90 96 L170 150 L250 108 L340 156 L420 118 L480 150 V270 H0 Z" fill="#c6a06a" opacity=".7"/><path d="M0 188 L70 140 L150 190 L230 150 L320 196 L400 150 L480 188 V270 H0 Z" fill="#a67f4e" opacity=".85"/><path d="M0 226 L100 186 L190 228 L300 188 L400 230 L480 206 V270 H0 Z" fill="#6f5334"/></svg>
+<span class="sr-only">Enlarge the plate</span>
 </button>
-<figcaption class="paper-plate__caption">PLATE I &middot; REPLACE WITH A REAL PHOTOGRAPH</figcaption>
+<figcaption class="paper-plate__caption">PLATE I &middot; PLACEHOLDER SCENE</figcaption>
 </div>
 </figure>
 
