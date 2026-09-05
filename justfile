@@ -50,6 +50,10 @@ format-check:
 test:
     npm run test
 
+# 🔗 Check for broken links, internal and external (builds first)
+links:
+    npm run links
+
 # 🧪 Pre-commit hook target
 precommit:
     npm run precommit

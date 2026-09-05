@@ -14,7 +14,8 @@
     "precommit": "lint-staged && astro check",
     "prepush": "npm run lint && npm run typecheck && npm run build",
     "prepare": "husky",
-    "test": "vitest run"
+    "test": "vitest run",
+    "links": "npm run build && linkinator ./dist --recurse --skip \"^https://goude\\.se\""
   },
   "lint-staged": {
     "*.{ts,astro}": [
@@ -47,6 +48,7 @@
     "eslint": "^10.0.1",
     "eslint-plugin-astro": "^1.6.0",
     "husky": "^9.1.7",
+    "linkinator": "^8.1.0",
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1",
