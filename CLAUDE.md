@@ -21,42 +21,24 @@
 
 ## Ownership
 
-- `src/components/` — reusable Astro components (BaseHead, Header, Footer, Layout, Md, CodeBlock)
-- `src/layouts/` — page layout wrappers
+- `src/components/` — reusable Astro components (BaseHead, NoteCard, PaperHeader, PaperFooter)
+- `src/layouts/` — page layout wrappers (PaperLayout is the only one; everything uses it, 404 included)
 - `src/pages/` — routes; each file or directory = one URL
-- `src/pages/docs/` — auto-generated from `docs/` markdown files
 - `src/utils/` — pure functions and build-time helpers
 - `src/types/` — shared TypeScript interfaces
-- `src/styles/` — global CSS (reset, base, vars, fonts, content)
+- `src/styles/` — global CSS (reset, paper/\*)
 - `scripts/` — standalone Node scripts called from justfile
-- `docs/` — project documentation, rendered at `/docs` on the site
-- `docs/standards/` — reusable conventions (not project-specific)
 
 ## Before Finishing
 
 Run `just check` (which runs lint → format-check → typecheck → build). Zero warnings.
 
-## Large Files
+## Content Authorship
 
-Target: <500 lines per file.
-
-| File                                         | Lines | Strategy                    |
-| -------------------------------------------- | ----- | --------------------------- |
-| src/pages/ai-generated/patch-learn.astro     | 771   | Extract into sub-components |
-| src/pages/ai-generated/beat-learn.astro      | 735   | Extract into sub-components |
-| src/pages/ai-generated/thread-taxonomy.astro | 532   | Extract into sub-components |
-
-## Content Authorship Zones
-
-The human author writes without AI assistance in most of the site. AI-generated or
-AI-assisted long-form text is only permitted in:
-
-- `src/pages/ai-generated/` — Astro pages explicitly marked as AI-generated
-- `public/ai-generated/` — static files (HTML, audio, visuals) produced by AI tools
-
-**Do not generate or place longer narrative/prose text anywhere else** (e.g.
-`src/pages/index.astro`, `src/pages/hello.astro`, or other top-level pages).
-Short labels, titles, aria-labels, and structural copy are fine everywhere.
+All prose on this site (essays, notes, any long-form text) is human-written by
+Daniel. AI may restructure, delete, or fix factual/structural content in this
+repo freely, but must ask explicit permission before writing or rewording any
+prose a visitor would read as the author's voice.
 
 ## Diffs
 
@@ -66,9 +48,8 @@ outside the current task.
 
 ## Stack
 
-- Astro 5, TypeScript (strict), Prettier, ESLint
-- Styling: Tufte-inspired CSS, et-book fonts, CSS custom properties
-- Markdown: marked + Shiki (dual light/dark themes)
+- Astro 7, TypeScript (strict), Prettier, ESLint
+- Styling: paper-themed CSS, four web fonts, CSS custom properties
 - Build: `just check` → format-check → lint → typecheck → build
 - Deploy: GitHub Actions → GitHub Pages (goude.se)
 - Dependencies: `npm install`, no other package managers
@@ -76,5 +57,4 @@ outside the current task.
 ## Reference
 
 - Development principles: CODING.md
-- Backlog: docs/backlog.md
-- Standards: docs/standards/
+- Removed-content record: docs/removed-cleanup-2026-09-05.md
