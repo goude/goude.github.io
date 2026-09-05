@@ -32,7 +32,7 @@ const displayDate = new Date(frontmatter.date).toLocaleDateString("en-GB", {
   description={frontmatter.description}
   current={section}
 >
-  <p style="margin:0 0 20px;">
+  <p class="paper-back-link">
     <a href={back.href}>← {back.label}</a>
   </p>
   {
@@ -43,10 +43,7 @@ const displayDate = new Date(frontmatter.date).toLocaleDateString("en-GB", {
         </div>
       </NoteCard>
     ) : (
-      <article
-        class="paper-panel paper-prose"
-        style="max-width:var(--paper-essay-max);margin:0 auto;"
-      >
+      <article class="paper-panel paper-prose paper-essay-panel">
         <slot />
       </article>
     )

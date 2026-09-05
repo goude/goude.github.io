@@ -27,35 +27,27 @@ const entries = Object.entries(modules)
   description="Essays — writeups, set in type."
   current="essays"
 >
-  <header
-    style="text-align:center;color:var(--paper-leather-fg);margin-bottom:26px;"
-  >
-    <p class="paper-eyebrow" style="opacity:.7;color:inherit;">Section II</p>
-    <h2 class="paper-h" style="font-size:clamp(30px,6vw,46px);color:inherit;">
-      Essays
-    </h2>
+  <header class="paper-section-header">
+    <p class="paper-eyebrow">Section II</p>
+    <h2 class="paper-h paper-h-section">Essays</h2>
   </header>
 
-  {
-    entries.map((e) => (
-      <article
-        class="paper-panel"
-        style="max-width:var(--paper-essay-max);margin:0 auto 34px;"
-      >
-        <p class="paper-eyebrow" style="text-align:center;">
-          Set in type
-        </p>
-        <h2
-          class="paper-h"
-          style="font-size:clamp(28px,5vw,40px);text-align:center;margin-bottom:20px;"
-        >
-          {e.title}
-        </h2>
-        <p class="paper-essay">{e.description}</p>
-        <p style="margin:20px 0 0;text-align:center;">
-          <a href={e.href}>Open →</a>
-        </p>
-      </article>
-    ))
-  }
+  <div class="paper-stack">
+    {
+      entries.map((e) => (
+        <article class="paper-panel paper-essay-panel">
+          <p class="paper-eyebrow paper-eyebrow--center">Set in type</p>
+          <h2 class="paper-h paper-h-panel">
+            <a href={e.href} class="paper-title-link">
+              {e.title}
+            </a>
+          </h2>
+          <p class="paper-essay">{e.description}</p>
+          <p style="margin:20px 0 0;text-align:center;">
+            <a href={e.href}>Open →</a>
+          </p>
+        </article>
+      ))
+    }
+  </div>
 </PaperLayout>

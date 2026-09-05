@@ -2,12 +2,13 @@
 interface Props {
   date?: string | undefined;
   title: string;
+  href?: string | undefined;
   tilt?: number | undefined;
   alt?: boolean | undefined;
   tape?: boolean | undefined;
 }
 
-const { date, title, tilt = -1, alt = false, tape = true } = Astro.props;
+const { date, title, href, tilt = -1, alt = false, tape = true } = Astro.props;
 ---
 
 <article
@@ -16,10 +17,16 @@ const { date, title, tilt = -1, alt = false, tape = true } = Astro.props;
 >
   {tape && <span class="tape" aria-hidden="true" />}
   {date && <p class="paper-label">{date}</p>}
-  <h3
-    style="font-family:var(--paper-font-type);font-size:20px;font-weight:400;margin:0 0 14px;color:var(--paper-ink-strong);"
-  >
-    {title}
+  <h3>
+    {
+      href ? (
+        <a href={href} class="paper-title-link">
+          {title}
+        </a>
+      ) : (
+        title
+      )
+    }
   </h3>
   <div class="paper-typewriter">
     <slot />

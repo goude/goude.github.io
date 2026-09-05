@@ -36,19 +36,20 @@ const fmt = (d: string) =>
   description="Field notes — typed entries, longer than a jotting."
   current="notes"
 >
-  <header
-    style="text-align:center;color:var(--paper-leather-fg);margin-bottom:26px;"
-  >
-    <p class="paper-eyebrow" style="opacity:.7;color:inherit;">Section I</p>
-    <h2 class="paper-h" style="font-size:clamp(30px,6vw,46px);color:inherit;">
-      Notes
-    </h2>
+  <header class="paper-section-header">
+    <p class="paper-eyebrow">Section I</p>
+    <h2 class="paper-h paper-h-section">Notes</h2>
   </header>
 
-  <div style="display:flex;flex-direction:column;gap:34px;">
+  <div class="paper-stack">
     {
       entries.map((e, i) => (
-        <NoteCard title={e.title} date={fmt(e.date)} tilt={i % 2 ? 1.2 : -1.2}>
+        <NoteCard
+          title={e.title}
+          href={e.href}
+          date={fmt(e.date)}
+          tilt={i % 2 ? 1.2 : -1.2}
+        >
           <p style="margin:0;">{e.description}</p>
           <p style="margin:14px 0 0;">
             <a href={e.href}>Open →</a>
