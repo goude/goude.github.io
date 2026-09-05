@@ -14,12 +14,3 @@
 // "astro/client" adds Astro-specific globals: ImportMeta (import.meta.env),
 // image asset types, content collection types, and the Astro namespace.
 // Without this, tsc wouldn't know what `import.meta.env.PUBLIC_*` is.
-
-/// <reference types="youtube" />
-// Pulls in @types/youtube, which declares the global `YT` namespace —
-// YT.Player, YT.PlayerState, etc. — and merges `YT` into Window.
-// The YouTube IFrame API loads asynchronously via a <script> tag and attaches
-// itself to window.YT at runtime; this tells tsc what shape to expect there.
-// Added here rather than in tsconfig "types" array to keep it visible and
-// explicit at the declaration site, and because Astro's tsconfig extends
-// may reset that array.

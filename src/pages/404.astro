@@ -1,14 +1,16 @@
 ---
-import Layout from "@/layouts/Layout.astro";
+import PaperLayout from "@/layouts/PaperLayout.astro";
 ---
 
-<Layout title="404 – Page not found" description="Page not found">
-  <article>
-    <header>
-      <h1>404</h1>
-      <p class="subtitle">Page not found.</p>
-    </header>
-    <p>The page you're looking for doesn't exist or has been moved.</p>
+<PaperLayout title="404 – Page not found" description="Page not found">
+  <article class="paper-panel">
+    <p class="paper-eyebrow">Not found</p>
+    <h2 class="paper-h" style="font-size:clamp(30px,6vw,46px);margin:0 0 12px;">
+      404
+    </h2>
+    <p style="margin:0 0 20px;">
+      The page you're looking for doesn't exist or has been moved.
+    </p>
     <p><a href="/">Go to the home page</a></p>
   </article>
-</Layout>
+</PaperLayout>

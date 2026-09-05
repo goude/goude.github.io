@@ -68,8 +68,4 @@ reset: clean
 
 # 📦 Bundle repo snapshot for LLM context (excludes secrets and large files)
 repomix:
-    repomix --ignore "coverage/,node_modules/,public/fonts,src/pages/egghunt.astro"
-
-# 🎨 Synchronize SVG fill colors to match the active theme palette (default: light)
-svg-sync THEME="light":
-    node scripts/sync-svg-swatches.mjs --verbose {{THEME}}
+    repomix --ignore "coverage/,node_modules/,public/fonts"

@@ -1,0 +1,262 @@
+---
+import PaperLayout from "@/layouts/PaperLayout.astro";
+
+// [word, seconds-from-video-start, lineIdx] — the canonical spine, carried
+// over from the old ai-generated build. Line breaks follow lineIdx.
+const tokens: [string, number, number][] = [
+  ["toppen", 3.0, 0],
+  ["fjäderhjälmar", 4.0, 0],
+  ["är", 5, 1],
+  ["leken", 5.3, 1],
+  ["och", 5.6, 1],
+  ["fyra", 5.9, 1],
+  ["vart", 6.3, 2],
+  ["aldrig", 6.6, 2],
+  ["fyra", 7, 3],
+  ["och", 7.3, 3],
+  ["två", 7.6, 3],
+  ["emmy", 8, 4],
+  ["polle", 9, 5],
+  ["och", 9, 5],
+  ["te", 9, 5],
+  ["polle", 10, 6],
+  ["och", 10, 6],
+  ["te", 10, 6],
+  ["emily", 11.0, 7],
+  ["hyaa", 12.0, 8],
+  ["hyaa", 13.5, 9],
+  ["hyaa", 14.0, 10],
+  ["hyaa", 15.5, 11],
+  ["hyaa", 16.0, 12],
+  ["hyaa", 17.5, 13],
+  ["hjalmar", 19.0, 14],
+  ["ville", 19.3, 14],
+  ["hata", 19.6, 14],
+  ["du", 21, 15],
+  ["är", 21.5, 15],
+  ["en", 22, 15],
+  ["kakbit", 22.5, 15],
+  ["i", 23, 16],
+  ["16", 24, 16],
+  ["avsnitt", 25, 16],
+  ["nu", 19.0, 17],
+  ["är", 19.3, 17],
+  ["det", 19.5, 17],
+  ["kavling", 19.8, 17],
+  ["i", 20.3, 18],
+  ["16", 20.5, 18],
+  ["avsnitt", 20.8, 18],
+  ["nu", 21.5, 19],
+  ["är", 21.8, 19],
+  ["det", 22.0, 19],
+  ["bara", 22.3, 19],
+  ["och", 22.6, 19],
+  ["vinna", 22.9, 19],
+  ["och", 23.5, 20],
+  ["österrike", 23.8, 20],
+  ["ratten", 24.5, 21],
+  ["är", 24.9, 21],
+  ["för", 25.1, 21],
+  ["rik", 25.4, 21],
+  ["är", 26.0, 22],
+  ["det", 26.3, 22],
+  ["någon", 26.6, 22],
+  ["skriftlig", 26.9, 22],
+  ["rink", 27.3, 22],
+  ["med", 27.6, 22],
+  ["mali", 27.9, 22],
+  ["verum", 28.8, 23],
+  ["kavling", 29.1, 23],
+  ["volfram", 30.0, 24],
+  ["18", 31.0, 25],
+  ["ingvild", 31.4, 25],
+  ["krusbärsson", 32.2, 26],
+  ["eran", 32.8, 26],
+  ["skåra", 33.2, 26],
+  ["island", 34.5, 27],
+  ["två", 35.0, 27],
+  ["öl", 35.3, 27],
+  ["österrike", 36.0, 28],
+  ["ej", 36.5, 28],
+  ["filip", 37.5, 29],
+  ["och", 37.9, 29],
+  ["han", 38.2, 29],
+  ["aids", 38.5, 29],
+  ["filip", 39.5, 30],
+  ["och", 39.9, 30],
+  ["han", 40.2, 30],
+  ["har", 40.5, 30],
+  ["aids", 40.8, 30],
+  ["han", 42.0, 31],
+  ["han", 43.0, 32],
+  ["bara", 43.3, 32],
+  ["flöjta", 43.7, 32],
+  ["till", 44.1, 32],
+  ["äggs", 44.5, 32],
+  ["klocka", 44.9, 32],
+  ["ger", 45.3, 32],
+  ["och", 46.0, 33],
+  ["aldrig", 46.3, 33],
+  ["naken", 46.7, 33],
+  ["klibbat", 47.1, 33],
+  ["och", 48.0, 34],
+  ["aldrig", 48.3, 34],
+  ["något", 48.7, 34],
+  ["till", 49.0, 34],
+  ["man", 49.3, 34],
+  ["hör", 50.0, 35],
+  ["min", 50.3, 35],
+  ["lille", 50.6, 35],
+  ["aids", 51.0, 35],
+  ["vän", 51.4, 35],
+  ["18", 52.5, 36],
+  ["ingvild", 52.9, 36],
+  ["tröstar", 53.3, 36],
+  ["son", 53.7, 36],
+  ["hans", 55.0, 37],
+  ["tryck-jackor", 55.5, 37],
+  ["fistas", 56.0, 37],
+  ["i", 56.4, 37],
+  ["urin", 56.8, 37],
+  ["a", 58.0, 38],
+  ["och", 58.3, 38],
+  ["em", 58.6, 38],
+  ["aldrig", 60.0, 39],
+  ["tappa", 60.4, 39],
+  ["klibbig", 61.5, 40],
+  ["flikig", 62.0, 40],
+  ["aldrig", 63.0, 41],
+  ["tappad", 63.4, 41],
+  ["en", 64.5, 42],
+  ["piss-diss", 64.9, 42],
+  ["i", 65.3, 42],
+  ["urin", 65.6, 42],
+  ["hästen", 67.0, 43],
+  ["har", 67.4, 43],
+  ["rymt", 67.8, 43],
+  ["island", 69.0, 44],
+  ["två", 69.4, 44],
+  ["österrike", 70.0, 45],
+  ["ett", 70.4, 45],
+  ["tack", 71.5, 46],
+  ["för", 71.9, 46],
+  ["du", 72.2, 46],
+  ["kom", 72.5, 46],
+  ["då", 72.9, 46],
+  ["österrike", 73.3, 46],
+  ["tack", 74.5, 47],
+  ["för", 74.9, 47],
+  ["din", 75.2, 47],
+  ["kommunal", 75.6, 47],
+];
+
+const lines: { idx: number; words: [string, number][] }[] = [];
+for (const [word, t, idx] of tokens) {
+  let line = lines.at(-1);
+  if (!line || line.idx !== idx) {
+    line = { idx, words: [] };
+    lines.push(line);
+  }
+  line.words.push([word, t]);
+}
+---
+
+<PaperLayout
+  title="Toppen fjäderhjälmar"
+  description="A misheard Swedish poem, synced word-by-word to the video that misheard it."
+  current="v/toppen-fjaderhjalmar"
+>
+  <article class="paper-panel">
+    <p class="paper-eyebrow">Toppen fjäderhjälmar</p>
+    <p
+      style="font-family:var(--paper-font-serif);font-style:italic;color:var(--paper-ink-muted);margin:0 0 24px;font-size:15px;"
+    >
+      Swedish phonetic transcription of Guðmundur Benediktsson's Icelandic
+      commentary, Iceland 2–1 Austria, Euro 2016 — transcription by
+      <a
+        href="https://www.reddit.com/user/zimonitrome/"
+        target="_blank"
+        rel="noopener">zimonitrome</a
+      >.
+    </p>
+
+    <video
+      id="v"
+      controls
+      preload="metadata"
+      playsinline
+      style="width:100%;max-width:640px;display:block;margin:0 auto 24px;"
+    >
+      <source
+        src="https://pub-297728e859704112a190147db3fefac6.r2.dev/toppen-fjaderhjalmar-web.webm"
+        type="video/webm"
+      />
+      <source
+        src="https://pub-297728e859704112a190147db3fefac6.r2.dev/toppen-fjaderhjalmar-web.mp4"
+        type="video/mp4"
+      />
+    </video>
+
+    <div class="poem">
+      {
+        lines.map((line) => (
+          <p class="poem-line">
+            {line.words.map(([word, t]) => (
+              <span class="word" data-t={t}>
+                {word}
+              </span>
+            ))}
+          </p>
+        ))
+      }
+    </div>
+  </article>
+</PaperLayout>
+
+<style>
+  .poem {
+    font-family: var(--paper-font-serif);
+    font-size: 19px;
+    line-height: 1.9;
+  }
+  .poem-line {
+    margin: 0 0 4px;
+  }
+  .word {
+    cursor: pointer;
+    padding: 0 2px;
+    border-radius: 2px;
+  }
+  .word:hover {
+    background: rgba(80, 60, 40, 0.12);
+  }
+  .word.current {
+    background: var(--paper-leather-fg, #7a5230);
+    color: #fff;
+  }
+  .word.past {
+    opacity: 0.45;
+  }
+</style>
+
+<script>
+  const video = document.getElementById("v") as HTMLVideoElement;
+  const words = Array.from(document.querySelectorAll<HTMLElement>(".word")).map(
+    (el) => ({ el, t: parseFloat(el.dataset.t ?? "0") })
+  );
+
+  words.forEach(({ el, t }) => {
+    el.addEventListener("click", () => {
+      video.currentTime = t;
+      video.play().catch(() => {});
+    });
+  });
+
+  video.addEventListener("timeupdate", () => {
+    const now = video.currentTime;
+    for (const { el, t } of words) {
+      el.classList.toggle("current", t <= now + 0.2 && t > now - 0.5);
+      el.classList.toggle("past", t <= now - 0.5);
+    }
+  });
+</script>
