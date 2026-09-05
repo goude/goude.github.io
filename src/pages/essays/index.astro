@@ -1,5 +1,25 @@
 ---
 import PaperLayout from "@/layouts/PaperLayout.astro";
+
+interface Meta {
+  title: string;
+  description: string;
+  date: string;
+}
+
+const modules = import.meta.glob<{ frontmatter: Meta }>("./*.{md,astro}", {
+  eager: true,
+});
+
+const entries = Object.entries(modules)
+  .map(([path, mod]) => {
+    const slug = path
+      .split("/")
+      .pop()!
+      .replace(/\.(md|astro)$/, "");
+    return { href: `/essays/${slug}`, ...mod.frontmatter };
+  })
+  .sort((a, b) => +new Date(b.date) - +new Date(a.date));
 ---
 
 <PaperLayout
@@ -16,23 +36,26 @@ import PaperLayout from "@/layouts/PaperLayout.astro";
     </h2>
   </header>
 
-  <article
-    class="paper-panel"
-    style="max-width:var(--paper-essay-max);margin:0 auto;"
-  >
-    <p class="paper-eyebrow" style="text-align:center;">Set in type</p>
-    <h2
-      class="paper-h"
-      style="font-size:clamp(28px,5vw,40px);text-align:center;margin-bottom:20px;"
-    >
-      First entry
-    </h2>
-    <p class="paper-essay">
-      Nothing here yet. This page exists to prove the Essays template works —
-      the first real essay replaces it.
-    </p>
-    <p style="margin:20px 0 0;text-align:center;">
-      <a href="/essays/first">Open →</a>
-    </p>
-  </article>
+  {
+    entries.map((e) => (
+      <article
+        class="paper-panel"
+        style="max-width:var(--paper-essay-max);margin:0 auto 34px;"
+      >
+        <p class="paper-eyebrow" style="text-align:center;">
+          Set in type
+        </p>
+        <h2
+          class="paper-h"
+          style="font-size:clamp(28px,5vw,40px);text-align:center;margin-bottom:20px;"
+        >
+          {e.title}
+        </h2>
+        <p class="paper-essay">{e.description}</p>
+        <p style="margin:20px 0 0;text-align:center;">
+          <a href={e.href}>Open →</a>
+        </p>
+      </article>
+    ))
+  }
 </PaperLayout>

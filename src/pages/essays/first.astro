@@ -1,10 +1,16 @@
 ---
 import PaperLayout from "@/layouts/PaperLayout.astro";
+
+export const frontmatter = {
+  title: "First entry",
+  description: "Placeholder — the first real essay goes here.",
+  date: "2026-09-05",
+};
 ---
 
 <PaperLayout
-  title="First entry"
-  description="Placeholder — the first real essay goes here."
+  title={frontmatter.title}
+  description={frontmatter.description}
   current="essays"
 >
   <p style="margin:0 0 20px;">
@@ -19,7 +25,7 @@ import PaperLayout from "@/layouts/PaperLayout.astro";
       class="paper-h"
       style="font-size:clamp(28px,5vw,40px);text-align:center;margin-bottom:20px;"
     >
-      First entry
+      {frontmatter.title}
     </h2>
     <p class="paper-essay">
       Placeholder entry — nothing written yet. This page exists to prove the

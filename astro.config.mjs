@@ -6,6 +6,11 @@ export default defineConfig({
   integrations: [sitemap()],
   site: "https://goude.se",
   compressHTML: true,
+  markdown: {
+    shikiConfig: {
+      theme: "github-light",
+    },
+  },
   build: {
     inlineStylesheets: "auto",
   },

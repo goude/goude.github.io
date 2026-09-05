@@ -22,7 +22,7 @@
 ## Ownership
 
 - `src/components/` — reusable Astro components (BaseHead, NoteCard, PaperHeader, PaperFooter)
-- `src/layouts/` — page layout wrappers (PaperLayout is the only one; everything uses it, 404 included)
+- `src/layouts/` — page layout wrappers: `PaperLayout` (everything, 404 included), `ContentLayout` (markdown notes/essays only, wraps `PaperLayout`)
 - `src/pages/` — routes; each file or directory = one URL
 - `src/utils/` — pure functions and build-time helpers
 - `src/types/` — shared TypeScript interfaces

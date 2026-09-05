@@ -1,6 +1,34 @@
 ---
 import PaperLayout from "@/layouts/PaperLayout.astro";
 import NoteCard from "@/components/NoteCard.astro";
+
+interface Meta {
+  title: string;
+  description: string;
+  date: string;
+}
+
+const modules = import.meta.glob<{ frontmatter: Meta }>("./*.{md,astro}", {
+  eager: true,
+});
+
+const entries = Object.entries(modules)
+  .map(([path, mod]) => {
+    const slug = path
+      .split("/")
+      .pop()!
+      .replace(/\.(md|astro)$/, "");
+    return { href: `/notes/${slug}`, ...mod.frontmatter };
+  })
+  .sort((a, b) => +new Date(b.date) - +new Date(a.date));
+
+const fmt = (d: string) =>
+  new Date(d).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 ---
 
 <PaperLayout
@@ -18,15 +46,15 @@ import NoteCard from "@/components/NoteCard.astro";
   </header>
 
   <div style="display:flex;flex-direction:column;gap:34px;">
-    <NoteCard title="Antilibrary" date="5 September 2026" tilt={-1.2}>
-      <p style="margin:0;">
-        Do not be fazed by all the books you own but haven't read. The word you
-        are looking for is
-        <a href="https://en.wikipedia.org/wiki/Antilibrary">"antilibrary"</a>.
-      </p>
-      <p style="margin:14px 0 0;">
-        <a href="/notes/antilibrary">Open →</a>
-      </p>
-    </NoteCard>
+    {
+      entries.map((e, i) => (
+        <NoteCard title={e.title} date={fmt(e.date)} tilt={i % 2 ? 1.2 : -1.2}>
+          <p style="margin:0;">{e.description}</p>
+          <p style="margin:14px 0 0;">
+            <a href={e.href}>Open →</a>
+          </p>
+        </NoteCard>
+      ))
+    }
   </div>
 </PaperLayout>

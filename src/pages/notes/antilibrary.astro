@@ -1,17 +1,23 @@
 ---
 import PaperLayout from "@/layouts/PaperLayout.astro";
 import NoteCard from "@/components/NoteCard.astro";
+
+export const frontmatter = {
+  title: "Antilibrary",
+  description: "On the books you haven't read yet.",
+  date: "2026-09-05",
+};
 ---
 
 <PaperLayout
-  title="Antilibrary"
-  description="On the books you haven't read yet."
+  title={frontmatter.title}
+  description={frontmatter.description}
   current="notes"
 >
   <p style="margin:0 0 20px;">
     <a href="/notes">← Notes</a>
   </p>
-  <NoteCard title="Antilibrary" date="5 September 2026" tilt={0}>
+  <NoteCard title={frontmatter.title} date="5 September 2026" tilt={0}>
     <p style="margin:0;">
       Do not be fazed by all the books you own but haven't read. The word you
       are looking for is

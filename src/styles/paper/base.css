@@ -248,3 +248,58 @@ body[data-paper] .paper-nav a:hover {
     border-bottom: 1px solid rgba(231, 214, 186, 0.22);
   }
 }
+
+/* ---------- Markdown prose (notes/essays authored as .md) ---------- */
+
+.paper-prose {
+  font-family: var(--paper-font-serif);
+  font-size: 20px;
+  line-height: 1.7;
+  color: var(--paper-ink-body);
+}
+
+.paper-prose p {
+  margin: 0 0 1.1em;
+}
+
+.paper-prose h2,
+.paper-prose h3 {
+  font-family: var(--paper-font-serif-sc);
+  color: var(--paper-ink-strong);
+  font-weight: 400;
+  margin: 1.4em 0 0.5em;
+}
+
+.paper-prose a {
+  color: var(--paper-seal);
+}
+
+.paper-prose ul,
+.paper-prose ol {
+  margin: 0 0 1.1em 1.4em;
+}
+
+.paper-prose blockquote {
+  border-left: 3px solid var(--paper-ink-label);
+  margin: 1.2em 0;
+  padding-left: 1em;
+  color: var(--paper-ink-muted);
+  font-style: italic;
+}
+
+.paper-prose code {
+  font-family: var(--paper-font-type);
+  font-size: 0.9em;
+}
+
+.paper-prose pre {
+  overflow-x: auto;
+  padding: 1em;
+  border-radius: 3px;
+}
+
+.paper-prose hr {
+  border: 0;
+  border-top: 1px solid var(--paper-ink-label);
+  margin: 2em 0;
+}

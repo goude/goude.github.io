@@ -1,0 +1,54 @@
+---
+import PaperLayout from "@/layouts/PaperLayout.astro";
+import NoteCard from "@/components/NoteCard.astro";
+
+interface Frontmatter {
+  title: string;
+  description: string;
+  date: string;
+}
+
+const { frontmatter, url } = Astro.props as {
+  frontmatter: Frontmatter;
+  url: string;
+};
+
+const section = url.split("/")[1] === "essays" ? "essays" : "notes";
+const back =
+  section === "notes"
+    ? { href: "/notes", label: "Notes" }
+    : { href: "/essays", label: "Essays" };
+
+const displayDate = new Date(frontmatter.date).toLocaleDateString("en-GB", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+  timeZone: "UTC",
+});
+---
+
+<PaperLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  current={section}
+>
+  <p style="margin:0 0 20px;">
+    <a href={back.href}>← {back.label}</a>
+  </p>
+  {
+    section === "notes" ? (
+      <NoteCard title={frontmatter.title} date={displayDate} tilt={0}>
+        <div class="paper-prose">
+          <slot />
+        </div>
+      </NoteCard>
+    ) : (
+      <article
+        class="paper-panel paper-prose"
+        style="max-width:var(--paper-essay-max);margin:0 auto;"
+      >
+        <slot />
+      </article>
+    )
+  }
+</PaperLayout>
