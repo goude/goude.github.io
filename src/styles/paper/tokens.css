@@ -31,6 +31,10 @@
   --paper-seal-dark: #571b15;
   --paper-gold: #c98a2f;
 
+  /* ---------- Media plates (photograph mat + field) ---------- */
+  --paper-plate: #faf4e6;
+  --paper-plate-inner: #e7dcc4;
+
   /* ---------- Fonts ---------- */
   --paper-font-type: "Special Elite", "Courier New", monospace;
   --paper-font-serif: "IM Fell English", Georgia, serif;

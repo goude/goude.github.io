@@ -1,6 +1,7 @@
 ---
 import PaperLayout from "@/layouts/PaperLayout.astro";
 import NoteCard from "@/components/NoteCard.astro";
+import Lightbox from "@/components/Lightbox.astro";
 
 interface Frontmatter {
   title: string;
@@ -41,4 +42,5 @@ const back =
       </article>
     )
   }
+  <Lightbox />
 </PaperLayout>

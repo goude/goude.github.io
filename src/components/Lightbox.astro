@@ -1,0 +1,129 @@
+---
+
+---
+
+<dialog class="paper-lightbox" data-lightbox aria-label="Enlarged figure">
+  <button
+    type="button"
+    class="paper-lightbox__btn paper-lightbox__close"
+    data-lb-close
+    aria-label="Close">&#215;</button
+  >
+  <button
+    type="button"
+    class="paper-lightbox__btn paper-lightbox__prev"
+    data-lb-prev
+    aria-label="Previous figure">&#8249;</button
+  >
+  <button
+    type="button"
+    class="paper-lightbox__btn paper-lightbox__next"
+    data-lb-next
+    aria-label="Next figure">&#8250;</button
+  >
+  <div class="paper-lightbox__stage" data-lb-stage></div>
+</dialog>
+
+<script>
+  // <dialog> + showModal() gives the focus trap, Escape-to-close and
+  // top-layer stacking for free — no hand-rolled keydown/hidden dance.
+  const overlay = document.querySelector<HTMLDialogElement>("[data-lightbox]");
+  const stage = overlay?.querySelector<HTMLDivElement>("[data-lb-stage]");
+  const closeBtn = overlay?.querySelector<HTMLButtonElement>("[data-lb-close]");
+  const prevBtn = overlay?.querySelector<HTMLButtonElement>("[data-lb-prev]");
+  const nextBtn = overlay?.querySelector<HTMLButtonElement>("[data-lb-next]");
+
+  if (overlay && stage && closeBtn && prevBtn && nextBtn) {
+    let items: HTMLElement[] = [];
+    let index = 0;
+    let opener: HTMLElement | null = null;
+
+    // The wrapper (not the trigger button itself) carries the figure's
+    // visual — background, aspect ratio, tape — so it's what gets cloned.
+    const mediaFor = (trigger: HTMLElement) =>
+      trigger.closest<HTMLElement>(".paper-figure__media, .paper-plate") ??
+      trigger;
+
+    const show = () => {
+      const trigger = items[index];
+      if (!trigger) return;
+      const media = mediaFor(trigger);
+      const clone = media.cloneNode(true) as HTMLElement;
+      // Strip the tape and neutralise the trigger — it stays in the clone
+      // (it carries the figure's own content) but shouldn't re-open itself.
+      clone.querySelectorAll(".paper-tape").forEach((el) => el.remove());
+      clone
+        .querySelectorAll("[data-lb]")
+        .forEach((el) => el.removeAttribute("data-lb"));
+      clone.classList.remove("is-tilted");
+      clone.style.transform = "none";
+
+      stage.replaceChildren(clone);
+
+      // A plate's caption is already baked into the clone (printed on the
+      // mat) — only inject a separate line when the figure doesn't carry
+      // one of its own, so it isn't shown twice.
+      if (!clone.querySelector("figcaption")) {
+        const caption = trigger
+          .closest("figure")
+          ?.querySelector("figcaption")
+          ?.textContent?.trim();
+        if (caption) {
+          const p = document.createElement("p");
+          p.className = "paper-lightbox__caption";
+          p.textContent = caption;
+          stage.append(p);
+        }
+      }
+      if (items.length > 1) {
+        const p = document.createElement("p");
+        p.className = "paper-lightbox__count";
+        p.textContent = `${index + 1} / ${items.length}`;
+        stage.append(p);
+      }
+      prevBtn.hidden = nextBtn.hidden = items.length <= 1;
+    };
+
+    const open = (trigger: HTMLElement) => {
+      items = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-lb]")
+      ).filter((el) => el.offsetParent !== null);
+      index = Math.max(0, items.indexOf(trigger));
+      opener = trigger;
+      show();
+      overlay.showModal();
+    };
+
+    const step = (delta: number) => {
+      if (!items.length) return;
+      index = (index + delta + items.length) % items.length;
+      show();
+    };
+
+    overlay.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") step(-1);
+      else if (e.key === "ArrowRight") step(1);
+    });
+
+    overlay.addEventListener("close", () => {
+      opener?.focus();
+      opener = null;
+    });
+
+    document.addEventListener("click", (e) => {
+      const trigger = (e.target as HTMLElement).closest<HTMLElement>(
+        "[data-lb]"
+      );
+      if (!trigger) return;
+      e.preventDefault();
+      open(trigger);
+    });
+
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) overlay.close();
+    });
+    closeBtn.addEventListener("click", () => overlay.close());
+    prevBtn.addEventListener("click", () => step(-1));
+    nextBtn.addEventListener("click", () => step(1));
+  }
+</script>
