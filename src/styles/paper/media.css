@@ -230,6 +230,11 @@
 
 /* ---------- Lightbox ---------- */
 
+/* display is set only on [open]: a bare `.paper-lightbox { display: flex }`
+   outranks the UA stylesheet's closed-state `dialog { display: none }` (a
+   single class beats a bare type selector), which pinned this open — as a
+   full-viewport overlay, unclosable — on every single page load. Verified
+   live 2026-09-05 after Daniel caught it on /notes/antilibrary/. */
 .paper-lightbox {
   position: fixed;
   inset: 0;
@@ -240,14 +245,19 @@
   height: 100%;
   max-width: none;
   max-height: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background: rgba(20, 14, 9, 0.93);
   padding: 5vh 6vw;
 }
 
-/* dialog:not([open]) in the UA stylesheet already hides it */
+.paper-lightbox:not([open]) {
+  display: none;
+}
+
+.paper-lightbox[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .paper-lightbox__stage {
   width: 100%;
