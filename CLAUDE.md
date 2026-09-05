@@ -33,6 +33,17 @@
 
 Run `just check` (which runs lint → format-check → typecheck → build). Zero warnings.
 
+## Code Style
+
+Comments explain why, not what — the code already shows how. Small
+functions, flat control flow, early returns. TypeScript strict + ESLint +
+Prettier are the source of truth for everything else; don't restate what
+they already enforce.
+
+Justfile recipes delegate to the matching npm script (single source of
+truth for the actual command) except where there's no npm equivalent
+(`clean`, `reset`, `repomix`). One emoji + one-line comment per recipe.
+
 ## Content Authorship
 
 All prose on this site (essays, notes, any long-form text) is human-written by
@@ -56,5 +67,4 @@ outside the current task.
 
 ## Reference
 
-- Development principles: CODING.md
 - Removed-content record: docs/removed-cleanup-2026-09-05.md

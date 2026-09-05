@@ -20,35 +20,35 @@ check: format-check lint typecheck test build
 
 # ▶️ Start dev server
 dev:
-    astro dev
+    npm run dev
 
 # 🔍 Lint
 lint:
-    eslint . --ext .ts,.astro --max-warnings=0
+    npm run lint
 
 # 🔍 Type check (tsc only)
 typecheck:
-    tsc --noEmit
+    npm run typecheck
 
 # 🔨 Build for production
 build:
-    astro check && astro build
+    npm run build
 
 # 👁️ Preview production build
 preview:
-    astro preview
+    npm run preview
 
 # ✨ Format code (writes changes)
 format:
-    prettier --write .
+    npm run format
 
 # 🔎 Verify formatting (non-destructive)
 format-check:
-    prettier --check .
+    npm run format:check
 
 # 🧪 Run unit tests
 test:
-    vitest run
+    npm run test
 
 # 🧪 Pre-commit hook target
 precommit:
