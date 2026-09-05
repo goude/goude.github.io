@@ -18,13 +18,6 @@ const back =
   section === "notes"
     ? { href: "/notes", label: "Notes" }
     : { href: "/essays", label: "Essays" };
-
-const displayDate = new Date(frontmatter.date).toLocaleDateString("en-GB", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-  timeZone: "UTC",
-});
 ---
 
 <PaperLayout
@@ -37,7 +30,7 @@ const displayDate = new Date(frontmatter.date).toLocaleDateString("en-GB", {
   </p>
   {
     section === "notes" ? (
-      <NoteCard title={frontmatter.title} date={displayDate} tilt={0}>
+      <NoteCard title={frontmatter.title} date={frontmatter.date} tilt={0}>
         <div class="paper-prose">
           <slot />
         </div>

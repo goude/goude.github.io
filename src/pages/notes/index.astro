@@ -21,14 +21,6 @@ const entries = Object.entries(modules)
     return { href: `/notes/${slug}`, ...mod.frontmatter };
   })
   .sort((a, b) => +new Date(b.date) - +new Date(a.date));
-
-const fmt = (d: string) =>
-  new Date(d).toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    timeZone: "UTC",
-  });
 ---
 
 <PaperLayout
@@ -47,7 +39,7 @@ const fmt = (d: string) =>
         <NoteCard
           title={e.title}
           href={e.href}
-          date={fmt(e.date)}
+          date={e.date}
           tilt={i % 2 ? 1.2 : -1.2}
         >
           <p style="margin:0;">{e.description}</p>
