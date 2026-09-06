@@ -15,20 +15,14 @@ const { frontmatter, url } = Astro.props as {
 };
 
 const section = url.split("/")[1] === "essays" ? "essays" : "notes";
-const back =
-  section === "notes"
-    ? { href: "/notes", label: "Notes" }
-    : { href: "/essays", label: "Essays" };
 ---
 
 <PaperLayout
   title={frontmatter.title}
   description={frontmatter.description}
   current={section}
+  crumb={frontmatter.title}
 >
-  <p class="paper-back-link">
-    <a href={back.href}>← {back.label}</a>
-  </p>
   {
     section === "notes" ? (
       <NoteCard title={frontmatter.title} date={frontmatter.date} tilt={0}>

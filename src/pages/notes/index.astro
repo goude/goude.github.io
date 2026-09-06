@@ -6,6 +6,7 @@ interface Meta {
   title: string;
   description: string;
   date: string;
+  thumb?: "sketch" | "svg" | "photo";
 }
 
 const modules = import.meta.glob<{ frontmatter: Meta }>("./*.{md,astro}", {
@@ -41,6 +42,7 @@ const entries = Object.entries(modules)
           href={e.href}
           date={e.date}
           tilt={i % 2 ? 1.2 : -1.2}
+          thumb={e.thumb}
         >
           <p style="margin:0;">{e.description}</p>
           <p style="margin:14px 0 0;">

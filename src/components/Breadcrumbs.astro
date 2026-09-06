@@ -1,0 +1,28 @@
+---
+import type { Breadcrumb } from "@/types/site";
+
+interface Props {
+  crumbs: Breadcrumb[];
+}
+
+const { crumbs } = Astro.props;
+---
+
+<div class="paper-width paper-crumbs">
+  {
+    crumbs.map((c, i) => (
+      <>
+        {i > 0 && (
+          <span class="paper-crumbs__sep" aria-hidden="true">
+            &rsaquo;
+          </span>
+        )}
+        {c.href ? (
+          <a href={c.href}>{c.label}</a>
+        ) : (
+          <span class="paper-crumbs__current">{c.label}</span>
+        )}
+      </>
+    ))
+  }
+</div>

@@ -5,6 +5,7 @@ interface Meta {
   title: string;
   description: string;
   date: string;
+  thumb?: "sketch" | "svg" | "photo";
 }
 
 const modules = import.meta.glob<{ frontmatter: Meta }>("./*.{md,astro}", {
@@ -43,6 +44,16 @@ const entries = Object.entries(modules)
             </a>
           </h2>
           <p class="paper-essay">{e.description}</p>
+          {e.thumb && (
+            <div
+              class={`paper-thumb paper-thumb--wide paper-thumb--${e.thumb}`}
+              aria-hidden="true"
+            >
+              <span class="paper-thumb__label">
+                {e.thumb === "photo" ? "plate" : e.thumb}
+              </span>
+            </div>
+          )}
           <p style="margin:20px 0 0;text-align:center;">
             <a href={e.href}>Open →</a>
           </p>

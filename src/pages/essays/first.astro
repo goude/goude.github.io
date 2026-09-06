@@ -12,10 +12,8 @@ export const frontmatter = {
   title={frontmatter.title}
   description={frontmatter.description}
   current="essays"
+  crumb={frontmatter.title}
 >
-  <p class="paper-back-link">
-    <a href="/essays">← Essays</a>
-  </p>
   <article class="paper-panel paper-essay-panel">
     <p class="paper-eyebrow paper-eyebrow--center">Set in type</p>
     <h2 class="paper-h paper-h-panel">{frontmatter.title}</h2>

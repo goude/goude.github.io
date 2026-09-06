@@ -3,14 +3,20 @@ import "@/styles/paper.css";
 import BaseHead from "@/components/BaseHead.astro";
 import PaperHeader from "@/components/PaperHeader.astro";
 import PaperFooter from "@/components/PaperFooter.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import type { Breadcrumb } from "@/types/site";
 
 interface Props {
   title?: string | undefined;
   description?: string | undefined;
   current?: string | undefined;
+  /** Label for the deepest crumb on a detail/list page (e.g. a note's own
+   * title, or "Not found"). Omit on the Index and the two section-list
+   * pages, where the section itself is the deepest crumb. */
+  crumb?: string | undefined;
 }
 
-const { title, description, current } = Astro.props;
+const { title, description, current, crumb } = Astro.props;
 
 const siteName = "goude.se";
 const author = "doitpoorly";
@@ -18,6 +24,21 @@ const author = "doitpoorly";
 const fullTitle = title
   ? `${title} · ${siteName} · ${author}`
   : `${siteName} · ${author}`;
+
+const sections: Record<string, Breadcrumb> = {
+  notes: { label: "Notes", href: "/notes" },
+  essays: { label: "Essays", href: "/essays" },
+};
+const section = current ? sections[current] : undefined;
+
+const crumbs: Breadcrumb[] =
+  current === ""
+    ? [{ label: "Index" }]
+    : section
+      ? crumb
+        ? [{ label: "Index", href: "/" }, section, { label: crumb }]
+        : [{ label: "Index", href: "/" }, { label: section.label }]
+      : [{ label: "Index", href: "/" }, { label: crumb ?? "Not found" }];
 ---
 
 <!doctype html>
@@ -28,6 +49,7 @@ const fullTitle = title
   <body data-paper>
     <div class="paper-shell">
       <PaperHeader current={current} />
+      <Breadcrumbs crumbs={crumbs} />
       <main class="paper-width">
         <slot />
       </main>

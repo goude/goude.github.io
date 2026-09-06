@@ -1,7 +1,8 @@
 /* ==================== Paper Theme — Media & Lightbox ==================== */
 /* Figure framing for the three media kinds notes/essays can carry (scanned
-   sketch, inline SVG, photograph), plus the click-to-enlarge overlay. Each
-   box holds a hand-authored placeholder illustration (inline SVG in the .md)
+   sketch, inline SVG, photograph), the matching list-card thumbnails on the
+   Notes/Essays index, and the click-to-enlarge overlay. Each figure box
+   holds a hand-authored placeholder illustration (inline SVG in the .md)
    until Daniel drops in real art — a doodle over the sketch paper, a
    schematic/chart over the graph grid, an abstract scene on the plate. */
 
@@ -171,6 +172,78 @@
   color: var(--paper-ink-muted);
   margin-top: 10px;
   text-align: center;
+}
+
+/* ---------- List-card thumbnails (Notes/Essays index) ---------- */
+
+.paper-thumb {
+  width: 156px;
+  flex: none;
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: flex-end;
+  padding: 6px;
+  border: 1px solid color-mix(in srgb, var(--paper-ink-label) 30%, transparent);
+  transform: rotate(var(--tilt, -2deg));
+}
+
+.paper-thumb--sketch {
+  background: var(--paper-card-b);
+  background-image:
+    repeating-linear-gradient(
+      46deg,
+      color-mix(in srgb, var(--paper-ink) 10%, transparent) 0 1px,
+      transparent 1px 9px
+    ),
+    repeating-linear-gradient(
+      -46deg,
+      color-mix(in srgb, var(--paper-ink) 7%, transparent) 0 1px,
+      transparent 1px 11px
+    );
+}
+
+.paper-thumb--svg {
+  background: var(--paper-card-index);
+  background-image:
+    linear-gradient(
+      color-mix(in srgb, var(--paper-ink-label) 14%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--paper-ink-label) 14%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 14px 14px;
+}
+
+.paper-thumb--photo {
+  background: var(--paper-plate-inner);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--paper-ink-muted) 12%, transparent) 0 6px,
+    transparent 6px 13px
+  );
+}
+
+.paper-thumb__label {
+  font-family: var(--paper-font-type);
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--paper-ink-muted);
+  background: color-mix(in srgb, var(--paper-card-a) 82%, transparent);
+  padding: 2px 5px;
+  border: 1px solid color-mix(in srgb, var(--paper-ink-label) 30%, transparent);
+}
+
+/* Essays list: full-width, below the excerpt, never tilted */
+.paper-thumb--wide {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: 22px 0 4px;
+  padding: 8px;
+  transform: none;
 }
 
 /* ---------- Ruled tables ---------- */

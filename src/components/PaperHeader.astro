@@ -1,5 +1,5 @@
 ---
-import { PAPER_NAV } from "@/types/site";
+import { PAPER_NAV_INTERNAL, PAPER_NAV_EXTERNAL } from "@/types/site";
 
 interface Props {
   current?: string | undefined;
@@ -30,18 +30,27 @@ const currentHref = `/${current}`;
 </div>
 
 <nav id="paper-nav" class="paper-nav" aria-label="Main navigation">
-  {
-    PAPER_NAV.map((item) => (
-      <a
-        href={item.href}
-        aria-current={item.href === currentHref ? "page" : undefined}
-        rel={item.external ? "noopener noreferrer" : undefined}
-        target={item.external ? "_blank" : undefined}
-      >
-        {item.label}
-      </a>
-    ))
-  }
+  <div class="paper-nav__group">
+    {
+      PAPER_NAV_INTERNAL.map((item) => (
+        <a
+          href={item.href}
+          aria-current={item.href === currentHref ? "page" : undefined}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </div>
+  <div class="paper-nav__group paper-nav__group--external">
+    {
+      PAPER_NAV_EXTERNAL.map((item) => (
+        <a href={item.href} target="_blank" rel="noopener noreferrer">
+          {item.label}
+        </a>
+      ))
+    }
+  </div>
 </nav>
 
 <script>

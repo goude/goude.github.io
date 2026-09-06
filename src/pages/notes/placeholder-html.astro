@@ -13,10 +13,8 @@ export const frontmatter = {
   title={frontmatter.title}
   description={frontmatter.description}
   current="notes"
+  crumb={frontmatter.title}
 >
-  <p class="paper-back-link">
-    <a href="/notes">← Notes</a>
-  </p>
   <NoteCard title={frontmatter.title} date={frontmatter.date} tilt={0}>
     <p style="margin:0;">
       Placeholder — replace with real content. This note is a full Astro page

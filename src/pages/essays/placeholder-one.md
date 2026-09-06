@@ -3,6 +3,7 @@ layout: ../../layouts/ContentLayout.astro
 title: "Placeholder essay I"
 description: "Placeholder — replace with a real essay."
 date: "2026-09-04"
+thumb: "photo"
 ---
 
 <p class="paper-dropcap">Placeholder — replace with real content. This essay is set in type:

@@ -3,6 +3,7 @@ layout: ../../layouts/ContentLayout.astro
 title: "Placeholder note"
 description: "Placeholder — replace with a real note."
 date: "2026-09-05"
+thumb: "sketch"
 ---
 
 Placeholder — replace with real content. This markdown note exists to prove

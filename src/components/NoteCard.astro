@@ -6,9 +6,19 @@ interface Props {
   tilt?: number | undefined;
   alt?: boolean | undefined;
   tape?: boolean | undefined;
+  thumb?: "sketch" | "svg" | "photo" | undefined;
 }
 
-const { date, title, href, tilt = -1, alt = false, tape = true } = Astro.props;
+const {
+  date,
+  title,
+  href,
+  tilt = -1,
+  alt = false,
+  tape = true,
+  thumb,
+} = Astro.props;
+const thumbTilt = thumb === "photo" ? 1.5 : -2;
 ---
 
 <article
@@ -16,19 +26,34 @@ const { date, title, href, tilt = -1, alt = false, tape = true } = Astro.props;
   style={`--tilt:${tilt}deg`}
 >
   {tape && <span class="tape" aria-hidden="true" />}
-  {date && <p class="paper-label">{date}</p>}
-  <h3>
+  <div class="note-card__row">
+    <div class="note-card__body">
+      {date && <p class="paper-label">{date}</p>}
+      <h3>
+        {
+          href ? (
+            <a href={href} class="paper-title-link">
+              {title}
+            </a>
+          ) : (
+            title
+          )
+        }
+      </h3>
+      <div class="paper-typewriter">
+        <slot />
+      </div>
+    </div>
     {
-      href ? (
-        <a href={href} class="paper-title-link">
-          {title}
-        </a>
-      ) : (
-        title
+      thumb && (
+        <div
+          class={`paper-thumb paper-thumb--${thumb}`}
+          style={`--tilt:${thumbTilt}deg`}
+          aria-hidden="true"
+        >
+          <span class="paper-thumb__label">{thumb}</span>
+        </div>
       )
     }
-  </h3>
-  <div class="paper-typewriter">
-    <slot />
   </div>
 </article>
