@@ -19,7 +19,12 @@ export default defineConfig({
       cssMinify: true,
     },
     preview: {
-      allowedHosts: ["zelda.lan", "zelda"],
+      // Extra hostnames allowed to reach `astro preview`, comma-separated,
+      // e.g. PREVIEW_ALLOWED_HOSTS=myhost.lan,myhost. Kept out of the repo.
+      allowedHosts: (process.env.PREVIEW_ALLOWED_HOSTS ?? "")
+        .split(",")
+        .map((h) => h.trim())
+        .filter(Boolean),
     },
   },
 });

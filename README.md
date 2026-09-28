@@ -28,7 +28,7 @@ just check
 just build
 
 # Preview production build
-just preview
+just preview   # set PREVIEW_ALLOWED_HOSTS=host1,host2 to reach it from other machines
 ```
 
 Run `just` with no arguments to list all available recipes.
