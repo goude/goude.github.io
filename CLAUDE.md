@@ -31,7 +31,7 @@
 
 ## Before Finishing
 
-Run `just check` (which runs lint → format-check → typecheck → build). Zero warnings.
+Run `just check` (which runs format-check → lint → typecheck → test → build). Zero warnings.
 
 ## Code Style
 
@@ -61,7 +61,7 @@ outside the current task.
 
 - Astro 7, TypeScript (strict), Prettier, ESLint
 - Styling: paper-themed CSS, four web fonts, CSS custom properties
-- Build: `just check` → format-check → lint → typecheck → build
+- Build: `just check` → format-check → lint → typecheck → test → build
 - Deploy: GitHub Actions → GitHub Pages (goude.se)
 - Dependencies: `npm install`, no other package managers
 
