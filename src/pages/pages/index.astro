@@ -1,0 +1,40 @@
+---
+import PaperLayout from "@/layouts/PaperLayout.astro";
+import { toEntries } from "@/utils/entries";
+
+interface Meta {
+  title: string;
+  description: string;
+  created: string;
+  updated: string;
+}
+
+const modules = import.meta.glob<{ frontmatter: Meta }>("./*.{md,astro}", {
+  eager: true,
+});
+
+// Newest update first; ties keep A to Z.
+const entries = toEntries(modules, "pages").sort(
+  (a, b) => b.updated.localeCompare(a.updated) || a.title.localeCompare(b.title)
+);
+---
+
+<PaperLayout title="Pages" description="Pages." current="pages">
+  <header class="paper-section-header">
+    <p class="paper-eyebrow">Section I</p>
+    <h1 class="paper-h paper-h-section">Pages</h1>
+  </header>
+
+  <div class="paper-stack">
+    {
+      entries.map((e) => (
+        <article class="paper-panel">
+          <h2 class="paper-h" style="font-size:1.17em;margin:0 0 10px;">
+            <a href={e.href}>{e.title}</a>
+          </h2>
+          <p style="margin:0;">{e.description}</p>
+        </article>
+      ))
+    }
+  </div>
+</PaperLayout>

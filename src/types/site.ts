@@ -28,9 +28,12 @@ export const SITE: SiteMetadata = {
 };
 
 export const PAPER_NAV_INTERNAL: NavItem[] = [
-  { href: "/", label: "Index" },
+  { href: "/", label: "Home" },
+  { href: "/index", label: "Index" },
+  { href: "/pages", label: "Pages" },
   { href: "/notes", label: "Notes" },
   { href: "/essays", label: "Essays" },
+  { href: "/board", label: "Board" },
 ];
 
 export const PAPER_NAV_EXTERNAL: NavItem[] = [

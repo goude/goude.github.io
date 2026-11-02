@@ -14,3 +14,6 @@
 // "astro/client" adds Astro-specific globals: ImportMeta (import.meta.env),
 // image asset types, content collection types, and the Astro namespace.
 // Without this, tsc wouldn't know what `import.meta.env.PUBLIC_*` is.
+
+// Package version, injected by `vite.define` in astro.config.mjs.
+declare const __SITE_VERSION__: string;

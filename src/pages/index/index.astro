@@ -1,0 +1,136 @@
+---
+import PaperLayout from "@/layouts/PaperLayout.astro";
+import { toEntries } from "@/utils/entries";
+
+type Modules = Record<string, { frontmatter: { title: string } }>;
+
+interface TocEntry {
+  n: string;
+  label: string;
+  sub?: string;
+  href: string;
+}
+
+const toc: TocEntry[] = [
+  {
+    n: "I",
+    label: "Pages",
+    sub: "standing pieces, without a date",
+    href: "/pages",
+  },
+  {
+    n: "II",
+    label: "Notes",
+    sub: "typed entries, longer than a jotting",
+    href: "/notes",
+  },
+  {
+    n: "III",
+    label: "Essays",
+    sub: "writeups, set in type",
+    href: "/essays",
+  },
+];
+
+// Vite needs literal glob patterns, so each section gets its own call.
+const pages: Modules = import.meta.glob(
+  ["../pages/*.{md,astro}", "!**/index.astro"],
+  { eager: true }
+);
+const notes: Modules = import.meta.glob(
+  ["../notes/*.{md,astro}", "!**/index.astro"],
+  { eager: true }
+);
+const essays: Modules = import.meta.glob(
+  ["../essays/*.{md,astro}", "!**/index.astro"],
+  { eager: true }
+);
+
+const allEntries = [
+  { href: "/", title: "Home", section: "Pages" },
+  ...toEntries(pages, "pages").map((e) => ({ ...e, section: "Pages" })),
+  ...toEntries(notes, "notes").map((e) => ({ ...e, section: "Notes" })),
+  ...toEntries(essays, "essays").map((e) => ({ ...e, section: "Essays" })),
+].sort((a, b) => a.title.localeCompare(b.title));
+
+const letters = [
+  ...new Set(allEntries.map((e) => e.title[0]!.toUpperCase())),
+].map((letter) => ({
+  letter,
+  entries: allEntries.filter((e) => e.title[0]!.toUpperCase() === letter),
+}));
+---
+
+<PaperLayout
+  title="Index"
+  description="goude.se — reorg in progress. Notes and essays, gathered as they're found."
+  current="index"
+>
+  <article class="paper-panel">
+    <p class="paper-eyebrow">Table of contents</p>
+    <h1 class="paper-h" style="font-size:clamp(34px,6vw,52px);margin:0 0 34px;">
+      Index
+    </h1>
+    {
+      toc.map((e) => (
+        <a
+          href={e.href}
+          style="display:flex;width:100%;align-items:baseline;gap:12px;padding:14px 0;text-align:left;border-top:1px solid rgba(80,60,40,.18);border-bottom:none;"
+        >
+          <span style="font-family:var(--paper-font-type);font-size:12px;color:var(--paper-ink-label-dim);width:34px;flex:none;">
+            {e.n}
+          </span>
+          <span style="display:flex;flex-direction:column;gap:2px;flex:none;max-width:70%;">
+            <span style="font-family:var(--paper-font-serif);font-size:23px;color:var(--paper-ink-strong);">
+              {e.label}
+            </span>
+            {e.sub && (
+              <span style="font-family:var(--paper-font-type);font-size:11px;letter-spacing:1px;color:var(--paper-ink-label);">
+                {e.sub}
+              </span>
+            )}
+          </span>
+        </a>
+      ))
+    }
+    <p
+      style="font-family:var(--paper-font-serif);font-style:italic;color:var(--paper-ink-muted);margin:34px 0 0;font-size:17px;"
+    >
+      Reorg in progress. Entries are added as they are found.
+    </p>
+  </article>
+
+  <article class="paper-panel" style="margin-top:34px;">
+    <p class="paper-eyebrow">All pages</p>
+    <h2 class="paper-h" style="font-size:clamp(26px,4vw,34px);margin:0 0 26px;">
+      A to Z
+    </h2>
+    {
+      letters.map((group) => (
+        <section style="display:flex;gap:12px;padding:14px 0;border-top:1px solid rgba(80,60,40,.3);">
+          <h3 style="font-family:var(--paper-font-serif);font-size:23px;font-weight:normal;line-height:1.3;color:var(--paper-ink-label-dim);width:34px;flex:none;margin:0;">
+            {group.letter}
+          </h3>
+          <ul style="list-style:none;flex:1;min-width:0;margin:0;padding:0;">
+            {group.entries.map((e) => (
+              <li>
+                <a
+                  href={e.href}
+                  style="display:flex;align-items:baseline;gap:10px;padding:4px 0;border-bottom:none;"
+                >
+                  <span style="font-family:var(--paper-font-serif);font-size:19px;color:var(--paper-ink-strong);">
+                    {e.title}
+                  </span>
+                  <span style="flex:1;min-width:16px;height:3px;background:radial-gradient(circle,rgba(80,60,40,.45) 1px,transparent 1.3px) left/9px 3px repeat-x;transform:translateY(-3px);" />
+                  <span style="font-family:var(--paper-font-type);font-size:11px;letter-spacing:1px;color:var(--paper-ink-label);flex:none;">
+                    {e.section}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </article>
+</PaperLayout>

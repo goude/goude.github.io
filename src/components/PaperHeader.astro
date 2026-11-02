@@ -9,15 +9,8 @@ const { current = "" } = Astro.props;
 const currentHref = `/${current}`;
 ---
 
-<div
-  class="paper-width"
-  style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:14px;"
->
-  <span
-    class="paper-eyebrow"
-    style="margin:0;color:var(--paper-leather-fg);opacity:.72;"
-    >Field Notes &amp; Findings</span
-  >
+<!-- Holds only the phone menu toggle, so it shows only at phone width. -->
+<div class="paper-width paper-topbar">
   <button
     type="button"
     class="paper-nav-toggle"

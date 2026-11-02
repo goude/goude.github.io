@@ -80,8 +80,3 @@ clean:
 [group('maintenance')]
 reset: clean
     rm -rf node_modules/
-
-# 📦 Bundle repo snapshot for LLM context (excludes secrets and large files)
-[group('maintenance')]
-repomix:
-    npx repomix --ignore "coverage/,node_modules/,public/fonts"

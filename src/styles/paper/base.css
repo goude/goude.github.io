@@ -73,10 +73,6 @@ body[data-paper] a:hover {
   box-shadow: 0 16px 34px rgba(0, 0, 0, 0.4);
 }
 
-.note-card--alt {
-  background: var(--paper-card-b);
-}
-
 .note-card.is-tilted {
   transform: rotate(var(--tilt, -1deg));
 }
@@ -105,7 +101,7 @@ body[data-paper] a:hover {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
-.note-card h3 {
+.note-card__title {
   font-family: var(--paper-font-type);
   font-size: 20px;
   font-weight: 400;
@@ -185,6 +181,11 @@ body[data-paper] a:hover {
 .paper-h-section {
   font-size: clamp(30px, 6vw, 46px);
   color: inherit;
+}
+
+.paper-h-page {
+  font-size: 1.5em;
+  margin: 1.4em 0 0.5em;
 }
 
 .paper-h-panel {
@@ -316,11 +317,18 @@ body[data-paper] .paper-nav a:hover {
   background: var(--paper-gold);
 }
 
-.paper-nav-toggle {
+.paper-nav-toggle,
+.paper-topbar {
   display: none;
 }
 
 @media (max-width: 640px) {
+  .paper-topbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 14px;
+  }
+
   .paper-nav-toggle {
     display: block;
     background: none;
@@ -447,4 +455,39 @@ body[data-paper] .paper-crumbs a:hover {
   border: 0;
   border-top: 1px solid var(--paper-ink-label);
   margin: 2em 0;
+}
+
+/* ---------- Editor's notes (<aside class="ed"> in markdown) ---------- */
+
+/* A typed slip clipped to the galley: typewriter face, ink not tint. */
+.paper-prose .ed {
+  margin: 0 0 1.3em 1.2em;
+  padding: 0.7em 0.9em;
+  background: #fbf7ea;
+  border: 1px solid rgba(60, 45, 25, 0.22);
+  box-shadow: 1px 2px 4px rgba(40, 28, 14, 0.18);
+  color: #23201b;
+  font-family: var(--paper-font-type);
+  font-size: 14.5px;
+  line-height: 1.45;
+  transform: rotate(-0.3deg);
+}
+
+.paper-prose .ed:nth-of-type(even) {
+  transform: rotate(0.35deg);
+}
+
+.paper-prose .ed::before {
+  content: attr(data-ed);
+  display: block;
+  margin-bottom: 0.35em;
+  border-bottom: 1px dashed rgba(60, 45, 25, 0.4);
+  font-size: 12.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.paper-prose .ed q {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }

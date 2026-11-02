@@ -4,32 +4,21 @@ interface Props {
   title: string;
   href?: string | undefined;
   tilt?: number | undefined;
-  alt?: boolean | undefined;
-  tape?: boolean | undefined;
   thumb?: "sketch" | "svg" | "photo" | undefined;
 }
 
-const {
-  date,
-  title,
-  href,
-  tilt = -1,
-  alt = false,
-  tape = true,
-  thumb,
-} = Astro.props;
+const { date, title, href, tilt = -1, thumb } = Astro.props;
+// A card with a link sits in a list; one without is the page's own title.
+const Heading = href ? "h2" : "h1";
 const thumbTilt = thumb === "photo" ? 1.5 : -2;
 ---
 
-<article
-  class:list={["note-card", "is-tilted", { "note-card--alt": alt }]}
-  style={`--tilt:${tilt}deg`}
->
-  {tape && <span class="tape" aria-hidden="true" />}
+<article class="note-card is-tilted" style={`--tilt:${tilt}deg`}>
+  <span class="tape" aria-hidden="true"></span>
   <div class="note-card__row">
     <div class="note-card__body">
       {date && <p class="paper-label">{date}</p>}
-      <h3>
+      <Heading class="note-card__title">
         {
           href ? (
             <a href={href} class="paper-title-link">
@@ -39,7 +28,7 @@ const thumbTilt = thumb === "photo" ? 1.5 : -2;
             title
           )
         }
-      </h3>
+      </Heading>
       <div class="paper-typewriter">
         <slot />
       </div>

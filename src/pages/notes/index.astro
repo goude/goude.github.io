@@ -1,11 +1,13 @@
 ---
 import PaperLayout from "@/layouts/PaperLayout.astro";
+import { toEntries } from "@/utils/entries";
 import NoteCard from "@/components/NoteCard.astro";
 
 interface Meta {
   title: string;
   description: string;
-  date: string;
+  created: string;
+  updated: string;
   thumb?: "sketch" | "svg" | "photo";
 }
 
@@ -13,15 +15,10 @@ const modules = import.meta.glob<{ frontmatter: Meta }>("./*.{md,astro}", {
   eager: true,
 });
 
-const entries = Object.entries(modules)
-  .map(([path, mod]) => {
-    const slug = path
-      .split("/")
-      .pop()!
-      .replace(/\.(md|astro)$/, "");
-    return { href: `/notes/${slug}`, ...mod.frontmatter };
-  })
-  .sort((a, b) => +new Date(b.date) - +new Date(a.date));
+// Newest update first; ties keep A to Z.
+const entries = toEntries(modules, "notes").sort(
+  (a, b) => b.updated.localeCompare(a.updated) || a.title.localeCompare(b.title)
+);
 ---
 
 <PaperLayout
@@ -30,8 +27,8 @@ const entries = Object.entries(modules)
   current="notes"
 >
   <header class="paper-section-header">
-    <p class="paper-eyebrow">Section I</p>
-    <h2 class="paper-h paper-h-section">Notes</h2>
+    <p class="paper-eyebrow">Section II</p>
+    <h1 class="paper-h paper-h-section">Notes</h1>
   </header>
 
   <div class="paper-stack">
@@ -40,7 +37,7 @@ const entries = Object.entries(modules)
         <NoteCard
           title={e.title}
           href={e.href}
-          date={e.date}
+          date={e.updated}
           tilt={i % 2 ? 1.2 : -1.2}
           thumb={e.thumb}
         >

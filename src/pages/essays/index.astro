@@ -1,10 +1,12 @@
 ---
 import PaperLayout from "@/layouts/PaperLayout.astro";
+import { toEntries } from "@/utils/entries";
 
 interface Meta {
   title: string;
   description: string;
-  date: string;
+  created: string;
+  updated: string;
   thumb?: "sketch" | "svg" | "photo";
 }
 
@@ -12,15 +14,10 @@ const modules = import.meta.glob<{ frontmatter: Meta }>("./*.{md,astro}", {
   eager: true,
 });
 
-const entries = Object.entries(modules)
-  .map(([path, mod]) => {
-    const slug = path
-      .split("/")
-      .pop()!
-      .replace(/\.(md|astro)$/, "");
-    return { href: `/essays/${slug}`, ...mod.frontmatter };
-  })
-  .sort((a, b) => +new Date(b.date) - +new Date(a.date));
+// Newest update first; ties keep A to Z.
+const entries = toEntries(modules, "essays").sort(
+  (a, b) => b.updated.localeCompare(a.updated) || a.title.localeCompare(b.title)
+);
 ---
 
 <PaperLayout
@@ -29,8 +26,8 @@ const entries = Object.entries(modules)
   current="essays"
 >
   <header class="paper-section-header">
-    <p class="paper-eyebrow">Section II</p>
-    <h2 class="paper-h paper-h-section">Essays</h2>
+    <p class="paper-eyebrow">Section III</p>
+    <h1 class="paper-h paper-h-section">Essays</h1>
   </header>
 
   <div class="paper-stack">

@@ -8,7 +8,7 @@ interface Props {
 const { crumbs } = Astro.props;
 ---
 
-<div class="paper-width paper-crumbs">
+<nav class="paper-width paper-crumbs" aria-label="Breadcrumb">
   {
     crumbs.map((c, i) => (
       <>
@@ -20,9 +20,11 @@ const { crumbs } = Astro.props;
         {c.href ? (
           <a href={c.href}>{c.label}</a>
         ) : (
-          <span class="paper-crumbs__current">{c.label}</span>
+          <span class="paper-crumbs__current" aria-current="page">
+            {c.label}
+          </span>
         )}
       </>
     ))
   }
-</div>
+</nav>

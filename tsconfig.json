@@ -2,15 +2,9 @@
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
     "types": ["astro/client"],
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@components/*": ["src/components/*"],
-      "@layouts/*": ["src/layouts/*"],
-      "@styles/*": ["src/styles/*"]
+      "@/*": ["./src/*"]
     },
-    "strictNullChecks": true,
-    "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
@@ -19,5 +13,5 @@
     "allowUnusedLabels": false
   },
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["dist", "node_modules", "tmp"]
 }

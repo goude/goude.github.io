@@ -4,15 +4,15 @@ import BaseHead from "@/components/BaseHead.astro";
 import PaperHeader from "@/components/PaperHeader.astro";
 import PaperFooter from "@/components/PaperFooter.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
-import type { Breadcrumb } from "@/types/site";
+import { PAPER_NAV_INTERNAL, type Breadcrumb } from "@/types/site";
 
 interface Props {
   title?: string | undefined;
   description?: string | undefined;
   current?: string | undefined;
   /** Label for the deepest crumb on a detail/list page (e.g. a note's own
-   * title, or "Not found"). Omit on the Index and the two section-list
-   * pages, where the section itself is the deepest crumb. */
+   * title, or "Not found"). Omit on Home and the section-list pages,
+   * where the section itself is the deepest crumb. */
   crumb?: string | undefined;
 }
 
@@ -25,20 +25,16 @@ const fullTitle = title
   ? `${title} · ${siteName} · ${author}`
   : `${siteName} · ${author}`;
 
-const sections: Record<string, Breadcrumb> = {
-  notes: { label: "Notes", href: "/notes" },
-  essays: { label: "Essays", href: "/essays" },
-};
-const section = current ? sections[current] : undefined;
+const section = PAPER_NAV_INTERNAL.find((n) => n.href === `/${current}`);
 
 const crumbs: Breadcrumb[] =
   current === ""
-    ? [{ label: "Index" }]
-    : section
-      ? crumb
-        ? [{ label: "Index", href: "/" }, section, { label: crumb }]
-        : [{ label: "Index", href: "/" }, { label: section.label }]
-      : [{ label: "Index", href: "/" }, { label: crumb ?? "Not found" }];
+    ? [{ label: "Home" }]
+    : [
+        { label: "Home", href: "/" },
+        ...(section && crumb ? [section] : []),
+        { label: crumb ?? section?.label ?? "Not found" },
+      ];
 ---
 
 <!doctype html>

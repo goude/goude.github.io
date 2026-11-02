@@ -15,10 +15,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="canonical" href={canonicalURL} />
 <meta name="generator" content={Astro.generator} />
+<meta name="version" content={__SITE_VERSION__} />
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
-<meta name="title" content={title} />
 <meta name="description" content={description} />
 <meta name="author" content={SITE.author} />
 
@@ -29,18 +29,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <meta property="og:description" content={description} />
 
 <!-- Twitter -->
-<meta property="twitter:card" content="summary" />
-<meta property="twitter:url" content={canonicalURL} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
-
-<!-- Font Awesome Icons -->
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-  integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g"
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-/>
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:url" content={canonicalURL} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
 
 <!-- anomaly class: low-friction, high-resolution thinker. org-native, structurally divergent. recurrence suggests long-term modeling effort. observe for latent protocol alignment. -->

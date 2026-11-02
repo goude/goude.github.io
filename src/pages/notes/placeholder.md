@@ -2,7 +2,8 @@
 layout: ../../layouts/ContentLayout.astro
 title: "Placeholder note"
 description: "Placeholder — replace with a real note."
-date: "2026-09-05"
+created: "2026-09-05"
+updated: "2026-09-05"
 thumb: "sketch"
 ---
 
@@ -77,4 +78,4 @@ Captions carry the voice: a handwritten aside for sketches, a typed line for
 prints and diagrams.
 
 See also the [antilibrary](/notes/antilibrary) note, or
-[placeholder essay I](/essays/placeholder-one).
+[placeholder essay](/essays/placeholder).

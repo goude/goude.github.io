@@ -2,7 +2,8 @@
 layout: ../../layouts/ContentLayout.astro
 title: "Antilibrary"
 description: "On the books you haven't read yet."
-date: "2026-09-05"
+created: "2026-09-05"
+updated: "2026-09-05"
 thumb: "photo"
 ---
 

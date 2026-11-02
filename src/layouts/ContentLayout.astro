@@ -6,7 +6,8 @@ import Lightbox from "@/components/Lightbox.astro";
 interface Frontmatter {
   title: string;
   description: string;
-  date: string;
+  created?: string;
+  updated?: string;
 }
 
 const { frontmatter, url } = Astro.props as {
@@ -14,7 +15,12 @@ const { frontmatter, url } = Astro.props as {
   url: string;
 };
 
-const section = url.split("/")[1] === "essays" ? "essays" : "notes";
+// The root URL has no segment: Home is a page, but lives at "/" with current="".
+const segment = url.split("/")[1] ?? "";
+const section =
+  segment === "essays" || segment === "pages" || segment === ""
+    ? segment
+    : "notes";
 ---
 
 <PaperLayout
@@ -25,13 +31,26 @@ const section = url.split("/")[1] === "essays" ? "essays" : "notes";
 >
   {
     section === "notes" ? (
-      <NoteCard title={frontmatter.title} date={frontmatter.date} tilt={0}>
+      <NoteCard title={frontmatter.title} date={frontmatter.updated} tilt={0}>
         <div class="paper-prose">
           <slot />
         </div>
       </NoteCard>
     ) : (
-      <article class="paper-panel paper-prose paper-essay-panel">
+      <article
+        class:list={[
+          "paper-panel paper-prose",
+          { "paper-essay-panel": section === "essays" },
+        ]}
+      >
+        {section === "essays" ? (
+          <>
+            <p class="paper-eyebrow paper-eyebrow--center">Set in type</p>
+            <h1 class="paper-h paper-h-panel">{frontmatter.title}</h1>
+          </>
+        ) : (
+          <h1 class="paper-h paper-h-page">{frontmatter.title}</h1>
+        )}
         <slot />
       </article>
     )
