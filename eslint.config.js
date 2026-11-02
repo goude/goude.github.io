@@ -12,6 +12,7 @@ export default [
       ".output/**",
       "public/**",
       "coverage/**",
+      "tmp/**",
     ],
   },
 
@@ -24,6 +25,13 @@ export default [
   // 3) TS + Astro (only source)
   ...tseslint.configs.recommended,
   ...astro.configs.recommended,
+
+  // HTML-authored entries export their front matter, which the section
+  // listings read through import.meta.glob, just as markdown front matter.
+  {
+    files: ["src/pages/{pages,notes,essays}/*.astro"],
+    rules: { "astro/no-exports-from-components": "off" },
+  },
 
   // 4) Enable type-aware linting where it matters
   {
