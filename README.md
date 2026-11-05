@@ -31,7 +31,9 @@ format reach both.
 
 `/board` reads each entry's source at build time: every internal link
 (markdown `](/path)` or HTML `href="/path"`) to another entry becomes a red
-string between their cards, drawn client-side so it follows the layout.
+string between their cards, drawn client-side so it follows the layout. Each
+card looks like what it is: a note is a ruled index card, a page a sheet of A4,
+and an essay a stapled stack of A4 sheets.
 
 Editorial notes are `<aside class="ed" data-ed="ED-n · kind · open">` slips in an
 entry's body, styled by `.ed` in `src/styles/paper/base.css`. They render on the
